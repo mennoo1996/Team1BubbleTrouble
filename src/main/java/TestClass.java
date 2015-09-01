@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -5,7 +7,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -16,7 +17,7 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class TestClass extends BasicGame {
 	
-	private BouncingCircle circle1;
+	private ArrayList<BouncingCircle> circleList;
 	private MyShapeFill shapeFill;
 	
 	public TestClass(String title) {
@@ -42,8 +43,15 @@ public class TestClass extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		
+		circleList = new ArrayList<BouncingCircle>();
+		for(int i = 0; i < 5; i++) {
+			float x = 100 + i * 150;
+			float y = 100 + i * 50;
+			float speed = 0.1f + i*0.1f;
+			
+			circleList.add(new BouncingCircle(x, y, 20, speed, 0, 0.001f));
+		}
 		
-		circle1 = new BouncingCircle(200, 200, 20, 0.3f, 0, 0.001f);
 		shapeFill = new MyShapeFill();
 		
 	}
@@ -54,7 +62,9 @@ public class TestClass extends BasicGame {
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
 		
-		circle1.update(container);
+		for(BouncingCircle circle : circleList) {
+			circle.update(container);
+		}
 		
 	}
 	
@@ -66,7 +76,12 @@ public class TestClass extends BasicGame {
 		// TODO Auto-generated method stub
 		graphics.drawString("Hello Bubble Trouble!", 100, 100);
 		
-		graphics.fill(circle1.getCircle(), shapeFill);
+		
+		for(BouncingCircle circle : circleList) {
+			graphics.fill(circle.getCircle(), shapeFill);
+		}
+		
+		
 	}
 
 	

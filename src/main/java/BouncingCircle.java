@@ -32,26 +32,43 @@ public class BouncingCircle extends Circle {
 
 	public void update(GameContainer container) {
 		
-		System.out.println(container.getHeight());
 		
-		// Calculations for Y coördinates
+		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed);
-		System.out.println(this.getMaxY());
 		if(this.getMaxY() > container.getHeight() ) {
 			ySpeed *= -1;
-			System.out.println("reverse");
 		} else {
 			ySpeed += gravity;
-			System.out.println(ySpeed);
 		}
 		
-		// Calculations for X coördinates
-		this.setX(x + xSpeed);
-		if(minX < 0 || maxX > container.getWidth()) {
+		// Calculations for X coordinates
+		this.setX(this.getX() + xSpeed);
+		if(this.getMinX() < 0 || this.getMaxX() > container.getWidth()) {
 			xSpeed *= -1;
 		}
 		
 	}
+	
+	@Override
+	public float getMaxX() {
+		return this.getX() + 2 * this.getRadius();
+	}
+	
+	@Override
+	public float getMaxY() {
+		return this.getY() + 2 * this.getRadius();
+	}
+	
+	@Override
+	public float getMinX() {
+		return this.getX();
+	}
+	
+	@Override
+	public float getMinY() {
+		return this.getY();
+	}
+	
 	
 	public Circle getCircle() {
 		return new Circle(this.getCenterX(), this.getCenterY(), this.getRadius());

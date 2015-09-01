@@ -83,10 +83,6 @@ public class TestClass extends BasicGame {
 		
 		
 	}
-
-	
-
-	
 }
 
 

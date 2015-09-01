@@ -5,7 +5,7 @@ import org.newdawn.slick.geom.Circle;
 public class BouncingCircle extends Circle {
 
 	/**
-	 * 
+	 * variables
 	 */
 	private static final long serialVersionUID = 1L;
 	private float xSpeed;

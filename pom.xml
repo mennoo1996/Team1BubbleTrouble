@@ -7,6 +7,24 @@
     <groupId>com.ti2206.team1.bubble-trouble</groupId>
     <artifactId>bubble-trouble</artifactId>
     <version>0.0.1</version>
+	
+	<dependencies>
+		<dependency>
+			<groupId>checkstyle</groupId>
+			<artifactId>checkstyle</artifactId>
+				<version>5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>pmd</groupId>
+			<artifactId>pmd</artifactId>
+				<version>4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>findbugs</groupId>
+			<artifactId>findbugs</artifactId>
+				<version>1.0.0</version>
+		</dependency>
+	</dependencies>
 
 
 </project>

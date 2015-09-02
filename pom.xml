@@ -20,10 +20,12 @@
 		<repository>
 			<id>Internal lwjgl repo 1</id>
 			<url>file://${basedir}/libraries/$artifactId.$extension</url>
+			<layout>custom</layout>
 		</repository>
 		<repository>
 			<id>Internal lwjgl repo 2</id>
 			<url>file://${basedir}/lwjgl/jar/$artifactId.$extension</url>
+			<layout>custom</layout>
 		</repository>
 	</repositories>
 

@@ -5,8 +5,10 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.ShapeFill;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -17,8 +19,24 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class TestClass extends BasicGame {
 	
+	///// CONFIGURATION /////
+	
+	static int maxFPS = 60;
+	static float gravity = 0.1f;
+	static float startingSpeed = 0.5f;
+	static float speedStep = 0.5f;
+	static int playerSpeed = 5;
+	
+	////////////////////////
+	
+	
+	private boolean gameOver = false;
+	private static AppGameContainer app;
 	private ArrayList<BouncingCircle> circleList;
 	private MyShapeFill shapeFill;
+	private Rectangle player;
+	private Input input;
+	
 	
 	public TestClass(String title) {
 		super(title);
@@ -29,7 +47,8 @@ public class TestClass extends BasicGame {
 		
         System.out.print("Hello World");
         
-        AppGameContainer app = new AppGameContainer(new TestClass("TestClass"));
+        app = new AppGameContainer(new TestClass("TestClass"));
+        app.setTargetFrameRate(maxFPS);
         
         app.setDisplayMode(800, 600, false);
 
@@ -43,13 +62,15 @@ public class TestClass extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		
+		player = new Rectangle(380, 500, 40, 80);
+		
 		circleList = new ArrayList<BouncingCircle>();
 		for(int i = 0; i < 5; i++) {
 			float x = 100 + i * 150;
 			float y = 100 + i * 50;
-			float speed = 0.1f + i*0.1f;
+			float speed = startingSpeed + i*speedStep;
 			
-			circleList.add(new BouncingCircle(x, y, 20, speed, 0, 0.001f));
+			circleList.add(new BouncingCircle(x, y, 20, speed, 0, gravity));
 		}
 		
 		shapeFill = new MyShapeFill();
@@ -61,11 +82,27 @@ public class TestClass extends BasicGame {
 	 */
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
-		
-		for(BouncingCircle circle : circleList) {
-			circle.update(container);
+		if(gameOver) {
+			
+		} else {
+
+			input = container.getInput();
+
+			if(input.isKeyDown(Input.KEY_LEFT) && player.getMinX() > 0) {
+				player.setX(player.getX() - playerSpeed);
+			}
+
+			if(input.isKeyDown(Input.KEY_RIGHT) && player.getMaxX() < container.getWidth()) {
+				player.setX(player.getX() + playerSpeed);
+			}
+
+			for(BouncingCircle circle : circleList) {
+				circle.update(container);
+				if(player.intersects(circle) || player.contains(circle)) {
+					gameOver = true;
+				}
+			}
 		}
-		
 	}
 	
 	
@@ -74,14 +111,19 @@ public class TestClass extends BasicGame {
 	 */
 	public void render(GameContainer container, Graphics graphics) throws SlickException {
 		// TODO Auto-generated method stub
-		graphics.drawString("Hello Bubble Trouble!", 100, 100);
 		
-		
-		for(BouncingCircle circle : circleList) {
-			graphics.fill(circle.getCircle(), shapeFill);
+		if(gameOver) {
+			graphics.drawString("Game Over Sucker!", 300, 250);
+		} else {
+			graphics.drawString("Hello Bubble Trouble!", 100, 100);
+
+
+			for(BouncingCircle circle : circleList) {
+				graphics.fill(circle.getCircle(), shapeFill);
+			}
+
+			graphics.fill(player, shapeFill);
 		}
-		
-		
 	}
 }
 

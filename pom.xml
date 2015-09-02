@@ -16,6 +16,17 @@
 		<findbugs.version>3.0.0</findbugs.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>Internal lwjgl repo 1</id>
+			<url>file://${basedir}/libraries</url>
+		</repository>
+		<repository>
+			<id>Internal lwjgl repo 2</id>
+			<url>file://${basedir}/lwjgl/jar</url>
+		</repository>
+	</repositories>
+
 	<build>
 		<plugins><plugin>
 			<groupId>org.apache.maven.plugins</groupId>
@@ -83,16 +94,7 @@
 		</plugin></plugins>
 	</build>
 
-	<repositories>
-		<repository>
-			<id>Internal lwjgl repo 1</id>
-			<url>file://${basedir}/libraries</url>
-		</repository>
-		<repository>
-			<id>Internal lwjgl repo 2</id>
-			<url>file://${basedir}/lwjgl/jar</url>
-		</repository>
-	</repositories>
+
 	
 	<dependencies>
 		<dependency>

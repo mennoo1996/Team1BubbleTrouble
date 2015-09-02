@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -51,7 +52,7 @@ public class GameState extends BasicGameState {
 			circleList.add(new BouncingCircle(x, y, 20, speed, 0, gravity));
 		}
 		
-		shapeFill = new MyShapeFill();
+		shapeFill = new MyShapeFill(Color.blue);
 	}
 	
 	

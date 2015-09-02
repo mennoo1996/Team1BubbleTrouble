@@ -40,5 +40,9 @@
     <orderEntry type="library" name="Maven: findbugs:coreplugin:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: findbugs:findbugs-ant:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: findbugs:findbugsGUI:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.lwjgl:lwjgl:3.0.0a" level="project" />
+    <orderEntry type="library" name="Maven: org.newdawn.slick:slick:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.lwjgl.util:lwjgl_util:1.0" level="project" />
+    <orderEntry type="library" name="Maven: net.java.games:jinput:1.0" level="project" />
   </component>
 </module>

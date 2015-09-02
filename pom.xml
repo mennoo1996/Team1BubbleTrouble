@@ -32,6 +32,26 @@
 			<artifactId>findbugs</artifactId>
 				<version>1.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl</artifactId>
+			<version>3.0.0a</version>
+		</dependency>
+		<dependency>
+			<groupId>org.newdawn.slick</groupId>
+			<artifactId>slick</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl.util</groupId>
+			<artifactId>lwjgl_util</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.games</groupId>
+			<artifactId>jinput</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 
@@ -81,20 +101,7 @@
 			<artifactId>maven-install-plugin</artifactId>
 			<version>2.3.1</version>
 			<executions>
-				<execution>
-					<id>LWJGL UTIL</id>
-					<phase>initialize</phase>
-					<goals>
-						<goal>install-file</goal>
-					</goals>
-					<configuration>
-						<version>1.0</version>
-						<groupId>org.lwjgl.util</groupId>
-						<artifactId>lwjgl_util</artifactId>
-						<packaging>jar</packaging>
-						<file>${basedir}/libraries/lwjgl_util.jar</file>
-					</configuration>
-				</execution>
+
 				<execution>
 					<id>SLICK</id>
 					<phase>initialize</phase>
@@ -132,9 +139,23 @@
 					<configuration>
 						<version>1.0</version>
 						<groupId>org.lwjgl</groupId>
-						<artifactId>lwgl</artifactId>
+						<artifactId>lwjgl</artifactId>
 						<packaging>jar</packaging>
 						<file>${basedir}/lwjgl/jar/lwjgl.jar</file>
+					</configuration>
+				</execution>
+				<execution>
+					<id>LWJGL UTIL</id>
+					<phase>initialize</phase>
+					<goals>
+						<goal>install-file</goal>
+					</goals>
+					<configuration>
+						<version>1.0</version>
+						<groupId>org.lwjgl.util</groupId>
+						<artifactId>lwjgl_util</artifactId>
+						<packaging>jar</packaging>
+						<file>${basedir}/libraries/lwjgl_util.jar</file>
 					</configuration>
 				</execution>
 			</executions>

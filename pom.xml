@@ -15,6 +15,84 @@
 		<pmd.plugin.version>3.4</pmd.plugin.version>
 		<findbugs.version>3.0.0</findbugs.version>
 	</properties>
+
+	<build>
+		<plugins><plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-install-plugin</artifactId>
+			<version>2.3.1</version>
+			<executions>
+
+				<execution>
+					<id>SLICK</id>
+					<phase>initialize</phase>
+					<goals>
+						<goal>install-file</goal>
+					</goals>
+					<configuration>
+						<version>1.0</version>
+						<groupId>org.newdawn.slick</groupId>
+						<artifactId>slick</artifactId>
+						<packaging>jar</packaging>
+						<file>${basedir}/libraries/slick.jar</file>
+					</configuration>
+				</execution>
+				<execution>
+					<id>JINPUT</id>
+					<phase>initialize</phase>
+					<goals>
+						<goal>install-file</goal>
+					</goals>
+					<configuration>
+						<version>1.0</version>
+						<groupId>net.java.games</groupId>
+						<artifactId>jinput</artifactId>
+						<packaging>jar</packaging>
+						<file>${basedir}/libraries/jinput.jar</file>
+					</configuration>
+				</execution>
+				<execution>
+					<id>LWJGL</id>
+					<phase>initialize</phase>
+					<goals>
+						<goal>install-file</goal>
+					</goals>
+					<configuration>
+						<version>1.0</version>
+						<groupId>org.lwjgl</groupId>
+						<artifactId>lwjgl</artifactId>
+						<packaging>jar</packaging>
+						<file>${basedir}/lwjgl/jar/lwjgl.jar</file>
+					</configuration>
+				</execution>
+				<execution>
+					<id>LWJGL UTIL</id>
+					<phase>initialize</phase>
+					<goals>
+						<goal>install-file</goal>
+					</goals>
+					<configuration>
+						<version>1.0</version>
+						<groupId>org.lwjgl.util</groupId>
+						<artifactId>lwjgl_util</artifactId>
+						<packaging>jar</packaging>
+						<file>${basedir}/libraries/lwjgl_util.jar</file>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin></plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>Internal lwjgl repo 1</id>
+			<url>file://${basedir}/libraries</url>
+		</repository>
+		<repository>
+			<id>Internal lwjgl repo 2</id>
+			<url>file://${basedir}/lwjgl/jar</url>
+		</repository>
+	</repositories>
 	
 	<dependencies>
 		<dependency>
@@ -95,72 +173,7 @@
 		</plugins>
 	</reporting>
 
-	<build>
-		<plugins><plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-install-plugin</artifactId>
-			<version>2.3.1</version>
-			<executions>
 
-				<execution>
-					<id>SLICK</id>
-					<phase>initialize</phase>
-					<goals>
-						<goal>install-file</goal>
-					</goals>
-					<configuration>
-						<version>1.0</version>
-						<groupId>org.newdawn.slick</groupId>
-						<artifactId>slick</artifactId>
-						<packaging>jar</packaging>
-						<file>${basedir}/libraries/slick.jar</file>
-					</configuration>
-				</execution>
-				<execution>
-					<id>JINPUT</id>
-					<phase>initialize</phase>
-					<goals>
-						<goal>install-file</goal>
-					</goals>
-					<configuration>
-						<version>1.0</version>
-						<groupId>net.java.games</groupId>
-						<artifactId>jinput</artifactId>
-						<packaging>jar</packaging>
-						<file>${basedir}/libraries/jinput.jar</file>
-					</configuration>
-				</execution>
-				<execution>
-					<id>LWJGL</id>
-					<phase>initialize</phase>
-					<goals>
-						<goal>install-file</goal>
-					</goals>
-					<configuration>
-						<version>1.0</version>
-						<groupId>org.lwjgl</groupId>
-						<artifactId>lwjgl</artifactId>
-						<packaging>jar</packaging>
-						<file>${basedir}/lwjgl/jar/lwjgl.jar</file>
-					</configuration>
-				</execution>
-				<execution>
-					<id>LWJGL UTIL</id>
-					<phase>initialize</phase>
-					<goals>
-						<goal>install-file</goal>
-					</goals>
-					<configuration>
-						<version>1.0</version>
-						<groupId>org.lwjgl.util</groupId>
-						<artifactId>lwjgl_util</artifactId>
-						<packaging>jar</packaging>
-						<file>${basedir}/libraries/lwjgl_util.jar</file>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin></plugins>
-	</build>
 
 
 </project>

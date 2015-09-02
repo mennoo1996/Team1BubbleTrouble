@@ -1,14 +1,10 @@
-import java.util.ArrayList;
-
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 
-public class StateGame extends StateBasedGame {
+public class MainGame extends StateBasedGame {
 
 	///// CONFIGURATION /////
 	
@@ -23,12 +19,12 @@ public class StateGame extends StateBasedGame {
 	private static AppGameContainer app;
 	
 	
-	public StateGame(String name) {
+	public MainGame(String name) {
 		super(name);
 	}
 
 	public static void main(String[] args) throws SlickException {
-		app = new AppGameContainer(new StateGame("StateGame"));
+		app = new AppGameContainer(new MainGame("StateGame"));
         app.setTargetFrameRate(maxFPS);
         
         app.setDisplayMode(800, 600, false);

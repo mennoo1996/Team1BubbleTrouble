@@ -6,7 +6,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -19,8 +18,8 @@ public class GameState extends BasicGameState {
 	static float startingSpeed = 0.5f;
 	static float speedStep = 0.5f;
 	static int playerSpeed = 5;
-	static float laserWidth = 4f;
-	private int laserDuration = 10;
+	static float laserWidth = 3f;
+	private int laserSpeed = 10;
 	
 	////////////////////////
 	
@@ -32,14 +31,11 @@ public class GameState extends BasicGameState {
 	private Image playerImage;
 	private Input input;
 	private boolean shot = false;
-	private Rectangle laser;
-	private int shotFrames;
-	
+	private Laser laser;
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		shot = false;
-		shotFrames = 0;
 		
 		player = new Player(380,500,45,75, playerImage);
 		
@@ -83,10 +79,16 @@ public class GameState extends BasicGameState {
 		if(input.isKeyPressed(Input.KEY_SPACE)) {
 			shot = true;
 			float x = player.getCenterX();
-			float leftLaser = (float) (x - (0.5 * laserWidth));
 			
-			laser = new Rectangle(leftLaser, 0, 4, container.getHeight() - 40);
+			laser = new Laser(x, container.getHeight()-40, laserSpeed, laserWidth);
 			
+		}
+		
+		if(shot) {
+			laser.update(container);
+			if(!laser.visible) {
+				shot = false;
+			}
 		}
 
 		for(BouncingCircle circle : circleList) {
@@ -95,8 +97,9 @@ public class GameState extends BasicGameState {
 				sbg.enterState(2);
 			}
 			
-			if(shot && laser.intersects(circle)) {
+			if(shot && laser.getRectangle().intersects(circle)) {
 				shotList.add(circle);
+				laser.setVisible(false);
 			}
 		}
 		
@@ -121,17 +124,9 @@ public class GameState extends BasicGameState {
 			graphics.fill(circle.getCircle(), shapeFill);
 		}
 
-		if(shot && shotFrames == 0) {
-			shotFrames++;
-			graphics.fill(laser);
-		} else if (shot && shotFrames < laserDuration) {
-			shotFrames++;
-			graphics.fill(laser);
-		} else if (shot && shotFrames == laserDuration) {
-			shotFrames = 0;
-			shot = false;
+		if(shot) {
+			graphics.fill(laser.getRectangle());
 		}
-		
 		
 		graphics.drawImage(player.getImage(), player.getX(), player.getY());
 		

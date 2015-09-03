@@ -33,11 +33,11 @@ public class Laser {
 		return new Rectangle(x,y,width,height);
 	}
 	
-	public void update(GameContainer container) {
+	public void update(Rectangle ceiling) {
 		y -= laserSpeed;
 		height += laserSpeed;
 		
-		if(y < 0) {
+		if(y < ceiling.getHeight()) {
 			this.visible = false;
 		}
 		

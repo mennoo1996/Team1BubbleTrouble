@@ -11,7 +11,7 @@ public class BouncingCircle extends Circle {
 	private float xSpeed;
 	private float ySpeed;
 	private float gravity;
-	
+	private boolean done;
 	
 	
 	/**
@@ -28,48 +28,83 @@ public class BouncingCircle extends Circle {
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
 		this.gravity = gravity;
+		this.done = false;
 	}
 
-	public void update(GameContainer container) {
-		
-		
+	/**
+	 * Update the circle in the given container
+	 * @param gs			- the gamestate the circle is in
+	 * @param container		- the container the circle is in
+	 */
+	public void update(GameState gs, GameContainer container) {
 		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed);
-		if(this.getMaxY() > container.getHeight() ) {
+		// When the ball hit the floor reverse it's speed
+		if(this.getMaxY() > container.getHeight() - gs.floor.getHeight() ) {
 			ySpeed *= -1;
 		} else {
+			// Else increase the speed
 			ySpeed += gravity;
 		}
 		
 		// Calculations for X coordinates
 		this.setX(this.getX() + xSpeed);
-		if(this.getMinX() < 0 || this.getMaxX() > container.getWidth()) {
+		// If the ball hit a wall reverse it's speed
+		if(this.getMinX() < gs.leftWall.getWidth() || this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
 			xSpeed *= -1;
 		}
 		
 	}
 	
+	/**
+	 * Get the maximum x value of the circle
+	 */
 	@Override
 	public float getMaxX() {
 		return this.getX() + 2 * this.getRadius();
 	}
 	
+	/**
+	 * Get the maximum y value of the circle
+	 */
 	@Override
 	public float getMaxY() {
 		return this.getY() + 2 * this.getRadius();
 	}
 	
+	/**
+	 * Get the minimum x value of the circle
+	 */
 	@Override
 	public float getMinX() {
 		return this.getX();
 	}
 	
+	/**
+	 * Get the minimum y value of the circle
+	 */
 	@Override
 	public float getMinY() {
 		return this.getY();
 	}
 	
 	
+	
+	
+	/**
+	 * @return the done
+	 */
+	public boolean isDone() {
+		return done;
+	}
+
+	/**
+	 * @param done the done to set
+	 */
+	public void setDone(boolean done) {
+		this.done = done;
+	}
+
 	public Circle getCircle() {
 		return new Circle(this.getCenterX(), this.getCenterY(), this.getRadius());
 	}

@@ -10,7 +10,6 @@ public class Player {
 	Image image;
 	
 	
-	
 	/**
 	 * @param x
 	 * @param y
@@ -27,24 +26,42 @@ public class Player {
 		this.image = image;
 	}
 
-	
-	
+	/**
+	 * Return a bounding box rectangle of the player
+	 * @return
+	 */
 	public Rectangle getRectangle() {
 		return new Rectangle(x,y,width,height);
 	}
 	
+	/**
+	 * Get the center X coordinate
+	 * @return
+	 */
 	public float getCenterX() {
 		return x + (0.5f * width);
 	}
 	
+	/**
+	 * Get the center Y coordinate
+	 * @return
+	 */
 	public float getCenterY() {
 		return y + (0.5f * height);
 	}
 	
+	/**
+	 * Get the maximum x value
+	 * @return
+	 */
 	public float getMaxX() {
 		return x + width;
 	}
 	
+	/**
+	 * Get the maximum Y value
+	 * @return
+	 */
 	public float getMaxY() {
 		return y + height;
 	}

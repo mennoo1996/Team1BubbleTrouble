@@ -9,7 +9,7 @@ public class MainGame extends StateBasedGame {
 	///// CONFIGURATION /////
 	
 	protected float gravity = 0.1f;
-	protected float startingSpeed = 0.5f;
+	protected float startingSpeed = 1000f; // pixels per second
 	protected float speedStep = 0.5f;
 	protected int playerSpeed = 5;
 	protected float laserWidth = 3f;
@@ -37,7 +37,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
-        app.setTargetFrameRate(maxFPS);
+        //app.setTargetFrameRate(maxFPS);
         
         app.setDisplayMode(800, 600, false);
 

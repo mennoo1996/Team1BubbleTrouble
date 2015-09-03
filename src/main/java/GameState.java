@@ -43,6 +43,8 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		System.out.println("Hello world");
+		
 		// If still shooting stop it
 		shot = false;
 		
@@ -114,7 +116,7 @@ public class GameState extends BasicGameState {
 		// loop through all active circles
 		for(BouncingCircle circle : circleList) {
 			//update circles
-			circle.update(this, container);
+			circle.update(this, container, delta);
 			
 			// if player touches circle
 			if(player.getRectangle().intersects(circle)) {
@@ -180,6 +182,7 @@ public class GameState extends BasicGameState {
 		graphics.fill(ceiling, shapeFill);
 		
 		graphics.drawString("Hello Bubble Trouble!", 100, 100);
+		graphics.drawString("Hello Bubble Trouble!", 200, 200);
 
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {

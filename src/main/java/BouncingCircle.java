@@ -36,7 +36,9 @@ public class BouncingCircle extends Circle {
 	 * @param gs			- the gamestate the circle is in
 	 * @param container		- the container the circle is in
 	 */
-	public void update(GameState gs, GameContainer container) {
+	public void update(GameState gs, GameContainer container, int delta) {
+		float deltaFloat = delta/1000;
+		
 		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed);
 		// When the ball hit the floor reverse it's speed
@@ -48,7 +50,7 @@ public class BouncingCircle extends Circle {
 		}
 		
 		// Calculations for X coordinates
-		this.setX(this.getX() + xSpeed);
+		this.setX(this.getX() + xSpeed*deltaFloat);
 		// If the ball hit a wall reverse it's speed
 		if(this.getMinX() < gs.leftWall.getWidth() || this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
 			xSpeed *= -1;

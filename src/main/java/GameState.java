@@ -58,7 +58,9 @@ public class GameState extends BasicGameState {
 		startTime = System.currentTimeMillis();
 		
 		// Add player sprite and walls
+		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75, playerImage);
+		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
 		floor = new Rectangle(0,container.getHeight()-25,container.getWidth(),25);
 		leftWall = new Rectangle(0,0,10,container.getHeight());
 		rightWall = new Rectangle(container.getWidth()-10,0,10,container.getHeight());
@@ -81,7 +83,6 @@ public class GameState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
-		playerImage = new Image("resources/mannetje.png");
 	}
 	
 	/**
@@ -144,24 +145,15 @@ public class GameState extends BasicGameState {
 					sbg.enterState(1);
 				}
 			}
-			
-			//Method 1 code
-			// if player doesn't touch ANY circle noCircleIntersects will be true
-//			if(player.getRectangle().intersects(circle)) {
-//				noCircleIntersectsDetected = false;
-//			}
-			
+
 			// if laser intersects circle
 			if(shot && laser.getRectangle().intersects(circle)) {
 				// it has been shot and disabled
 				shotList.add(circle);
 				laser.setVisible(false);
 			}
+
 		}
-		//Method 1 code
-//		if(noCircleIntersectsDetected) {
-//			playerIntersect = false;
-//		}
 		
 		// loop through the circles that has been shot
 		for(BouncingCircle circle : shotList) {
@@ -196,8 +188,10 @@ public class GameState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
+		
 		// draw background
 		graphics.drawImage(mg.backgroundImage, 0, 0);
+		graphics.setColor(Color.white);
 		
 		// Draw walls, floor and ceiling
 		graphics.fill(floor, shapeFill);
@@ -220,8 +214,9 @@ public class GameState extends BasicGameState {
 			graphics.fill(laser.getRectangle());
 		}
 		
-		// draw player
 		graphics.drawImage(player.getImage(), player.getX(), player.getY());
+		// draw player
+		//graphics.drawImage(player.getImage(), player.getX(), player.getY());
 		
 		
 	}

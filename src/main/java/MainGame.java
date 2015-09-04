@@ -16,7 +16,7 @@ public class MainGame extends StateBasedGame {
 	protected float speedStep = 0.5f;
 	protected float playerSpeed = 400f;
 	protected float laserWidth = 3f;
-	protected float laserSpeed = 1600f;
+	protected float laserSpeed = 1000f;
 	protected static int xRes = 1600;
 	protected static int yRes = 1000;
 	protected Image backgroundImage;
@@ -49,7 +49,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
-        app.setDisplayMode(xRes, yRes, false);
+		app.setDisplayMode(Math.round(app.getScreenWidth() * 0.85f), Math.round(app.getScreenHeight() * 0.85f), false);
 		app.start();
 	}
 

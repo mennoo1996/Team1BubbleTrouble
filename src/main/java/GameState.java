@@ -12,6 +12,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 public class GameState extends BasicGameState {
+
+	// CONSTANTS
+	private static int totalTime = 40000;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -24,7 +27,7 @@ public class GameState extends BasicGameState {
 	private int score;
 	private long startTime;
 	private float currentTime;
-	
+
 	//Life counter method 1 code
 	private boolean playerIntersect;
 	
@@ -90,6 +93,12 @@ public class GameState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
+		// Timer logic
+		currentTime = (System.currentTimeMillis() - startTime);
+		if (currentTime >= totalTime) {
+			playerDeath(sbg);
+		}
+
 		float deltaFloat = delta/1000f;
 		input = container.getInput();
 		
@@ -137,13 +146,7 @@ public class GameState extends BasicGameState {
 				playerIntersect = true;
 				
 				//LIVES FUNCTIONALITY
-				mg.decreaselifeCount();
-				if(mg.getLifeCount() <= 0) {
-					mg.score = score;
-					sbg.enterState(2);
-				} else {
-					sbg.enterState(1);
-				}
+				playerDeath(sbg);
 			}
 
 			// if laser intersects circle
@@ -178,8 +181,6 @@ public class GameState extends BasicGameState {
 			mg.score = score;
 			sbg.enterState(3);
 		}
-		
-		currentTime = (System.currentTimeMillis() - startTime) / 1000f;
 	}
 
 	/**
@@ -228,6 +229,19 @@ public class GameState extends BasicGameState {
 	@Override
 	public int getID() {
 		return 1;
+	}
+
+	/**
+	 * Player death
+	 */
+	private void playerDeath(StateBasedGame sbg) {
+		mg.decreaselifeCount();
+		if(mg.getLifeCount() <= 0) {
+			mg.score = score;
+			sbg.enterState(2);
+		} else {
+			sbg.enterState(1);
+		}
 	}
 
 }

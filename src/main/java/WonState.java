@@ -10,6 +10,11 @@ import org.newdawn.slick.state.StateBasedGame;
 public class WonState extends BasicGameState {
 
 	private Button playAgainButton;
+	private MainGame mg;
+	
+	public WonState(MainGame mg) {
+		this.mg = mg;
+	}
 	
 	/**
 	 * Init module, load resources
@@ -42,6 +47,7 @@ public class WonState extends BasicGameState {
 		
 		// draw string and button
 		graphics.drawString("You won, you are the champion!", 100, 100);
+		graphics.drawString("Youre score was: " + mg.score, 100, 120);
 		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(), playAgainButton.getY());
 	}
 

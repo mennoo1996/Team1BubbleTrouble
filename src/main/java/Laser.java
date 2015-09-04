@@ -1,4 +1,3 @@
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Rectangle;
 
 
@@ -33,11 +32,11 @@ public class Laser {
 		return new Rectangle(x,y,width,height);
 	}
 	
-	public void update(Rectangle ceiling) {
-		y -= laserSpeed;
-		height += laserSpeed;
+	public void update(GameState gs, float deltaFloat) {
+		y -= laserSpeed*deltaFloat;
+		height += laserSpeed*deltaFloat;
 		
-		if(y < ceiling.getHeight()) {
+		if(y < gs.ceiling.getHeight()) {
 			this.visible = false;
 		}
 		

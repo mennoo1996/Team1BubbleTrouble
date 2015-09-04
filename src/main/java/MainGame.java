@@ -22,6 +22,9 @@ public class MainGame extends StateBasedGame {
 	
 	protected int score;
 	
+	// Life method 2 code, storing the data outside of the state because those things keep being recreated
+	protected int lifeCount = 3;
+	
 	////////////////////////
 	
 	private static AppGameContainer app;
@@ -61,8 +64,17 @@ public class MainGame extends StateBasedGame {
 		
 		this.backgroundImage = new Image("resources/grid.png");
 		
+		System.out.println(this.getStateCount());
+		
 		this.enterState(0);
 		
 	}
-
+	
+	public void decreaselifeCount() {
+		lifeCount = lifeCount -1;
+	}
+	
+	public int getLifeCount() {
+		return lifeCount;
+	}
 }

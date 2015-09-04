@@ -25,6 +25,9 @@ public class GameState extends BasicGameState {
 	private long startTime;
 	private float currentTime;
 	
+	//Life counter method 1 code
+	private boolean playerIntersect;
+	
 	protected Laser laser;
 	protected Rectangle floor;
 	protected Rectangle leftWall;
@@ -46,7 +49,8 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		System.out.println("Hello world");
+		//Initialize for life counter
+		playerIntersect = false;
 		
 		// If still shooting stop it
 		shot = false;
@@ -118,18 +122,34 @@ public class GameState extends BasicGameState {
 				shot = false;
 			}
 		}
-
+		
+		//Method 1 code
+		//boolean noCircleIntersectsDetected = true;
+		
 		// loop through all active circles
 		for(BouncingCircle circle : circleList) {
 			//update circles
 			circle.update(this, container, deltaFloat);
 			
-			// if player touches circle
-			if(player.getRectangle().intersects(circle)) {
-				// go to gameover state
-				mg.score = score;
-				sbg.enterState(2);
+			// if player touches circle (for the first frame)
+			if(player.getRectangle().intersects(circle) && !playerIntersect) {
+				playerIntersect = true;
+				
+				//LIVES FUNCTIONALITY
+				mg.decreaselifeCount();
+				if(mg.getLifeCount() <= 0) {
+					mg.score = score;
+					sbg.enterState(2);
+				} else {
+					sbg.enterState(1);
+				}
 			}
+			
+			//Method 1 code
+			// if player doesn't touch ANY circle noCircleIntersects will be true
+//			if(player.getRectangle().intersects(circle)) {
+//				noCircleIntersectsDetected = false;
+//			}
 			
 			// if laser intersects circle
 			if(shot && laser.getRectangle().intersects(circle)) {
@@ -138,6 +158,10 @@ public class GameState extends BasicGameState {
 				laser.setVisible(false);
 			}
 		}
+		//Method 1 code
+//		if(noCircleIntersectsDetected) {
+//			playerIntersect = false;
+//		}
 		
 		// loop through the circles that has been shot
 		for(BouncingCircle circle : shotList) {
@@ -182,7 +206,7 @@ public class GameState extends BasicGameState {
 		graphics.fill(ceiling, shapeFill);
 		
 		
-		
+		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-30);
 		graphics.drawString("Score = " + score, 20, container.getHeight()-70);
 		graphics.drawString(String.format("Time = %.1f", currentTime), 20, container.getHeight()-50);
 

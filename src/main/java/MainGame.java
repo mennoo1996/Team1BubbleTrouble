@@ -1,4 +1,5 @@
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -19,6 +20,7 @@ public class MainGame extends StateBasedGame {
 	protected static int xRes = 1600;
 	protected static int yRes = 1000;
 	protected Image backgroundImage;
+	protected String playerImage;
 	
 	protected int score;
 	
@@ -36,6 +38,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) throws SlickException {
 		super(name);
+		this.playerImage = "mannetje.png";
 	}
 
 	/**
@@ -61,6 +64,7 @@ public class MainGame extends StateBasedGame {
 		this.addState(new GameState(this));
 		this.addState(new GameOverState(this));
 		this.addState(new WonState(this));
+		this.addState(new SettingsState(this));
 		
 		this.backgroundImage = new Image("resources/grid.png");
 		

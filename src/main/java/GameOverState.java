@@ -34,6 +34,7 @@ public class GameOverState extends BasicGameState {
 			// If the mouse is pressed inside the playAgainButton, enter the gameState
 			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 				if(playAgainButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+					mg.resetLifeCount();
 					sbg.enterState(1);
 				}
 			}

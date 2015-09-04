@@ -14,7 +14,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GameState extends BasicGameState {
 
 	// CONSTANTS
-	private static int totalTime = 40000;
+	private static int TOTAL_TIME = 40000;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -95,7 +95,7 @@ public class GameState extends BasicGameState {
 			throws SlickException {
 		// Timer logic
 		currentTime = (System.currentTimeMillis() - startTime);
-		if (currentTime >= totalTime) {
+		if (currentTime >= TOTAL_TIME) {
 			playerDeath(sbg);
 		}
 

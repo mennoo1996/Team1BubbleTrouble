@@ -25,7 +25,8 @@ public class MainGame extends StateBasedGame {
 	protected int score;
 	
 	// Life method 2 code, storing the data outside of the state because those things keep being recreated
-	protected int lifeCount = 3;
+	private static int LIVES = 3;
+	protected int lifeCount;
 	
 	////////////////////////
 	
@@ -39,6 +40,7 @@ public class MainGame extends StateBasedGame {
 	public MainGame(String name) throws SlickException {
 		super(name);
 		this.playerImage = "mannetje.png";
+		this.lifeCount = LIVES;
 	}
 
 	/**
@@ -76,6 +78,10 @@ public class MainGame extends StateBasedGame {
 	
 	public void decreaselifeCount() {
 		lifeCount = lifeCount -1;
+	}
+
+	public void resetLifeCount() {
+		lifeCount = LIVES;
 	}
 	
 	public int getLifeCount() {

@@ -77,7 +77,7 @@ public class GameState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
-		playerImage = new Image("resources/arie.png");
+		playerImage = new Image("resources/mannetje.png");
 	}
 	
 	/**
@@ -87,7 +87,12 @@ public class GameState extends BasicGameState {
 			throws SlickException {
 		float deltaFloat = delta/1000f;
 		input = container.getInput();
-
+		
+		// Exit application when esc key is pressed at any time during game.
+		if(input.isKeyDown(Input.KEY_ESCAPE)) {
+			System.exit(0);
+		}
+		
 		// Walk left when left key pressed and not at left wall
 		if(input.isKeyDown(Input.KEY_LEFT) && player.getX() > leftWall.getWidth()) {
 			player.setX(player.getX() - mg.playerSpeed*deltaFloat);
@@ -167,6 +172,9 @@ public class GameState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
+		// draw background
+		graphics.drawImage(mg.backgroundImage, 0, 0);
+		
 		// Draw walls, floor and ceiling
 		graphics.fill(floor, shapeFill);
 		graphics.fill(leftWall, shapeFill);

@@ -3,6 +3,8 @@ import org.newdawn.slick.geom.Rectangle;
 
 
 public class Player {
+	//Method 1 code
+	//int lifeCount;
 	float x;
 	float y;
 	float width;
@@ -24,6 +26,8 @@ public class Player {
 		this.width = width;
 		this.height = height;
 		this.image = image;
+		//Method 1 code
+		//this.lifeCount = lifeCount;
 	}
 
 	/**
@@ -132,5 +136,12 @@ public class Player {
 		this.image = image;
 	}
 	
-	
+	//Method 1 code
+//	public void decreaselifeCount() {
+//		lifeCount = lifeCount -1;
+//	}
+//	
+//	public int getLifeCount() {
+//		return lifeCount;
+//	}
 }

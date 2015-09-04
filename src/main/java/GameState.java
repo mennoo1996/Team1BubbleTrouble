@@ -20,7 +20,10 @@ public class GameState extends BasicGameState {
 	private Player player;
 	private Image playerImage;
 	private Input input;
-	private boolean shot = false;
+	private boolean shot;
+	private int score;
+	private long startTime;
+	private float currentTime;
 	
 	protected Laser laser;
 	protected Rectangle floor;
@@ -47,25 +50,22 @@ public class GameState extends BasicGameState {
 		
 		// If still shooting stop it
 		shot = false;
+		score = 0;
+		startTime = System.currentTimeMillis();
 		
 		// Add player sprite and walls
-		player = new Player(380,500,45,75, playerImage);
-		floor = new Rectangle(0,575,800,25);
-		leftWall = new Rectangle(0,0,10,600);
-		rightWall = new Rectangle(790,0,10,600);
-		ceiling = new Rectangle(0,0,800,10);
+		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75, playerImage);
+		floor = new Rectangle(0,container.getHeight()-25,container.getWidth(),25);
+		leftWall = new Rectangle(0,0,10,container.getHeight());
+		rightWall = new Rectangle(container.getWidth()-10,0,10,container.getHeight());
+		ceiling = new Rectangle(0,0,container.getWidth(),10);
 		
 		// Add arraylists of circles
 		circleList = new ArrayList<BouncingCircle>(); // active list
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		
-		// Add initial circles
-		for(int i = 0; i < 2; i++) {
-			float x = 100 + i * 150;
-			float y = 100 + i * 50;
-			float speed = mg.startingSpeed + i*mg.speedStep;	
-			circleList.add(new BouncingCircle(x, y, 20, speed, 0, mg.gravity));
-		}
+		// Add initial circle
+		circleList.add(new BouncingCircle(100,200,90,mg.startingSpeed, -50, mg.gravity));
 		
 		// shapeFill which always returns the given color
 		shapeFill = new MyShapeFill(Color.blue);
@@ -85,16 +85,17 @@ public class GameState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
+		float deltaFloat = delta/1000f;
 		input = container.getInput();
 
 		// Walk left when left key pressed and not at left wall
 		if(input.isKeyDown(Input.KEY_LEFT) && player.getX() > leftWall.getWidth()) {
-			player.setX(player.getX() - mg.playerSpeed);
+			player.setX(player.getX() - mg.playerSpeed*deltaFloat);
 		}
 
 		// Walk right when right key pressed and not at right wall
 		if(input.isKeyDown(Input.KEY_RIGHT) && player.getMaxX() < (container.getWidth() - rightWall.getWidth())) {
-			player.setX(player.getX() + mg.playerSpeed);
+			player.setX(player.getX() + mg.playerSpeed*deltaFloat);
 		}
 		
 		// Shoot laser when spacebar is pressed and no laser is active
@@ -106,7 +107,7 @@ public class GameState extends BasicGameState {
 		
 		// Update laser
 		if(shot) {
-			laser.update(ceiling);
+			laser.update(this, deltaFloat);
 			// Disable laser when it has reached the ceiling
 			if(!laser.visible) {
 				shot = false;
@@ -116,11 +117,12 @@ public class GameState extends BasicGameState {
 		// loop through all active circles
 		for(BouncingCircle circle : circleList) {
 			//update circles
-			circle.update(this, container, delta);
+			circle.update(this, container, deltaFloat);
 			
 			// if player touches circle
 			if(player.getRectangle().intersects(circle)) {
 				// go to gameover state
+				mg.score = score;
 				sbg.enterState(2);
 			}
 			
@@ -140,33 +142,23 @@ public class GameState extends BasicGameState {
 				if(circleList.contains(circle)) {
 					circleList.remove(circle);
 					circle.setDone(true);
+					score += circle.getScore();
 				}
 				
 				// if the ball has a radius of 20, split it up
-				if(circle.getRadius() == 20) {
-					float ySpeed = circle.getySpeed();
-					
-					// minimum speed = -2
-					if(ySpeed > -2) {
-						ySpeed = -2;
-					}
-					
-					// bonus speed when hit at the right moment
-					if(ySpeed < -4) {
-						ySpeed -= 2;
-					}
-					
-					// add new balls to the active list
-					circleList.add(new BouncingCircle(circle.getX(), circle.getY(), 10, circle.getxSpeed(), ySpeed, mg.gravity));
-					circleList.add(new BouncingCircle(circle.getX(), circle.getY(), 10, -circle.getxSpeed(), ySpeed, mg.gravity));
+				if(circle.getRadius() >= 20) {
+					circleList.addAll(circle.getSplittedCircles(mg));
 				}
 			}
 		}
 		
 		// if there are no active circles, process to gamover screen
 		if(circleList.isEmpty()) {
+			mg.score = score;
 			sbg.enterState(3);
 		}
+		
+		currentTime = (System.currentTimeMillis() - startTime) / 1000f;
 	}
 
 	/**
@@ -181,8 +173,10 @@ public class GameState extends BasicGameState {
 		graphics.fill(rightWall, shapeFill);
 		graphics.fill(ceiling, shapeFill);
 		
-		graphics.drawString("Hello Bubble Trouble!", 100, 100);
-		graphics.drawString("Hello Bubble Trouble!", 200, 200);
+		
+		
+		graphics.drawString("Score = " + score, 20, container.getHeight()-70);
+		graphics.drawString(String.format("Time = %.1f", currentTime), 20, container.getHeight()-50);
 
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {

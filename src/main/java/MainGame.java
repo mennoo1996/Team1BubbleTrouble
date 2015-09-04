@@ -8,14 +8,15 @@ public class MainGame extends StateBasedGame {
 
 	///// CONFIGURATION /////
 	
-	protected float gravity = 0.1f;
-	protected float startingSpeed = 1000f; // pixels per second
+	// Speeds in pixels per second
+	protected float gravity = 500f;
+	protected float startingSpeed = 200f; 
 	protected float speedStep = 0.5f;
-	protected int playerSpeed = 5;
+	protected float playerSpeed = 400f;
 	protected float laserWidth = 3f;
-	protected int laserSpeed = 10;
+	protected float laserSpeed = 1600f;
 	
-	private static int maxFPS = 60;
+	protected int score;
 	
 	////////////////////////
 	
@@ -39,7 +40,7 @@ public class MainGame extends StateBasedGame {
 		app = new AppGameContainer(new MainGame("StateGame"));
         //app.setTargetFrameRate(maxFPS);
         
-        app.setDisplayMode(800, 600, false);
+        app.setDisplayMode(1600, 1000, false);
 
         app.start();
 
@@ -54,8 +55,8 @@ public class MainGame extends StateBasedGame {
 		
 		this.addState(new StartState());
 		this.addState(new GameState(this));
-		this.addState(new GameOverState());
-		this.addState(new WonState());
+		this.addState(new GameOverState(this));
+		this.addState(new WonState(this));
 		
 		this.enterState(0);
 		

@@ -10,6 +10,11 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GameOverState extends BasicGameState {
 
 	private Button playAgainButton;
+	private MainGame mg;
+	
+	public GameOverState(MainGame mg) {
+		this.mg = mg;
+	}
 	
 	/**
 	 * Init method - load resources here
@@ -41,6 +46,7 @@ public class GameOverState extends BasicGameState {
 			throws SlickException {
 		// draw string and button
 		graphics.drawString("Game Over Sucker!", 100, 100);
+		graphics.drawString("Youre score was: " + mg.score, 100, 120);
 		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(), playAgainButton.getY());
 	}
 

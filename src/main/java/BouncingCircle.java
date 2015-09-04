@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
 
@@ -11,8 +13,7 @@ public class BouncingCircle extends Circle {
 	private float xSpeed;
 	private float ySpeed;
 	private float gravity;
-	
-	
+	private boolean done;
 	
 	/**
 	 * @param centerPointX
@@ -25,51 +26,180 @@ public class BouncingCircle extends Circle {
 	public BouncingCircle(float centerPointX, float centerPointY, float radius,
 			float xSpeed, float ySpeed, float gravity) {
 		super(centerPointX, centerPointY, radius);
+		
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
 		this.gravity = gravity;
+		this.done = false;
 	}
 
-	public void update(GameContainer container) {
-		
+	/**
+	 * Update the circle in the given container
+	 * @param gs			- the gamestate the circle is in
+	 * @param container		- the container the circle is in
+	 */
+	public void update(GameState gs, GameContainer container, float deltaFloat) {
 		
 		// Calculations for Y coordinates
-		this.setY(this.getY() + ySpeed);
-		if(this.getMaxY() > container.getHeight() ) {
-			ySpeed *= -1;
+		this.setY(this.getY() + ySpeed*deltaFloat);
+		// When the ball hit the floor reverse it's speed
+		if(this.getMaxY() > container.getHeight() - gs.floor.getHeight() ) {
+			ySpeed = -getSpeedForRadius();
+			System.out.println(ySpeed);
 		} else {
-			ySpeed += gravity;
+			// Else increase the speed
+			ySpeed += gravity*deltaFloat;
 		}
 		
 		// Calculations for X coordinates
-		this.setX(this.getX() + xSpeed);
-		if(this.getMinX() < 0 || this.getMaxX() > container.getWidth()) {
-			xSpeed *= -1;
+		this.setX(this.getX() + xSpeed*deltaFloat);
+		// If the ball hit a wall reverse it's speed
+		if(this.getMinX() < gs.leftWall.getWidth()) {
+			xSpeed = Math.abs(xSpeed);
+		} else if(this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
+			xSpeed = -Math.abs(xSpeed);
 		}
-		
 	}
 	
+	/**
+	 * Return splitted balls
+	 * @param mg
+	 * @return
+	 */
+	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mg) {
+		if(radius == 10) {
+			return null;
+		}
+		
+		ArrayList<BouncingCircle> res = new ArrayList<BouncingCircle>();
+		
+		float newYSpeed = ySpeed;
+		// minimum speed = -2
+		if(newYSpeed > -200) {
+			newYSpeed = -200;
+		}
+		
+		// bonus speed when hit at the right moment
+		if(newYSpeed < -600) {
+			newYSpeed -= 100;
+		}
+		
+		// add new balls to the active list
+		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed, newYSpeed, mg.gravity));
+		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed, newYSpeed, mg.gravity));
+		
+		return res;
+	}
+	
+	private float getSpeedForRadius() {
+		if(radius == 10f) {
+			return 400f;
+		} else if(radius == 20f) {
+			return 550f;
+		} else if(radius == 30f) {
+			return 650f;
+		} else if(radius == 45f) {
+			return 725f;
+		} else if(radius == 65f) {
+			return 775f;
+		} else if(radius == 90f) {
+			return 800f;
+		} else if(radius == 140f) {
+			return 825f;
+		}
+		
+		return 0f;
+	}
+	
+	private float getNewRadius() {
+		if(radius == 10f) {
+			return 10f;
+		} else if(radius == 20f) {
+			return 10f;
+		} else if(radius == 30f) {
+			return 20f;
+		} else if(radius == 45f) {
+			return 30f;
+		} else if(radius == 65f) {
+			return 45f;
+		} else if(radius == 90f) {
+			return 65f;
+		} else if(radius == 140f) {
+			return 90f;
+		}
+		
+		return 0f;
+	}
+	
+	public int getScore() {
+		if(radius == 10f) {
+			return 100;
+		} else if(radius == 20f) {
+			return 50;
+		} else if(radius == 30f) {
+			return 25;
+		} else if(radius == 45f) {
+			return 10;
+		} else if(radius == 65f) {
+			return 5;
+		} else if(radius == 90f) {
+			return 2;
+		} else if(radius == 140f) {
+			return 1;
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * Get the maximum x value of the circle
+	 */
 	@Override
 	public float getMaxX() {
 		return this.getX() + 2 * this.getRadius();
 	}
 	
+	/**
+	 * Get the maximum y value of the circle
+	 */
 	@Override
 	public float getMaxY() {
 		return this.getY() + 2 * this.getRadius();
 	}
 	
+	/**
+	 * Get the minimum x value of the circle
+	 */
 	@Override
 	public float getMinX() {
 		return this.getX();
 	}
 	
+	/**
+	 * Get the minimum y value of the circle
+	 */
 	@Override
 	public float getMinY() {
 		return this.getY();
 	}
 	
 	
+	
+	
+	/**
+	 * @return the done
+	 */
+	public boolean isDone() {
+		return done;
+	}
+
+	/**
+	 * @param done the done to set
+	 */
+	public void setDone(boolean done) {
+		this.done = done;
+	}
+
 	public Circle getCircle() {
 		return new Circle(this.getCenterX(), this.getCenterY(), this.getRadius());
 	}

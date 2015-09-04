@@ -9,8 +9,6 @@ public class Button {
 	float height;
 	Image image;
 	
-	
-	
 	/**
 	 * @param x
 	 * @param y
@@ -27,29 +25,44 @@ public class Button {
 		this.image = image;
 	}
 
-	
-	
+	/**
+	 * get bounding box rectangle of the button
+	 * @return
+	 */
 	public Rectangle getRectangle() {
 		return new Rectangle(x,y,width,height);
 	}
 	
+	/**
+	 * Get the center x value of the button
+	 * @return
+	 */
 	public float getCenterX() {
 		return x + (0.5f * width);
 	}
 	
+	/**
+	 * Get the center y value of the button
+	 */
 	public float getCenterY() {
 		return y + (0.5f * height);
 	}
 	
+	/**
+	 * Get the maximum x value of the button
+	 * @return
+	 */
 	public float getMaxX() {
 		return x + width;
 	}
 	
+	/**
+	 * Get the maximum y value of the button
+	 * @return
+	 */
 	public float getMaxY() {
 		return y + height;
 	}
-	
-	
 	
 	
 	/**

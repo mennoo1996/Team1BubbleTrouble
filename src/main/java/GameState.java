@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -26,7 +28,13 @@ public class GameState extends BasicGameState {
 	private boolean shot;
 	private int score;
 	private long startTime;
-	private float currentTime;
+	private long timeDelta;
+	private long timeRemaining;
+	private long prevTime;
+	private boolean countIn;
+	private String countString;
+	private boolean playingState;
+	private boolean waitEsc;
 
 	// Countdown Bar Logic
 	private static int COUNTDOWN_BAR_WIDTH = 300;
@@ -52,6 +60,8 @@ public class GameState extends BasicGameState {
 	 */
 	public GameState(MainGame mg) {
 		this.mg = mg;
+		this.countIn = true;
+		this.playingState = true;
 	}
 	
 	/**
@@ -69,8 +79,11 @@ public class GameState extends BasicGameState {
 		// If still shooting stop it
 		shot = false;
 		score = 0;
+
 		startTime = System.currentTimeMillis();
-		
+		timeRemaining = TOTAL_TIME;
+		prevTime = startTime;
+
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75, playerImage);
@@ -107,91 +120,129 @@ public class GameState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
-		// Timer logic
-		currentTime = (System.currentTimeMillis() - startTime);
-		fractionTimePix = COUNTDOWN_BAR_WIDTH*(TOTAL_TIME - currentTime) / TOTAL_TIME;
-		if (currentTime >= TOTAL_TIME) {
-			playerDeath(sbg);
-		}
+		if (playingState) {
+			// Timer logic
+			long curTime = System.currentTimeMillis();
+			timeDelta = curTime - prevTime;
 
-		float deltaFloat = delta/1000f;
+			if (countIn) {
+				if (timeDelta < 1000) {
+					countString = "3";
+				} else if (timeDelta < 2000) {
+					countString = "2";
+				} else if (timeDelta < 3000) {
+					countString = "1";
+				} else {
+					countIn = false;
+					prevTime = curTime;
+				}
+			} else {
+				playGame(container, sbg, delta, curTime);
+			}
+		} else {
+			if (input.isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
+				// Reset time countdown
+				prevTime = System.currentTimeMillis();
+				countIn = true;
+				playingState = true;
+			}
+		}
+	}
+
+	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
+		timeRemaining -= timeDelta;
+		fractionTimePix = COUNTDOWN_BAR_WIDTH * (timeRemaining) / TOTAL_TIME;
+		if (timeRemaining <= 0) {
+            playerDeath(sbg);
+        }
+		prevTime = curTime;
+
+		float deltaFloat = delta / 1000f;
 		input = container.getInput();
-		
+
 		// Exit application when esc key is pressed at any time during game.
-		if(input.isKeyDown(Input.KEY_ESCAPE)) {
-			System.exit(0);
-		}
-		
+		if (input.isKeyDown(Input.KEY_ESCAPE)) {
+			waitEsc = true;
+			(new Timer()).schedule(new TimerTask() {
+				@Override
+				public void run() {
+					waitEsc = false;
+				}
+			}, 100);
+			playingState = false;
+        }
+
 		// Walk left when left key pressed and not at left wall
-		if(input.isKeyDown(Input.KEY_LEFT) && player.getX() > leftWall.getWidth()) {
-			player.setX(player.getX() - mg.playerSpeed*deltaFloat);
-		}
+		if (input.isKeyDown(Input.KEY_LEFT) && player.getX() > leftWall.getWidth()) {
+            player.setX(player.getX() - mg.playerSpeed * deltaFloat);
+        }
 
 		// Walk right when right key pressed and not at right wall
-		if(input.isKeyDown(Input.KEY_RIGHT) && player.getMaxX() < (container.getWidth() - rightWall.getWidth())) {
-			player.setX(player.getX() + mg.playerSpeed*deltaFloat);
-		}
-		
+		if (input.isKeyDown(Input.KEY_RIGHT) && player.getMaxX() < (container.getWidth() - rightWall.getWidth())) {
+            player.setX(player.getX() + mg.playerSpeed * deltaFloat);
+        }
+
 		// Shoot laser when spacebar is pressed and no laser is active
-		if(input.isKeyPressed(Input.KEY_SPACE) && !shot) {
-			shot = true;
-			float x = player.getCenterX();
-			laser = new Laser(x, container.getHeight() - floor.getHeight(), mg.laserSpeed, mg.laserWidth);
-		}
-		
+		if (input.isKeyPressed(Input.KEY_SPACE) && !shot) {
+            shot = true;
+            float x = player.getCenterX();
+            laser = new Laser(x, container.getHeight() - floor.getHeight(), mg.laserSpeed, mg.laserWidth);
+        }
+
 		// Update laser
-		if(shot) {
-			laser.update(this, deltaFloat);
-			// Disable laser when it has reached the ceiling
-			if(!laser.visible) {
-				shot = false;
-			}
-		}
-		
+		if (shot) {
+            laser.update(this, deltaFloat);
+            // Disable laser when it has reached the ceiling
+            if (!laser.visible) {
+                shot = false;
+            }
+        }
+
 		//Method 1 code
 		//boolean noCircleIntersectsDetected = true;
-		
+
 		// loop through all active circles
-		for(BouncingCircle circle : circleList) {
-			//update circles
-			circle.update(this, container, deltaFloat);
-			
-			// if player touches circle (for the first frame)
-			if(player.getRectangle().intersects(circle) && !playerIntersect) {
-				playerIntersect = true;
-				
-				//LIVES FUNCTIONALITY
-				playerDeath(sbg);
-			}
+		for (BouncingCircle circle : circleList) {
+            //update circles
+            circle.update(this, container, deltaFloat);
 
-			// if laser intersects circle
-			if(shot && laser.getRectangle().intersects(circle)) {
-				// it has been shot and disabled
-				shotList.add(circle);
-				laser.setVisible(false);
-			}
+            // if player touches circle (for the first frame)
+            if (player.getRectangle().intersects(circle) && !playerIntersect) {
+                playerIntersect = true;
 
-		}
-		
+                //LIVES FUNCTIONALITY
+                playerDeath(sbg);
+            }
+
+            // if laser intersects circle
+            if (shot && laser.getRectangle().intersects(circle)) {
+                // it has been shot and disabled
+                shotList.add(circle);
+                laser.setVisible(false);
+            }
+
+        }
+
 		// loop through the circles that has been shot
-		for(BouncingCircle circle : shotList) {
-			// if the circle hasn't been handled
-			if(!circle.isDone()) {
-				// remove circle from active list
-				if(circleList.contains(circle)) {
-					circleList.remove(circle);
-					circle.setDone(true);
-					score += circle.getScore();
-				}
-				
-				// if the ball has a radius of 20, split it up
-				if(circle.getRadius() >= 20) {
-					circleList.addAll(circle.getSplittedCircles(mg));
-				}
-			}
-		}
-		
+		for (BouncingCircle circle : shotList) {
+            // if the circle hasn't been handled
+            if (!circle.isDone()) {
+                // remove circle from active list
+                if (circleList.contains(circle)) {
+                    circleList.remove(circle);
+                    circle.setDone(true);
+                    score += circle.getScore();
+                }
+
+                // if the ball has a radius of 20, split it up
+                if (circle.getRadius() >= 20) {
+                    circleList.addAll(circle.getSplittedCircles(mg));
+                }
+            }
+        }
+
 		// if there are no active circles, process to gamover screen
+
 		if(circleList.isEmpty()) {
 			mg.score = score;
 			if (mg.levelCounter<levels.size()-1) {
@@ -201,6 +252,7 @@ public class GameState extends BasicGameState {
 			sbg.enterState(3);
 			}
 		}
+
 	}
 
 	/**
@@ -246,6 +298,25 @@ public class GameState extends BasicGameState {
 		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 19, container.getHeight() - 49, fractionTimePix, 18);
 
 		graphics.setColor(Color.white);
+
+		// Overlay for count-in
+		if (playingState && countIn) {
+			Color overLay = new Color(0f, 0f, 0f, 0.5f);
+			graphics.setColor(overLay);
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
+
+			graphics.setColor(Color.white);
+			graphics.drawString(countString, container.getWidth() / 2, container.getHeight() / 2);
+		}
+
+		if (!playingState) {
+			Color overLay = new Color(0f, 0f, 0f, 0.5f);
+			graphics.setColor(overLay);
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
+
+			graphics.setColor(Color.white);
+			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
+		}
 	}
 
 	

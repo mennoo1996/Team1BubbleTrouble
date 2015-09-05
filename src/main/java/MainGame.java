@@ -19,13 +19,23 @@ public class MainGame extends StateBasedGame {
 	protected float laserSpeed = 1000f;
 	protected static int xRes = 1600;
 	protected static int yRes = 1000;
+	
+	// Some environment images
 	protected Image backgroundImage;
+	protected Image foreGroundImage;
+	protected Image terminalImage;
+	protected Image laserHorizontalImage;
+	protected Image laserVerticalImage;
 	protected String playerImage;
 	
 	protected int score;
 	
 	// Life method 2 code, storing the data outside of the state because those things keep being recreated
-	private static int LIVES = 3;
+	private static int LIVES = 5; // V V V V
+	// Thou shallt count to five, no more, no less. 
+	// Five shall be the number thou shalt count, and the number of the counting shall be five. 
+	// Six shalt thou not count, neither count thou four, excepting that thou then proceed to five. 
+	// six is right out. 
 	protected int lifeCount;
 	protected int levelCounter = 0;
 	
@@ -52,7 +62,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
-		app.setDisplayMode(Math.round(app.getScreenWidth() * 0.85f), Math.round(app.getScreenHeight() * 0.85f), false);
+		app.setDisplayMode(xRes, Math.round(yRes), false);
 		app.start();
 	}
 
@@ -69,7 +79,11 @@ public class MainGame extends StateBasedGame {
 		this.addState(new WonState(this));
 		this.addState(new SettingsState(this));
 		
-		this.backgroundImage = new Image("resources/grid.png");
+		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
+		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
+		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
+		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
+		this.laserVerticalImage = new Image("resources/laser_vertical.png");
 		
 		System.out.println(this.getStateCount());
 		

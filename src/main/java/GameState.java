@@ -41,6 +41,9 @@ public class GameState extends BasicGameState {
 	protected Rectangle rightWall;
 	protected Rectangle ceiling;
 	
+	private LevelContainer levels;
+	
+	
 	
 	/**
 	 * constructor
@@ -56,6 +59,40 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		// Create levels
+		
+		levels = new LevelContainer();
+		
+		System.out.println("hier");
+		
+		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
+		circles.add(new BouncingCircle(100, 200, 30, mg.startingSpeed, -50, mg.gravity));
+		Level level = new Level(40, circles);
+		levels.add(level);
+		
+		
+		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
+		circles2.add(new BouncingCircle(100, 200, 45, mg.startingSpeed, -50, mg.gravity));
+		level = new Level(40, circles2);
+		levels.add(level);
+		
+		
+		ArrayList<BouncingCircle> circles3 = new ArrayList<BouncingCircle>();
+		circles3.add(new BouncingCircle(100, 200, 65, mg.startingSpeed, -50, mg.gravity));
+		level = new Level(100, circles3);
+		levels.add(level);
+		
+		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
+		circles4.add(new BouncingCircle(100, 200, 45, mg.startingSpeed, -50, mg.gravity));
+		circles4.add(new BouncingCircle(500, 200, 65, -mg.startingSpeed, -50, mg.gravity));
+		level = new Level(125, circles4);
+		levels.add(level);
+		
+		System.out.println("Hier ook");
+		
+		
+		
+		
 		//Initialize for life counter
 		playerIntersect = false;
 		
@@ -74,11 +111,14 @@ public class GameState extends BasicGameState {
 		ceiling = new Rectangle(0,0,container.getWidth(),10);
 		
 		// Add arraylists of circles
-		circleList = new ArrayList<BouncingCircle>(); // active list
+		//circleList = new ArrayList<BouncingCircle>(); // active list
+		circleList = levels.getLevel(mg.levelCounter).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		
+		TOTAL_TIME = levels.getLevel(mg.levelCounter).getTime()*1000;
+		
 		// Add initial circle
-		circleList.add(new BouncingCircle(100,200,90,mg.startingSpeed, -50, mg.gravity));
+		//circleList.add(new BouncingCircle(100,200,90,mg.startingSpeed, -50, mg.gravity));
 		
 		// shapeFill which always returns the given color
 		shapeFill = new MyShapeFill(Color.blue);
@@ -184,7 +224,12 @@ public class GameState extends BasicGameState {
 		// if there are no active circles, process to gamover screen
 		if(circleList.isEmpty()) {
 			mg.score = score;
+			if (mg.levelCounter<levels.size()-1) {
+				mg.levelCounter++;
+				sbg.enterState(1);
+			} else {
 			sbg.enterState(3);
+			}
 		}
 	}
 

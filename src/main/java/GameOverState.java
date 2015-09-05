@@ -35,6 +35,7 @@ public class GameOverState extends BasicGameState {
 			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 				if(playAgainButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 					mg.resetLifeCount();
+					mg.resetLevelCount();
 					sbg.enterState(1);
 				}
 			}

@@ -22,6 +22,8 @@ public class GameState extends BasicGameState {
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
+	private ArrayList<Gate> gateList;
+	private Gate intersectingGate;
 	private MyShapeFill shapeFill;
 	private Player player;
 	private Image playerImage;
@@ -52,6 +54,9 @@ public class GameState extends BasicGameState {
 	
 	private LevelContainer levels;
 	
+	// Container width and height coordinates
+	private float containerWidth;
+	private float containerHeight;
 	
 	
 	/**
@@ -68,6 +73,10 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		// Remember container width and height
+		containerWidth = container.getWidth();
+		containerHeight = container.getHeight();
+		
 		// Create levels
 		initializeLevels();
 		
@@ -100,8 +109,8 @@ public class GameState extends BasicGameState {
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		
-	
-
+		// Add gates
+		gateList = levels.getLevel(mg.levelCounter).getGates();
 		
 		// shapeFill which always returns the given color
 		shapeFill = new MyShapeFill(Color.blue);
@@ -172,14 +181,31 @@ public class GameState extends BasicGameState {
 			playingState = false;
         }
 
-		// Walk left when left key pressed and not at left wall
+		// Check the intersection of a player with a gate
+		boolean freeToRoam = true;
+		for(Gate machvise : gateList) {
+			if(player.getRectangle().intersects(machvise.getRectangle())) {
+				freeToRoam = false;
+				intersectingGate = machvise;
+			}
+		}
+		// Reset intersecting gate to none if there is no intersection
+		if(freeToRoam) {
+			intersectingGate = null;
+		}
+		
+		// Walk left when left key pressed and not at left wall OR a gate
 		if (input.isKeyDown(Input.KEY_LEFT) && player.getX() > leftWall.getWidth()) {
-            player.setX(player.getX() - mg.playerSpeed * deltaFloat);
+            if(freeToRoam || (player.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
+            	player.setX(player.getX() - mg.playerSpeed * deltaFloat);
+            }
         }
 
-		// Walk right when right key pressed and not at right wall
+		// Walk right when right key pressed and not at right wall OR a gate
 		if (input.isKeyDown(Input.KEY_RIGHT) && player.getMaxX() < (container.getWidth() - rightWall.getWidth())) {
-            player.setX(player.getX() + mg.playerSpeed * deltaFloat);
+           if(freeToRoam || (player.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
+        	   player.setX(player.getX() + mg.playerSpeed * deltaFloat);
+           }
         }
 
 		// Shoot laser when spacebar is pressed and no laser is active
@@ -233,15 +259,38 @@ public class GameState extends BasicGameState {
                     circle.setDone(true);
                     score += circle.getScore();
                 }
-
-                // if the ball has a radius of 20, split it up
+                // if the ball has a radius of 20, split it u
+                ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>(); 
                 if (circle.getRadius() >= 20) {
-                    circleList.addAll(circle.getSplittedCircles(mg));
+                	splits = circle.getSplittedCircles(mg);
+                    circleList.addAll(splits);
+                    // if it was part of the gate requirements, add to new gate requirements
+                }
+                //if it was part of the gate requirements remove it from the gate requirements (+ add new ones)
+                for(Gate gate : gateList) {
+                	if(gate.getRequired().contains(circle)) {
+                		gate.getRequired().remove(circle);
+                	}
+                	if(circle.getRadius() >= 20) {
+                		gate.addToRequirements(splits);
+                	}
                 }
             }
         }
-
-		// if there are no active circles, process to gamover screen
+		
+		// if there are no circles required to be shot by a gate, remove said gate
+		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
+		for(Gate gate : gateList) {
+			if(gate.getRequired().isEmpty()) {
+				tempGateList.add(gate);
+			}
+		}
+		for(Gate gate : tempGateList) {
+			if(gateList.contains(gate)) {
+				gateList.remove(gate);
+			}
+		}
+		// if there are no active circles, process to gameover screen
 
 
 		if(circleList.isEmpty()) {
@@ -255,6 +304,10 @@ public class GameState extends BasicGameState {
 			}
 		}
 
+	}
+
+	public ArrayList<Gate> getGateList() {
+		return gateList;
 	}
 
 	/**
@@ -282,6 +335,11 @@ public class GameState extends BasicGameState {
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {
 			graphics.fill(circle.getCircle(), shapeFill);
+		}
+		
+		// draw all active gates
+		for(Gate gate : gateList) {
+			graphics.fill(gate, shapeFill);
 		}
 
 		// if shot, draw laser
@@ -349,67 +407,86 @@ public class GameState extends BasicGameState {
 		
 		System.out.println("hier");
 		
+		//First level, test with gate
+		
 		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
-		circles.add(new BouncingCircle(100, 200, 30, mg.startingSpeed, -50, mg.gravity));
-		Level level = new Level(40, circles);
+		BouncingCircle circle11 = new BouncingCircle(100, 100, 30, mg.startingSpeed, -50, mg.gravity);
+		circles.add(new BouncingCircle(1200, 100, 30, mg.startingSpeed, -50, mg.gravity));
+		circles.add(circle11);
+		
+		ArrayList<Gate> gates = new ArrayList<Gate>();
+		Gate gate11 = new Gate(containerWidth/2+50f,0,45,containerHeight);
+		gate11.addToRequirements(circle11);
+		gates.add(gate11);
+		//Height to height-150?
+		Level level = new Level(40, circles, gates);
 		levels.add(level);
 		
 		
 		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates2 = new ArrayList<Gate>();
 		circles2.add(new BouncingCircle(100, 200, 45, mg.startingSpeed, -50, mg.gravity));
-		level = new Level(40, circles2);
+		level = new Level(40, circles2, gates2);
 		levels.add(level);
 		
 		
 		ArrayList<BouncingCircle> circles3 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates3 = new ArrayList<Gate>();
 		circles3.add(new BouncingCircle(100, 200, 65, mg.startingSpeed, -50, mg.gravity));
-		level = new Level(100, circles3);
+		level = new Level(100, circles3, gates3);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates4 = new ArrayList<Gate>();
 		circles4.add(new BouncingCircle(100, 200, 45, mg.startingSpeed, -50, mg.gravity));
 		circles4.add(new BouncingCircle(500, 200, 65, -mg.startingSpeed, -50, mg.gravity));
-		level = new Level(125, circles4);
+		level = new Level(125, circles4, gates4);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles5 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates5 = new ArrayList<Gate>();
 		for (int i=0;i<10;i++) {
 			circles5.add(new BouncingCircle(10, 50*i, 10, mg.startingSpeed, -50, mg.gravity));
 		}
-		level = new Level(60, circles5);
+		level = new Level(60, circles5, gates5);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles6 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates6 = new ArrayList<Gate>();
 		circles6.add(new BouncingCircle(900, 200, 140, -mg.startingSpeed, -50, mg.gravity));
-		level = new Level(120, circles6);
+		level = new Level(120, circles6, gates6);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles7 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates7 = new ArrayList<Gate>();
 		circles7.add(new BouncingCircle(100, 200, 30, mg.startingSpeed, -50, mg.gravity));
 		circles7.add(new BouncingCircle(500, 500, 65, 0, -50, mg.gravity));
 		circles7.add(new BouncingCircle(900, 300, 90, -mg.startingSpeed, -50, mg.gravity));
-		level =  new Level(150, circles7);
+		level =  new Level(150, circles7, gates7);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles8 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates8 = new ArrayList<Gate>();
 		circles8.add(new BouncingCircle(100, 100, 20, 0, -50, mg.gravity));
 		circles8.add(new BouncingCircle(300, 100, 30, 0, -50, mg.gravity));
 		circles8.add(new BouncingCircle(500, 100, 45, 0, -50, mg.gravity));
 		circles8.add(new BouncingCircle(700, 100, 65, 0, -50, mg.gravity));
-		level = new Level (120, circles8);
+		level = new Level (120, circles8, gates8);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles9 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates9 = new ArrayList<Gate>();
 		circles9.add(new BouncingCircle(100, 200, 140, mg.startingSpeed, -50, mg.gravity));
 		circles9.add(new BouncingCircle(900, 200, 140, -mg.startingSpeed, -50, mg.gravity));
-		level = new Level(180, circles9);
+		level = new Level(180, circles9, gates9);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles10 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates10 = new ArrayList<Gate>();
 		for (int i=0;i<20;i++) {
 			circles10.add(new BouncingCircle(100, 10*i, 10, 0, -50, mg.gravity));
 		}
-		level = new Level(40, circles10);
+		level = new Level(40, circles10, gates10);
 		levels.add(level);
 		
 		

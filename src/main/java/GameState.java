@@ -17,6 +17,7 @@ public class GameState extends BasicGameState {
 
 	// CONSTANTS
 	private static int TOTAL_TIME = 40000;
+	private static int LEVEL_POINTS = 1500;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -57,8 +58,6 @@ public class GameState extends BasicGameState {
 	 */
 	public GameState(MainGame mg) {
 		this.mg = mg;
-		this.countIn = true;
-		this.playingState = true;
 	}
 	
 	/**
@@ -76,6 +75,8 @@ public class GameState extends BasicGameState {
 		startTime = System.currentTimeMillis();
 		timeRemaining = TOTAL_TIME;
 		prevTime = startTime;
+		countIn = true;
+		playingState = true;
 
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
@@ -91,7 +92,7 @@ public class GameState extends BasicGameState {
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		
 		// Add initial circle
-		circleList.add(new BouncingCircle(100,200,90,mg.startingSpeed, -50, mg.gravity));
+		circleList.add(new BouncingCircle(100,200,20,mg.startingSpeed, -50, mg.gravity));
 		
 		// shapeFill which always returns the given color
 		shapeFill = new MyShapeFill(Color.blue);
@@ -158,7 +159,7 @@ public class GameState extends BasicGameState {
 				public void run() {
 					waitEsc = false;
 				}
-			}, 100);
+			}, 300);
 			playingState = false;
         }
 
@@ -233,6 +234,7 @@ public class GameState extends BasicGameState {
 
 		// if there are no active circles, process to gamover screen
 		if (circleList.isEmpty()) {
+			score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
             mg.score = score;
             sbg.enterState(3);
         }

@@ -1,28 +1,22 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class represents a level, with a certain time to complete the level and a list of bouncing circles that are present in this level.
+ * @author Menno
+ *
+ */
 public class Level {
+	
 	
 	private int time;
 	private ArrayList<BouncingCircle> circles;
 	
-//	public HashMap<Integer, ArrayList<BouncingCircle>> map;
-//	public int levelCounter;
-//	
-//	public Level () {
-//		map = new HashMap<Integer, ArrayList<BouncingCircle>>();
-//		levelCounter = 0;
-//	}
-//	
-//	public void add(ArrayList<BouncingCircle> circles) {
-//		map.put(levelCounter, circles);
-//		levelCounter++;
-//	}
-//	
-//	public ArrayList<BouncingCircle> getCirclesForId(int levelId) {
-//		return map.get(levelId);
-//	}
-	
+	/**
+	 * Construct a new level
+	 * @param time the time you get for completing this level
+	 * @param circles the circles present in this level
+	 */
 	public Level(int time, ArrayList<BouncingCircle> circles) {
 		this.time = time;
 		this.circles = circles;

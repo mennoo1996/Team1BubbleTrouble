@@ -60,37 +60,7 @@ public class GameState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		// Create levels
-		
-		levels = new LevelContainer();
-		
-		System.out.println("hier");
-		
-		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
-		circles.add(new BouncingCircle(100, 200, 30, mg.startingSpeed, -50, mg.gravity));
-		Level level = new Level(40, circles);
-		levels.add(level);
-		
-		
-		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
-		circles2.add(new BouncingCircle(100, 200, 45, mg.startingSpeed, -50, mg.gravity));
-		level = new Level(40, circles2);
-		levels.add(level);
-		
-		
-		ArrayList<BouncingCircle> circles3 = new ArrayList<BouncingCircle>();
-		circles3.add(new BouncingCircle(100, 200, 65, mg.startingSpeed, -50, mg.gravity));
-		level = new Level(100, circles3);
-		levels.add(level);
-		
-		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
-		circles4.add(new BouncingCircle(100, 200, 45, mg.startingSpeed, -50, mg.gravity));
-		circles4.add(new BouncingCircle(500, 200, 65, -mg.startingSpeed, -50, mg.gravity));
-		level = new Level(125, circles4);
-		levels.add(level);
-		
-		System.out.println("Hier ook");
-		
-		
+		initializeLevels();
 		
 		
 		//Initialize for life counter
@@ -298,6 +268,82 @@ public class GameState extends BasicGameState {
 		} else {
 			sbg.enterState(1);
 		}
+	}
+	
+	private void initializeLevels() {
+		levels = new LevelContainer();
+		
+		System.out.println("hier");
+		
+		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
+		circles.add(new BouncingCircle(100, 200, 30, mg.startingSpeed, -50, mg.gravity));
+		Level level = new Level(40, circles);
+		levels.add(level);
+		
+		
+		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
+		circles2.add(new BouncingCircle(100, 200, 45, mg.startingSpeed, -50, mg.gravity));
+		level = new Level(40, circles2);
+		levels.add(level);
+		
+		
+		ArrayList<BouncingCircle> circles3 = new ArrayList<BouncingCircle>();
+		circles3.add(new BouncingCircle(100, 200, 65, mg.startingSpeed, -50, mg.gravity));
+		level = new Level(100, circles3);
+		levels.add(level);
+		
+		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
+		circles4.add(new BouncingCircle(100, 200, 45, mg.startingSpeed, -50, mg.gravity));
+		circles4.add(new BouncingCircle(500, 200, 65, -mg.startingSpeed, -50, mg.gravity));
+		level = new Level(125, circles4);
+		levels.add(level);
+		
+		ArrayList<BouncingCircle> circles5 = new ArrayList<BouncingCircle>();
+		for (int i=0;i<10;i++) {
+			circles5.add(new BouncingCircle(10, 50*i, 10, mg.startingSpeed, -50, mg.gravity));
+		}
+		level = new Level(60, circles5);
+		levels.add(level);
+		
+		ArrayList<BouncingCircle> circles6 = new ArrayList<BouncingCircle>();
+		circles6.add(new BouncingCircle(900, 200, 140, -mg.startingSpeed, -50, mg.gravity));
+		level = new Level(120, circles6);
+		levels.add(level);
+		
+		ArrayList<BouncingCircle> circles7 = new ArrayList<BouncingCircle>();
+		circles7.add(new BouncingCircle(100, 200, 30, mg.startingSpeed, -50, mg.gravity));
+		circles7.add(new BouncingCircle(500, 500, 65, 0, -50, mg.gravity));
+		circles7.add(new BouncingCircle(900, 300, 90, -mg.startingSpeed, -50, mg.gravity));
+		level =  new Level(150, circles7);
+		levels.add(level);
+		
+		ArrayList<BouncingCircle> circles8 = new ArrayList<BouncingCircle>();
+		circles8.add(new BouncingCircle(100, 100, 20, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(300, 100, 30, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(500, 100, 45, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(700, 100, 65, 0, -50, mg.gravity));
+		level = new Level (120, circles8);
+		levels.add(level);
+		
+		ArrayList<BouncingCircle> circles9 = new ArrayList<BouncingCircle>();
+		circles9.add(new BouncingCircle(100, 200, 140, mg.startingSpeed, -50, mg.gravity));
+		circles9.add(new BouncingCircle(900, 200, 140, -mg.startingSpeed, -50, mg.gravity));
+		level = new Level(180, circles9);
+		levels.add(level);
+		
+		ArrayList<BouncingCircle> circles10 = new ArrayList<BouncingCircle>();
+		for (int i=0;i<20;i++) {
+			circles10.add(new BouncingCircle(100, 10*i, 10, 0, -50, mg.gravity));
+		}
+		level = new Level(40, circles10);
+		levels.add(level);
+		
+		
+		
+		System.out.println("Hier ook");
+		
+		
+		
 	}
 
 }

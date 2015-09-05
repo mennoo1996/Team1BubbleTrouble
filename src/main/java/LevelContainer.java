@@ -1,45 +1,45 @@
 import java.util.ArrayList;
 
+/**
+ * This class is a container for all the levels in the game.
+ * @author Menno
+ *
+ */
 public class LevelContainer {
 	
 	private ArrayList<Level> levels;
 	
+	/**
+	 * Initialize the container
+	 */
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
 	}
 	
+	/**
+	 * Add a level to the container
+	 * @param level the level to add
+	 */
 	public void add (Level level) {
-		
 		levels.add(level);
 	}
 	
+	/**
+	 * Get a level from the container
+	 * @param ID the ID from the level to get
+	 * @return the level with ID specified
+	 */
 	public Level getLevel(int ID) {
 		return levels.get(ID);
 	}
 	
-	public Level getNextLevel(int ID) {
-		return levels.get(ID+1);
-	}
-	
+	/**
+	 * The size of the container
+	 * @return the size (amount of levels)
+	 */
 	public int size() {
 		return levels.size();
 	}
 
 }
 
-//public HashMap<Integer, ArrayList<BouncingCircle>> map;
-//public int levelCounter;
-//
-//public Level () {
-//	map = new HashMap<Integer, ArrayList<BouncingCircle>>();
-//	levelCounter = 0;
-//}
-//
-//public void add(ArrayList<BouncingCircle> circles) {
-//	map.put(levelCounter, circles);
-//	levelCounter++;
-//}
-//
-//public ArrayList<BouncingCircle> getCirclesForId(int levelId) {
-//	return map.get(levelId);
-//}

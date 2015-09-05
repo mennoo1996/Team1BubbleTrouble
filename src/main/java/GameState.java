@@ -78,7 +78,8 @@ public class GameState extends BasicGameState {
 		// If still shooting stop it
 		shot = false;
 		score = 0;
-
+		
+		TOTAL_TIME = levels.getLevel(mg.levelCounter).getTime()*1000;
 		startTime = System.currentTimeMillis();
 		timeRemaining = TOTAL_TIME;
 		prevTime = startTime;
@@ -99,7 +100,7 @@ public class GameState extends BasicGameState {
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		
-		TOTAL_TIME = levels.getLevel(mg.levelCounter).getTime()*1000;
+	
 
 		
 		// shapeFill which always returns the given color

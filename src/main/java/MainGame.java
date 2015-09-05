@@ -27,6 +27,7 @@ public class MainGame extends StateBasedGame {
 	// Life method 2 code, storing the data outside of the state because those things keep being recreated
 	private static int LIVES = 3;
 	protected int lifeCount;
+	protected int levelCounter = 0;
 	
 	////////////////////////
 	
@@ -86,5 +87,9 @@ public class MainGame extends StateBasedGame {
 	
 	public int getLifeCount() {
 		return lifeCount;
+	}
+	
+	public void resetLevelCount() {
+		levelCounter = 0;
 	}
 }

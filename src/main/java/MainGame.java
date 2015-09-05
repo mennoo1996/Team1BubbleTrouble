@@ -24,7 +24,6 @@ public class MainGame extends StateBasedGame {
 	protected Image backgroundImage;
 	protected Image foreGroundImage;
 	protected Image terminalImage;
-	protected Image wallsImage;
 	protected Image laserHorizontalImage;
 	protected Image laserVerticalImage;
 	protected String playerImage;
@@ -32,7 +31,11 @@ public class MainGame extends StateBasedGame {
 	protected int score;
 	
 	// Life method 2 code, storing the data outside of the state because those things keep being recreated
-	private static int LIVES = 3;
+	private static int LIVES = 5; // V V V V
+	// Thou shallt count to five, no more, no less. 
+	// Five shall be the number thou shalt count, and the number of the counting shall be five. 
+	// Six shalt thou not count, neither count thou four, excepting that thou then proceed to five. 
+	// six is right out. 
 	protected int lifeCount;
 	protected int levelCounter = 0;
 	
@@ -79,7 +82,6 @@ public class MainGame extends StateBasedGame {
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
-		this.wallsImage = new Image("resources/walls_blue.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
 		

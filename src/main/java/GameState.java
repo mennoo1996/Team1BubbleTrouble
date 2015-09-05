@@ -24,7 +24,6 @@ public class GameState extends BasicGameState {
 	private ArrayList<BouncingCircle> shotList;
 	private MyShapeFill shapeFill;
 	private Player player;
-	private Image playerImage;
 	private Input input;
 	private boolean shot;
 	private int score;
@@ -37,6 +36,17 @@ public class GameState extends BasicGameState {
 	private boolean playingState;
 	private boolean waitEsc;
 
+	// Images
+	private Image playerImage;
+	private Image wallsImage;
+	private Image health_0_Image;
+	private Image health_1_Image;
+	private Image health_2_Image;
+	private Image health_3_Image;
+	private Image health_4_Image;
+	private Image health_5_Image;
+	
+	
 	// Countdown Bar Logic
 	private static int COUNTDOWN_BAR_WIDTH = 300;
 	private float fractionTimePix;
@@ -72,7 +82,6 @@ public class GameState extends BasicGameState {
 		// Create levels
 		initializeLevels();
 		
-		
 		//Initialize for life counter
 		playerIntersect = false;
 		
@@ -87,9 +96,18 @@ public class GameState extends BasicGameState {
 		countIn = true;
 		playingState = true;
 
+		// load health images
+		health_0_Image = new Image("resources/Terminal/Terminal_Lights_0.png");
+		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
-		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75, playerImage);
+		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage);
+		wallsImage = new Image("resources/walls_blue.png");
 		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
 		floor = new Rectangle(0,container.getHeight()-210,container.getWidth(),210);
 		leftWall = new Rectangle(0,0,105,container.getHeight());
@@ -100,8 +118,6 @@ public class GameState extends BasicGameState {
 		//circleList = new ArrayList<BouncingCircle>(); // active list
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
-		
-	
 
 		
 		// shapeFill which always returns the given color
@@ -268,17 +284,6 @@ public class GameState extends BasicGameState {
 		// draw background layer
 		graphics.drawImage(mg.backgroundImage, 0, 0);
 		graphics.setColor(Color.white);
-		
-		// Draw walls, floor and ceiling
-//		graphics.fill(floor, shapeFill);
-//		graphics.fill(leftWall, shapeFill);
-//		graphics.fill(rightWall, shapeFill);
-//		graphics.fill(ceiling, shapeFill);
-		graphics.drawImage(mg.wallsImage, 0, 0);
-		
-		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-50);
-		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-70);
-		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -90);
 
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {
@@ -294,6 +299,13 @@ public class GameState extends BasicGameState {
 		graphics.drawImage(player.getImage(), player.getX(), player.getY());
 		//graphics.drawImage(player.getImage(), player.getX(), player.getY());
 
+		// Draw walls, floor and ceiling
+//		graphics.fill(floor, shapeFill);
+//		graphics.fill(leftWall, shapeFill);
+//		graphics.fill(rightWall, shapeFill);
+//		graphics.fill(ceiling, shapeFill);
+		graphics.drawImage(wallsImage, 0, 0);
+		
 		// Draw timer countdown bar
 		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 20, container.getHeight() - 50, COUNTDOWN_BAR_WIDTH + 2, 20);
 
@@ -321,9 +333,8 @@ public class GameState extends BasicGameState {
 			graphics.setColor(Color.white);
 			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
 		}
-		
 
-		// experimenting with stretched textures
+		// experimenting with stretched laser textures
 		//graphics.drawImage(mg.laserHorizontalImage, 100, 70, 1495, 105, 0, 0, 128, 35);
 		//graphics.drawImage(mg.laserHorizontalImage, 100, 800, 1495, 835, 0, 0, 128, 35);
 		//graphics.drawImage(mg.laserVerticalImage, 100, 100, 135, 1400, 0, 0, 35, 128);
@@ -333,6 +344,32 @@ public class GameState extends BasicGameState {
 		
 		// draw terminal
 		graphics.drawImage(mg.terminalImage, 0, 0);
+		
+		switch(mg.getLifeCount()) {
+			case(0) : 
+				graphics.drawImage(health_0_Image, 0, 0);
+			break;
+			case(1) : 
+				graphics.drawImage(health_1_Image, 0, 0);
+			break;
+			case(2) : 
+				graphics.drawImage(health_2_Image, 0, 0);
+			break;
+			case(3) : 
+				graphics.drawImage(health_3_Image, 0, 0);
+			break;
+			case(4) : 
+				graphics.drawImage(health_4_Image, 0, 0);
+			break;
+			case(5) : 
+				graphics.drawImage(health_5_Image, 0, 0);
+			break;
+		}
+		
+		graphics.drawString("Debug values ", 20, container.getHeight()-90);
+		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-70);
+		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);
+		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -30);
 		
 	}
 

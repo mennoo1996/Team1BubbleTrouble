@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -31,6 +33,8 @@ public class GameState extends BasicGameState {
 	private long prevTime;
 	private boolean countIn;
 	private String countString;
+	private boolean playingState;
+	private boolean waitEsc;
 
 	// Countdown Bar Logic
 	private static int COUNTDOWN_BAR_WIDTH = 300;
@@ -54,6 +58,7 @@ public class GameState extends BasicGameState {
 	public GameState(MainGame mg) {
 		this.mg = mg;
 		this.countIn = true;
+		this.playingState = true;
 	}
 	
 	/**
@@ -105,25 +110,35 @@ public class GameState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
-		// Timer logic
-		long curTime = System.currentTimeMillis();
-		timeDelta = curTime - prevTime;
+		if (playingState) {
+			// Timer logic
+			long curTime = System.currentTimeMillis();
+			timeDelta = curTime - prevTime;
 
-		if (countIn) {
-			if (timeDelta < 1000) {
-				countString = "3";
-			} else if (timeDelta < 2000) {
-				countString = "2";
-			} else if (timeDelta < 3000) {
-				countString = "1";
+			if (countIn) {
+				if (timeDelta < 1000) {
+					countString = "3";
+				} else if (timeDelta < 2000) {
+					countString = "2";
+				} else if (timeDelta < 3000) {
+					countString = "1";
+				} else {
+					countIn = false;
+					prevTime = curTime;
+				}
 			} else {
-				countIn = false;
+				playGame(container, sbg, delta, curTime);
 			}
 		} else {
-			playGame(container, sbg, delta, curTime);
+			if (input.isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
+				// Reset time countdown
+				prevTime = System.currentTimeMillis();
+				countIn = true;
+				playingState = true;
+			}
 		}
 	}
-	
+
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
 		timeRemaining -= timeDelta;
 		fractionTimePix = COUNTDOWN_BAR_WIDTH * (timeRemaining) / TOTAL_TIME;
@@ -137,7 +152,14 @@ public class GameState extends BasicGameState {
 
 		// Exit application when esc key is pressed at any time during game.
 		if (input.isKeyDown(Input.KEY_ESCAPE)) {
-            System.exit(0);
+			waitEsc = true;
+			(new Timer()).schedule(new TimerTask() {
+				@Override
+				public void run() {
+					waitEsc = false;
+				}
+			}, 100);
+			playingState = false;
         }
 
 		// Walk left when left key pressed and not at left wall
@@ -261,13 +283,22 @@ public class GameState extends BasicGameState {
 		graphics.setColor(Color.white);
 
 		// Overlay for count-in
-		if (countIn) {
+		if (playingState && countIn) {
 			Color overLay = new Color(0f, 0f, 0f, 0.5f);
 			graphics.setColor(overLay);
 			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
 
 			graphics.setColor(Color.white);
 			graphics.drawString(countString, container.getWidth() / 2, container.getHeight() / 2);
+		}
+
+		if (!playingState) {
+			Color overLay = new Color(0f, 0f, 0f, 0.5f);
+			graphics.setColor(overLay);
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
+
+			graphics.setColor(Color.white);
+			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
 		}
 	}
 

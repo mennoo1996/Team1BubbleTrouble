@@ -41,9 +41,10 @@ public class GameState extends BasicGameState {
 	private static int COUNTDOWN_BAR_WIDTH = 300;
 	private float fractionTimePix;
 
-	//Life counter method 1 code
+	// Life counter method 1 code
 	private boolean playerIntersect;
 	
+	// level objects
 	protected Laser laser;
 	protected Rectangle floor;
 	protected Rectangle leftWall;
@@ -90,10 +91,10 @@ public class GameState extends BasicGameState {
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75, playerImage);
 		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
-		floor = new Rectangle(0,container.getHeight()-25,container.getWidth(),25);
-		leftWall = new Rectangle(0,0,10,container.getHeight());
-		rightWall = new Rectangle(container.getWidth()-10,0,10,container.getHeight());
-		ceiling = new Rectangle(0,0,container.getWidth(),10);
+		floor = new Rectangle(0,container.getHeight()-210,container.getWidth(),210);
+		leftWall = new Rectangle(0,0,105,container.getHeight());
+		rightWall = new Rectangle(container.getWidth()-130,0,130,container.getHeight());
+		ceiling = new Rectangle(0,0,container.getWidth(),95);
 		
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
@@ -264,16 +265,16 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		
-		// draw background
+		// draw background layer
 		graphics.drawImage(mg.backgroundImage, 0, 0);
 		graphics.setColor(Color.white);
 		
 		// Draw walls, floor and ceiling
-		graphics.fill(floor, shapeFill);
-		graphics.fill(leftWall, shapeFill);
-		graphics.fill(rightWall, shapeFill);
-		graphics.fill(ceiling, shapeFill);
-		
+//		graphics.fill(floor, shapeFill);
+//		graphics.fill(leftWall, shapeFill);
+//		graphics.fill(rightWall, shapeFill);
+//		graphics.fill(ceiling, shapeFill);
+		graphics.drawImage(mg.wallsImage, 0, 0);
 		
 		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-50);
 		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-70);
@@ -289,8 +290,8 @@ public class GameState extends BasicGameState {
 			graphics.fill(laser.getRectangle());
 		}
 		
-		graphics.drawImage(player.getImage(), player.getX(), player.getY());
 		// draw player
+		graphics.drawImage(player.getImage(), player.getX(), player.getY());
 		//graphics.drawImage(player.getImage(), player.getX(), player.getY());
 
 		// Draw timer countdown bar
@@ -320,6 +321,19 @@ public class GameState extends BasicGameState {
 			graphics.setColor(Color.white);
 			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
 		}
+		
+
+		// experimenting with stretched textures
+		//graphics.drawImage(mg.laserHorizontalImage, 100, 70, 1495, 105, 0, 0, 128, 35);
+		//graphics.drawImage(mg.laserHorizontalImage, 100, 800, 1495, 835, 0, 0, 128, 35);
+		//graphics.drawImage(mg.laserVerticalImage, 100, 100, 135, 1400, 0, 0, 35, 128);
+		
+		// draw foreground layer
+		graphics.drawImage(mg.foreGroundImage, 0, 0);
+		
+		// draw terminal
+		graphics.drawImage(mg.terminalImage, 0, 0);
+		
 	}
 
 	

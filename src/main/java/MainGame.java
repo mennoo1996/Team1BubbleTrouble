@@ -20,10 +20,13 @@ public class MainGame extends StateBasedGame {
 	protected static int xRes = 1600;
 	protected static int yRes = 1000;
 	
-	// Some important images
+	// Some environment images
 	protected Image backgroundImage;
 	protected Image foreGroundImage;
 	protected Image terminalImage;
+	protected Image wallsImage;
+	protected Image laserHorizontalImage;
+	protected Image laserVerticalImage;
 	protected String playerImage;
 	
 	protected int score;
@@ -56,7 +59,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
-		app.setDisplayMode(Math.round(app.getScreenWidth() * 0.85f), Math.round(app.getScreenHeight() * 0.85f), false);
+		app.setDisplayMode(xRes, Math.round(yRes), false);
 		app.start();
 	}
 
@@ -73,7 +76,12 @@ public class MainGame extends StateBasedGame {
 		this.addState(new WonState(this));
 		this.addState(new SettingsState(this));
 		
-		this.backgroundImage = new Image("resources/grid.png");
+		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
+		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
+		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
+		this.wallsImage = new Image("resources/walls_blue.png");
+		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
+		this.laserVerticalImage = new Image("resources/laser_vertical.png");
 		
 		System.out.println(this.getStateCount());
 		

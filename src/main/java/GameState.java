@@ -17,6 +17,7 @@ public class GameState extends BasicGameState {
 
 	// CONSTANTS
 	private static int TOTAL_TIME = 40000;
+	private static int LEVEL_POINTS = 1500;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -60,8 +61,6 @@ public class GameState extends BasicGameState {
 	 */
 	public GameState(MainGame mg) {
 		this.mg = mg;
-		this.countIn = true;
-		this.playingState = true;
 	}
 	
 	/**
@@ -83,6 +82,8 @@ public class GameState extends BasicGameState {
 		startTime = System.currentTimeMillis();
 		timeRemaining = TOTAL_TIME;
 		prevTime = startTime;
+		countIn = true;
+		playingState = true;
 
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
@@ -99,9 +100,7 @@ public class GameState extends BasicGameState {
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		
 		TOTAL_TIME = levels.getLevel(mg.levelCounter).getTime()*1000;
-		
-		// Add initial circle
-		//circleList.add(new BouncingCircle(100,200,90,mg.startingSpeed, -50, mg.gravity));
+
 		
 		// shapeFill which always returns the given color
 		shapeFill = new MyShapeFill(Color.blue);
@@ -168,7 +167,7 @@ public class GameState extends BasicGameState {
 				public void run() {
 					waitEsc = false;
 				}
-			}, 100);
+			}, 300);
 			playingState = false;
         }
 
@@ -243,8 +242,10 @@ public class GameState extends BasicGameState {
 
 		// if there are no active circles, process to gamover screen
 
+
 		if(circleList.isEmpty()) {
-			mg.score = score;
+			mg.score += score;
+			score+= ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
 			if (mg.levelCounter<levels.size()-1) {
 				mg.levelCounter++;
 				sbg.enterState(1);
@@ -274,7 +275,8 @@ public class GameState extends BasicGameState {
 		
 		
 		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-50);
-		graphics.drawString("Score = " + score, 20, container.getHeight()-70);
+		graphics.drawString("Score = " + mg.score, 20, container.getHeight()-70);
+		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -90);
 
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {
@@ -334,7 +336,7 @@ public class GameState extends BasicGameState {
 	private void playerDeath(StateBasedGame sbg) {
 		mg.decreaselifeCount();
 		if(mg.getLifeCount() <= 0) {
-			mg.score = score;
+			mg.score += score;
 			sbg.enterState(2);
 		} else {
 			sbg.enterState(1);

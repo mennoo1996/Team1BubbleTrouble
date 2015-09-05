@@ -8,6 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -45,11 +46,15 @@ public class GameState extends BasicGameState {
 	private Image health_3_Image;
 	private Image health_4_Image;
 	private Image health_5_Image;
+	private Image counterBarImage;
 	
+	TrueTypeFont font;
 	
 	// Countdown Bar Logic
-	private static int COUNTDOWN_BAR_WIDTH = 300;
+	private static int COUNTDOWN_BAR_WIDTH = 550;
+	private static int COUNTDOWN_BAR_PARTS = 56;
 	private float fractionTimePix;
+	private int fractionTimeParts;
 
 	// Life counter method 1 code
 	private boolean playerIntersect;
@@ -103,6 +108,9 @@ public class GameState extends BasicGameState {
 		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
 		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
 		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
 		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
@@ -169,6 +177,8 @@ public class GameState extends BasicGameState {
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
 		timeRemaining -= timeDelta;
 		fractionTimePix = COUNTDOWN_BAR_WIDTH * (timeRemaining) / TOTAL_TIME;
+		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / TOTAL_TIME);
+		
 		if (timeRemaining <= 0) {
             playerDeath(sbg);
         }
@@ -307,14 +317,16 @@ public class GameState extends BasicGameState {
 		graphics.drawImage(wallsImage, 0, 0);
 		
 		// Draw timer countdown bar
-		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 20, container.getHeight() - 50, COUNTDOWN_BAR_WIDTH + 2, 20);
+//		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 600, container.getHeight() - 50, COUNTDOWN_BAR_WIDTH + 2, 20);
+//		graphics.setColor(Color.red);
+//		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 599, container.getHeight() - 49, fractionTimePix, 18);
+//		graphics.setColor(Color.white);
 
-		graphics.setColor(Color.red);
-
-		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 19, container.getHeight() - 49, fractionTimePix, 18);
-
-		graphics.setColor(Color.white);
-
+		// Draw timer countdown images
+		for(int x = 0; x < fractionTimeParts; x++) {
+			graphics.drawImage(counterBarImage, container.getWidth()/2 - 80 - 5*(COUNTDOWN_BAR_PARTS) + x*10, container.getHeight() - 60);//
+		}
+		
 		// Overlay for count-in
 		if (playingState && countIn) {
 			Color overLay = new Color(0f, 0f, 0f, 0.5f);
@@ -366,6 +378,7 @@ public class GameState extends BasicGameState {
 			break;
 		}
 		
+		graphics.setColor(Color.green);
 		graphics.drawString("Debug values ", 20, container.getHeight()-90);
 		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-70);
 		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);

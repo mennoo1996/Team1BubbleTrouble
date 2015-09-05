@@ -244,8 +244,8 @@ public class GameState extends BasicGameState {
 
 
 		if(circleList.isEmpty()) {
+			score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
 			mg.score += score;
-			score+= ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
 			if (mg.levelCounter<levels.size()-1) {
 				mg.levelCounter++;
 				sbg.enterState(1);
@@ -275,7 +275,7 @@ public class GameState extends BasicGameState {
 		
 		
 		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-50);
-		graphics.drawString("Score = " + mg.score, 20, container.getHeight()-70);
+		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-70);
 		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -90);
 
 		// draw all active circles

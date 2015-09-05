@@ -16,7 +16,7 @@ public class MainGame extends StateBasedGame {
 	protected float speedStep = 0.5f;
 	protected float playerSpeed = 400f;
 	protected float laserWidth = 3f;
-	protected float laserSpeed = 1600f;
+	protected float laserSpeed = 1000f;
 	protected static int xRes = 1600;
 	protected static int yRes = 1000;
 	protected Image backgroundImage;
@@ -25,7 +25,8 @@ public class MainGame extends StateBasedGame {
 	protected int score;
 	
 	// Life method 2 code, storing the data outside of the state because those things keep being recreated
-	protected int lifeCount = 3;
+	private static int LIVES = 3;
+	protected int lifeCount;
 	
 	////////////////////////
 	
@@ -39,6 +40,7 @@ public class MainGame extends StateBasedGame {
 	public MainGame(String name) throws SlickException {
 		super(name);
 		this.playerImage = "mannetje.png";
+		this.lifeCount = LIVES;
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
-        app.setDisplayMode(xRes, yRes, false);
+		app.setDisplayMode(Math.round(app.getScreenWidth() * 0.85f), Math.round(app.getScreenHeight() * 0.85f), false);
 		app.start();
 	}
 
@@ -76,6 +78,10 @@ public class MainGame extends StateBasedGame {
 	
 	public void decreaselifeCount() {
 		lifeCount = lifeCount -1;
+	}
+
+	public void resetLifeCount() {
+		lifeCount = LIVES;
 	}
 	
 	public int getLifeCount() {

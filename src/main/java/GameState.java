@@ -12,6 +12,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 public class GameState extends BasicGameState {
+
+	// CONSTANTS
+	private static int TOTAL_TIME = 40000;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -24,7 +27,11 @@ public class GameState extends BasicGameState {
 	private int score;
 	private long startTime;
 	private float currentTime;
-	
+
+	// Countdown Bar Logic
+	private static int COUNTDOWN_BAR_WIDTH = 300;
+	private float fractionTimePix;
+
 	//Life counter method 1 code
 	private boolean playerIntersect;
 	
@@ -90,6 +97,13 @@ public class GameState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
+		// Timer logic
+		currentTime = (System.currentTimeMillis() - startTime);
+		fractionTimePix = COUNTDOWN_BAR_WIDTH*(TOTAL_TIME - currentTime) / TOTAL_TIME;
+		if (currentTime >= TOTAL_TIME) {
+			playerDeath(sbg);
+		}
+
 		float deltaFloat = delta/1000f;
 		input = container.getInput();
 		
@@ -137,13 +151,7 @@ public class GameState extends BasicGameState {
 				playerIntersect = true;
 				
 				//LIVES FUNCTIONALITY
-				mg.decreaselifeCount();
-				if(mg.getLifeCount() <= 0) {
-					mg.score = score;
-					sbg.enterState(2);
-				} else {
-					sbg.enterState(1);
-				}
+				playerDeath(sbg);
 			}
 
 			// if laser intersects circle
@@ -178,8 +186,6 @@ public class GameState extends BasicGameState {
 			mg.score = score;
 			sbg.enterState(3);
 		}
-		
-		currentTime = (System.currentTimeMillis() - startTime) / 1000f;
 	}
 
 	/**
@@ -200,9 +206,8 @@ public class GameState extends BasicGameState {
 		graphics.fill(ceiling, shapeFill);
 		
 		
-		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-30);
+		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-50);
 		graphics.drawString("Score = " + score, 20, container.getHeight()-70);
-		graphics.drawString(String.format("Time = %.1f", currentTime), 20, container.getHeight()-50);
 
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {
@@ -217,8 +222,15 @@ public class GameState extends BasicGameState {
 		graphics.drawImage(player.getImage(), player.getX(), player.getY());
 		// draw player
 		//graphics.drawImage(player.getImage(), player.getX(), player.getY());
-		
-		
+
+		// Draw timer countdown bar
+		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 20, container.getHeight() - 50, COUNTDOWN_BAR_WIDTH + 2, 20);
+
+		graphics.setColor(Color.red);
+
+		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 19, container.getHeight() - 49, fractionTimePix, 18);
+
+		graphics.setColor(Color.white);
 	}
 
 	
@@ -228,6 +240,19 @@ public class GameState extends BasicGameState {
 	@Override
 	public int getID() {
 		return 1;
+	}
+
+	/**
+	 * Player death
+	 */
+	private void playerDeath(StateBasedGame sbg) {
+		mg.decreaselifeCount();
+		if(mg.getLifeCount() <= 0) {
+			mg.score = score;
+			sbg.enterState(2);
+		} else {
+			sbg.enterState(1);
+		}
 	}
 
 }

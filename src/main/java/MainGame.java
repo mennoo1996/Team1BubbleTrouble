@@ -19,7 +19,11 @@ public class MainGame extends StateBasedGame {
 	protected float laserSpeed = 1000f;
 	protected static int xRes = 1600;
 	protected static int yRes = 1000;
+	
+	// Some important images
 	protected Image backgroundImage;
+	protected Image foreGroundImage;
+	protected Image terminalImage;
 	protected String playerImage;
 	
 	protected int score;

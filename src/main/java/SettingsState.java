@@ -1,6 +1,5 @@
 import java.util.LinkedList;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -110,16 +109,5 @@ public class SettingsState extends BasicGameState {
 	public int getID() {
 		// TODO Auto-generated method stub
 		return 4;
-	}
-	
-	private String getStringForColor(Color color) {
-		if(color == Color.blue) {
-			return "blue";
-		} else if(color == Color.red) {
-			return "red";
-		} else if(color == Color.yellow) {
-			return "yellow";
-		}
-		return "";
 	}
 }

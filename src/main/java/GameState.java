@@ -9,7 +9,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -55,7 +54,8 @@ public class GameState extends BasicGameState {
 	private Image scoretextImage;
 	private Image leveltextImage;
 	private Image pausedtextImage;
-	private Image gateWallImage;
+	private Image gateUpper;
+	private Image gateLower;
 	
 	// Countdown Bar Logic
 	private static int COUNTDOWN_BAR_PARTS = 56;
@@ -113,7 +113,29 @@ public class GameState extends BasicGameState {
 		countIn = true;
 		playingState = true;
 
-		// Add player sprite
+		// load health images
+		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		
+		// button image
+		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
+		
+		// laser images
+		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
+		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
+		
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
+		
+		// text images
+		scoretextImage = new Image("resources/text/text_score.png");
+		leveltextImage = new Image("resources/text/text_level.png");
+		
+		
+		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage);
 		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
@@ -160,8 +182,10 @@ public class GameState extends BasicGameState {
 		scoretextImage = new Image("resources/text/text_score.png");
 		leveltextImage = new Image("resources/text/text_level.png");
 		pausedtextImage = new Image("resources/text/text_paused.png");
+
 		// gate images
-		gateWallImage = new Image("resources/gate_wall.png");
+		gateUpper = new Image("resources/gate_upper.png");
+		gateLower = new Image("resources/gate_lower.png");
 		// walls image
 		wallsImage = new Image("resources/walls_blue.png");
 		
@@ -327,11 +351,14 @@ public class GameState extends BasicGameState {
 		for(Gate gate : gateList) {
 			if(gate.getRequired().isEmpty()) {
 				tempGateList.add(gate);
+				gate.setFading(true);
 			}
 		}
 		for(Gate gate : tempGateList) {
-			if(gateList.contains(gate)) {
+			if(gateList.contains(gate) && gate.isDone()) {
 				gateList.remove(gate);
+			} else if(gateList.contains(gate) && gate.isFading()) {
+				gate.update(deltaFloat);
 			}
 		}
 		// if there are no active circles, process to gameover screen
@@ -372,9 +399,43 @@ public class GameState extends BasicGameState {
 		
 		// draw all active gates
 		for(Gate gate : gateList) {
-			//graphics.fill(gate, shapeFill);
-			graphics.drawImage(gateWallImage, gate.getMinX() - 12, 0);
-			graphics.drawImage(gateWallImage, gate.getMaxX() - 12, 0);
+			
+			//upper
+			int left = 11;
+			int down = 9;
+			float x = gate.getMinX() - left;
+			float y = ceiling.getHeight();
+			float x2 = x + gateUpper.getWidth();
+			float y2 = ceiling.getHeight() + 348*gate.getHeightPercentage() + down;
+			float srcx = 0;
+			float srcy = gateUpper.getHeight() - 348*gate.getHeightPercentage();
+			float srcx2 = gateUpper.getWidth();
+			float srcy2 = gateUpper.getHeight();
+			graphics.drawImage(gateUpper, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
+			
+			//lower
+			left = 9;
+			float up = 9;
+			x = gate.getMinX() - left -1;
+			y = container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage() - up;
+			x2 = x + gateLower.getWidth() - 1;
+			y2 = container.getHeight() - floor.getHeight();
+			srcx = 0;
+			srcy = 0;
+			srcx2 = gateLower.getWidth();
+			srcy2 = 347*gate.getHeightPercentage();
+			graphics.drawImage(gateLower, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
+			
+//			//graphics.fill(gate, shapeFill);
+//			graphics.drawImage(gateWallImage, gate.getMinX() - 13, ceiling.getHeight(), gate.getMinX() + 11, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, ceiling.getHeight(), gate.getMaxX() + 6, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMinX() - 13, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMinX() + 11, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMaxX() + 6, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateHorizontalWallImage, gate.getMinX(), ceiling.getHeight() - 21 + 348*gate.getHeightPercentage(), gate.getMaxX(), ceiling.getHeight() + 11 + 348*gate.getHeightPercentage(), 0, 0, gateHorizontalWallImage.getWidth(), gateHorizontalWallImage.getHeight());
+//			
+//			if(gate.isFading()) {
+//				graphics.drawImage(gateHorizontalWallImage, gate.getMinX(),container.getHeight() - floor.getHeight() - 11 - 347*gate.getHeightPercentage(), gate.getMaxX(), container.getHeight() - floor.getHeight() + 21 - 347*gate.getHeightPercentage(), 0, 0, gateHorizontalWallImage.getWidth(), gateHorizontalWallImage.getHeight());
+//			}
 		}
 		
 		// if shot, draw laser

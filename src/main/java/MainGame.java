@@ -38,7 +38,7 @@ public class MainGame extends StateBasedGame {
 	// Six shalt thou not count, neither count thou four, excepting that thou then proceed to five. 
 	// six is right out. 
 	protected int lifeCount;
-	protected int levelCounter = 0;
+	protected int levelCounter = 5;
 	
 	////////////////////////
 	

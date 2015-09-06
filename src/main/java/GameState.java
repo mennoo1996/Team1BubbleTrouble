@@ -643,7 +643,7 @@ public class GameState extends BasicGameState {
 		
 		ArrayList<BouncingCircle> circles6 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates6 = new ArrayList<Gate>();
-		circles6.add(new BouncingCircle(900, 200, 140, -mg.startingSpeed, -50, mg.gravity));
+		circles6.add(new BouncingCircle(900, 200, 90, -mg.startingSpeed, -50, mg.gravity));
 		level = new Level(120, circles6, gates6);
 		levels.add(level);
 		
@@ -666,8 +666,8 @@ public class GameState extends BasicGameState {
 		
 		ArrayList<BouncingCircle> circles9 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates9 = new ArrayList<Gate>();
-		circles9.add(new BouncingCircle(200, 200, 140, mg.startingSpeed, -50, mg.gravity));
-		circles9.add(new BouncingCircle(900, 200, 140, -mg.startingSpeed, -50, mg.gravity));
+		circles9.add(new BouncingCircle(200, 200, 90, mg.startingSpeed, -50, mg.gravity));
+		circles9.add(new BouncingCircle(900, 200, 90, -mg.startingSpeed, -50, mg.gravity));
 		level = new Level(180, circles9, gates9);
 		levels.add(level);
 		

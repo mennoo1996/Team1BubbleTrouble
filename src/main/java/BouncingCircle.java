@@ -101,20 +101,18 @@ public class BouncingCircle extends Circle {
 	
 	private float getSpeedForRadius() {
 		if(radius == 10f) {
-			return 400f;
+			return 360f;
 		} else if(radius == 20f) {
-			return 550f;
+			return 470f;
 		} else if(radius == 30f) {
-			return 650f;
+			return 530f;
 		} else if(radius == 45f) {
-			return 725f;
+			return 570f;
 		} else if(radius == 65f) {
-			return 775f;
+			return 610f;
 		} else if(radius == 90f) {
-			return 800f;
-		} else if(radius == 140f) {
-			return 825f;
-		}
+			return 650f;
+		} 
 		
 		return 0f;
 	}
@@ -132,9 +130,7 @@ public class BouncingCircle extends Circle {
 			return 45f;
 		} else if(radius == 90f) {
 			return 65f;
-		} else if(radius == 140f) {
-			return 90f;
-		}
+		} 
 		
 		return 0f;
 	}

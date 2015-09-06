@@ -398,7 +398,6 @@ public class GameState extends BasicGameState {
 		}
 		
 		
-		
 		// Draw level/Score data
 		LinkedList<Integer> numberStack = new LinkedList<Integer>();
 		int levelInt = (mg.levelCounter+1), scoreInt = (mg.score + score), stackCount = 0;
@@ -429,8 +428,7 @@ public class GameState extends BasicGameState {
 		}
 
 		
-		// Overlay for count-in
-		
+		// Pause overlay and counter
 		if (playingState && countIn) {
 			int count = (int)Math.ceil((3000.0-timeDelta)/1000.0), amount = Math.round((3000f-timeDelta)/3000f*15f);
 
@@ -454,16 +452,32 @@ public class GameState extends BasicGameState {
 			graphics.drawImage(pausedtextImage, container.getWidth() / 2 - 130, container.getHeight() / 2 - 60);
 		}
 		
+		// draw version number (BECAUZ ITZ COOL)
+		graphics.drawImage(mg.versiontextImage, 72, container.getHeight() - 195);
+		graphics.drawImage(mg.numberImages[1], 72 + 150, container.getHeight() - 196);
+		int versionnumber = 105;
+		stackCount = 0;
+		while(versionnumber > 0) {
+			numberStack.push(versionnumber % 10);
+			versionnumber /= 10;
+		}
+		while(!numberStack.isEmpty()) {
+			graphics.drawImage(mg.numberImages[numberStack.pop()], 72 + 175 + 20*stackCount, container.getHeight() - 196);
+			stackCount++;
+		}
+		
 		// draw foreground layer
 		graphics.drawImage(mg.foreGroundImage, 0, 0);
 		
 		// draw terminal
 		graphics.drawImage(mg.terminalImage, 0, 0);
 		
+		// disable button when paused
 		if(!playingState) {
 			graphics.drawImage(nobutton_Image, 0, 0);
 		}
 		
+		// show correct health lights
 		switch(mg.getLifeCount()) {
 			case(1) : 
 				graphics.drawImage(health_1_Image, 0, 0);

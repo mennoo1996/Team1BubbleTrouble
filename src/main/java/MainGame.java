@@ -24,6 +24,7 @@ public class MainGame extends StateBasedGame {
 	protected Image backgroundImage;
 	protected Image foreGroundImage;
 	protected Image terminalImage;
+	protected Image versiontextImage;
 	protected Image[] numberImages;
 	protected Image laserHorizontalImage;
 	protected Image laserVerticalImage;
@@ -78,7 +79,7 @@ public class MainGame extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
 		
-		this.addState(new StartState());
+		this.addState(new StartState(this));
 		this.addState(new GameState(this));
 		this.addState(new GameOverState(this));
 		this.addState(new WonState(this));
@@ -89,7 +90,7 @@ public class MainGame extends StateBasedGame {
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
-		
+		this.versiontextImage = new Image("resources/text/text_version.png");
 		this.numberImages = new Image[10];
 		for(int i = 0; i < 10; i++) {
 			this.numberImages[i] = new Image("resources/numbers/" + Integer.toString(i) + ".png");

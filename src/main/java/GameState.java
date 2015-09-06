@@ -54,6 +54,7 @@ public class GameState extends BasicGameState {
 	private Image counterBarImage;
 	private Image scoretextImage;
 	private Image leveltextImage;
+	private Image pausedtextImage;
 	private Image gateWallImage;
 	
 	// Countdown Bar Logic
@@ -112,7 +113,6 @@ public class GameState extends BasicGameState {
 		countIn = true;
 		playingState = true;
 
-		
 		// Add player sprite
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage);
@@ -159,6 +159,7 @@ public class GameState extends BasicGameState {
 		// text images
 		scoretextImage = new Image("resources/text/text_score.png");
 		leveltextImage = new Image("resources/text/text_level.png");
+		pausedtextImage = new Image("resources/text/text_paused.png");
 		// gate images
 		gateWallImage = new Image("resources/gate_wall.png");
 		// walls image
@@ -396,6 +397,8 @@ public class GameState extends BasicGameState {
 			//counterBarImage.rotate(-10*x); // EPIC
 		}
 		
+		
+		
 		// Draw level/Score data
 		LinkedList<Integer> numberStack = new LinkedList<Integer>();
 		int levelInt = (mg.levelCounter+1), scoreInt = (mg.score + score), stackCount = 0;
@@ -427,24 +430,28 @@ public class GameState extends BasicGameState {
 
 		
 		// Overlay for count-in
-		//counterBarImage.ro
 		
 		if (playingState && countIn) {
-			Color overLay = new Color(0f, 0f, 0f, 0.5f);
-			graphics.setColor(overLay);
-			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
+			int count = (int)Math.ceil((3000.0-timeDelta)/1000.0), amount = Math.round((3000f-timeDelta)/3000f*15f);
 
-			graphics.setColor(Color.white);
-			graphics.drawString(countString, container.getWidth() / 2, container.getHeight() / 2);
+			graphics.setColor(new Color(0f, 0f, 0f, 0.5f));
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
+			graphics.drawImage(mg.numberImages[count], container.getWidth() / 2 - 18, container.getHeight() / 2 - 60);
+			
+			for(int i = 0; i < amount; i++) {
+				float degree = i*(360/15);
+				counterBarImage.setCenterOfRotation(12, 50);
+				counterBarImage.rotate(degree);
+				graphics.drawImage(counterBarImage, container.getWidth() / 2 - 10, container.getHeight() / 2 - 91);
+				counterBarImage.rotate(-degree);
+			}
 		}
 
 		if (!playingState) {
 			Color overLay = new Color(0f, 0f, 0f, 0.5f);
 			graphics.setColor(overLay);
-			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
-
-			graphics.setColor(Color.white);
-			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
+			graphics.drawImage(pausedtextImage, container.getWidth() / 2 - 130, container.getHeight() / 2 - 60);
 		}
 		
 		// draw foreground layer

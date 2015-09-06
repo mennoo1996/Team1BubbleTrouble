@@ -28,7 +28,7 @@ public class Gate extends Rectangle {
 		done = false;
 		fading = false;
 		heightPercentage = 1;
-		fadingSpeed = 600;
+		fadingSpeed = 1000;
 	}
 	
 	public void update(float delta) {

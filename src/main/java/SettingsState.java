@@ -82,15 +82,4 @@ public class SettingsState extends BasicGameState {
 		return 4;
 	}
 	
-	private String getStringForColor(Color color) {
-		if(color == Color.blue) {
-			return "blue";
-		} else if(color == Color.red) {
-			return "red";
-		} else if(color == Color.yellow) {
-			return "yellow";
-		}
-		
-		return "";
-	}
 }

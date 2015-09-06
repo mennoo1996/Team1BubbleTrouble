@@ -9,7 +9,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -134,7 +133,7 @@ public class GameState extends BasicGameState {
 		leveltextImage = new Image("resources/text/text_level.png");
 		
 		// gate images
-		gateWallImage = new Image("resources/gate_wall.png");
+		gateWallImage = new Image("resources/gate_wall_2.png");
 		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
@@ -328,11 +327,14 @@ public class GameState extends BasicGameState {
 		for(Gate gate : gateList) {
 			if(gate.getRequired().isEmpty()) {
 				tempGateList.add(gate);
+				gate.setFading(true);
 			}
 		}
 		for(Gate gate : tempGateList) {
-			if(gateList.contains(gate)) {
+			if(gateList.contains(gate) && gate.isDone()) {
 				gateList.remove(gate);
+			} else if(gateList.contains(gate) && gate.isFading()) {
+				gate.update(deltaFloat);
 			}
 		}
 		// if there are no active circles, process to gameover screen
@@ -374,8 +376,10 @@ public class GameState extends BasicGameState {
 		// draw all active gates
 		for(Gate gate : gateList) {
 			//graphics.fill(gate, shapeFill);
-			graphics.drawImage(gateWallImage, gate.getMinX() - 12, 0);
-			graphics.drawImage(gateWallImage, gate.getMaxX() - 12, 0);
+			graphics.drawImage(gateWallImage, gate.getMinX() - 13, ceiling.getHeight(), gate.getMinX() + 11, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, ceiling.getHeight(), gate.getMaxX() + 6, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+			graphics.drawImage(gateWallImage, gate.getMinX() - 13, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMinX() + 11, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMaxX() + 6, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
 		}
 		
 		// if shot, draw laser

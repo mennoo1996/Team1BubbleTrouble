@@ -54,7 +54,8 @@ public class GameState extends BasicGameState {
 	private Image scoretextImage;
 	private Image leveltextImage;
 	private Image pausedtextImage;
-	private Image gateWallImage;
+	private Image gateUpper;
+	private Image gateLower;
 	
 	// Countdown Bar Logic
 	private static int COUNTDOWN_BAR_PARTS = 56;
@@ -133,8 +134,6 @@ public class GameState extends BasicGameState {
 		scoretextImage = new Image("resources/text/text_score.png");
 		leveltextImage = new Image("resources/text/text_level.png");
 		
-		// gate images
-		gateWallImage = new Image("resources/gate_wall_2.png");
 		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
@@ -183,8 +182,10 @@ public class GameState extends BasicGameState {
 		scoretextImage = new Image("resources/text/text_score.png");
 		leveltextImage = new Image("resources/text/text_level.png");
 		pausedtextImage = new Image("resources/text/text_paused.png");
+
 		// gate images
-		gateWallImage = new Image("resources/gate_wall.png");
+		gateUpper = new Image("resources/gate_upper.png");
+		gateLower = new Image("resources/gate_lower.png");
 		// walls image
 		wallsImage = new Image("resources/walls_blue.png");
 		
@@ -398,11 +399,43 @@ public class GameState extends BasicGameState {
 		
 		// draw all active gates
 		for(Gate gate : gateList) {
-			//graphics.fill(gate, shapeFill);
-			graphics.drawImage(gateWallImage, gate.getMinX() - 13, ceiling.getHeight(), gate.getMinX() + 11, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
-			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, ceiling.getHeight(), gate.getMaxX() + 6, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
-			graphics.drawImage(gateWallImage, gate.getMinX() - 13, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMinX() + 11, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
-			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMaxX() + 6, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+			
+			//upper
+			int left = 11;
+			int down = 9;
+			float x = gate.getMinX() - left;
+			float y = ceiling.getHeight();
+			float x2 = x + gateUpper.getWidth();
+			float y2 = ceiling.getHeight() + 348*gate.getHeightPercentage() + down;
+			float srcx = 0;
+			float srcy = gateUpper.getHeight() - 348*gate.getHeightPercentage();
+			float srcx2 = gateUpper.getWidth();
+			float srcy2 = gateUpper.getHeight();
+			graphics.drawImage(gateUpper, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
+			
+			//lower
+			left = 9;
+			float up = 9;
+			x = gate.getMinX() - left -1;
+			y = container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage() - up;
+			x2 = x + gateLower.getWidth() - 1;
+			y2 = container.getHeight() - floor.getHeight();
+			srcx = 0;
+			srcy = 0;
+			srcx2 = gateLower.getWidth();
+			srcy2 = 347*gate.getHeightPercentage();
+			graphics.drawImage(gateLower, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
+			
+//			//graphics.fill(gate, shapeFill);
+//			graphics.drawImage(gateWallImage, gate.getMinX() - 13, ceiling.getHeight(), gate.getMinX() + 11, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, ceiling.getHeight(), gate.getMaxX() + 6, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMinX() - 13, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMinX() + 11, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMaxX() + 6, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateHorizontalWallImage, gate.getMinX(), ceiling.getHeight() - 21 + 348*gate.getHeightPercentage(), gate.getMaxX(), ceiling.getHeight() + 11 + 348*gate.getHeightPercentage(), 0, 0, gateHorizontalWallImage.getWidth(), gateHorizontalWallImage.getHeight());
+//			
+//			if(gate.isFading()) {
+//				graphics.drawImage(gateHorizontalWallImage, gate.getMinX(),container.getHeight() - floor.getHeight() - 11 - 347*gate.getHeightPercentage(), gate.getMaxX(), container.getHeight() - floor.getHeight() + 21 - 347*gate.getHeightPercentage(), 0, 0, gateHorizontalWallImage.getWidth(), gateHorizontalWallImage.getHeight());
+//			}
 		}
 		
 		// if shot, draw laser

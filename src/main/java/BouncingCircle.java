@@ -55,10 +55,18 @@ public class BouncingCircle extends Circle {
 		this.setX(this.getX() + xSpeed*deltaFloat);
 		// If the ball hit a wall reverse it's speed
 		if(this.getMinX() < gs.leftWall.getWidth()) {
-			xSpeed = Math.abs(xSpeed);
+			xSpeed = -xSpeed;
 		} else if(this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
-			xSpeed = -Math.abs(xSpeed);
+			xSpeed = -xSpeed;
+		} else {
+			for(Gate gate : gs.getGateList()) {
+				if(gate.getRectangle().intersects(this.getCircle())) {
+					xSpeed = -xSpeed;
+				}
+			}
 		}
+		
+		//
 	}
 	
 	/**

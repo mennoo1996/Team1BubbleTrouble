@@ -11,15 +11,17 @@ public class Level {
 	
 	private int time;
 	private ArrayList<BouncingCircle> circles;
+	private ArrayList<Gate> gates;
 	
 	/**
 	 * Construct a new level
 	 * @param time the time you get for completing this level
 	 * @param circles the circles present in this level
 	 */
-	public Level(int time, ArrayList<BouncingCircle> circles) {
+	public Level(int time, ArrayList<BouncingCircle> circles, ArrayList<Gate> gates) {
 		this.time = time;
 		this.circles = circles;
+		this.gates = gates;
 	}
 
 	/**
@@ -49,9 +51,12 @@ public class Level {
 	public void setCircles(ArrayList<BouncingCircle> circles) {
 		this.circles = circles;
 	}
-	
-	
-	
-	
 
+	public ArrayList<Gate> getGates() {
+		return gates;
+	}
+
+	public void setGates(ArrayList<Gate> gates) {
+		this.gates = gates;
+	}
 }

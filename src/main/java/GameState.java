@@ -8,6 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -26,7 +27,6 @@ public class GameState extends BasicGameState {
 	private Gate intersectingGate;
 	private MyShapeFill shapeFill;
 	private Player player;
-	private Image playerImage;
 	private Input input;
 	private boolean shot;
 	private int score;
@@ -39,13 +39,29 @@ public class GameState extends BasicGameState {
 	private boolean playingState;
 	private boolean waitEsc;
 
+	// Images
+	private Image playerImage;
+	private Image wallsImage;
+	private Image health_0_Image;
+	private Image health_1_Image;
+	private Image health_2_Image;
+	private Image health_3_Image;
+	private Image health_4_Image;
+	private Image health_5_Image;
+	private Image counterBarImage;
+	
+	TrueTypeFont font;
+	
 	// Countdown Bar Logic
-	private static int COUNTDOWN_BAR_WIDTH = 300;
+	private static int COUNTDOWN_BAR_WIDTH = 550;
+	private static int COUNTDOWN_BAR_PARTS = 56;
 	private float fractionTimePix;
+	private int fractionTimeParts;
 
-	//Life counter method 1 code
+	// Life counter method 1 code
 	private boolean playerIntersect;
 	
+	// level objects
 	protected Laser laser;
 	protected Rectangle floor;
 	protected Rectangle leftWall;
@@ -80,7 +96,6 @@ public class GameState extends BasicGameState {
 		// Create levels
 		initializeLevels();
 		
-		
 		//Initialize for life counter
 		playerIntersect = false;
 		
@@ -95,22 +110,36 @@ public class GameState extends BasicGameState {
 		countIn = true;
 		playingState = true;
 
+		// load health images
+		health_0_Image = new Image("resources/Terminal/Terminal_Lights_0.png");
+		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
+		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
-		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75, playerImage);
+		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage);
+		wallsImage = new Image("resources/walls_blue.png");
 		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
-		floor = new Rectangle(0,container.getHeight()-25,container.getWidth(),25);
-		leftWall = new Rectangle(0,0,10,container.getHeight());
-		rightWall = new Rectangle(container.getWidth()-10,0,10,container.getHeight());
-		ceiling = new Rectangle(0,0,container.getWidth(),10);
+		floor = new Rectangle(0,container.getHeight()-210,container.getWidth(),210);
+		leftWall = new Rectangle(0,0,105,container.getHeight());
+		rightWall = new Rectangle(container.getWidth()-130,0,130,container.getHeight());
+		ceiling = new Rectangle(0,0,container.getWidth(),95);
 		
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
+
 		
 		// Add gates
 		gateList = levels.getLevel(mg.levelCounter).getGates();
+
 		
 		// shapeFill which always returns the given color
 		shapeFill = new MyShapeFill(Color.blue);
@@ -161,6 +190,8 @@ public class GameState extends BasicGameState {
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
 		timeRemaining -= timeDelta;
 		fractionTimePix = COUNTDOWN_BAR_WIDTH * (timeRemaining) / TOTAL_TIME;
+		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / TOTAL_TIME);
+		
 		if (timeRemaining <= 0) {
             playerDeath(sbg);
         }
@@ -317,20 +348,9 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		
-		// draw background
+		// draw background layer
 		graphics.drawImage(mg.backgroundImage, 0, 0);
 		graphics.setColor(Color.white);
-		
-		// Draw walls, floor and ceiling
-		graphics.fill(floor, shapeFill);
-		graphics.fill(leftWall, shapeFill);
-		graphics.fill(rightWall, shapeFill);
-		graphics.fill(ceiling, shapeFill);
-		
-		
-		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-50);
-		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-70);
-		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -90);
 
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {
@@ -347,19 +367,28 @@ public class GameState extends BasicGameState {
 			graphics.fill(laser.getRectangle());
 		}
 		
-		graphics.drawImage(player.getImage(), player.getX(), player.getY());
 		// draw player
+		graphics.drawImage(player.getImage(), player.getX(), player.getY());
 		//graphics.drawImage(player.getImage(), player.getX(), player.getY());
 
+		// Draw walls, floor and ceiling
+//		graphics.fill(floor, shapeFill);
+//		graphics.fill(leftWall, shapeFill);
+//		graphics.fill(rightWall, shapeFill);
+//		graphics.fill(ceiling, shapeFill);
+		graphics.drawImage(wallsImage, 0, 0);
+		
 		// Draw timer countdown bar
-		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 20, container.getHeight() - 50, COUNTDOWN_BAR_WIDTH + 2, 20);
+//		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 600, container.getHeight() - 50, COUNTDOWN_BAR_WIDTH + 2, 20);
+//		graphics.setColor(Color.red);
+//		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 599, container.getHeight() - 49, fractionTimePix, 18);
+//		graphics.setColor(Color.white);
 
-		graphics.setColor(Color.red);
-
-		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 19, container.getHeight() - 49, fractionTimePix, 18);
-
-		graphics.setColor(Color.white);
-
+		// Draw timer countdown images
+		for(int x = 0; x < fractionTimeParts; x++) {
+			graphics.drawImage(counterBarImage, container.getWidth()/2 - 80 - 5*(COUNTDOWN_BAR_PARTS) + x*10, container.getHeight() - 60);//
+		}
+		
 		// Overlay for count-in
 		if (playingState && countIn) {
 			Color overLay = new Color(0f, 0f, 0f, 0.5f);
@@ -378,6 +407,45 @@ public class GameState extends BasicGameState {
 			graphics.setColor(Color.white);
 			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
 		}
+
+		// experimenting with stretched laser textures
+		//graphics.drawImage(mg.laserHorizontalImage, 100, 70, 1495, 105, 0, 0, 128, 35);
+		//graphics.drawImage(mg.laserHorizontalImage, 100, 800, 1495, 835, 0, 0, 128, 35);
+		//graphics.drawImage(mg.laserVerticalImage, 100, 100, 135, 1400, 0, 0, 35, 128);
+		
+		// draw foreground layer
+		graphics.drawImage(mg.foreGroundImage, 0, 0);
+		
+		// draw terminal
+		graphics.drawImage(mg.terminalImage, 0, 0);
+		
+		switch(mg.getLifeCount()) {
+			case(0) : 
+				graphics.drawImage(health_0_Image, 0, 0);
+			break;
+			case(1) : 
+				graphics.drawImage(health_1_Image, 0, 0);
+			break;
+			case(2) : 
+				graphics.drawImage(health_2_Image, 0, 0);
+			break;
+			case(3) : 
+				graphics.drawImage(health_3_Image, 0, 0);
+			break;
+			case(4) : 
+				graphics.drawImage(health_4_Image, 0, 0);
+			break;
+			case(5) : 
+				graphics.drawImage(health_5_Image, 0, 0);
+			break;
+		}
+		
+		graphics.setColor(Color.green);
+		graphics.drawString("Debug values ", 20, container.getHeight()-90);
+		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-70);
+		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);
+		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -30);
+		
 	}
 
 	

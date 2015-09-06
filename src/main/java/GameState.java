@@ -43,17 +43,18 @@ public class GameState extends BasicGameState {
 	// Images
 	private Image playerImage;
 	private Image wallsImage;
-	private Image health_0_Image;
 	private Image health_1_Image;
 	private Image health_2_Image;
 	private Image health_3_Image;
 	private Image health_4_Image;
 	private Image health_5_Image;
+	private Image nobutton_Image;
 	private Image laser_beam_image;
 	private Image laser_tip_image;
 	private Image counterBarImage;
 	private Image scoretextImage;
 	private Image leveltextImage;
+	private Image gateWallImage;
 	
 	// Countdown Bar Logic
 	private static int COUNTDOWN_BAR_PARTS = 56;
@@ -112,12 +113,14 @@ public class GameState extends BasicGameState {
 		playingState = true;
 
 		// load health images
-		health_0_Image = new Image("resources/Terminal/Terminal_Lights_0.png");
 		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
 		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
 		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
 		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
 		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		
+		// button image
+		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
 		
 		// laser images
 		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
@@ -129,6 +132,9 @@ public class GameState extends BasicGameState {
 		// text images
 		scoretextImage = new Image("resources/text/text_score.png");
 		leveltextImage = new Image("resources/text/text_level.png");
+		
+		// gate images
+		gateWallImage = new Image("resources/gate_wall.png");
 		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
@@ -367,7 +373,9 @@ public class GameState extends BasicGameState {
 		
 		// draw all active gates
 		for(Gate gate : gateList) {
-			graphics.fill(gate, shapeFill);
+			//graphics.fill(gate, shapeFill);
+			graphics.drawImage(gateWallImage, gate.getMinX() - 12, 0);
+			graphics.drawImage(gateWallImage, gate.getMaxX() - 12, 0);
 		}
 		
 		// if shot, draw laser
@@ -447,10 +455,11 @@ public class GameState extends BasicGameState {
 		// draw terminal
 		graphics.drawImage(mg.terminalImage, 0, 0);
 		
+		if(!playingState) {
+			graphics.drawImage(nobutton_Image, 0, 0);
+		}
+		
 		switch(mg.getLifeCount()) {
-			case(0) : 
-				graphics.drawImage(health_0_Image, 0, 0);
-			break;
 			case(1) : 
 				graphics.drawImage(health_1_Image, 0, 0);
 			break;

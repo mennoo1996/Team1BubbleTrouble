@@ -66,7 +66,7 @@ public class MainGame extends StateBasedGame {
 		app.setDisplayMode(xRes, Math.round(yRes), false);
 		app.setVSync(true);
 		app.setTargetFrameRate(60);
-		//app.setMaximumLogicUpdateInterval(10);
+		//app.setMaximumLogicUpdateInterval(10); // Do not touch this - Mark
 		app.start();
 		app.setSmoothDeltas(true);
 	}

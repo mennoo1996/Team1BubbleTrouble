@@ -112,34 +112,10 @@ public class GameState extends BasicGameState {
 		countIn = true;
 		playingState = true;
 
-		// load health images
-		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
-		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
-		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
-		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
-		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 		
-		// button image
-		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
-		
-		// laser images
-		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
-		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
-		
-		// countdown bar images
-		counterBarImage = new Image("resources/counter_bar.png");
-		
-		// text images
-		scoretextImage = new Image("resources/text/text_score.png");
-		leveltextImage = new Image("resources/text/text_level.png");
-		
-		// gate images
-		gateWallImage = new Image("resources/gate_wall.png");
-		
-		// Add player sprite and walls
+		// Add player sprite
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage);
-		wallsImage = new Image("resources/walls_blue.png");
 		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
 		floor = new Rectangle(0,container.getHeight()-210,container.getWidth(),210);
 		leftWall = new Rectangle(0,0,105,container.getHeight());
@@ -166,6 +142,28 @@ public class GameState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
+		
+		// load health images
+		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		// button image
+		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
+		// laser images
+		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
+		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
+		// text images
+		scoretextImage = new Image("resources/text/text_score.png");
+		leveltextImage = new Image("resources/text/text_level.png");
+		// gate images
+		gateWallImage = new Image("resources/gate_wall.png");
+		// walls image
+		wallsImage = new Image("resources/walls_blue.png");
+		
 	}
 	
 	/**
@@ -393,16 +391,16 @@ public class GameState extends BasicGameState {
 
 		// Draw timer countdown bar
 		for(int x = 0; x < fractionTimeParts; x++) {
+			//counterBarImage.rotate(10*x); // EPIC
 			graphics.drawImage(counterBarImage, container.getWidth()/2 - 80 - 5*(COUNTDOWN_BAR_PARTS) + x*10, container.getHeight() - 60);//
+			//counterBarImage.rotate(-10*x); // EPIC
 		}
 		
 		// Draw level/Score data
 		LinkedList<Integer> numberStack = new LinkedList<Integer>();
 		int levelInt = (mg.levelCounter+1), scoreInt = (mg.score + score), stackCount = 0;
-		
 
 		graphics.drawImage(leveltextImage, container.getWidth() / 2, container.getHeight() - 90);
-		
 		while(levelInt > 0) {
 			numberStack.push(levelInt % 10);
 			levelInt /= 10;
@@ -411,10 +409,8 @@ public class GameState extends BasicGameState {
 			graphics.drawImage(mg.numberImages[numberStack.pop()], container.getWidth() / 2 + 116 + 20*stackCount, container.getHeight() - 89);
 			stackCount++;
 		}
-		
 
 		graphics.drawImage(scoretextImage, container.getWidth() / 2 - 300, container.getHeight() - 90);
-		
 		stackCount = 0;
 		if(scoreInt == 0) {
 			numberStack.push(scoreInt);
@@ -431,6 +427,8 @@ public class GameState extends BasicGameState {
 
 		
 		// Overlay for count-in
+		//counterBarImage.ro
+		
 		if (playingState && countIn) {
 			Color overLay = new Color(0f, 0f, 0f, 0.5f);
 			graphics.setColor(overLay);

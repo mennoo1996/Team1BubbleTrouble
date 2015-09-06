@@ -564,5 +564,9 @@ public class GameState extends BasicGameState {
 		
 		
 	}
+	
+	public void setCeiling(Rectangle c) {
+		ceiling = c;
+	}
 
 }

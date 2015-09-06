@@ -49,6 +49,8 @@ public class GameState extends BasicGameState {
 	private Image health_3_Image;
 	private Image health_4_Image;
 	private Image health_5_Image;
+	private Image laser_beam_image;
+	private Image laser_tip_image;
 	private Image counterBarImage;
 	private Image scoretextImage;
 	private Image leveltextImage;
@@ -116,6 +118,10 @@ public class GameState extends BasicGameState {
 		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
 		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
 		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		
+		// laser images
+		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
+		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
 		
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
@@ -363,15 +369,16 @@ public class GameState extends BasicGameState {
 		for(Gate gate : gateList) {
 			graphics.fill(gate, shapeFill);
 		}
-
+		
 		// if shot, draw laser
 		if(shot) {
-			graphics.fill(laser.getRectangle());
+			//graphics.fill(laser.getRectangle());
+			graphics.drawImage(laser_tip_image, laser.getX() - 18, laser.getY() - 14);
+			graphics.drawImage(laser_beam_image, laser.getX() - 18, laser.getRectangle().getMinY() + 13, laser.getX() + 17, laser.getRectangle().getMaxY(), 0, 0, 35, 300);
 		}
 		
 		// draw player
 		graphics.drawImage(player.getImage(), player.getX(), player.getY());
-		//graphics.drawImage(player.getImage(), player.getX(), player.getY());
 
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);
@@ -433,11 +440,6 @@ public class GameState extends BasicGameState {
 			graphics.setColor(Color.white);
 			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
 		}
-
-		// experimenting with stretched laser textures
-		//graphics.drawImage(mg.laserHorizontalImage, 100, 70, 1495, 105, 0, 0, 128, 35);
-		//graphics.drawImage(mg.laserHorizontalImage, 100, 800, 1495, 835, 0, 0, 128, 35);
-		//graphics.drawImage(mg.laserVerticalImage, 100, 100, 135, 1400, 0, 0, 35, 128);
 		
 		// draw foreground layer
 		graphics.drawImage(mg.foreGroundImage, 0, 0);
@@ -465,6 +467,11 @@ public class GameState extends BasicGameState {
 				graphics.drawImage(health_5_Image, 0, 0);
 			break;
 		}
+		
+		// experimenting with stretched laser textures -> MARK HERE: DONT DELETE THIS COMMENTED CODE, ITS A PAIN TO SET UP AGAIN
+		//graphics.drawImage(mg.laserHorizontalImage, 100, 70, 1495, 105, 0, 0, 128, 35);
+		//graphics.drawImage(mg.laserHorizontalImage, 100, 800, 1495, 835, 0, 0, 128, 35);
+		//graphics.drawImage(mg.laserVerticalImage, 100, 100, 135, 1400, 0, 0, 35, 128);
 		
 //		graphics.setColor(Color.green);
 //		graphics.drawString("Debug values ", 20, container.getHeight()-90);

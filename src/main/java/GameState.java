@@ -53,6 +53,7 @@ public class GameState extends BasicGameState {
 	private Image counterBarImage;
 	private Image scoretextImage;
 	private Image leveltextImage;
+	private Image pausedtextImage;
 	private Image gateWallImage;
 	
 	// Countdown Bar Logic
@@ -138,7 +139,6 @@ public class GameState extends BasicGameState {
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage);
-		wallsImage = new Image("resources/walls_blue.png");
 		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
 		floor = new Rectangle(0,container.getHeight()-210,container.getWidth(),210);
 		leftWall = new Rectangle(0,0,105,container.getHeight());
@@ -165,6 +165,29 @@ public class GameState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
+		
+		// load health images
+		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		// button image
+		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
+		// laser images
+		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
+		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
+		// text images
+		scoretextImage = new Image("resources/text/text_score.png");
+		leveltextImage = new Image("resources/text/text_level.png");
+		pausedtextImage = new Image("resources/text/text_paused.png");
+		// gate images
+		gateWallImage = new Image("resources/gate_wall.png");
+		// walls image
+		wallsImage = new Image("resources/walls_blue.png");
+		
 	}
 	
 	/**
@@ -397,16 +420,17 @@ public class GameState extends BasicGameState {
 
 		// Draw timer countdown bar
 		for(int x = 0; x < fractionTimeParts; x++) {
+			//counterBarImage.rotate(10*x); // EPIC
 			graphics.drawImage(counterBarImage, container.getWidth()/2 - 80 - 5*(COUNTDOWN_BAR_PARTS) + x*10, container.getHeight() - 60);//
+			//counterBarImage.rotate(-10*x); // EPIC
 		}
+		
 		
 		// Draw level/Score data
 		LinkedList<Integer> numberStack = new LinkedList<Integer>();
 		int levelInt = (mg.levelCounter+1), scoreInt = (mg.score + score), stackCount = 0;
-		
 
 		graphics.drawImage(leveltextImage, container.getWidth() / 2, container.getHeight() - 90);
-		
 		while(levelInt > 0) {
 			numberStack.push(levelInt % 10);
 			levelInt /= 10;
@@ -415,10 +439,8 @@ public class GameState extends BasicGameState {
 			graphics.drawImage(mg.numberImages[numberStack.pop()], container.getWidth() / 2 + 116 + 20*stackCount, container.getHeight() - 89);
 			stackCount++;
 		}
-		
 
 		graphics.drawImage(scoretextImage, container.getWidth() / 2 - 300, container.getHeight() - 90);
-		
 		stackCount = 0;
 		if(scoreInt == 0) {
 			numberStack.push(scoreInt);
@@ -434,23 +456,42 @@ public class GameState extends BasicGameState {
 		}
 
 		
-		// Overlay for count-in
+		// Pause overlay and counter
 		if (playingState && countIn) {
-			Color overLay = new Color(0f, 0f, 0f, 0.5f);
-			graphics.setColor(overLay);
-			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
+			int count = (int)Math.ceil((3000.0-timeDelta)/1000.0), amount = Math.round((3000f-timeDelta)/3000f*15f);
 
-			graphics.setColor(Color.white);
-			graphics.drawString(countString, container.getWidth() / 2, container.getHeight() / 2);
+			graphics.setColor(new Color(0f, 0f, 0f, 0.5f));
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
+			graphics.drawImage(mg.numberImages[count], container.getWidth() / 2 - 18, container.getHeight() / 2 - 60);
+			
+			for(int i = 0; i < amount; i++) {
+				float degree = i*(360/15);
+				counterBarImage.setCenterOfRotation(12, 50);
+				counterBarImage.rotate(degree);
+				graphics.drawImage(counterBarImage, container.getWidth() / 2 - 10, container.getHeight() / 2 - 91);
+				counterBarImage.rotate(-degree);
+			}
 		}
 
 		if (!playingState) {
 			Color overLay = new Color(0f, 0f, 0f, 0.5f);
 			graphics.setColor(overLay);
-			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
-
-			graphics.setColor(Color.white);
-			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
+			graphics.drawImage(pausedtextImage, container.getWidth() / 2 - 130, container.getHeight() / 2 - 60);
+		}
+		
+		// draw version number (BECAUZ ITZ COOL)
+		graphics.drawImage(mg.versiontextImage, 72, container.getHeight() - 195);
+		graphics.drawImage(mg.numberImages[1], 72 + 150, container.getHeight() - 196);
+		int versionnumber = 105;
+		stackCount = 0;
+		while(versionnumber > 0) {
+			numberStack.push(versionnumber % 10);
+			versionnumber /= 10;
+		}
+		while(!numberStack.isEmpty()) {
+			graphics.drawImage(mg.numberImages[numberStack.pop()], 72 + 175 + 20*stackCount, container.getHeight() - 196);
+			stackCount++;
 		}
 		
 		// draw foreground layer
@@ -459,10 +500,12 @@ public class GameState extends BasicGameState {
 		// draw terminal
 		graphics.drawImage(mg.terminalImage, 0, 0);
 		
+		// disable button when paused
 		if(!playingState) {
 			graphics.drawImage(nobutton_Image, 0, 0);
 		}
 		
+		// show correct health lights
 		switch(mg.getLifeCount()) {
 			case(1) : 
 				graphics.drawImage(health_1_Image, 0, 0);

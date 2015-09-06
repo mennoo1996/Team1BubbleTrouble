@@ -24,6 +24,7 @@ public class MainGame extends StateBasedGame {
 	protected Image backgroundImage;
 	protected Image foreGroundImage;
 	protected Image terminalImage;
+	protected Image[] numberImages;
 	protected Image laserHorizontalImage;
 	protected Image laserVerticalImage;
 	protected String playerImage;
@@ -84,6 +85,11 @@ public class MainGame extends StateBasedGame {
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
+		
+		this.numberImages = new Image[10];
+		for(int i = 0; i < 10; i++) {
+			this.numberImages[i] = new Image("resources/numbers/" + Integer.toString(i) + ".png");
+		}
 		
 		System.out.println(this.getStateCount());
 		

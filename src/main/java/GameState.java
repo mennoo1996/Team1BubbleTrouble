@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,13 +50,11 @@ public class GameState extends BasicGameState {
 	private Image health_4_Image;
 	private Image health_5_Image;
 	private Image counterBarImage;
-	
-	TrueTypeFont font;
+	private Image scoretextImage;
+	private Image leveltextImage;
 	
 	// Countdown Bar Logic
-	private static int COUNTDOWN_BAR_WIDTH = 550;
 	private static int COUNTDOWN_BAR_PARTS = 56;
-	private float fractionTimePix;
 	private int fractionTimeParts;
 
 	// Life counter method 1 code
@@ -120,6 +119,10 @@ public class GameState extends BasicGameState {
 		
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
+		
+		// text images
+		scoretextImage = new Image("resources/text/text_score.png");
+		leveltextImage = new Image("resources/text/text_level.png");
 		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
@@ -189,7 +192,6 @@ public class GameState extends BasicGameState {
 
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
 		timeRemaining -= timeDelta;
-		fractionTimePix = COUNTDOWN_BAR_WIDTH * (timeRemaining) / TOTAL_TIME;
 		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / TOTAL_TIME);
 		
 		if (timeRemaining <= 0) {
@@ -372,22 +374,46 @@ public class GameState extends BasicGameState {
 		//graphics.drawImage(player.getImage(), player.getX(), player.getY());
 
 		// Draw walls, floor and ceiling
-//		graphics.fill(floor, shapeFill);
-//		graphics.fill(leftWall, shapeFill);
-//		graphics.fill(rightWall, shapeFill);
-//		graphics.fill(ceiling, shapeFill);
 		graphics.drawImage(wallsImage, 0, 0);
-		
-		// Draw timer countdown bar
-//		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 600, container.getHeight() - 50, COUNTDOWN_BAR_WIDTH + 2, 20);
-//		graphics.setColor(Color.red);
-//		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 599, container.getHeight() - 49, fractionTimePix, 18);
-//		graphics.setColor(Color.white);
 
-		// Draw timer countdown images
+		// Draw timer countdown bar
 		for(int x = 0; x < fractionTimeParts; x++) {
 			graphics.drawImage(counterBarImage, container.getWidth()/2 - 80 - 5*(COUNTDOWN_BAR_PARTS) + x*10, container.getHeight() - 60);//
 		}
+		
+		// Draw level/Score data
+		LinkedList<Integer> numberStack = new LinkedList<Integer>();
+		int levelInt = (mg.levelCounter+1), scoreInt = (mg.score + score), stackCount = 0;
+		
+
+		graphics.drawImage(leveltextImage, container.getWidth() / 2, container.getHeight() - 90);
+		
+		while(levelInt > 0) {
+			numberStack.push(levelInt % 10);
+			levelInt /= 10;
+		}
+		while(!numberStack.isEmpty()) {
+			graphics.drawImage(mg.numberImages[numberStack.pop()], container.getWidth() / 2 + 116 + 20*stackCount, container.getHeight() - 89);
+			stackCount++;
+		}
+		
+
+		graphics.drawImage(scoretextImage, container.getWidth() / 2 - 300, container.getHeight() - 90);
+		
+		stackCount = 0;
+		if(scoreInt == 0) {
+			numberStack.push(scoreInt);
+		}
+		while(scoreInt > 0) {
+			numberStack.push(scoreInt % 10);
+			scoreInt /= 10;
+		}
+		
+		while(!numberStack.isEmpty()) {
+			graphics.drawImage(mg.numberImages[numberStack.pop()], container.getWidth() / 2 - 184 + 20*stackCount, container.getHeight() - 90);
+			stackCount++;
+		}
+
 		
 		// Overlay for count-in
 		if (playingState && countIn) {
@@ -440,11 +466,11 @@ public class GameState extends BasicGameState {
 			break;
 		}
 		
-		graphics.setColor(Color.green);
-		graphics.drawString("Debug values ", 20, container.getHeight()-90);
-		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-70);
-		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);
-		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -30);
+//		graphics.setColor(Color.green);
+//		graphics.drawString("Debug values ", 20, container.getHeight()-90);
+//		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-70);
+//		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);
+//		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -30);
 		
 	}
 

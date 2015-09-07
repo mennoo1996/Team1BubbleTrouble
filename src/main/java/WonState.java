@@ -34,6 +34,7 @@ public class WonState extends BasicGameState {
 			// If mouse is pressed inside the button, go to the gameState
 			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 				if(playAgainButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+					mg.levelCounter = 0;
 					sbg.enterState(1);
 				}
 			}

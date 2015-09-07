@@ -13,11 +13,11 @@ public class SettingsState extends BasicGameState {
 
 	private Image mannetje;
 	private Image arie;
-	private Rectangle mannetjeRectangle;
-	private Rectangle arieRectangle;
-	private Rectangle mannetjeHighlight;
-	private Rectangle arieHighlight;
-	private Rectangle backButton;
+	private MyRectangle mannetjeRectangle;
+	private MyRectangle arieRectangle;
+	private MyRectangle mannetjeHighlight;
+	private MyRectangle arieHighlight;
+	private MyRectangle backButton;
 	private MainGame mg;
 	private Input input;
 	
@@ -33,11 +33,11 @@ public class SettingsState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		mannetje = new Image("resources/mannetje.png");
 		arie = new Image("resources/arie.png");
-		mannetjeRectangle = new Rectangle(100,300,45,75);
-		arieRectangle = new Rectangle(300,300,45,75);
-		mannetjeHighlight = new Rectangle(90,290,65,95);
-		arieHighlight = new Rectangle(290,290,65,95);
-		backButton = new Rectangle(500,200,200,45);
+		mannetjeRectangle = new MyRectangle(100,300,45,75);
+		arieRectangle = new MyRectangle(300,300,45,75);
+		mannetjeHighlight = new MyRectangle(90,290,65,95);
+		arieHighlight = new MyRectangle(290,290,65,95);
+		backButton = new MyRectangle(500,200,200,45);
 	}
 	
 	public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {

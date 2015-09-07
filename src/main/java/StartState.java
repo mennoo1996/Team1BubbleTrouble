@@ -11,12 +11,12 @@ import org.newdawn.slick.state.StateBasedGame;
 public class StartState extends BasicGameState {
 
 	private Button playButton;
-	private Rectangle settingsButton;
+	private MyRectangle settingsButton;
 	
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		
 		playButton = new Button(300,275,200,45, new Image("resources/play_button.png"));
-		settingsButton = new Rectangle(300,325,200,45);
+		settingsButton = new MyRectangle(300,325,200,45);
 	}
 	
 	public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {

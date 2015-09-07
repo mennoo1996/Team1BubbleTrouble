@@ -32,8 +32,8 @@ public class Gate extends Rectangle {
 		this.done = done;
 	}
 
-	public Rectangle getRectangle() {
-		return new Rectangle(x, y, width, height);
+	public MyRectangle getRectangle() {
+		return new MyRectangle(x, y, width, height);
 	}
 	
 	public void addToRequirements(BouncingCircle circle) {

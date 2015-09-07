@@ -29,8 +29,8 @@ public class Button {
 	 * get bounding box rectangle of the button
 	 * @return
 	 */
-	public Rectangle getRectangle() {
-		return new Rectangle(x,y,width,height);
+	public MyRectangle getRectangle() {
+		return new MyRectangle(x,y,width,height);
 	}
 	
 	/**

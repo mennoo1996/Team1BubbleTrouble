@@ -17,8 +17,8 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GameState extends BasicGameState {
 
 	// CONSTANTS
-	private static int TOTAL_TIME = 40000;
-	private static int LEVEL_POINTS = 1500;
+	private static int TOTAL_TIME;
+	private static final int LEVEL_POINTS = 1500;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -35,7 +35,6 @@ public class GameState extends BasicGameState {
 	private long timeRemaining;
 	private long prevTime;
 	private boolean countIn;
-	private String countString;
 	private boolean playingState;
 	private boolean waitEsc;
 
@@ -63,6 +62,7 @@ public class GameState extends BasicGameState {
 	private static int COUNTDOWN_BAR_PARTS = 56;
 	private int fractionTimeParts;
 	private boolean waitForLevelEnd = false;
+	private boolean freeToRoam;
 
 	// Life counter method 1 code
 	private boolean playerIntersect;
@@ -146,7 +146,10 @@ public class GameState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
-		
+		loadImages();
+	}
+
+	private void loadImages() throws SlickException {
 		// load health images
 		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
 		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
@@ -170,15 +173,15 @@ public class GameState extends BasicGameState {
 		gateLower = new Image("resources/gate_lower.png");
 		// walls image
 		wallsImage = new Image("resources/walls_blue.png");
-		
+
 		// load health images
 		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
 		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
 		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
 		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
 		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
-				
-				// balls images
+
+		// balls images
 		balls_Images = new Image[6];
 		balls_Images[0] = new Image("resources/Balls/Ball_90.png");
 		balls_Images[1] = new Image("resources/Balls/Ball_65.png");
@@ -203,9 +206,8 @@ public class GameState extends BasicGameState {
 
 		// ceiling image
 		ceiling_Image = new Image("resources/ceiling.png");
-		
 	}
-	
+
 	/**
 	 * update method, called on each frame refresh
 	 */
@@ -217,13 +219,7 @@ public class GameState extends BasicGameState {
 			timeDelta = curTime - prevTime;
 
 			if (countIn) {
-				if (timeDelta < 1000) {
-					countString = "3";
-				} else if (timeDelta < 2000) {
-					countString = "2";
-				} else if (timeDelta < 3000) {
-					countString = "1";
-				} else {
+				if (timeDelta >= 3000) {
 					countIn = false;
 					prevTime = curTime;
 				}
@@ -258,45 +254,38 @@ public class GameState extends BasicGameState {
 		float deltaFloat = delta / 1000f;
 		input = container.getInput();
 
-		// Exit application when esc key is pressed at any time during game.
-		if (input.isKeyDown(Input.KEY_ESCAPE)) {
-			waitEsc = true;
-			(new Timer()).schedule(new TimerTask() {
-				@Override
-				public void run() {
-					waitEsc = false;
-				}
-			}, 300);
-			playingState = false;
-        }
+		processPause();
+		processGates();
+		processPlayerMovement(container, deltaFloat, freeToRoam);
+		processWeapon(container, deltaFloat);
+		processCircles(container, sbg, deltaFloat);
+		
+		// if there are no circles required to be shot by a gate, remove said gate
+		updateGateExistence(deltaFloat);
+		// if there are no active circles, process to gameover screen
 
+		if(circleList.isEmpty()) {
+			endLevel(sbg);
+		}
+
+	}
+
+	private void processGates() {
 		// Check the intersection of a player with a gate
-		boolean freeToRoam = true;
-		for(Gate machvise : gateList) {
-			if(player.getRectangle().intersects(machvise.getRectangle())) {
+		freeToRoam = true;
+		for(Gate someGate : gateList) {
+			if(player.getRectangle().intersects(someGate.getRectangle())) {
 				freeToRoam = false;
-				intersectingGate = machvise;
+				intersectingGate = someGate;
 			}
 		}
 		// Reset intersecting gate to none if there is no intersection
 		if(freeToRoam) {
 			intersectingGate = null;
 		}
-		
-		// Walk left when left key pressed and not at left wall OR a gate
-		if (input.isKeyDown(Input.KEY_LEFT) && player.getX() > leftWall.getWidth()) {
-            if(freeToRoam || (player.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
-            	player.setX(player.getX() - mg.playerSpeed * deltaFloat);
-            }
-        }
+	}
 
-		// Walk right when right key pressed and not at right wall OR a gate
-		if (input.isKeyDown(Input.KEY_RIGHT) && player.getMaxX() < (container.getWidth() - rightWall.getWidth())) {
-           if(freeToRoam || (player.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
-        	   player.setX(player.getX() + mg.playerSpeed * deltaFloat);
-           }
-        }
-
+	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
 		if (input.isKeyPressed(Input.KEY_SPACE) && !shot) {
             shot = true;
@@ -312,12 +301,11 @@ public class GameState extends BasicGameState {
                 shot = false;
             }
         }
+	}
 
-		//Method 1 code
-		//boolean noCircleIntersectsDetected = true;
-
+	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
 		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
-		
+
 		// loop through all active circles
 		for (BouncingCircle circle : circleList) {
             //update circles
@@ -337,7 +325,7 @@ public class GameState extends BasicGameState {
                 shotList.add(circle);
                 laser.setVisible(false);
             }
-            
+
             if (circle.isHitCeiling()) {
             	ceilingList.add(circle);
             }
@@ -349,7 +337,7 @@ public class GameState extends BasicGameState {
 				circleList.remove(circle);
 			}
 		}
-		
+
 		// loop through the circles that has been shot
 		for (BouncingCircle circle : shotList) {
             // if the circle hasn't been handled
@@ -361,7 +349,7 @@ public class GameState extends BasicGameState {
                     score += circle.getScore();
                 }
                 // if the ball has a radius of 20, split it u
-                ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>(); 
+                ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
                 if (circle.getRadius() >= 20) {
                 	splits = circle.getSplittedCircles(mg);
                     circleList.addAll(splits);
@@ -378,8 +366,9 @@ public class GameState extends BasicGameState {
                 }
             }
         }
-		
-		// if there are no circles required to be shot by a gate, remove said gate
+	}
+
+	private void updateGateExistence(float deltaFloat) {
 		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
 		for(Gate gate : gateList) {
 			if(gate.getRequired().isEmpty()) {
@@ -394,29 +383,54 @@ public class GameState extends BasicGameState {
 				gate.update(deltaFloat);
 			}
 		}
-		// if there are no active circles, process to gameover screen
+	}
 
+	private void endLevel(StateBasedGame sbg) {
+		if(waitForLevelEnd == false) {
+            score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
+            mg.score += score;
+            waitForLevelEnd = true;
+        }
+		if(waitForLevelEnd && timeRemaining == 1) {
+            if (mg.levelCounter<levels.size()-1) {
+                waitForLevelEnd = false;
+                mg.levelCounter++;
+                System.out.println("");
+                sbg.enterState(1);
+            } else {
+                waitForLevelEnd = false;
+                sbg.enterState(3);
+            }
+        }
+	}
 
-		if(circleList.isEmpty()) {
-			if(waitForLevelEnd == false) {
-				score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
-				mg.score += score;
-				waitForLevelEnd = true;
-			}
-			if(waitForLevelEnd && timeRemaining == 1) {
-				if (mg.levelCounter<levels.size()-1) {
-					waitForLevelEnd = false;
-					mg.levelCounter++;
-					System.out.println("");
-					sbg.enterState(1);
-				} else {
-					waitForLevelEnd = false;
-					sbg.enterState(3);
+	private void processPlayerMovement(GameContainer container, float deltaFloat, boolean freeToRoam) {
+		// Walk left when left key pressed and not at left wall OR a gate
+		if (input.isKeyDown(Input.KEY_LEFT) && player.getX() > leftWall.getWidth()) {
+            if(freeToRoam || (player.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
+            	player.setX(player.getX() - mg.playerSpeed * deltaFloat);
+            }
+        }
+
+		// Walk right when right key pressed and not at right wall OR a gate
+		if (input.isKeyDown(Input.KEY_RIGHT) && player.getMaxX() < (container.getWidth() - rightWall.getWidth())) {
+           if(freeToRoam || (player.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
+        	   player.setX(player.getX() + mg.playerSpeed * deltaFloat);
+           }
+        }
+	}
+
+	private void processPause() {
+		if (input.isKeyDown(Input.KEY_ESCAPE)) {
+			waitEsc = true;
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					waitEsc = false;
 				}
-			}
-			
-		}
-
+			}, 300);
+			playingState = false;
+        }
 	}
 
 	public ArrayList<Gate> getGateList() {
@@ -651,7 +665,6 @@ public class GameState extends BasicGameState {
 		
 		
 		//First level, test with gate
-		
 		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
 		BouncingCircle circle11 = new BouncingCircle(200, 200, 30, mg.startingSpeed, -50, mg.gravity);
 		circles.add(new BouncingCircle(1200, 200, 30, mg.startingSpeed, -50, mg.gravity));

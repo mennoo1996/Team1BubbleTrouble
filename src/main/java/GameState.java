@@ -48,6 +48,7 @@ public class GameState extends BasicGameState {
 	private Image health_4_Image;
 	private Image health_5_Image;
 	private Image nobutton_Image;
+	private Image[] balls_Images;
 	private Image laser_beam_image;
 	private Image laser_tip_image;
 	private Image counterBarImage;
@@ -119,6 +120,15 @@ public class GameState extends BasicGameState {
 		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
 		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
 		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		
+		// balls images
+		balls_Images = new Image[6];
+		balls_Images[0] = new Image("resources/Balls/Ball_90.png");
+		balls_Images[1] = new Image("resources/Balls/Ball_65.png");
+		balls_Images[2] = new Image("resources/Balls/Ball_45.png");
+		balls_Images[3] = new Image("resources/Balls/Ball_30.png");
+		balls_Images[4] = new Image("resources/Balls/Ball_20.png");
+		balls_Images[5] = new Image("resources/Balls/Ball_10.png");
 		
 		// button image
 		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
@@ -406,7 +416,17 @@ public class GameState extends BasicGameState {
 
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {
-			graphics.fill(circle.getCircle(), shapeFill);
+			//graphics.fill(circle.getCircle(), shapeFill);
+			int r = (int)circle.getRadius();
+			int offset = 13;
+			switch(r) {
+				case(90) : graphics.drawImage(balls_Images[0], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(65) : graphics.drawImage(balls_Images[1], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(45) : graphics.drawImage(balls_Images[2], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(30) : graphics.drawImage(balls_Images[3], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(20) : graphics.drawImage(balls_Images[4], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(10) : graphics.drawImage(balls_Images[5], circle.getMinX()-offset, circle.getMinY()-offset); break;
+			}
 		}
 		
 		// draw all active gates

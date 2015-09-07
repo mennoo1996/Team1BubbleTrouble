@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * This class represents a level, with a certain time to complete the level and a list of bouncing circles that are present in this level.

@@ -1,5 +1,4 @@
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -24,6 +23,8 @@ public class MainGame extends StateBasedGame {
 	protected Image backgroundImage;
 	protected Image foreGroundImage;
 	protected Image terminalImage;
+	protected Image versiontextImage;
+	protected Image[] numberImages;
 	protected Image laserHorizontalImage;
 	protected Image laserVerticalImage;
 	protected String playerImage;
@@ -63,7 +64,11 @@ public class MainGame extends StateBasedGame {
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
 		app.setDisplayMode(xRes, Math.round(yRes), false);
+		app.setVSync(true);
+		app.setTargetFrameRate(60);
+		//app.setMaximumLogicUpdateInterval(10); // Do not touch this - Mark
 		app.start();
+		app.setSmoothDeltas(true);
 	}
 
 	/**
@@ -73,7 +78,7 @@ public class MainGame extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer arg0) throws SlickException {
 		
-		this.addState(new StartState());
+		this.addState(new StartState(this));
 		this.addState(new GameState(this));
 		this.addState(new GameOverState(this));
 		this.addState(new WonState(this));
@@ -84,6 +89,11 @@ public class MainGame extends StateBasedGame {
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
+		this.versiontextImage = new Image("resources/text/text_version.png");
+		this.numberImages = new Image[10];
+		for(int i = 0; i < 10; i++) {
+			this.numberImages[i] = new Image("resources/numbers/" + Integer.toString(i) + ".png");
+		}
 		
 		System.out.println(this.getStateCount());
 		

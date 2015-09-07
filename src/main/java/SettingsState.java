@@ -1,4 +1,5 @@
-import org.newdawn.slick.Color;
+import java.util.LinkedList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -11,13 +12,18 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class SettingsState extends BasicGameState {
 
+	private Button returnButton;
+	
 	private Image mannetje;
 	private Image arie;
+
+	private Image highLight;
+	private Image background;
+	
 	private MyRectangle mannetjeRectangle;
 	private MyRectangle arieRectangle;
-	private MyRectangle mannetjeHighlight;
-	private MyRectangle arieHighlight;
-	private MyRectangle backButton;
+	
+
 	private MainGame mg;
 	private Input input;
 	
@@ -31,13 +37,15 @@ public class SettingsState extends BasicGameState {
 	}
 	
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
+		returnButton = new Button(228,190,1000,50, new Image("resources/menus/Menu_Button_Return.png"), new Image("resources/menus/Menu_Button_Return2.png"));
+		highLight = new Image("resources/menus/Menu_Highlight.png");
 		mannetje = new Image("resources/mannetje.png");
 		arie = new Image("resources/arie.png");
-		mannetjeRectangle = new MyRectangle(100,300,45,75);
-		arieRectangle = new MyRectangle(300,300,45,75);
-		mannetjeHighlight = new MyRectangle(90,290,65,95);
-		arieHighlight = new MyRectangle(290,290,65,95);
-		backButton = new MyRectangle(500,200,200,45);
+
+		background = new Image("resources/menus/Menu_Options_Text.png");
+		mannetjeRectangle = new MyRectangle(350,380,45,75);
+		arieRectangle = new MyRectangle(450,380,45,75);
+
 	}
 	
 	public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
@@ -48,49 +56,62 @@ public class SettingsState extends BasicGameState {
 				mg.playerImage = "mannetje.png";
 			} else if(arieRectangle.contains(input.getMouseX(), input.getMouseY())) {
 				mg.playerImage = "arie.png";
-			} else if(backButton.contains(input.getMouseX(), input.getMouseY())) {
+			} else if(returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 				sbg.enterState(0);
 			}
 		}
 		
-		
 	}
 
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) throws SlickException {
-		graphics.setColor(Color.white);
 		
-		graphics.drawString("Click the player of your chose", 100, 100);
+		Input input = container.getInput();
+		
+		// background
+		graphics.drawImage(mg.backgroundImage, 0, 0);
+		graphics.drawImage(background, 0, 0);
 		
 		if(mg.playerImage.equals("mannetje.png")) {
-			graphics.fill(mannetjeHighlight);
+			graphics.drawImage(highLight, 340, 370);
 		} else if(mg.playerImage.equals("arie.png")) {
-			graphics.fill(arieHighlight);
+			graphics.drawImage(highLight, 440, 370);
+		}
+		
+		
+		if(returnButton.getRectangle().contains(500, input.getMouseY())) {
+			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), returnButton.getY());
+		} else {
+			graphics.drawImage(returnButton.getImage(), returnButton.getX(), returnButton.getY());
 		}
 		
 		graphics.drawImage(mannetje, mannetjeRectangle.getX(), mannetjeRectangle.getY());
 		graphics.drawImage(arie, arieRectangle.getX(), arieRectangle.getY());
 		
-		graphics.draw(backButton);
-		graphics.drawString("Back to start menu", backButton.getX() + 20f, backButton.getY() + 10f);
+		// draw version number (BECAUZ ITZ COOL)
+		graphics.drawImage(mg.versiontextImage, 72, container.getHeight() - 195);
+		graphics.drawImage(mg.numberImages[1], 72 + 150, container.getHeight() - 196);
+		LinkedList<Integer> numberStack = new LinkedList<Integer>();
+		int versionnumber = 105;
+		int stackCount = 0;
+		while(versionnumber > 0) {
+			numberStack.push(versionnumber % 10);
+			versionnumber /= 10;
+		}
+		while(!numberStack.isEmpty()) {
+			graphics.drawImage(mg.numberImages[numberStack.pop()], 72 + 175 + 20*stackCount, container.getHeight() - 196);
+			stackCount++;
+		}
+		
+		// foreground and terminal
+		graphics.drawImage(mg.foreGroundImage, 0, 0);
+		graphics.drawImage(mg.terminalImage, 0, 0);
+		
 	}
 
-	
 
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
 		return 4;
-	}
-	
-	private String getStringForColor(Color color) {
-		if(color == Color.blue) {
-			return "blue";
-		} else if(color == Color.red) {
-			return "red";
-		} else if(color == Color.yellow) {
-			return "yellow";
-		}
-		
-		return "";
 	}
 }

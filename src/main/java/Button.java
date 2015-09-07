@@ -8,6 +8,7 @@ public class Button {
 	float width;
 	float height;
 	Image image;
+	Image imageMouseover;
 	
 	/**
 	 * @param x
@@ -23,6 +24,24 @@ public class Button {
 		this.width = width;
 		this.height = height;
 		this.image = image;
+	}
+	
+	/**
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param image
+	 * @param imageMouseover
+	 */
+	public Button(float x, float y, float width, float height, Image image, Image image2) {
+		super();
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.image = image;
+		this.imageMouseover = image2;
 	}
 
 	/**
@@ -118,9 +137,20 @@ public class Button {
 		this.height = height;
 	}
 
+	/**
+	 * @return image for this button
+	 */
 	public Image getImage() {
 		return image;
 	}
+	
+	/**
+	 * @return image for this button
+	 */
+	public Image getImageMouseOver() {
+		return imageMouseover;
+	}
+	
 	/**
 	 * @param image the image to set
 	 */
@@ -128,5 +158,11 @@ public class Button {
 		this.image = image;
 	}
 	
+	/**
+	 * @param image the image to set
+	 */
+	public void setImageMouseOver(Image image) {
+		this.imageMouseover = image;
+	}
 	
 }

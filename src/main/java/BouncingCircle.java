@@ -14,6 +14,7 @@ public class BouncingCircle extends Circle {
 	private float ySpeed;
 	private float gravity;
 	private boolean done;
+	private boolean hitCeiling;
 	
 	/**
 	 * @param centerPointX
@@ -31,6 +32,8 @@ public class BouncingCircle extends Circle {
 		this.ySpeed = ySpeed;
 		this.gravity = gravity;
 		this.done = false;
+		this.hitCeiling = false;
+		
 	}
 
 	/**
@@ -49,16 +52,22 @@ public class BouncingCircle extends Circle {
 		// When the ball hit the floor reverse it's speed
 		if(this.getMaxY() > container.getHeight() - gs.floor.getHeight() ) {
 			ySpeed = -getSpeedForRadius();
-			System.out.println(ySpeed);
 		} else {
 			// Else increase the speed
 			ySpeed += gravity*deltaFloat;
 		}
 		
+		// When ball hits ceiling
+		System.out.println(this.getMinX());
+		if(this.getMinY() <= gs.ceiling.getHeight()) {
+			System.out.println("hitceiling");
+			this.hitCeiling = true;
+		}
+		
 		// Calculations for X coordinates
 		this.setX(this.getX() + xSpeed*deltaFloat);
 		// If the ball hit a wall reverse it's speed
-		if(this.getMinX() < gs.leftWall.getWidth()) {
+		if(this.getX() < gs.leftWall.getWidth()) {
 			xSpeed = -xSpeed;
 		} else if(this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
 			xSpeed = -xSpeed;
@@ -95,8 +104,8 @@ public class BouncingCircle extends Circle {
 		}
 		
 		// bonus speed when hit at the right moment
-		if(newYSpeed < -600) {
-			newYSpeed -= 100;
+		if(newYSpeed < -4*radius) {
+			newYSpeed -= 50;
 		}
 		
 		// add new balls to the active list
@@ -108,20 +117,18 @@ public class BouncingCircle extends Circle {
 	
 	private float getSpeedForRadius() {
 		if(radius == 10f) {
-			return 400f;
+			return 360f;
 		} else if(radius == 20f) {
-			return 550f;
+			return 470f;
 		} else if(radius == 30f) {
-			return 650f;
+			return 530f;
 		} else if(radius == 45f) {
-			return 725f;
+			return 570f;
 		} else if(radius == 65f) {
-			return 775f;
+			return 610f;
 		} else if(radius == 90f) {
-			return 800f;
-		} else if(radius == 140f) {
-			return 825f;
-		}
+			return 650f;
+		} 
 		
 		return 0f;
 	}
@@ -139,9 +146,7 @@ public class BouncingCircle extends Circle {
 			return 45f;
 		} else if(radius == 90f) {
 			return 65f;
-		} else if(radius == 140f) {
-			return 90f;
-		}
+		} 
 		
 		return 0f;
 	}
@@ -279,6 +284,22 @@ public class BouncingCircle extends Circle {
 	public void setGravity(float gravity) {
 		this.gravity = gravity;
 	}
+
+	/**
+	 * @return the hitCeiling
+	 */
+	public boolean isHitCeiling() {
+		return hitCeiling;
+	}
+
+	/**
+	 * @param hitCeiling the hitCeiling to set
+	 */
+	public void setHitCeiling(boolean hitCeiling) {
+		this.hitCeiling = hitCeiling;
+	}
+	
+	
 	
 	
 	

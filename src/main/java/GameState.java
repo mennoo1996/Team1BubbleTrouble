@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -8,7 +9,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -42,20 +42,25 @@ public class GameState extends BasicGameState {
 	// Images
 	private Image playerImage;
 	private Image wallsImage;
-	private Image health_0_Image;
 	private Image health_1_Image;
 	private Image health_2_Image;
 	private Image health_3_Image;
 	private Image health_4_Image;
 	private Image health_5_Image;
+	private Image nobutton_Image;
+	private Image[] balls_Images;
+	private Image ceiling_Image;
+	private Image laser_beam_image;
+	private Image laser_tip_image;
 	private Image counterBarImage;
-	
-	TrueTypeFont font;
+	private Image scoretextImage;
+	private Image leveltextImage;
+	private Image pausedtextImage;
+	private Image gateUpper;
+	private Image gateLower;
 	
 	// Countdown Bar Logic
-	private static int COUNTDOWN_BAR_WIDTH = 550;
 	private static int COUNTDOWN_BAR_PARTS = 56;
-	private float fractionTimePix;
 	private int fractionTimeParts;
 
 	// Life counter method 1 code
@@ -109,27 +114,17 @@ public class GameState extends BasicGameState {
 		prevTime = startTime;
 		countIn = true;
 		playingState = true;
-
-		// load health images
-		health_0_Image = new Image("resources/Terminal/Terminal_Lights_0.png");
-		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
-		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
-		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
-		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
-		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
-		
-		// countdown bar images
-		counterBarImage = new Image("resources/counter_bar.png");
 		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage);
-		wallsImage = new Image("resources/walls_blue.png");
 		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
+
 		floor = new MyRectangle(0,container.getHeight()-210,container.getWidth(),210);
 		leftWall = new MyRectangle(0,0,105,container.getHeight());
 		rightWall = new MyRectangle(container.getWidth()-130,0,130,container.getHeight());
-		ceiling = new MyRectangle(0,0,container.getWidth(),95);
+		ceiling = new MyRectangle(0,0,container.getWidth(),110);
+
 		
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
@@ -151,6 +146,64 @@ public class GameState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
+		
+		// load health images
+		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		// button image
+		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
+		// laser images
+		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
+		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
+		// text images
+		scoretextImage = new Image("resources/text/text_score.png");
+		leveltextImage = new Image("resources/text/text_level.png");
+		pausedtextImage = new Image("resources/text/text_paused.png");
+
+		// gate images
+		gateUpper = new Image("resources/gate_upper.png");
+		gateLower = new Image("resources/gate_lower.png");
+		// walls image
+		wallsImage = new Image("resources/walls_blue.png");
+		
+		// load health images
+		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+				
+				// balls images
+		balls_Images = new Image[6];
+		balls_Images[0] = new Image("resources/Balls/Ball_90.png");
+		balls_Images[1] = new Image("resources/Balls/Ball_65.png");
+		balls_Images[2] = new Image("resources/Balls/Ball_45.png");
+		balls_Images[3] = new Image("resources/Balls/Ball_30.png");
+		balls_Images[4] = new Image("resources/Balls/Ball_20.png");
+		balls_Images[5] = new Image("resources/Balls/Ball_10.png");
+
+		// button image
+		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
+
+		// laser images
+		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
+		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
+
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
+
+		// text images
+		scoretextImage = new Image("resources/text/text_score.png");
+		leveltextImage = new Image("resources/text/text_level.png");
+
+		// ceiling image
+		ceiling_Image = new Image("resources/ceiling.png");
+		
 	}
 	
 	/**
@@ -189,7 +242,6 @@ public class GameState extends BasicGameState {
 
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
 		timeRemaining -= timeDelta;
-		fractionTimePix = COUNTDOWN_BAR_WIDTH * (timeRemaining) / TOTAL_TIME;
 		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / TOTAL_TIME);
 		
 		if (timeRemaining <= 0) {
@@ -258,6 +310,8 @@ public class GameState extends BasicGameState {
 		//Method 1 code
 		//boolean noCircleIntersectsDetected = true;
 
+		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
+		
 		// loop through all active circles
 		for (BouncingCircle circle : circleList) {
             //update circles
@@ -277,9 +331,19 @@ public class GameState extends BasicGameState {
                 shotList.add(circle);
                 laser.setVisible(false);
             }
+            
+            if (circle.isHitCeiling()) {
+            	ceilingList.add(circle);
+            }
 
         }
 
+		for(BouncingCircle circle : ceilingList) {
+			if(circleList.contains(circle)) {
+				circleList.remove(circle);
+			}
+		}
+		
 		// loop through the circles that has been shot
 		for (BouncingCircle circle : shotList) {
             // if the circle hasn't been handled
@@ -314,11 +378,14 @@ public class GameState extends BasicGameState {
 		for(Gate gate : gateList) {
 			if(gate.getRequired().isEmpty()) {
 				tempGateList.add(gate);
+				gate.setFading(true);
 			}
 		}
 		for(Gate gate : tempGateList) {
-			if(gateList.contains(gate)) {
+			if(gateList.contains(gate) && gate.isDone()) {
 				gateList.remove(gate);
+			} else if(gateList.contains(gate) && gate.isFading()) {
+				gate.update(deltaFloat);
 			}
 		}
 		// if there are no active circles, process to gameover screen
@@ -354,64 +421,150 @@ public class GameState extends BasicGameState {
 
 		// draw all active circles
 		for(BouncingCircle circle : circleList) {
-			graphics.fill(circle.getCircle(), shapeFill);
+			//graphics.fill(circle.getCircle(), shapeFill);
+			int r = (int)circle.getRadius();
+			int offset = 13;
+			switch(r) {
+				case(90) : graphics.drawImage(balls_Images[0], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(65) : graphics.drawImage(balls_Images[1], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(45) : graphics.drawImage(balls_Images[2], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(30) : graphics.drawImage(balls_Images[3], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(20) : graphics.drawImage(balls_Images[4], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(10) : graphics.drawImage(balls_Images[5], circle.getMinX()-offset, circle.getMinY()-offset); break;
+			}
 		}
+		
+		graphics.drawImage(ceiling_Image, leftWall.getWidth() - 10, ceiling.getHeight() - 25);
 		
 		// draw all active gates
 		for(Gate gate : gateList) {
-			graphics.fill(gate, shapeFill);
+			
+			//upper
+			int left = 11;
+			int down = 9;
+			float x = gate.getMinX() - left;
+			float y = ceiling.getHeight() - 15;
+			float x2 = x + gateUpper.getWidth();
+			float y2 = ceiling.getHeight() + 348*gate.getHeightPercentage() + down - 15;
+			float srcx = 0;
+			float srcy = gateUpper.getHeight() - 348*gate.getHeightPercentage();
+			float srcx2 = gateUpper.getWidth();
+			float srcy2 = gateUpper.getHeight();
+			graphics.drawImage(gateUpper, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
+			
+			//lower
+			left = 9;
+			float up = 9;
+			x = gate.getMinX() - left -1;
+			y = container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage() - up;
+			x2 = x + gateLower.getWidth() - 1;
+			y2 = container.getHeight() - floor.getHeight();
+			srcx = 0;
+			srcy = 0;
+			srcx2 = gateLower.getWidth();
+			srcy2 = 347*gate.getHeightPercentage();
+			graphics.drawImage(gateLower, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
+			
+//			//graphics.fill(gate, shapeFill);
+//			graphics.drawImage(gateWallImage, gate.getMinX() - 13, ceiling.getHeight(), gate.getMinX() + 11, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, ceiling.getHeight(), gate.getMaxX() + 6, ceiling.getHeight() + 348*gate.getHeightPercentage(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMinX() - 13, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMinX() + 11, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateWallImage, gate.getMaxX() - 18, container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage(), gate.getMaxX() + 6, container.getHeight() - floor.getHeight(), 0, 0, gateWallImage.getWidth(), gateWallImage.getHeight());
+//			graphics.drawImage(gateHorizontalWallImage, gate.getMinX(), ceiling.getHeight() - 21 + 348*gate.getHeightPercentage(), gate.getMaxX(), ceiling.getHeight() + 11 + 348*gate.getHeightPercentage(), 0, 0, gateHorizontalWallImage.getWidth(), gateHorizontalWallImage.getHeight());
+//			
+//			if(gate.isFading()) {
+//				graphics.drawImage(gateHorizontalWallImage, gate.getMinX(),container.getHeight() - floor.getHeight() - 11 - 347*gate.getHeightPercentage(), gate.getMaxX(), container.getHeight() - floor.getHeight() + 21 - 347*gate.getHeightPercentage(), 0, 0, gateHorizontalWallImage.getWidth(), gateHorizontalWallImage.getHeight());
+//			}
 		}
-
+		
 		// if shot, draw laser
 		if(shot) {
-			graphics.fill(laser.getRectangle());
+			//graphics.fill(laser.getRectangle());
+			graphics.drawImage(laser_tip_image, laser.getX() - 18, laser.getY() - 14);
+			graphics.drawImage(laser_beam_image, laser.getX() - 18, laser.getRectangle().getMinY() + 13, laser.getX() + 17, laser.getRectangle().getMaxY(), 0, 0, 35, 300);
 		}
 		
 		// draw player
 		graphics.drawImage(player.getImage(), player.getX(), player.getY());
-		//graphics.drawImage(player.getImage(), player.getX(), player.getY());
 
 		// Draw walls, floor and ceiling
-//		graphics.fill(floor, shapeFill);
-//		graphics.fill(leftWall, shapeFill);
-//		graphics.fill(rightWall, shapeFill);
-//		graphics.fill(ceiling, shapeFill);
 		graphics.drawImage(wallsImage, 0, 0);
-		
-		// Draw timer countdown bar
-//		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 600, container.getHeight() - 50, COUNTDOWN_BAR_WIDTH + 2, 20);
-//		graphics.setColor(Color.red);
-//		graphics.fillRect(container.getWidth() - COUNTDOWN_BAR_WIDTH - 599, container.getHeight() - 49, fractionTimePix, 18);
-//		graphics.setColor(Color.white);
 
-		// Draw timer countdown images
+		// Draw timer countdown bar
 		for(int x = 0; x < fractionTimeParts; x++) {
+			//counterBarImage.rotate(10*x); // EPIC
 			graphics.drawImage(counterBarImage, container.getWidth()/2 - 80 - 5*(COUNTDOWN_BAR_PARTS) + x*10, container.getHeight() - 60);//
+			//counterBarImage.rotate(-10*x); // EPIC
 		}
 		
-		// Overlay for count-in
-		if (playingState && countIn) {
-			Color overLay = new Color(0f, 0f, 0f, 0.5f);
-			graphics.setColor(overLay);
-			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
+		
+		// Draw level/Score data
+		LinkedList<Integer> numberStack = new LinkedList<Integer>();
+		int levelInt = (mg.levelCounter+1), scoreInt = (mg.score + score), stackCount = 0;
 
-			graphics.setColor(Color.white);
-			graphics.drawString(countString, container.getWidth() / 2, container.getHeight() / 2);
+		graphics.drawImage(leveltextImage, container.getWidth() / 2, container.getHeight() - 90);
+		while(levelInt > 0) {
+			numberStack.push(levelInt % 10);
+			levelInt /= 10;
+		}
+		while(!numberStack.isEmpty()) {
+			graphics.drawImage(mg.numberImages[numberStack.pop()], container.getWidth() / 2 + 116 + 20*stackCount, container.getHeight() - 89);
+			stackCount++;
+		}
+
+		graphics.drawImage(scoretextImage, container.getWidth() / 2 - 300, container.getHeight() - 90);
+		stackCount = 0;
+		if(scoreInt == 0) {
+			numberStack.push(scoreInt);
+		}
+		while(scoreInt > 0) {
+			numberStack.push(scoreInt % 10);
+			scoreInt /= 10;
+		}
+		
+		while(!numberStack.isEmpty()) {
+			graphics.drawImage(mg.numberImages[numberStack.pop()], container.getWidth() / 2 - 184 + 20*stackCount, container.getHeight() - 90);
+			stackCount++;
+		}
+
+		
+		// Pause overlay and counter
+		if (playingState && countIn) {
+			int count = (int)Math.ceil((3000.0-timeDelta)/1000.0), amount = Math.round((3000f-timeDelta)/3000f*15f);
+
+			graphics.setColor(new Color(0f, 0f, 0f, 0.5f));
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
+			graphics.drawImage(mg.numberImages[count], container.getWidth() / 2 - 18, container.getHeight() / 2 - 60);
+			
+			for(int i = 0; i < amount; i++) {
+				float degree = i*(360/15);
+				counterBarImage.setCenterOfRotation(12, 50);
+				counterBarImage.rotate(degree);
+				graphics.drawImage(counterBarImage, container.getWidth() / 2 - 10, container.getHeight() / 2 - 91);
+				counterBarImage.rotate(-degree);
+			}
 		}
 
 		if (!playingState) {
 			Color overLay = new Color(0f, 0f, 0f, 0.5f);
 			graphics.setColor(overLay);
-			graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
-
-			graphics.setColor(Color.white);
-			graphics.drawString("Paused", container.getWidth() / 2, container.getHeight() / 2);
+			graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
+			graphics.drawImage(pausedtextImage, container.getWidth() / 2 - 130, container.getHeight() / 2 - 60);
 		}
-
-		// experimenting with stretched laser textures
-		//graphics.drawImage(mg.laserHorizontalImage, 100, 70, 1495, 105, 0, 0, 128, 35);
-		//graphics.drawImage(mg.laserHorizontalImage, 100, 800, 1495, 835, 0, 0, 128, 35);
-		//graphics.drawImage(mg.laserVerticalImage, 100, 100, 135, 1400, 0, 0, 35, 128);
+		
+		// draw version number (BECAUZ ITZ COOL)
+		graphics.drawImage(mg.versiontextImage, 72, container.getHeight() - 195);
+		graphics.drawImage(mg.numberImages[1], 72 + 150, container.getHeight() - 196);
+		int versionnumber = 105;
+		stackCount = 0;
+		while(versionnumber > 0) {
+			numberStack.push(versionnumber % 10);
+			versionnumber /= 10;
+		}
+		while(!numberStack.isEmpty()) {
+			graphics.drawImage(mg.numberImages[numberStack.pop()], 72 + 175 + 20*stackCount, container.getHeight() - 196);
+			stackCount++;
+		}
 		
 		// draw foreground layer
 		graphics.drawImage(mg.foreGroundImage, 0, 0);
@@ -419,10 +572,13 @@ public class GameState extends BasicGameState {
 		// draw terminal
 		graphics.drawImage(mg.terminalImage, 0, 0);
 		
+		// disable button when paused
+		if(!playingState) {
+			graphics.drawImage(nobutton_Image, 0, 0);
+		}
+		
+		// show correct health lights
 		switch(mg.getLifeCount()) {
-			case(0) : 
-				graphics.drawImage(health_0_Image, 0, 0);
-			break;
 			case(1) : 
 				graphics.drawImage(health_1_Image, 0, 0);
 			break;
@@ -440,11 +596,16 @@ public class GameState extends BasicGameState {
 			break;
 		}
 		
-		graphics.setColor(Color.green);
-		graphics.drawString("Debug values ", 20, container.getHeight()-90);
-		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-70);
-		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);
-		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -30);
+		// experimenting with stretched laser textures -> MARK HERE: DONT DELETE THIS COMMENTED CODE, ITS A PAIN TO SET UP AGAIN
+		//graphics.drawImage(mg.laserHorizontalImage, 100, 70, 1495, 105, 0, 0, 128, 35);
+		//graphics.drawImage(mg.laserHorizontalImage, 100, 800, 1495, 835, 0, 0, 128, 35);
+		//graphics.drawImage(mg.laserVerticalImage, 100, 100, 135, 1400, 0, 0, 35, 128);
+		
+//		graphics.setColor(Color.green);
+//		graphics.drawString("Debug values ", 20, container.getHeight()-90);
+//		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-70);
+//		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);
+//		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -30);
 		
 	}
 
@@ -473,13 +634,12 @@ public class GameState extends BasicGameState {
 	private void initializeLevels() {
 		levels = new LevelContainer();
 		
-		System.out.println("hier");
 		
 		//First level, test with gate
 		
 		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
-		BouncingCircle circle11 = new BouncingCircle(200, 100, 30, mg.startingSpeed, -50, mg.gravity);
-		circles.add(new BouncingCircle(1200, 100, 30, mg.startingSpeed, -50, mg.gravity));
+		BouncingCircle circle11 = new BouncingCircle(200, 200, 30, mg.startingSpeed, -50, mg.gravity);
+		circles.add(new BouncingCircle(1200, 200, 30, mg.startingSpeed, -50, mg.gravity));
 		circles.add(circle11);
 		
 		ArrayList<Gate> gates = new ArrayList<Gate>();
@@ -507,7 +667,7 @@ public class GameState extends BasicGameState {
 		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates4 = new ArrayList<Gate>();
 		circles4.add(new BouncingCircle(200, 200, 45, mg.startingSpeed, -50, mg.gravity));
-		circles4.add(new BouncingCircle(500, 200, 65, -mg.startingSpeed, -50, mg.gravity));
+		circles4.add(new BouncingCircle(500, 300, 65, -mg.startingSpeed, -50, mg.gravity));
 		level = new Level(125, circles4, gates4);
 		levels.add(level);
 		
@@ -521,7 +681,7 @@ public class GameState extends BasicGameState {
 		
 		ArrayList<BouncingCircle> circles6 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates6 = new ArrayList<Gate>();
-		circles6.add(new BouncingCircle(900, 200, 140, -mg.startingSpeed, -50, mg.gravity));
+		circles6.add(new BouncingCircle(900, 300, 90, -mg.startingSpeed, -50, mg.gravity));
 		level = new Level(120, circles6, gates6);
 		levels.add(level);
 		
@@ -535,31 +695,27 @@ public class GameState extends BasicGameState {
 		
 		ArrayList<BouncingCircle> circles8 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates8 = new ArrayList<Gate>();
-		circles8.add(new BouncingCircle(200, 100, 20, 0, -50, mg.gravity));
-		circles8.add(new BouncingCircle(300, 100, 30, 0, -50, mg.gravity));
-		circles8.add(new BouncingCircle(500, 100, 45, 0, -50, mg.gravity));
-		circles8.add(new BouncingCircle(700, 100, 65, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(200, 200, 20, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(300, 200, 30, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(500, 200, 45, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(700, 200, 65, 0, -50, mg.gravity));
 		level = new Level (120, circles8, gates8);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles9 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates9 = new ArrayList<Gate>();
-		circles9.add(new BouncingCircle(200, 200, 140, mg.startingSpeed, -50, mg.gravity));
-		circles9.add(new BouncingCircle(900, 200, 140, -mg.startingSpeed, -50, mg.gravity));
+		circles9.add(new BouncingCircle(200, 300, 90, mg.startingSpeed, -50, mg.gravity));
+		circles9.add(new BouncingCircle(900, 300, 90, -mg.startingSpeed, -50, mg.gravity));
 		level = new Level(180, circles9, gates9);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles10 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates10 = new ArrayList<Gate>();
 		for (int i=0;i<20;i++) {
-			circles10.add(new BouncingCircle(200, 10*i, 10, 0, -50, mg.gravity));
+			circles10.add(new BouncingCircle(200, 10*i+ 200, 10, 50, -50, mg.gravity));
 		}
 		level = new Level(40, circles10, gates10);
 		levels.add(level);
-		
-		
-		
-		System.out.println("Hier ook");
 		
 		
 		

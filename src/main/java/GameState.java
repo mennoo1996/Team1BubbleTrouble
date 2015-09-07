@@ -568,5 +568,21 @@ public class GameState extends BasicGameState {
 	public void setCeiling(MyRectangle c) {
 		ceiling = c;
 	}
+	
+	public void setFloor (MyRectangle floor) {
+		this.floor = floor;
+	}
+	
+	public void setLeftWall (MyRectangle leftWall) {
+		this.leftWall = leftWall;
+	}
+	
+	public void setRightWall(MyRectangle rightWall) {
+		this.rightWall = rightWall;
+	}
+	
+	public void setGateList(ArrayList<Gate> gatelist) {
+		this.gateList = gatelist;
+	}
 
 }

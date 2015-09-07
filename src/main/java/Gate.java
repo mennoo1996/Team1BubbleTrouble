@@ -104,4 +104,12 @@ public class Gate extends Rectangle {
 			required.add(circle);
 		}
 	}
+
+	public float getFadingSpeed() {
+		return fadingSpeed;
+	}
+
+	public void setFadingSpeed(float fadingSpeed) {
+		this.fadingSpeed = fadingSpeed;
+	}
 }

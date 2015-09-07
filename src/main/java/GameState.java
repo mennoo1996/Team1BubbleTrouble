@@ -305,6 +305,8 @@ public class GameState extends BasicGameState {
 		//Method 1 code
 		//boolean noCircleIntersectsDetected = true;
 
+		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
+		
 		// loop through all active circles
 		for (BouncingCircle circle : circleList) {
             //update circles
@@ -324,9 +326,19 @@ public class GameState extends BasicGameState {
                 shotList.add(circle);
                 laser.setVisible(false);
             }
+            
+            if (circle.isHitCeiling()) {
+            	ceilingList.add(circle);
+            }
 
         }
 
+		for(BouncingCircle circle : ceilingList) {
+			if(circleList.contains(circle)) {
+				circleList.remove(circle);
+			}
+		}
+		
 		// loop through the circles that has been shot
 		for (BouncingCircle circle : shotList) {
             // if the circle hasn't been handled
@@ -615,7 +627,6 @@ public class GameState extends BasicGameState {
 	private void initializeLevels() {
 		levels = new LevelContainer();
 		
-		System.out.println("hier");
 		
 		//First level, test with gate
 		
@@ -694,14 +705,10 @@ public class GameState extends BasicGameState {
 		ArrayList<BouncingCircle> circles10 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates10 = new ArrayList<Gate>();
 		for (int i=0;i<20;i++) {
-			circles10.add(new BouncingCircle(200, 10*i, 10, 0, -50, mg.gravity));
+			circles10.add(new BouncingCircle(200, 10*i, 10, 50, -50, mg.gravity));
 		}
 		level = new Level(40, circles10, gates10);
 		levels.add(level);
-		
-		
-		
-		System.out.println("Hier ook");
 		
 		
 		

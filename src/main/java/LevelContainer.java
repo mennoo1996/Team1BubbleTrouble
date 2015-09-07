@@ -16,6 +16,14 @@ public class LevelContainer {
 		levels = new ArrayList<Level>();
 	}
 	
+	public ArrayList<Level> getLevels() {
+		return levels;
+	}
+
+	public void setLevels(ArrayList<Level> levels) {
+		this.levels = levels;
+	}
+
 	/**
 	 * Add a level to the container
 	 * @param level the level to add

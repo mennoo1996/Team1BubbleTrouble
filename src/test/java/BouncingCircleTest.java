@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.geom.Circle;
 
 public class BouncingCircleTest {
 	
@@ -188,7 +189,7 @@ public class BouncingCircleTest {
 	public void testGetSplittedCirclesUseBonusSpeed() {
 		c = new BouncingCircle(1, 2, 20, 4, -700, 0);
 		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
-		assertEquals(-100, result.get(0).getySpeed(), 0);
+		assertEquals(-800, result.get(0).getySpeed(), 0);
 	}
 	
 	@Test
@@ -272,90 +273,246 @@ public class BouncingCircleTest {
 	
 	@Test
 	public void testGetMinX() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(-2, c.getMinX(), 0);
+	}
+	
+	@Test
+	public void testGetMinXNoConstantValue() {
+		c = new BouncingCircle(2, 5, 1, 9, 8, 6);
+		assertEquals(1, c.getMinX(), 0);
 	}
 
 	@Test
 	public void testGetMinY() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(-1, c.getMinY(), 0);
 	}
-
+	
 	@Test
-	public void testGetX() {
-		fail("Not yet implemented");
+	public void testGetMinYNoConstantValue() {
+		c = new BouncingCircle(5, 1, 8, 3, 6, 3);
+		assertEquals(-7, c.getMinY(), 0);
 	}
-
-	@Test
-	public void testSetX() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetY() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetY() {
-		fail("Not yet implemented");
-	}
-
 	
-
-	
-
-	
-
-	
-
-	
-
-
-	
-
 	@Test
 	public void testIsDone() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertFalse(c.isDone());
+	}
+	
+	@Test
+	public void testIsDoneNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setDone(true);
+		assertTrue(c.isDone());
 	}
 
 	@Test
 	public void testSetDone() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setDone(true);
+		assertTrue(c.isDone());
 	}
-
+	
 	@Test
-	public void testGetCircle() {
-		fail("Not yet implemented");
+	public void testSetDoneNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setDone(false);
+		assertFalse(c.isDone());
 	}
-
+	
+	@Test
+	public void testGetCircleCenterX() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		Circle res = c.getCircle();
+		assertEquals(1, res.getCenterX(), 0);
+	}
+	
+	@Test
+	public void testGetCircleCenterY() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		Circle res = c.getCircle();
+		assertEquals(2, res.getCenterY(), 0);
+	}
+	
+	@Test
+	public void testGetCircleRadius() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		Circle res = c.getCircle();
+		assertEquals(3, res.getRadius(), 0);
+	}
+	
+	@Test
+	public void testGetCircleCenterXNoConstantValue() {
+		c = new BouncingCircle(6, 5, 4, 3, 2, 1);
+		Circle res = c.getCircle();
+		assertEquals(6, res.getCenterX(), 0);
+	}
+	
+	@Test
+	public void testGetCircleCenterYNoConstantValue() {
+		c = new BouncingCircle(6, 5, 4, 3, 2, 1);
+		Circle res = c.getCircle();
+		assertEquals(5, res.getCenterY(), 0);
+	}
+	
+	@Test
+	public void testGetCircleRadiusNoConstantValue() {
+		c = new BouncingCircle(6, 5, 4, 3, 2, 1);
+		Circle res = c.getCircle();
+		assertEquals(4, res.getRadius(), 0);
+	}
+	
 	@Test
 	public void testGetxSpeed() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(4, c.getxSpeed(), 0);
+	}
+	
+	@Test
+	public void testGetxSpeedNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 5, 5, 6);
+		assertEquals(5, c.getxSpeed(), 0);
 	}
 
 	@Test
 	public void testSetxSpeed() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setxSpeed(8);
+		assertEquals(8, c.getxSpeed(), 0);
+	}
+	
+	@Test
+	public void testSetxSpeedNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setxSpeed(80);
+		assertEquals(80, c.getxSpeed(), 0);
 	}
 
 	@Test
 	public void testGetySpeed() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(5, c.getySpeed(), 0);
+	}
+	
+	@Test
+	public void testGetySpeedNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 7, 6);
+		assertEquals(7, c.getySpeed(), 0);
 	}
 
 	@Test
 	public void testSetySpeed() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setySpeed(50);
+		assertEquals(50, c.getySpeed(), 0);
+	}
+	
+	@Test
+	public void testSetySpeedNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setySpeed(20);
+		assertEquals(20, c.getySpeed(), 0);
+	}
+
+	@Test
+	public void testGetX() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(-2, c.getX(), 0);
+	}
+	
+	@Test
+	public void testGetXNoConstantValue() {
+		c = new BouncingCircle(2, 2, 5, 4, 5, 6);
+		assertEquals(-3, c.getX(), 0);
+	}
+
+	@Test
+	public void testSetX() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setX(8);
+		assertEquals(8, c.getX(), 0);
+	}
+	
+	@Test
+	public void testSetXNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setX(10);
+		assertEquals(10, c.getX(), 0);
+	}
+	
+	@Test
+	public void testGetY() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(-1, c.getY(), 0);
+	}
+	
+	@Test
+	public void testGetYNoConstantValue() {
+		c = new BouncingCircle(1, 3, 3, 4, 5, 6);
+		assertEquals(0, c.getY(), 0);
+	}
+
+	@Test
+	public void testSetY() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setY(10);
+		assertEquals(10, c.getY(), 0);
+	}
+	
+	@Test
+	public void testSetYNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setY(20);
+		assertEquals(20, c.getY(), 0);
 	}
 
 	@Test
 	public void testGetGravity() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(6, c.getGravity(), 0);
+	}
+	
+	@Test
+	public void testGetGravityNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 8);
+		assertEquals(8, c.getGravity(), 0);
 	}
 
 	@Test
 	public void testSetGravity() {
-		fail("Not yet implemented");
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setGravity(10);
+		assertEquals(10, c.getGravity(), 0);
 	}
+	
+	@Test
+	public void testSetGravityNoConstantValue() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setGravity(50);
+		assertEquals(50, c.getGravity(), 0);
+	}
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+	
+
+	
+
+	
+
+	
+
 
 }

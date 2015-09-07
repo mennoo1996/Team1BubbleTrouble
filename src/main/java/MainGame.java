@@ -107,8 +107,6 @@ public class MainGame extends StateBasedGame {
 			this.numberImages[i] = new Image("resources/numbers/" + Integer.toString(i) + ".png");
 		}
 		
-		System.out.println(this.getStateCount());
-		
 		this.enterState(0);
 		
 	}

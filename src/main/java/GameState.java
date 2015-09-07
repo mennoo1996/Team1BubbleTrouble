@@ -62,6 +62,7 @@ public class GameState extends BasicGameState {
 	// Countdown Bar Logic
 	private static int COUNTDOWN_BAR_PARTS = 56;
 	private int fractionTimeParts;
+	private boolean waitForLevelEnd = false;
 
 	// Life counter method 1 code
 	private boolean playerIntersect;
@@ -79,6 +80,7 @@ public class GameState extends BasicGameState {
 	private float containerWidth;
 	private float containerHeight;
 	
+	// Level ending, empty bar
 	
 	/**
 	 * constructor
@@ -244,6 +246,12 @@ public class GameState extends BasicGameState {
 		timeRemaining -= timeDelta;
 		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / TOTAL_TIME);
 		
+		if(waitForLevelEnd) {
+			timeRemaining -= 0.01f*TOTAL_TIME;
+			if(timeRemaining < 1)
+				timeRemaining = 1;
+		}
+		
 		if (timeRemaining <= 0) {
             playerDeath(sbg);
         }
@@ -392,14 +400,23 @@ public class GameState extends BasicGameState {
 
 
 		if(circleList.isEmpty()) {
-			score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
-			mg.score += score;
-			if (mg.levelCounter<levels.size()-1) {
-				mg.levelCounter++;
-				sbg.enterState(1);
-			} else {
-			sbg.enterState(3);
+			if(waitForLevelEnd == false) {
+				score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
+				mg.score += score;
+				waitForLevelEnd = true;
 			}
+			if(waitForLevelEnd && timeRemaining == 1) {
+				if (mg.levelCounter<levels.size()-1) {
+					waitForLevelEnd = false;
+					mg.levelCounter++;
+					System.out.println("");
+					sbg.enterState(1);
+				} else {
+					waitForLevelEnd = false;
+					sbg.enterState(3);
+				}
+			}
+			
 		}
 
 	}
@@ -489,10 +506,10 @@ public class GameState extends BasicGameState {
 
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);
-
+		
 		// Draw timer countdown bar
 		for(int x = 0; x < fractionTimeParts; x++) {
-			//counterBarImage.rotate(10*x); // EPIC
+			//counterBarImage.rotate(0.5f*x); // EPIC
 			graphics.drawImage(counterBarImage, container.getWidth()/2 - 80 - 5*(COUNTDOWN_BAR_PARTS) + x*10, container.getHeight() - 60);//
 			//counterBarImage.rotate(-10*x); // EPIC
 		}

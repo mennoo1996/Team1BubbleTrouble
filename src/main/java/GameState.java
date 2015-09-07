@@ -636,8 +636,8 @@ public class GameState extends BasicGameState {
 		//First level, test with gate
 		
 		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
-		BouncingCircle circle11 = new BouncingCircle(200, 100, 30, mg.startingSpeed, -50, mg.gravity);
-		circles.add(new BouncingCircle(1200, 100, 30, mg.startingSpeed, -50, mg.gravity));
+		BouncingCircle circle11 = new BouncingCircle(200, 200, 30, mg.startingSpeed, -50, mg.gravity);
+		circles.add(new BouncingCircle(1200, 200, 30, mg.startingSpeed, -50, mg.gravity));
 		circles.add(circle11);
 		
 		ArrayList<Gate> gates = new ArrayList<Gate>();
@@ -665,7 +665,7 @@ public class GameState extends BasicGameState {
 		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates4 = new ArrayList<Gate>();
 		circles4.add(new BouncingCircle(200, 200, 45, mg.startingSpeed, -50, mg.gravity));
-		circles4.add(new BouncingCircle(500, 200, 65, -mg.startingSpeed, -50, mg.gravity));
+		circles4.add(new BouncingCircle(500, 300, 65, -mg.startingSpeed, -50, mg.gravity));
 		level = new Level(125, circles4, gates4);
 		levels.add(level);
 		
@@ -679,7 +679,7 @@ public class GameState extends BasicGameState {
 		
 		ArrayList<BouncingCircle> circles6 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates6 = new ArrayList<Gate>();
-		circles6.add(new BouncingCircle(900, 200, 90, -mg.startingSpeed, -50, mg.gravity));
+		circles6.add(new BouncingCircle(900, 300, 90, -mg.startingSpeed, -50, mg.gravity));
 		level = new Level(120, circles6, gates6);
 		levels.add(level);
 		
@@ -693,24 +693,24 @@ public class GameState extends BasicGameState {
 		
 		ArrayList<BouncingCircle> circles8 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates8 = new ArrayList<Gate>();
-		circles8.add(new BouncingCircle(200, 100, 20, 0, -50, mg.gravity));
-		circles8.add(new BouncingCircle(300, 100, 30, 0, -50, mg.gravity));
-		circles8.add(new BouncingCircle(500, 100, 45, 0, -50, mg.gravity));
-		circles8.add(new BouncingCircle(700, 100, 65, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(200, 200, 20, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(300, 200, 30, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(500, 200, 45, 0, -50, mg.gravity));
+		circles8.add(new BouncingCircle(700, 200, 65, 0, -50, mg.gravity));
 		level = new Level (120, circles8, gates8);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles9 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates9 = new ArrayList<Gate>();
-		circles9.add(new BouncingCircle(200, 200, 90, mg.startingSpeed, -50, mg.gravity));
-		circles9.add(new BouncingCircle(900, 200, 90, -mg.startingSpeed, -50, mg.gravity));
+		circles9.add(new BouncingCircle(200, 300, 90, mg.startingSpeed, -50, mg.gravity));
+		circles9.add(new BouncingCircle(900, 300, 90, -mg.startingSpeed, -50, mg.gravity));
 		level = new Level(180, circles9, gates9);
 		levels.add(level);
 		
 		ArrayList<BouncingCircle> circles10 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates10 = new ArrayList<Gate>();
 		for (int i=0;i<20;i++) {
-			circles10.add(new BouncingCircle(200, 10*i, 10, 50, -50, mg.gravity));
+			circles10.add(new BouncingCircle(200, 10*i+ 200, 10, 50, -50, mg.gravity));
 		}
 		level = new Level(40, circles10, gates10);
 		levels.add(level);

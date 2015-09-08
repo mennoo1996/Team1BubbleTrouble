@@ -1,6 +1,8 @@
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Player {
 	//Method 1 code
@@ -10,6 +12,9 @@ public class Player {
 	float width;
 	float height;
 	Image image;
+
+	private boolean laser;
+	private boolean shield;
 	
 	
 	/**
@@ -26,6 +31,8 @@ public class Player {
 		this.width = width;
 		this.height = height;
 		this.image = image;
+		this.laser = false;
+		this.shield = false;
 		//Method 1 code
 		//this.lifeCount = lifeCount;
 	}
@@ -134,6 +141,24 @@ public class Player {
 	 */
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public boolean hasShield() {
+		return shield;
+	}
+
+	public void addShield() {
+		shield = true;
+		Executors.newScheduledThreadPool(1).schedule(() -> shield = false, 10, TimeUnit.SECONDS);
+	}
+
+	public boolean hasLaser() {
+		return laser;
+	}
+
+	public void addLaser() {
+		laser = true;
+		Executors.newScheduledThreadPool(1).schedule(() -> laser = false, 10, TimeUnit.SECONDS);
 	}
 	
 	//Method 1 code

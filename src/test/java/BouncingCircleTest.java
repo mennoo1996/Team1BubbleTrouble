@@ -73,7 +73,7 @@ public class BouncingCircleTest {
 		//3 is radius, 5 is yspeed
 		c = new BouncingCircle(1,2,51,4,-15,6);
 		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
-		assertEquals(-200.0, result.get(0).getySpeed(), 0);
+		assertEquals(-250.0, result.get(0).getySpeed(), 0);
 	}
 	
 
@@ -140,11 +140,6 @@ public class BouncingCircleTest {
 		assertEquals(2, c.getScore());
 	}
 	
-	@Test
-	public void testGetScore140() {
-		c = new BouncingCircle(1, 2, 140, 4, 5, 6);
-		assertEquals(1, c.getScore());
-	}
 	
 	@Test
 	public void testGetScoreNoUsualRadius() {

@@ -1,6 +1,7 @@
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SpriteSheet;
 
 
 public class Player {
@@ -11,6 +12,7 @@ public class Player {
 	private float width;
 	private float height;
 	private Image image;
+	private SpriteSheet spritesheet;
 	private boolean freeToRoam;
 	private MainGame mg;
 	private GameState gs;
@@ -186,6 +188,9 @@ public class Player {
 		this.height = height;
 	}
 
+	/**
+	 * @return the player image
+	 */
 	public Image getImage() {
 		return image;
 	}
@@ -194,6 +199,19 @@ public class Player {
 	 */
 	public void setImage(Image image) {
 		this.image = image;
+	}
+	
+	/**
+	 * @return the player spritesheet
+	 */
+	public SpriteSheet getSpritesheet() {
+		return spritesheet;
+	}
+	/**
+	 * @param Spritesheet the spritesheet to set
+	 */
+	public void setSpritesheet(SpriteSheet spritesheet) {
+		this.spritesheet = spritesheet;
 	}
 	
 	//Method 1 code

@@ -51,7 +51,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
-		this.playerImage = "mannetje.png";
+		this.playerImage = "Playersprite.png";
 		this.lifeCount = LIVES;
 	}
 

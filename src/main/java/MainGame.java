@@ -1,3 +1,4 @@
+import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
@@ -19,14 +20,13 @@ public class MainGame extends StateBasedGame {
 	protected static int xRes = 1600;
 	protected static int yRes = 1000;
 	
-	// Some environment images
+	// Some often-used images
 	protected Image backgroundImage;
 	protected Image foreGroundImage;
 	protected Image terminalImage;
-	protected Image versiontextImage;
-	protected Image[] numberImages;
 	protected Image laserHorizontalImage;
 	protected Image laserVerticalImage;
+	protected AngelCodeFont dosFont;
 	protected String playerImage;
 	
 	protected int score;
@@ -101,11 +101,7 @@ public class MainGame extends StateBasedGame {
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
-		this.versiontextImage = new Image("resources/text/text_version.png");
-		this.numberImages = new Image[10];
-		for(int i = 0; i < 10; i++) {
-			this.numberImages[i] = new Image("resources/numbers/" + Integer.toString(i) + ".png");
-		}
+		this.dosFont = new AngelCodeFont("resources/font/dosfont.fnt", "resources/font/dosfont_0.png");
 		
 		this.enterState(START_STATE);
 		

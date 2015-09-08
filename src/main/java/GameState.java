@@ -109,7 +109,6 @@ public class GameState extends BasicGameState {
 		
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
-		System.out.println("entering that mothafuckah");
 
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
 		

@@ -49,7 +49,7 @@ public class MainGame extends StateBasedGame {
 	 * @param name	- name of mainGame
 	 * @throws SlickException 
 	 */
-	public MainGame(String name) throws SlickException {
+	public MainGame(String name) {
 		super(name);
 		this.playerImage = "mannetje.png";
 		this.lifeCount = LIVES;

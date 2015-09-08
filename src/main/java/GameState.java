@@ -101,7 +101,7 @@ public class GameState extends BasicGameState {
 		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
-		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage, mg);
+		player = new Player(container.getWidth()/2 -80,container.getHeight()-295,60,92, playerImage, mg);
 
 		floor = new MyRectangle(0,container.getHeight()-210,container.getWidth(),210);
 		leftWall = new MyRectangle(0,0,105,container.getHeight());
@@ -355,8 +355,27 @@ public class GameState extends BasicGameState {
 		}
 		
 		// draw player
-		graphics.drawImage(player.getImage(), player.getX(), player.getY());
-
+		//graphics.drawImage(player.getImage(), player.getX() - 30, player.getY() - 23);
+		if(player.getMovement() == 2) {
+			player.incrementMovementCounter();
+			int sp = 3;
+			if(player.getMovementCounter() > player.getMovementCounter_Max() * 0.5f)
+				sp = 4;
+			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX() - 30, player.getY() - 23);
+		} else if(player.getMovement() == 1) {
+			player.incrementMovementCounter();
+			int sp = 1;
+			if(player.getMovementCounter() > player.getMovementCounter_Max() * 0.5f)
+				sp = 0;
+			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX() - 30, player.getY() - 23);
+		} else {
+			player.resetMovementCounter();
+			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX() - 30, player.getY() - 23);
+		}
+		player.setMovement(0);
+		
+		
+		
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);
 		

@@ -1,6 +1,7 @@
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SpriteSheet;
 
 
 public class Player {
@@ -10,7 +11,11 @@ public class Player {
 	private float y;
 	private float width;
 	private float height;
+	private int movement = 0;
+	private int movementCounter = 0;
+	private int movementCounter_max = 18;
 	private Image image;
+	private SpriteSheet spritesheet;
 	private boolean freeToRoam;
 	private MainGame mg;
 	private GameState gs;
@@ -31,6 +36,7 @@ public class Player {
 		this.width = width;
 		this.height = height;
 		this.image = image;
+		this.spritesheet = new SpriteSheet(image, 120, 120);
 		this.mg = mg;
 		this.gs = (GameState) mg.getState(mg.GAME_STATE);
 	}
@@ -79,6 +85,7 @@ public class Player {
 		if (gs.input.isKeyDown(Input.KEY_LEFT) && this.getX() > gs.leftWall.getWidth()) {
             if(freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mg.playerSpeed * deltaFloat);
+            	this.movement = 1;
             }
         }
 
@@ -86,6 +93,7 @@ public class Player {
 		if (gs.input.isKeyDown(Input.KEY_RIGHT) && this.getMaxX() < (container.getWidth() - gs.rightWall.getWidth())) {
            if(freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mg.playerSpeed * deltaFloat);
+        	   this.movement = 2;
            }
         }
 	}
@@ -186,6 +194,10 @@ public class Player {
 		this.height = height;
 	}
 
+	
+	/**
+	 * @return the player image
+	 */
 	public Image getImage() {
 		return image;
 	}
@@ -194,6 +206,71 @@ public class Player {
 	 */
 	public void setImage(Image image) {
 		this.image = image;
+	}
+	
+	/**
+	 * @return the player spritesheet
+	 */
+	public SpriteSheet getSpritesheet() {
+		return spritesheet;
+	}
+	/**
+	 * @param Spritesheet the spritesheet to set
+	 */
+	public void setSpritesheet(SpriteSheet spritesheet) {
+		this.spritesheet = spritesheet;
+	}
+	
+	/**
+	 * @param movement the movement integer used to determine movement state. 
+	 */
+	public void setMovement(int movement) {
+		this.movement = movement;
+	}
+	
+	/**
+	 * @return the current movement integer used to determine movement 
+	 */
+	public int getMovement() {
+		return movement;
+	}
+	
+	/**
+	 * @return movement counter for spritesheets
+	 */
+	public int getMovementCounter() {
+		return movementCounter;
+	}
+	
+	/**
+	 * increment the movement counter used for spritesheets
+	 */
+	public void incrementMovementCounter() {
+		movementCounter++;
+		if(movementCounter > movementCounter_max) {
+			resetMovementCounter();
+		}
+	}
+	
+	/**
+	 * reset the movement counter used for spritesheets
+	 */
+	public void resetMovementCounter() {
+		movementCounter = 0;
+	}
+	
+	/**
+	 * @return movementCounter_max get the movement counter maximum used for spritesheets
+	 */
+	public int getMovementCounter_Max() {
+		return movementCounter_max;
+	}
+	
+	/**
+	 * @param MovementCounter_max set the movement counter maximum used for spritesheets
+	 */
+	public void setMovementCounter_Max(int newMax) {
+		movementCounter_max = newMax;
 	}
 	
 	//Method 1 code

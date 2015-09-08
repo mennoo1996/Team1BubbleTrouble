@@ -23,6 +23,7 @@ public class GameState extends BasicGameState {
 	// CONSTANTS
 	private static int totaltime;
 	private static final int LEVEL_POINTS = 1500;
+	private static final int SECOND_TO_MS_FACTOR = 1000;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -77,7 +78,7 @@ public class GameState extends BasicGameState {
 	// Level ending, empty bar
 	
 	/**
-	 * constructor
+	 * constructor.
 	 * 
 	 * @param mg	- the maingame this state belongs to
 	 */
@@ -86,7 +87,10 @@ public class GameState extends BasicGameState {
 	}
 	
 	/**
-	 * setup all variables when entering this state
+	 * setup all variables when entering this state.
+	 * @param container the Container this state is part of
+	 * @param arg1 The statebasedgame this state is part of
+	 * @throws SlickException sometimes.
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
@@ -96,14 +100,12 @@ public class GameState extends BasicGameState {
 
 		levels.initialize();
 		
-		
-		totaltime = levels.getLevel(mg.levelCounter).getTime()*1000;
+		totaltime = levels.getLevel(mg.levelCounter).getTime() * SECOND_TO_MS_FACTOR;
 		startTime = System.currentTimeMillis();
 		timeRemaining = totaltime;
 		prevTime = startTime;
 		countIn = true;
 		playingState = true;
-		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -80,container.getHeight()-295,60,92, playerImage, mg);
@@ -112,17 +114,14 @@ public class GameState extends BasicGameState {
 		leftWall = new MyRectangle(0,0,105,container.getHeight());
 		rightWall = new MyRectangle(container.getWidth()-130,0,130,container.getHeight());
 		ceiling = new MyRectangle(0,0,container.getWidth(),110);
-		
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
 
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
-		
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 
 		// Add gates
 		gateList = levels.getLevel(mg.levelCounter).getGates();
-
 	}
 	
 	

@@ -3,6 +3,7 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -40,7 +41,7 @@ public class GameState extends BasicGameState {
 	private boolean countIn;
 	private boolean playingState;
 	private boolean waitEsc;
-
+	
 	// Images
 	private Image playerImage;
 	private Image wallsImage;
@@ -55,9 +56,6 @@ public class GameState extends BasicGameState {
 	private Image laserbeamimage;
 	private Image lasertipimage;
 	private Image counterBarImage;
-	private Image scoretextImage;
-	private Image leveltextImage;
-	private Image pausedtextImage;
 	private Image gateUpper;
 	private Image gateLower;
 	
@@ -359,7 +357,6 @@ public class GameState extends BasicGameState {
 		}
 		
 		// draw player
-		//graphics.drawImage(player.getImage(), player.getX() - 30, player.getY() - 23);
 		if(player.getMovement() == 2) {
 			player.incrementMovementCounter();
 			int sp = 3;
@@ -386,36 +383,9 @@ public class GameState extends BasicGameState {
 		// Draw timer countdown bar
 		drawCountdownBar(container, graphics);
 
-
 		// Draw level/Score data
-		LinkedList<Integer> numberStack = new LinkedList<Integer>();
-		int levelInt = (mg.levelCounter+1), scoreInt = (mg.score + score), stackCount = 0;
-
-		graphics.drawImage(leveltextImage, container.getWidth() / 2, container.getHeight() - 90);
-		while(levelInt > 0) {
-			numberStack.push(levelInt % 10);
-			levelInt /= 10;
-		}
-		while(!numberStack.isEmpty()) {
-			graphics.drawImage(mg.numberImages[numberStack.pop()], container.getWidth() / 2 + 116 + 20*stackCount, container.getHeight() - 89);
-			stackCount++;
-		}
-
-		graphics.drawImage(scoretextImage, container.getWidth() / 2 - 300, container.getHeight() - 90);
-		stackCount = 0;
-		if(scoreInt == 0) {
-			numberStack.push(scoreInt);
-		}
-		while(scoreInt > 0) {
-			numberStack.push(scoreInt % 10);
-			scoreInt /= 10;
-		}
-		
-		while(!numberStack.isEmpty()) {
-			graphics.drawImage(mg.numberImages[numberStack.pop()], container.getWidth() / 2 - 184 + 20*stackCount, container.getHeight() - 90);
-			stackCount++;
-		}
-
+		mg.dosFont.drawString(container.getWidth() / 2 - 270, container.getHeight() - 84, "Level: " + Integer.toString(mg.levelCounter + 1));
+		mg.dosFont.drawString(container.getWidth() / 2, container.getHeight() - 84, "Score: " + Integer.toString(mg.score + score));
 		
 		// Pause overlay and counter
 		if (playingState && countIn) {
@@ -426,19 +396,8 @@ public class GameState extends BasicGameState {
 			drawPausedScreen(container, graphics);
 		}
 		
-		// draw version number (BECAUZ ITZ COOL)
-		graphics.drawImage(mg.versiontextImage, 72, container.getHeight() - 195);
-		graphics.drawImage(mg.numberImages[1], 72 + 150, container.getHeight() - 196);
-		int versionnumber = 105;
-		stackCount = 0;
-		while(versionnumber > 0) {
-			numberStack.push(versionnumber % 10);
-			versionnumber /= 10;
-		}
-		while(!numberStack.isEmpty()) {
-			graphics.drawImage(mg.numberImages[numberStack.pop()], 72 + 175 + 20*stackCount, container.getHeight() - 196);
-			stackCount++;
-		}
+		// draw version number
+		mg.dosFont.drawString(70, container.getHeight() - 190, "#Version 0.98");
 		
 		// draw foreground layer
 		graphics.drawImage(mg.foreGroundImage, 0, 0);
@@ -551,7 +510,7 @@ public class GameState extends BasicGameState {
 		Color overLay = new Color(0f, 0f, 0f, 0.5f);
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
-		graphics.drawImage(pausedtextImage, container.getWidth() / 2 - 130, container.getHeight() / 2 - 60);
+		mg.dosFont.drawString(container.getWidth() / 2 - 130, container.getHeight() / 2 - 53, "Game is paused...");
 	}
 
 	private void drawCountIn(GameContainer container, Graphics graphics) {
@@ -559,7 +518,8 @@ public class GameState extends BasicGameState {
 
 		graphics.setColor(new Color(0f, 0f, 0f, 0.5f));
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
-		graphics.drawImage(mg.numberImages[count], container.getWidth() / 2 - 18, container.getHeight() / 2 - 60);
+		mg.dosFont.drawString(container.getWidth() / 2 - 90, container.getHeight() / 2 - 130, "Starting in");
+		mg.dosFont.drawString(container.getWidth() / 2 - 5, container.getHeight() / 2 - 53, Integer.toString(count));
 
 		for(int i = 0; i < amount; i++) {
             float degree = i*(360/15);
@@ -607,20 +567,22 @@ public class GameState extends BasicGameState {
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 		// laser images
+
 		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
 		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 		// countdown bar images
+
 		counterBarImage = new Image("resources/counter_bar.png");
-		// text images
-		scoretextImage = new Image("resources/text/text_score.png");
-		leveltextImage = new Image("resources/text/text_level.png");
-		pausedtextImage = new Image("resources/text/text_paused.png");
 
 		// gate images
 		gateUpper = new Image("resources/gate_upper.png");
 		gateLower = new Image("resources/gate_lower.png");
+		
 		// walls image
 		wallsImage = new Image("resources/walls_blue.png");
+		
+		// ceiling image
+		ceilingImage = new Image("resources/ceiling.png");
 
 		// load health images
 		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
@@ -642,18 +604,18 @@ public class GameState extends BasicGameState {
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 
 		// laser images
+
 		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
 		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
 
-		// text images
-		scoretextImage = new Image("resources/text/text_score.png");
-		leveltextImage = new Image("resources/text/text_level.png");
+		
 
 		// ceiling image
 		ceilingImage = new Image("resources/ceiling.png");
+
 
 	}
 	
@@ -675,6 +637,14 @@ public class GameState extends BasicGameState {
 	
 	public void setGateList(ArrayList<Gate> gatelist) {
 		this.gateList = gatelist;
+	}
+
+	public MainGame getMg() {
+		return mg;
+	}
+
+	public void setMg(MainGame mg) {
+		this.mg = mg;
 	}
 
 }

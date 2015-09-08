@@ -71,7 +71,15 @@ public class BouncingCircleTest {
 		assertFalse(c.isDone());
 	}
 	
-	
+	@Test
+	public void testGetSplittedCirclesBonusSpeedBranch() {
+		//3 is radius, 5 is yspeed
+		c = new BouncingCircle(1,2,51,4,-15,6);
+		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
+		System.out.println("ySpeed = " + c.getySpeed());
+		System.out.println("Radius = " + c.getRadius());
+		assertEquals(-200.0, result.get(0).getySpeed(), 0);
+	}
 	
 
 	@Test
@@ -396,7 +404,18 @@ public class BouncingCircleTest {
 		assertEquals(50, c.getGravity(), 0);
 	}
 	
-
+	@Test
+	public void testIsHitCeiling() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertFalse(c.isHitCeiling());
+	}
+	
+	@Test
+	public void testSetHitCeiling() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		c.setHitCeiling(true);
+		assertTrue(c.isHitCeiling());
+	}
 	
 
 	

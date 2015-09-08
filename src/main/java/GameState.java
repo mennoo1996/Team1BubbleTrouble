@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,6 +27,7 @@ public class GameState extends BasicGameState {
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
+	private ArrayList<floatingScore> floatingScoreList;
 	protected ArrayList<Gate> gateList;
 	private Player player;
 	private int score;
@@ -144,6 +146,7 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
+	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	
 	// Level ending, empty bar
 	
@@ -189,6 +192,7 @@ public class GameState extends BasicGameState {
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
+		floatingScoreList = new ArrayList<floatingScore>();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		// Add gates
 		gateList = levels.getLevel(mg.levelCounter).getGates();
@@ -258,7 +262,7 @@ public class GameState extends BasicGameState {
 		player.update(deltaFloat);
 		processPause();
 		processCircles(container, sbg, deltaFloat);
-		
+		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate
 		updateGateExistence(deltaFloat);
 		// if there are no active circles, process to gameover screen
@@ -299,6 +303,7 @@ public class GameState extends BasicGameState {
 		for (BouncingCircle circle : shotList) {
             // if the circle hasn't been handled
             if (!circle.isDone()) {
+            	floatingScoreList.add(new floatingScore(circle));
                 // remove circle from active list
                 if (circleList.contains(circle)) {
                     circleList.remove(circle);
@@ -361,6 +366,18 @@ public class GameState extends BasicGameState {
         }
 	}
 
+	private void updateFloatingScores(float deltaFloat) {
+		Iterator<floatingScore> scoreListIterator = floatingScoreList.iterator();
+		while(scoreListIterator.hasNext()) {
+			floatingScore score = scoreListIterator.next();
+			if(score.isDead()) {
+				scoreListIterator.remove();
+			} else {
+				score.update(deltaFloat, timeDelta);
+			}
+		}
+	}
+	
 	private void updateGateExistence(float deltaFloat) {
 		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
 		for (Gate gate : gateList) {
@@ -434,6 +451,7 @@ public class GameState extends BasicGameState {
 		graphics.setColor(Color.white);
 		// draw all active circles
 		drawActiveCircles(graphics);
+		drawFloatingScores();
 		graphics.drawImage(ceilingImage, leftWall.getWidth() - CEILING_DRAW_X_DEVIATION,
 				ceiling.getHeight() - CEILING_DRAW_Y_DEVIATION);
 		drawGatesLaser(container, graphics);
@@ -586,6 +604,13 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	private void drawFloatingScores() {
+		for (floatingScore score : floatingScoreList) {
+			mg.dosFont.drawString(score.getX(), score.getY(), Integer.toString(score.getScore()), 
+					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS, score.getOpacity()));
+		}
+	}
+	
 	private void drawHealth(Graphics graphics) {
 		switch (mg.getLifeCount()) {
 			case(1) :

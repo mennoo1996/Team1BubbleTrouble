@@ -61,8 +61,6 @@ public class StartState extends BasicGameState {
 
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) throws SlickException {
 		
-		graphics.drawString("If you want to play this awesome game, click the play button!", 100, 100);
-		
 		Input input = container.getInput();
 		
 		graphics.drawImage(mg.backgroundImage, 0, 0);
@@ -85,20 +83,8 @@ public class StartState extends BasicGameState {
 			graphics.drawImage(quitButton.getImage(), quitButton.getX(), quitButton.getY());
 		}
 
-		// draw version number (BECAUZ ITZ COOL)
-		graphics.drawImage(mg.versiontextImage, 72, container.getHeight() - 195);
-		graphics.drawImage(mg.numberImages[1], 72 + 150, container.getHeight() - 196);
-		LinkedList<Integer> numberStack = new LinkedList<Integer>();
-		int versionnumber = 105;
-		int stackCount = 0;
-		while(versionnumber > 0) {
-			numberStack.push(versionnumber % 10);
-			versionnumber /= 10;
-		}
-		while(!numberStack.isEmpty()) {
-			graphics.drawImage(mg.numberImages[numberStack.pop()], 72 + 175 + 20*stackCount, container.getHeight() - 196);
-			stackCount++;
-		}
+		// draw version number
+		mg.dosFont.drawString(70, container.getHeight() - 190, "#Version 0.98");
 		
 		graphics.drawImage(miscText, 0, 0);
 		

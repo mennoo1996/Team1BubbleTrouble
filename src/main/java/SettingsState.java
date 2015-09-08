@@ -16,15 +16,12 @@ public class SettingsState extends BasicGameState {
 	
 	private SpriteSheet mannetje;
 	private SpriteSheet arie;
-
-	//private SpriteSheet mannetje;
 	
 	private Image highLight;
 	private Image background;
 	
 	private MyRectangle mannetjeRectangle;
 	private MyRectangle arieRectangle;
-	
 
 	private MainGame mg;
 	private Input input;
@@ -42,11 +39,9 @@ public class SettingsState extends BasicGameState {
 		highLight = new Image("resources/menus/Menu_Highlight.png");
 		mannetje = new SpriteSheet("resources/Playersprite.png", 120, 120);
 		arie = new SpriteSheet("resources/Ariesprite.png", 120, 120);
-
 		background = new Image("resources/menus/Menu_Options_Text.png");
 		mannetjeRectangle = new MyRectangle(320,380,120,120);
 		arieRectangle = new MyRectangle(450,380,120,120);
-
 	}
 	
 	public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {
@@ -78,7 +73,6 @@ public class SettingsState extends BasicGameState {
 			graphics.drawImage(highLight, 450, 380);
 		}
 		
-		
 		if(returnButton.getRectangle().contains(500, input.getMouseY())) {
 			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), returnButton.getY());
 		} else {
@@ -88,20 +82,8 @@ public class SettingsState extends BasicGameState {
 		graphics.drawImage(mannetje.getSprite(2, 0), mannetjeRectangle.getX(), mannetjeRectangle.getY());
 		graphics.drawImage(arie.getSprite(2, 0), arieRectangle.getX(), arieRectangle.getY());
 		
-		// draw version number (BECAUZ ITZ COOL)
-		graphics.drawImage(mg.versiontextImage, 72, container.getHeight() - 195);
-		graphics.drawImage(mg.numberImages[1], 72 + 150, container.getHeight() - 196);
-		LinkedList<Integer> numberStack = new LinkedList<Integer>();
-		int versionnumber = 105;
-		int stackCount = 0;
-		while(versionnumber > 0) {
-			numberStack.push(versionnumber % 10);
-			versionnumber /= 10;
-		}
-		while(!numberStack.isEmpty()) {
-			graphics.drawImage(mg.numberImages[numberStack.pop()], 72 + 175 + 20*stackCount, container.getHeight() - 196);
-			stackCount++;
-		}
+		// draw version number
+		mg.dosFont.drawString(70, container.getHeight() - 190, "#Version 0.98");
 		
 		// foreground and terminal
 		graphics.drawImage(mg.foreGroundImage, 0, 0);

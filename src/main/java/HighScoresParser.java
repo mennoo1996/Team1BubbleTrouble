@@ -4,9 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 /**
  * Class to parse the highscores from/to file.
  * @author Menno

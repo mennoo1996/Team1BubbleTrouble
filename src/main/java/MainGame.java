@@ -15,14 +15,17 @@ public class MainGame extends StateBasedGame {
 	///// CONFIGURATION /////
 	
 	// Speeds in pixels per second
-	protected float gravity = 500f;
-	protected float startingSpeed = 200f; 
-	protected float speedStep = 0.5f;
-	protected float playerSpeed = 400f;
-	protected float laserWidth = 3f;
-	protected float laserSpeed = 1000f;
-	protected static int xRes = 1600;
-	protected static int yRes = 1000;
+	private static final int DEFAULT_X_RES = 1600;
+	private static final int DEFAULT_Y_RES = 1000;
+	
+	protected float gravity = DEFAULT_GRAVITY;
+	protected float startingSpeed = DEFAULT_STARTING_SPEED;
+	protected float speedStep = DEFAULT_SPEED_STEP;
+	protected float playerSpeed = DEFAULT_PLAYER_SPEED;
+	protected float laserWidth = DEFAULT_LASER_WIDTH;
+	protected float laserSpeed = DEFAULT_LASER_SPEED;
+	protected static int xRes = DEFAULT_X_RES;
+	protected static int yRes = DEFAULT_Y_RES;
 	
 	// Some often-used images
 	protected Image backgroundImage;
@@ -48,9 +51,17 @@ public class MainGame extends StateBasedGame {
 	protected final int WON_STATE = 3;
 	protected final int SETTINGS_STATE = 4;
 	
+	
 	private static AppGameContainer app;
 	
 	private static final int TARGET_FRAMERATE = 60;
+	private static final float DEFAULT_GRAVITY = 500f;
+	private static final float DEFAULT_STARTING_SPEED = 200f;
+	private static final float DEFAULT_SPEED_STEP = 0.5f;
+	private static final float DEFAULT_PLAYER_SPEED = 400f;
+	private static final float DEFAULT_LASER_WIDTH = 3f;
+	private static final float DEFAULT_LASER_SPEED = 1000f;
+	
 	
 	/**
 	 * Constructor.

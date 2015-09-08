@@ -1,5 +1,6 @@
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.Input;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -7,15 +8,18 @@ import java.util.concurrent.TimeUnit;
 public class Player {
 	//Method 1 code
 	//int lifeCount;
-	float x;
-	float y;
-	float width;
-	float height;
-	Image image;
 
 	private boolean laser;
 	private boolean shield;
-	
+	private float x;
+	private float y;
+	private float width;
+	private float height;
+	private Image image;
+	private boolean freeToRoam;
+	private MainGame mg;
+	private GameState gs;
+	private Gate intersectingGate;
 	
 	/**
 	 * @param x
@@ -24,7 +28,7 @@ public class Player {
 	 * @param height
 	 * @param image
 	 */
-	public Player(float x, float y, float width, float height, Image image) {
+	public Player(float x, float y, float width, float height, Image image, MainGame mg) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -35,14 +39,71 @@ public class Player {
 		this.shield = false;
 		//Method 1 code
 		//this.lifeCount = lifeCount;
+		this.mg = mg;
+		this.gs = (GameState) mg.getState(mg.GAME_STATE);
+	}
+	
+	public void update(float deltaFloat) {
+		processGates();
+		processWeapon(mg.getContainer(), deltaFloat);
+		processPlayerMovement(mg.getContainer(), deltaFloat);
+	}
+	
+	private void processGates() {
+		// Check the intersection of a player with a gate
+		freeToRoam = true;
+		for(Gate someGate :gs.gateList) {
+			if(this.getRectangle().intersects(someGate.getRectangle())) {
+				freeToRoam = false;
+				intersectingGate = someGate;
+			}
+		}
+		// Reset intersecting gate to none if there is no intersection
+		if(freeToRoam) {
+			intersectingGate = null;
+		}
+	}
+
+	private void processWeapon(GameContainer container, float deltaFloat) {
+		// Shoot laser when spacebar is pressed and no laser is active
+		if (gs.input.isKeyPressed(Input.KEY_SPACE) && !gs.shot) {
+            gs.shot = true;
+            float x = this.getCenterX();
+            gs.laser = new Laser(x, container.getHeight() - gs.floor.getHeight(), mg.laserSpeed, mg.laserWidth);
+        }
+
+		// Update laser
+		if (gs.shot) {
+            gs.laser.update(gs, deltaFloat);
+            // Disable laser when it has reached the ceiling
+            if (!gs.laser.visible) {
+                gs.shot = false;
+            }
+        }
+	}
+	
+	private void processPlayerMovement(GameContainer container, float deltaFloat) {
+		// Walk left when left key pressed and not at left wall OR a gate
+		if (gs.input.isKeyDown(Input.KEY_LEFT) && this.getX() > gs.leftWall.getWidth()) {
+            if(freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
+            	this.setX(this.getX() - mg.playerSpeed * deltaFloat);
+            }
+        }
+
+		// Walk right when right key pressed and not at right wall OR a gate
+		if (gs.input.isKeyDown(Input.KEY_RIGHT) && this.getMaxX() < (container.getWidth() - gs.rightWall.getWidth())) {
+           if(freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
+        	   this.setX(this.getX() + mg.playerSpeed * deltaFloat);
+           }
+        }
 	}
 
 	/**
 	 * Return a bounding box rectangle of the player
 	 * @return
 	 */
-	public Rectangle getRectangle() {
-		return new Rectangle(x,y,width,height);
+	public MyRectangle getRectangle() {
+		return new MyRectangle(x,y,width,height);
 	}
 	
 	/**

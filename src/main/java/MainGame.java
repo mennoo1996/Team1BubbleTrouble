@@ -31,16 +31,16 @@ public class MainGame extends StateBasedGame {
 	
 	protected int score;
 	
-	// Life method 2 code, storing the data outside of the state because those things keep being recreated
-	private static int LIVES = 5; // V V V V
-	// Thou shallt count to five, no more, no less. 
-	// Five shall be the number thou shalt count, and the number of the counting shall be five. 
-	// Six shalt thou not count, neither count thou four, excepting that thou then proceed to five. 
-	// six is right out. 
+	private static int LIVES = 5;
 	protected int lifeCount;
 	protected int levelCounter = 0;
 	
-	////////////////////////
+	//////////////////////// STATES //////////////
+	protected final int START_STATE = 0;
+	protected final int GAME_STATE = 1;
+	protected final int GAMOVER_STATE = 2;
+	protected final int WON_STATE = 3;
+	protected final int SETTINGS_STATE = 4;
 	
 	private static AppGameContainer app;
 	
@@ -49,7 +49,7 @@ public class MainGame extends StateBasedGame {
 	 * @param name	- name of mainGame
 	 * @throws SlickException 
 	 */
-	public MainGame(String name) throws SlickException {
+	public MainGame(String name) {
 		super(name);
 		this.playerImage = "mannetje.png";
 		this.lifeCount = LIVES;
@@ -107,7 +107,7 @@ public class MainGame extends StateBasedGame {
 			this.numberImages[i] = new Image("resources/numbers/" + Integer.toString(i) + ".png");
 		}
 		
-		this.enterState(0);
+		this.enterState(START_STATE);
 		
 	}
 	

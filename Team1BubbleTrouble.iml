@@ -20,6 +20,9 @@
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:1.0" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.collections:google-collections:0.9" level="project" />
+    <orderEntry type="library" name="Maven: org.mockito:mockito-core:1.9.5" level="project" />
+    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.objenesis:objenesis:1.0" level="project" />
     <orderEntry type="library" name="Maven: pmd:pmd:4.3" level="project" />
     <orderEntry type="library" name="Maven: ant:ant:1.6" level="project" />
     <orderEntry type="library" name="Maven: jaxen:jaxen:1.1.1" level="project" />
@@ -41,8 +44,8 @@
     <orderEntry type="library" name="Maven: findbugs:findbugs-ant:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: findbugs:findbugsGUI:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.lwjgl:lwjgl:3.0.0a" level="project" />
-    <orderEntry type="library" name="Maven: org.newdawn.slick:slick:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.lwjgl.util:lwjgl_util:1.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.games:jinput:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.newdawn.slick:slick:1.0" level="project" />
   </component>
 </module>

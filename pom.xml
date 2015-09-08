@@ -10,7 +10,9 @@
 
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<targetJdk>1.7</targetJdk>
+		<targetJdk>1.8</targetJdk>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<checkstyle.plugin.version>2.15</checkstyle.plugin.version>
 		<pmd.plugin.version>3.4</pmd.plugin.version>
 		<findbugs.version>3.0.0</findbugs.version>
@@ -105,6 +107,11 @@
 				<version>5.0</version>
 		</dependency>
 		<dependency>
+	<groupId>org.mockito</groupId>
+	<artifactId>mockito-core</artifactId>
+	<version>1.9.5</version>
+</dependency>
+		<dependency>
 			<groupId>pmd</groupId>
 			<artifactId>pmd</artifactId>
 				<version>4.3</version>
@@ -120,11 +127,6 @@
 			<version>3.0.0a</version>
 		</dependency>
 		<dependency>
-			<groupId>org.newdawn.slick</groupId>
-			<artifactId>slick</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.lwjgl.util</groupId>
 			<artifactId>lwjgl_util</artifactId>
 			<version>1.0</version>
@@ -132,6 +134,11 @@
 		<dependency>
 			<groupId>net.java.games</groupId>
 			<artifactId>jinput</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.newdawn.slick</groupId>
+			<artifactId>slick</artifactId>
 			<version>1.0</version>
 		</dependency>
 	</dependencies>
@@ -167,7 +174,7 @@
       <artifactId>maven-pmd-plugin</artifactId>
       <version>3.0.1</version>
       <configuration>
-        <targetJdk>1.6</targetJdk>
+        <targetJdk>1.8</targetJdk>
         <rulesets>
           <ruleset>pmd_rules.xml</ruleset>
         </rulesets>

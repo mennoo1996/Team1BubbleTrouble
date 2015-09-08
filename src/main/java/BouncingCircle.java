@@ -45,6 +45,7 @@ public class BouncingCircle extends Circle {
 		
 		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed*deltaFloat);
+		
 		// When the ball hit the floor reverse it's speed
 		if(this.getMaxY() > container.getHeight() - gs.floor.getHeight() ) {
 			ySpeed = -getSpeedForRadius();
@@ -66,9 +67,11 @@ public class BouncingCircle extends Circle {
 		} else if(this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
 			xSpeed = -xSpeed;
 		} else {
-			for(Gate gate : gs.getGateList()) {
-				if(gate.getRectangle().intersects(this.getCircle())) {
-					xSpeed = -xSpeed;
+			if (gs.getGateList()!=null) {
+				for(Gate gate : gs.getGateList()) {
+					if(gate.getRectangle().intersects(this.getCircle())) {
+						xSpeed = -xSpeed;
+					}
 				}
 			}
 		}
@@ -289,6 +292,8 @@ public class BouncingCircle extends Circle {
 	public void setHitCeiling(boolean hitCeiling) {
 		this.hitCeiling = hitCeiling;
 	}
+	
+	
 	
 	
 	

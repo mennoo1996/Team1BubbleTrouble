@@ -13,11 +13,16 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-
+/**
+ * This class is the state that we are in during gameplay.
+ * It contains basically all the game logic.
+ * @author Menno
+ *
+ */
 public class GameState extends BasicGameState {
 
 	// CONSTANTS
-	private static int TOTAL_TIME;
+	private static int totaltime;
 	private static final int LEVEL_POINTS = 1500;
 	
 	private MainGame mg;
@@ -41,16 +46,16 @@ public class GameState extends BasicGameState {
 	// Images
 	private Image playerImage;
 	private Image wallsImage;
-	private Image health_1_Image;
-	private Image health_2_Image;
-	private Image health_3_Image;
-	private Image health_4_Image;
-	private Image health_5_Image;
-	private Image nobutton_Image;
-	private Image[] balls_Images;
-	private Image ceiling_Image;
-	private Image laser_beam_image;
-	private Image laser_tip_image;
+	private Image health1Image;
+	private Image health2Image;
+	private Image health3Image;
+	private Image health4Image;
+	private Image health5Image;
+	private Image nobuttonImage;
+	private Image[] ballsImages;
+	private Image ceilingImage;
+	private Image laserbeamimage;
+	private Image lasertipimage;
 	private Image counterBarImage;
 	private Image scoretextImage;
 	private Image leveltextImage;
@@ -59,7 +64,7 @@ public class GameState extends BasicGameState {
 	private Image gateLower;
 	
 	// Countdown Bar Logic
-	private static int COUNTDOWN_BAR_PARTS = 56;
+	private static final int COUNTDOWN_BAR_PARTS = 56;
 	private int fractionTimeParts;
 	private boolean waitForLevelEnd = false;
 	private boolean freeToRoam;
@@ -110,9 +115,9 @@ public class GameState extends BasicGameState {
 		shot = false;
 		score = 0;
 		
-		TOTAL_TIME = levels.getLevel(mg.levelCounter).getTime()*1000;
+		totaltime = levels.getLevel(mg.levelCounter).getTime()*1000;
 		startTime = System.currentTimeMillis();
-		timeRemaining = TOTAL_TIME;
+		timeRemaining = totaltime;
 		prevTime = startTime;
 		countIn = true;
 		playingState = true;
@@ -153,16 +158,16 @@ public class GameState extends BasicGameState {
 
 	private void loadImages() throws SlickException {
 		// load health images
-		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
-		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
-		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
-		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
-		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health2Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health3Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health4Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 		// button image
-		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
+		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 		// laser images
-		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
-		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
+		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
+		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
 		// text images
@@ -177,27 +182,27 @@ public class GameState extends BasicGameState {
 		wallsImage = new Image("resources/walls_blue.png");
 
 		// load health images
-		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
-		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
-		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
-		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
-		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health2Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health3Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health4Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 
 		// balls images
-		balls_Images = new Image[6];
-		balls_Images[0] = new Image("resources/Balls/Ball_90.png");
-		balls_Images[1] = new Image("resources/Balls/Ball_65.png");
-		balls_Images[2] = new Image("resources/Balls/Ball_45.png");
-		balls_Images[3] = new Image("resources/Balls/Ball_30.png");
-		balls_Images[4] = new Image("resources/Balls/Ball_20.png");
-		balls_Images[5] = new Image("resources/Balls/Ball_10.png");
+		ballsImages = new Image[6];
+		ballsImages[0] = new Image("resources/Balls/Ball_90.png");
+		ballsImages[1] = new Image("resources/Balls/Ball_65.png");
+		ballsImages[2] = new Image("resources/Balls/Ball_45.png");
+		ballsImages[3] = new Image("resources/Balls/Ball_30.png");
+		ballsImages[4] = new Image("resources/Balls/Ball_20.png");
+		ballsImages[5] = new Image("resources/Balls/Ball_10.png");
 
 		// button image
-		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
+		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 
 		// laser images
-		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
-		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
+		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
+		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
@@ -207,7 +212,7 @@ public class GameState extends BasicGameState {
 		leveltextImage = new Image("resources/text/text_level.png");
 
 		// ceiling image
-		ceiling_Image = new Image("resources/ceiling.png");
+		ceilingImage = new Image("resources/ceiling.png");
 	}
 
 	/**
@@ -262,10 +267,10 @@ public class GameState extends BasicGameState {
 
 	private void processTime(StateBasedGame sbg, long curTime) {
 		timeRemaining -= timeDelta;
-		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / TOTAL_TIME);
+		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / totaltime);
 
 		if(waitForLevelEnd) {
-			timeRemaining -= 0.01f*TOTAL_TIME;
+			timeRemaining -= 0.01f*totaltime;
 			if(timeRemaining < 1)
 				timeRemaining = 1;
 		}
@@ -403,7 +408,7 @@ public class GameState extends BasicGameState {
             waitForLevelEnd = true;
         }
 		if(waitForLevelEnd && timeRemaining == 1) {
-            score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS; // add level-ending score
+            score += ((double)timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
             mg.score += score; // update total score
             if (mg.levelCounter<levels.size()-1) {
                 waitForLevelEnd = false;
@@ -463,7 +468,7 @@ public class GameState extends BasicGameState {
 		// draw all active circles
 		drawActiveCircles(graphics);
 
-		graphics.drawImage(ceiling_Image, leftWall.getWidth() - 10, ceiling.getHeight() - 25);
+		graphics.drawImage(ceilingImage, leftWall.getWidth() - 10, ceiling.getHeight() - 25);
 		
 		// draw all active gates
 		drawActiveGates(container, graphics);
@@ -545,7 +550,7 @@ public class GameState extends BasicGameState {
 		
 		// disable button when paused
 		if(!playingState) {
-			graphics.drawImage(nobutton_Image, 0, 0);
+			graphics.drawImage(nobuttonImage, 0, 0);
 		}
 		
 		// show correct health lights
@@ -573,8 +578,8 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawWeapon(Graphics graphics) {
-		graphics.drawImage(laser_tip_image, laser.getX() - 18, laser.getY() - 14);
-		graphics.drawImage(laser_beam_image, laser.getX() - 18, laser.getRectangle().getMinY() + 13, laser.getX() + 17, laser.getRectangle().getMaxY(), 0, 0, 35, 300);
+		graphics.drawImage(lasertipimage, laser.getX() - 18, laser.getY() - 14);
+		graphics.drawImage(laserbeamimage, laser.getX() - 18, laser.getRectangle().getMinY() + 13, laser.getX() + 17, laser.getRectangle().getMaxY(), 0, 0, 35, 300);
 	}
 
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
@@ -625,12 +630,12 @@ public class GameState extends BasicGameState {
 			int r = (int)circle.getRadius();
 			int offset = 13;
 			switch(r) {
-				case(90) : graphics.drawImage(balls_Images[0], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(65) : graphics.drawImage(balls_Images[1], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(45) : graphics.drawImage(balls_Images[2], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(30) : graphics.drawImage(balls_Images[3], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(20) : graphics.drawImage(balls_Images[4], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(10) : graphics.drawImage(balls_Images[5], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(90) : graphics.drawImage(ballsImages[0], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(65) : graphics.drawImage(ballsImages[1], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(45) : graphics.drawImage(ballsImages[2], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(30) : graphics.drawImage(ballsImages[3], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(20) : graphics.drawImage(ballsImages[4], circle.getMinX()-offset, circle.getMinY()-offset); break;
+				case(10) : graphics.drawImage(ballsImages[5], circle.getMinX()-offset, circle.getMinY()-offset); break;
 			}
 		}
 	}
@@ -638,19 +643,19 @@ public class GameState extends BasicGameState {
 	private void drawHealth(Graphics graphics) {
 		switch(mg.getLifeCount()) {
 			case(1) :
-				graphics.drawImage(health_1_Image, 0, 0);
+				graphics.drawImage(health1Image, 0, 0);
 			break;
 			case(2) :
-				graphics.drawImage(health_2_Image, 0, 0);
+				graphics.drawImage(health2Image, 0, 0);
 			break;
 			case(3) :
-				graphics.drawImage(health_3_Image, 0, 0);
+				graphics.drawImage(health3Image, 0, 0);
 			break;
 			case(4) :
-				graphics.drawImage(health_4_Image, 0, 0);
+				graphics.drawImage(health4Image, 0, 0);
 			break;
 			case(5) :
-				graphics.drawImage(health_5_Image, 0, 0);
+				graphics.drawImage(health5Image, 0, 0);
 			break;
 		}
 	}

@@ -16,7 +16,7 @@ public class GameOverState extends BasicGameState {
 
 	private Button playAgainButton;
 	private MainGame mg;
-	TextField tf;
+	private TextField tf;
 	private Image tfBackground;
 	private String inputMessage;
 	
@@ -31,6 +31,13 @@ public class GameOverState extends BasicGameState {
 	private static final int POINTS_Y = 140;
 	private static final int NAME_X = 100;
 	private static final int NAME_Y = 180;
+	private static final int TEXT_FIELD_X = 115;
+	private static final int TEXT_FIELD_Y = 245;
+	private static final int TEXT_FIELD_WIDTH = 700;
+	private static final int TEXT_FIELD_HEIGHT = 60;
+	private static final int TF_BACKGROUND_DEVIATION = 27;
+	private static final int INPUT_MESSAGE_X = 100;
+	private static final int INPUT_MESSAGE_Y = 320;
 	
 	/**
 	 * Constructor.
@@ -57,7 +64,8 @@ public class GameOverState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
-		tf = new TextField(container, mg.dosFont, 115,245,700,60);
+		tf = new TextField(container, mg.dosFont, TEXT_FIELD_X, TEXT_FIELD_Y,
+				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 		tf.setBackgroundColor(null);
 		tf.setBorderColor(null);
 		tf.setFocus(true);
@@ -85,7 +93,7 @@ public class GameOverState extends BasicGameState {
 				}
 			}
 			
-			if(tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER)) {
+			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER)) {
 				Score score = new Score(mg.score, tf.getText());
 				mg.highscores.add(score);
 				HighScoresParser.writeHighScores(mg.highscoresFile, mg.highscores);
@@ -106,15 +114,17 @@ public class GameOverState extends BasicGameState {
 		// draw string and button
 
 
-		mg.dosFont.drawString(GAME_OVER_X, GAME_OVER_Y ,">Game Over Sucker!");
-		mg.dosFont.drawString(POINTS_X, POINTS_Y, ">Your score was: "+ mg.score);
+		mg.dosFont.drawString(GAME_OVER_X, GAME_OVER_Y , ">Game Over Sucker!");
+		mg.dosFont.drawString(POINTS_X, POINTS_Y, ">Your score was: " + mg.score);
 		mg.dosFont.drawString(NAME_X, NAME_Y, ">Please enter your name below");
-		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(), playAgainButton.getY());
-		graphics.drawImage(tfBackground, tf.getX()-27, tf.getY()-27);
+		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(), 
+				playAgainButton.getY());
+		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
+				tf.getY() - TF_BACKGROUND_DEVIATION);
 		tf.render(container, graphics);
 		
-		if(inputMessage != null) {
-			mg.dosFont.drawString(100, 320, inputMessage);
+		if (inputMessage != null) {
+			mg.dosFont.drawString(INPUT_MESSAGE_X, INPUT_MESSAGE_Y, inputMessage);
 		}
 
 	}

@@ -74,7 +74,7 @@ public class Player {
 		if (gs.shot) {
             gs.laser.update(gs, deltaFloat);
             // Disable laser when it has reached the ceiling
-            if (!gs.laser.visible) {
+            if (!gs.laser.isVisible()) {
                 gs.shot = false;
             }
         }

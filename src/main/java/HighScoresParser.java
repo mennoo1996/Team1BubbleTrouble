@@ -7,9 +7,22 @@ import java.util.Scanner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-
-public class HighScoresParser {
+/**
+ * Class to parse the highscores from/to file.
+ * @author Menno
+ *
+ */
+public final class HighScoresParser {
 	
+	private HighScoresParser() {
+		// do not even call this
+	}
+	
+	/**
+	 * Read the highscores from file.
+	 * @param fileName the location of the file
+	 * @return a HighScores object with the highscores from the file.
+	 */
 	public static HighScores readHighScores(String fileName) {
 		Scanner sc = null;
 		try {
@@ -20,7 +33,7 @@ public class HighScoresParser {
 
 		HighScores hs = new HighScores();
 		
-		while(sc.hasNextLine()) {
+		while (sc.hasNextLine()) {
 			String line = sc.nextLine();
 			String[] words = line.split(" ");
 			int points = Integer.parseInt(words[0]);
@@ -34,13 +47,18 @@ public class HighScoresParser {
 		return hs;
 	}
 	
+	/**
+	 * Write the highscores to file.
+	 * @param fileName the location of the file
+	 * @param hs the highscores to write.
+	 */
 	public static void writeHighScores(String fileName, HighScores hs) {
 		
 		try {
 			FileWriter fw = new FileWriter(fileName);
-			for(Score score : hs.getScoreList()) {
+			for (Score score : hs.getScoreList()) {
 				fw.write(String.format("%d %s", score.getScore(), score.getName()));
-				if(hs.getScoreList().get(hs.getScoreList().size()-1) != score) {
+				if (hs.getScoreList().get(hs.getScoreList().size() - 1) != score) {
 					fw.write("\n");
 				}
 			}
@@ -51,6 +69,10 @@ public class HighScoresParser {
 		}
 	}
 	
+	/**
+	 * To test the parser?
+	 * @param args for command line arguments - not used
+	 */
 	public static void main(String[] args) {
 		HighScores hs = readHighScores("resources/highscores.txt");
 		//writeHighScores("resources/highscores.txt", hs);

@@ -703,7 +703,7 @@ public class GameState extends BasicGameState {
 	private void initializeLevels() {
 		levels = new LevelContainer();
 		
-		
+        
 		//First level, test with gate
 		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
 		BouncingCircle circle11 = new BouncingCircle(200, 200, 30, mg.startingSpeed, -50, mg.gravity);

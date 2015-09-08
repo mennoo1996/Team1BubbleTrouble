@@ -16,8 +16,8 @@ public class MyButton extends Button {
 	public boolean equals(Object other) {
 		if (other instanceof MyButton) {
 			MyButton that = (MyButton) other;
-			if (this.x == that.x && this.y == that.y && this.width == that.width &&
-					this.height == that.height && this.image == that.image) {
+			if (this.getX() == that.getX() && this.getY() == that.getY() && this.getWidth() == that.getWidth() &&
+					this.getHeight() == that.getHeight() && this.getImage() == that.getImage()) {
 				return true;
 			}
 		}

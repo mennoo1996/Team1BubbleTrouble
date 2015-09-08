@@ -3,11 +3,42 @@ import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
 
-
+/**
+ * Class that represents a bouncing circle (bubble).
+ * @author Menno
+ *
+ */
 public class BouncingCircle extends Circle {
+	
+	
+	private static final int MINIMUM_SPEED = -200;
+	private static final int BONUS_SPEED_FACTOR = 4;
+	private static final int BONUS_SPEED = 50;
+	
+	private static final float MINIMUM_RADIUS = 10;
+	private static final float RADIUS_2 = 20;
+	private static final float RADIUS_3 = 30;
+	private static final float RADIUS_4 = 45;
+	private static final float RADIUS_5 = 65;
+	private static final float RADIUS_6 = 90;
+	
+	private static final float SPEED_FOR_MINIMUM_RADIUS = 360;
+	private static final float SPEED_FOR_RADIUS_2 = 470;
+	private static final float SPEED_FOR_RADIUS_3 = 530;
+	private static final float SPEED_FOR_RADIUS_4 = 570;
+	private static final float SPEED_FOR_RADIUS_5 = 610;
+	private static final float SPEED_FOR_RADIUS_6 = 650;
+	
+	private static final int POINTS_FOR_MINIMUM_RADIUS = 100;
+	private static final int POINTS_FOR_RADIUS_2 = 50;
+	private static final int POINTS_FOR_RADIUS_3 = 25;
+	private static final int POINTS_FOR_RADIUS_4 = 10;
+	private static final int POINTS_FOR_RADIUS_5 = 5;
+	private static final int POINTS_FOR_RADIUS_6 = 2;
+
 
 	/**
-	 * variables
+	 * Variables.
 	 */
 	private static final long serialVersionUID = 1L;
 	private float xSpeed;
@@ -15,17 +46,18 @@ public class BouncingCircle extends Circle {
 	private float gravity;
 	private boolean done;
 	private boolean hitCeiling;
-	
+
 	/**
-	 * @param centerPointX
-	 * @param centerPointY
-	 * @param radius
-	 * @param xSpeed
-	 * @param ySpeed
-	 * @param gravity
+	 * 
+	 * @param centerPointX the X coordinate of the center point of the circle
+	 * @param centerPointY the Y coordinate of the center point of the circle
+	 * @param radius the radius of the circle
+	 * @param xSpeed the speed in horizontal direction
+	 * @param ySpeed the speed in vertical direction
+	 * @param gravity the gravity affecting this circle
 	 */
-	public BouncingCircle(float centerPointX, float centerPointY, float radius,
-			float xSpeed, float ySpeed, float gravity) {
+	public BouncingCircle(float centerPointX, float centerPointY, 
+			float radius, float xSpeed, float ySpeed, float gravity) {
 		super(centerPointX, centerPointY, radius);
 		
 		this.xSpeed = xSpeed;
@@ -37,55 +69,49 @@ public class BouncingCircle extends Circle {
 	}
 
 	/**
-	 * Update the circle in the given container
+	 * Update the circle in the given container.
 	 * @param gs			- the gamestate the circle is in
 	 * @param container		- the container the circle is in
+	 * @param deltaFloat    - the time in ms since last frame
 	 */
 	public void update(GameState gs, GameContainer container, float deltaFloat) {
-		
 		// Calculations for Y coordinates
-		this.setY(this.getY() + ySpeed*deltaFloat);
-		
+
+		this.setY(this.getY() + ySpeed * deltaFloat);
 		// When the ball hit the floor reverse it's speed
-		if(this.getMaxY() > container.getHeight() - gs.floor.getHeight() ) {
+		if (this.getMaxY() > container.getHeight() - gs.floor.getHeight()) {
 			ySpeed = -getSpeedForRadius();
 		} else {
 			// Else increase the speed
-			ySpeed += gravity*deltaFloat;
+			ySpeed += gravity * deltaFloat;
 		}
-		
 		// When ball hits ceiling
-		if(this.getMinY() <= gs.ceiling.getHeight()) {
+		if (this.getMinY() <= gs.ceiling.getHeight()) {
 			this.hitCeiling = true;
 		}
-		
 		// Calculations for X coordinates
-		this.setX(this.getX() + xSpeed*deltaFloat);
+		this.setX(this.getX() + xSpeed * deltaFloat);
 		// If the ball hit a wall reverse it's speed
-		if(this.getX() < gs.leftWall.getWidth()) {
+		if (this.getX() < gs.leftWall.getWidth()) {
 			xSpeed = -xSpeed;
-		} else if(this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
+		} else if (this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
 			xSpeed = -xSpeed;
 		} else {
-			if (gs.getGateList()!=null) {
-				for(Gate gate : gs.getGateList()) {
-					if(gate.getRectangle().intersects(this.getCircle())) {
-						xSpeed = -xSpeed;
-					}
+			for (Gate gate : gs.getGateList()) {
+				if (gate.getRectangle().intersects(this.getCircle())) {
+					xSpeed = -xSpeed;
 				}
 			}
 		}
-		
-		//
 	}
 	
 	/**
-	 * Return splitted balls
-	 * @param mg
-	 * @return
+	 * Return splitted balls.
+	 * @param mg the maingame this bouncing circle is in.
+	 * @return an arraylist with the splitted circles
 	 */
 	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mg) {
-		if(radius == 10) {
+		if (radius == MINIMUM_RADIUS) {
 			return null;
 		}
 		
@@ -93,80 +119,84 @@ public class BouncingCircle extends Circle {
 		
 		float newYSpeed = ySpeed;
 		// minimum speed = -2
-		if(newYSpeed > -200) {
-			newYSpeed = -200;
+		if (newYSpeed > MINIMUM_SPEED) {
+			newYSpeed = MINIMUM_SPEED;
 		}
 		
 		// bonus speed when hit at the right moment
-		if(newYSpeed < -4*radius) {
-			newYSpeed -= 50;
+		if (newYSpeed < BONUS_SPEED_FACTOR * radius) {
+			newYSpeed -= BONUS_SPEED;
 		}
 		
 		// add new balls to the active list
-		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed, newYSpeed, mg.gravity));
-		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed, newYSpeed, mg.gravity));
+		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed,
+				newYSpeed, mg.gravity));
+		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed,
+				newYSpeed, mg.gravity));
 		
 		return res;
 	}
 	
 	private float getSpeedForRadius() {
-		if(radius == 10f) {
-			return 360f;
-		} else if(radius == 20f) {
-			return 470f;
-		} else if(radius == 30f) {
-			return 530f;
-		} else if(radius == 45f) {
-			return 570f;
-		} else if(radius == 65f) {
-			return 610f;
-		} else if(radius == 90f) {
-			return 650f;
+		if (radius == MINIMUM_RADIUS) {
+			return SPEED_FOR_MINIMUM_RADIUS;
+		} else if (radius == RADIUS_2) {
+			return SPEED_FOR_RADIUS_2;
+		} else if (radius == RADIUS_3) {
+			return SPEED_FOR_RADIUS_3;
+		} else if (radius == RADIUS_4) {
+			return SPEED_FOR_RADIUS_4;
+		} else if (radius == RADIUS_5) {
+			return SPEED_FOR_RADIUS_5;
+		} else if (radius == RADIUS_6) {
+			return SPEED_FOR_RADIUS_6;
 		} 
 		
 		return 0f;
 	}
 	
 	private float getNewRadius() {
-		if(radius == 10f) {
-			return 10f;
-		} else if(radius == 20f) {
-			return 10f;
-		} else if(radius == 30f) {
-			return 20f;
-		} else if(radius == 45f) {
-			return 30f;
-		} else if(radius == 65f) {
-			return 45f;
-		} else if(radius == 90f) {
-			return 65f;
+		if (radius == MINIMUM_RADIUS) {
+			return MINIMUM_RADIUS;
+		} else if (radius == RADIUS_2) {
+			return MINIMUM_RADIUS;
+		} else if (radius == RADIUS_3) {
+			return RADIUS_2;
+		} else if (radius == RADIUS_4) {
+			return RADIUS_3;
+		} else if (radius == RADIUS_5) {
+			return RADIUS_4;
+		} else if (radius == RADIUS_6) {
+			return RADIUS_5;
 		} 
 		
 		return 0f;
 	}
 	
+	/**
+	 * Returns the score of this bouncing circle.
+	 * @return the points associated with the radius of this circle
+	 */
 	public int getScore() {
-		if(radius == 10f) {
-			return 100;
-		} else if(radius == 20f) {
-			return 50;
-		} else if(radius == 30f) {
-			return 25;
-		} else if(radius == 45f) {
-			return 10;
-		} else if(radius == 65f) {
-			return 5;
-		} else if(radius == 90f) {
-			return 2;
-		} else if(radius == 140f) {
-			return 1;
-		}
+		if (radius == MINIMUM_RADIUS) {
+			return POINTS_FOR_MINIMUM_RADIUS;
+		} else if (radius == RADIUS_2) {
+			return POINTS_FOR_RADIUS_2;
+		} else if (radius == RADIUS_3) {
+			return POINTS_FOR_RADIUS_3;
+		} else if (radius == RADIUS_4) {
+			return POINTS_FOR_RADIUS_4;
+		} else if (radius == RADIUS_5) {
+			return POINTS_FOR_RADIUS_5;
+		} else if (radius == RADIUS_6) {
+			return POINTS_FOR_RADIUS_6;
+		} 
 		
 		return 0;
 	}
 	
 	/**
-	 * Get the maximum x value of the circle
+	 * Get the maximum x value of the circle.
 	 */
 	@Override
 	public float getMaxX() {
@@ -174,7 +204,7 @@ public class BouncingCircle extends Circle {
 	}
 	
 	/**
-	 * Get the maximum y value of the circle
+	 * Get the maximum y value of the circle.
 	 */
 	@Override
 	public float getMaxY() {
@@ -182,7 +212,7 @@ public class BouncingCircle extends Circle {
 	}
 	
 	/**
-	 * Get the minimum x value of the circle
+	 * Get the minimum x value of the circle.
 	 */
 	@Override
 	public float getMinX() {
@@ -190,7 +220,7 @@ public class BouncingCircle extends Circle {
 	}
 	
 	/**
-	 * Get the minimum y value of the circle
+	 * Get the minimum y value of the circle.
 	 */
 	@Override
 	public float getMinY() {
@@ -214,6 +244,10 @@ public class BouncingCircle extends Circle {
 		this.done = done;
 	}
 
+	/**
+	 * Get the Circle object of this Bouncing circle.
+	 * @return the Circle object of this Bouncing circle.
+	 */
 	public Circle getCircle() {
 		return new Circle(this.getCenterX(), this.getCenterY(), this.getRadius());
 	}

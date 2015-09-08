@@ -1,9 +1,7 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -13,20 +11,23 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-
+/**
+ * This class is the state that we are in during gameplay.
+ * It contains basically all the game logic.
+ * @author Menno
+ *
+ */
 public class GameState extends BasicGameState {
 
-	// CONSTANTS
-	private static int TOTAL_TIME;
-	private static final int LEVEL_POINTS = 1500;
+	
+	
+	private static int totaltime;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
 	protected ArrayList<Gate> gateList;
 	private Player player;
-	protected Input input;
-	protected boolean shot;
 	private int score;
 	private long startTime;
 	private long timeDelta;
@@ -39,22 +40,22 @@ public class GameState extends BasicGameState {
 	// Images
 	private Image playerImage;
 	private Image wallsImage;
-	private Image health_1_Image;
-	private Image health_2_Image;
-	private Image health_3_Image;
-	private Image health_4_Image;
-	private Image health_5_Image;
-	private Image nobutton_Image;
-	private Image[] balls_Images;
-	private Image ceiling_Image;
-	private Image laser_beam_image;
-	private Image laser_tip_image;
+	private Image health1Image;
+	private Image health2Image;
+	private Image health3Image;
+	private Image health4Image;
+	private Image health5Image;
+	private Image nobuttonImage;
+	private Image[] ballsImages;
+	private Image ceilingImage;
+	private Image laserbeamimage;
+	private Image lasertipimage;
 	private Image counterBarImage;
 	private Image gateUpper;
 	private Image gateLower;
 	
 	// Countdown Bar Logic
-	private static int COUNTDOWN_BAR_PARTS = 56;
+	private static final int COUNTDOWN_BAR_PARTS = 56;
 	private int fractionTimeParts;
 	private boolean waitForLevelEnd = false;
 	
@@ -64,13 +65,90 @@ public class GameState extends BasicGameState {
 	protected MyRectangle leftWall;
 	protected MyRectangle rightWall;
 	protected MyRectangle ceiling;
+	protected Input input;
+	protected boolean shot;
 	
 	private LevelContainer levels;
+	
+	// CONSTANTS
+	private static final int LEVEL_POINTS = 1500;
+	private static final int SECOND_TO_MS_FACTOR = 1000;
+	private static final float SECOND_TO_MS_FACTOR_FLOAT = 1000f;
+	private static final int PLAYER_X_DEVIATION = 80;
+	private static final int PLAYER_Y_DEVIATION = 295;
+	private static final int PLAYER_WIDTH = 60;
+	private static final int PLAYER_HEIGHT = 92;
+	private static final int FLOOR_Y_DEVIATION = 210;
+	private static final int FLOOR_HEIGHT = 210;
+	private static final int LEFT_WALL_WIDTH = 105;
+	private static final int RIGHT_WALL_X_DEVIATION = 130;
+	private static final int RIGHT_WALL_WIDTH = 130;
+	private static final int CEILING_HEIGHT = 110;
+	private static final int COUNT_IN_TIME = 3000;
+	private static final float TIME_REMAINING_FACTOR = 0.01f;
+	private static final int MINIMUM_SPLIT_RADIUS = 20;
+	private static final int PAUSE_FACTOR = 300;
+	private static final int CEILING_DRAW_X_DEVIATION = 10;
+	private static final int CEILING_DRAW_Y_DEVIATION = 25;
+	private static final int LEVEL_STRING_X_DEVIATION = 270;
+	private static final int LEVEL_STRING_Y_DEVIATION = 84;
+	private static final int SCORE_STRING_Y_DEVIATION = 84;
+	private static final int VERSION_STRING_X = 70;
+	private static final int VERSION_STRING_Y_DEVIATION = 190;
+	private static final int SPRITE_SHEET_THREE = 3;
+	private static final int SPRITE_SHEET_FOUR = 4;
+	private static final float MOVEMENT_COUNTER_FACTOR = 0.5f;
+	private static final int PLAYER_DRAW_X_DEVIATION = 30;
+	private static final int PLAYER_DRAW_Y_DEVIATION = 23;
+	private static final int COUNTER_BAR_X_DEVIATION = 80;
+	private static final int COUNTER_BAR_Y_DEVIATION = 60;
+	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
+	private static final int COUNTER_BAR_X_FACTOR = 10;
+	private static final int LASER_X_DEVIATION = 18;
+	private static final int LASER_TIP_Y_DEVIATION = 14;
+	private static final int LASER_BEAM_Y_DEVIATION = 13;
+	private static final int LASER_BEAM_X2_DEVIATION = 17;
+	private static final int LASER_BEAM_SRCX2 = 35;
+	private static final int LASER_BEAM_SRCY2 = 300;
+	private static final int GATE_LEFT = 11;
+	private static final int GATE_DOWN = 9;
+	private static final int GATE_Y_DEVIATION = 15;
+	private static final int GATE_Y_FACTOR = 348;
+	private static final int GATE_UP = 9;
+	private static final int GATE_LEFT_LOWER = 9;
+	private static final int GATE_Y_FACTOR_LOWER = 347;
+	private static final int CIRCLE_DRAW_OFFSET = 13;
+	private static final int MINIMUM_RADIUS = 10;
+	private static final int RADIUS_2 = 20;
+	private static final int RADIUS_3 = 30;
+	private static final int RADIUS_4 = 45;
+	private static final int RADIUS_5 = 65;
+	private static final int RADIUS_6 = 90;
+	private static final int BALL_IMAGE_THREE = 3;
+	private static final int BALL_IMAGE_FOUR = 4;
+	private static final int BALL_IMAGE_FIVE = 5;
+	private static final int HEALTH_IMAGE_THREE = 3;
+	private static final int HEALTH_IMAGE_FOUR = 4;
+	private static final int HEALTH_IMAGE_FIVE = 5;
+	private static final float PAUSE_OVERLAY_COLOR_FACTOR = 0.5f;
+	private static final int PAUSED_RECT_Y_DEVIATION = 150;
+	private static final int PAUSED_STRING_X_DEVIATION = 130;
+	private static final int PAUSED_STRING_Y_DEVIATION = 53;
+	private static final float COUNT_FACTOR = 15f;
+	private static final int STARTING_STRING_X_DEVIATION = 90;
+	private static final int STARTING_COUNT_X_DEVIATION = 5;
+	private static final int WHOLE_CIRCLE_DEGREES = 360;
+	private static final int COUNT_IN_DEGREES = 15;
+	private static final int COUNTER_BAR_ROTATION_X = 12;
+	private static final int COUNTER_BAR_ROTATION_Y = 50;
+	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
+	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
+	private static final int AMOUNT_OF_BALLS = 6;
 	
 	// Level ending, empty bar
 	
 	/**
-	 * constructor
+	 * constructor.
 	 * 
 	 * @param mg	- the maingame this state belongs to
 	 */
@@ -79,64 +157,71 @@ public class GameState extends BasicGameState {
 	}
 	
 	/**
-	 * setup all variables when entering this state
+	 * setup all variables when entering this state.
+	 * @param container the Container this state is part of
+	 * @param arg1 The statebasedgame this state is part of
+	 * @throws SlickException sometimes.
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		// If still shooting stop it
 		shot = false;
 		score = 0;
-
 		levels.initialize();
 		
-		
-		TOTAL_TIME = levels.getLevel(mg.levelCounter).getTime()*1000;
+		totaltime = levels.getLevel(mg.levelCounter).getTime() * SECOND_TO_MS_FACTOR;
 		startTime = System.currentTimeMillis();
-		timeRemaining = TOTAL_TIME;
+		timeRemaining = totaltime;
 		prevTime = startTime;
 		countIn = true;
 		playingState = true;
-		
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
-		player = new Player(container.getWidth()/2 -80,container.getHeight()-295,60,92, playerImage, mg);
-
-		floor = new MyRectangle(0,container.getHeight()-210,container.getWidth(),210);
-		leftWall = new MyRectangle(0,0,105,container.getHeight());
-		rightWall = new MyRectangle(container.getWidth()-130,0,130,container.getHeight());
-		ceiling = new MyRectangle(0,0,container.getWidth(),110);
-		
+		player = new Player(container.getWidth() / 2 - PLAYER_X_DEVIATION,
+				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
+				playerImage, mg);
+		floor = new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
+				container.getWidth(), FLOOR_HEIGHT);
+		leftWall = new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight());
+		rightWall = new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
+				0, RIGHT_WALL_WIDTH, container.getHeight());
+		ceiling = new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT);
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
-
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
-		
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
-
 		// Add gates
 		gateList = levels.getLevel(mg.levelCounter).getGates();
-
 	}
 	
 	
 	/**
-	 * load resources when state is initialised
+	 * load resources when state is initialised.
+	 * @param container The game container this state is used in
+	 * @param arg1 The state based game that uses this state
+	 * @throws SlickException when something goes wrong
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
 		loadImages();
-		floor = new MyRectangle(0,container.getHeight()-210,container.getWidth(),210);
-		leftWall = new MyRectangle(0,0,105,container.getHeight());
-		rightWall = new MyRectangle(container.getWidth()-130,0,130,container.getHeight());
-		ceiling = new MyRectangle(0,0,container.getWidth(),110);
+		floor = new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
+				container.getWidth(), FLOOR_HEIGHT);
+		leftWall = new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight());
+		rightWall = new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
+				0, RIGHT_WALL_WIDTH, container.getHeight());
+		ceiling = new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT);
 		
 		levels = new LevelContainer(mg);
 	}
 
-	
 
+	
 	/**
-	 * update method, called on each frame refresh
+	 * update method, called on each frame refresh.
+	 * @param container The GameContainer this state is used in
+	 * @param sbg The state based game that uses this state
+	 * @param delta The time in ms since the last frame
+	 * @throws SlickException if something goes wrong
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
@@ -148,7 +233,7 @@ public class GameState extends BasicGameState {
 			timeDelta = curTime - prevTime;
 
 			if (countIn) {
-				if (timeDelta >= 3000) {
+				if (timeDelta >= COUNT_IN_TIME) {
 					countIn = false;
 					prevTime = curTime;
 				}
@@ -168,7 +253,7 @@ public class GameState extends BasicGameState {
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
 		processTime(sbg, curTime);
 
-		float deltaFloat = delta / 1000f;
+		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 
 		player.update(deltaFloat);
 		processPause();
@@ -178,7 +263,7 @@ public class GameState extends BasicGameState {
 		updateGateExistence(deltaFloat);
 		// if there are no active circles, process to gameover screen
 
-		if(circleList.isEmpty()) {
+		if (circleList.isEmpty()) {
 			endLevel(sbg);
 		}
 
@@ -186,12 +271,13 @@ public class GameState extends BasicGameState {
 
 	private void processTime(StateBasedGame sbg, long curTime) {
 		timeRemaining -= timeDelta;
-		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / TOTAL_TIME);
+		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / totaltime);
 
-		if(waitForLevelEnd) {
-			timeRemaining -= 0.01f*TOTAL_TIME;
-			if(timeRemaining < 1)
+		if (waitForLevelEnd) {
+			timeRemaining -= TIME_REMAINING_FACTOR * totaltime;
+			if (timeRemaining < 1) {
 				timeRemaining = 1;
+			}
 		}
 
 		if (timeRemaining <= 0) {
@@ -221,17 +307,18 @@ public class GameState extends BasicGameState {
                 }
                 // if the ball has a radius of 20, split it u
                 ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
-                if (circle.getRadius() >= 20) {
+                if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
                 	splits = circle.getSplittedCircles(mg);
                     circleList.addAll(splits);
                     // if it was part of the gate requirements, add to new gate requirements
                 }
-                //if it was part of the gate requirements remove it from the gate requirements (+ add new ones)
-                for(Gate gate : gateList) {
-                	if(gate.getRequired().contains(circle)) {
+                // if it was part of the gate requirements remove it from the gate requirements 
+                // (+ add new ones)
+                for (Gate gate : gateList) {
+                	if (gate.getRequired().contains(circle)) {
                 		gate.getRequired().remove(circle);
                 	}
-                	if(circle.getRadius() >= 20) {
+                	if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
                 		gate.addToRequirements(splits);
                 	}
                 }
@@ -240,14 +327,15 @@ public class GameState extends BasicGameState {
 	}
 
 	private void removeCeilingCircles(ArrayList<BouncingCircle> ceilingList) {
-		for(BouncingCircle circle : ceilingList) {
-			if(circleList.contains(circle)) {
+		for (BouncingCircle circle : ceilingList) {
+			if (circleList.contains(circle)) {
 				circleList.remove(circle);
 			}
 		}
 	}
 
-	private void updateActiveCircles(GameContainer container, StateBasedGame sbg, float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
+	private void updateActiveCircles(GameContainer container, StateBasedGame sbg,
+			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
 		for (BouncingCircle circle : circleList) {
             //update circles
             circle.update(this, container, deltaFloat);
@@ -275,35 +363,35 @@ public class GameState extends BasicGameState {
 
 	private void updateGateExistence(float deltaFloat) {
 		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
-		for(Gate gate : gateList) {
-			if(gate.getRequired().isEmpty()) {
+		for (Gate gate : gateList) {
+			if (gate.getRequired().isEmpty()) {
 				tempGateList.add(gate);
 				gate.setFading(true);
 			}
 		}
-		for(Gate gate : tempGateList) {
-			if(gateList.contains(gate) && gate.isDone()) {
+		for (Gate gate : tempGateList) {
+			if (gateList.contains(gate) && gate.isDone()) {
 				gateList.remove(gate);
-			} else if(gateList.contains(gate) && gate.isFading()) {
+			} else if (gateList.contains(gate) && gate.isFading()) {
 				gate.update(deltaFloat);
 				}
 		}
 	}
 
 	private void endLevel(StateBasedGame sbg) {
-		if(!waitForLevelEnd) {
+		if (!waitForLevelEnd) {
             waitForLevelEnd = true;
         }
-		if(waitForLevelEnd && timeRemaining == 1) {
-            score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS; // add level-ending score
+		if (waitForLevelEnd && timeRemaining == 1) {
+            score += ((double) timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
             mg.score += score; // update total score
-            if (mg.levelCounter<levels.size()-1) {
+            if (mg.levelCounter < levels.size() - 1) {
                 waitForLevelEnd = false;
                 mg.levelCounter++;
-                sbg.enterState(1); // next level
+                sbg.enterState(mg.GAME_STATE); // next level
             } else {
                 waitForLevelEnd = false;
-                sbg.enterState(3); // game completed
+                sbg.enterState(mg.WON_STATE); // game completed
             }
         }
 	}
@@ -318,217 +406,243 @@ public class GameState extends BasicGameState {
 				public void run() {
 					waitEsc = false;
 				}
-			}, 300);
+			}, PAUSE_FACTOR);
 			playingState = false;
         }
 	}
 
+	/**
+	 * Get the gate list.
+	 * @return The gatelist.
+	 */
 	public ArrayList<Gate> getGateList() {
 		return gateList;
 	}
 
 	/**
-	 * Render method
+	 * Render method.
 	 * draw things on screen
+	 * @param container The gamecontainer this state is used in.
+	 * @param arg1 The state based game that uses this state.
+	 * @param graphics The graphics object used for drawing things on screen
+	 * @throws SlickException when something goes wrong.
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		
 		// draw background layer
 		graphics.drawImage(mg.backgroundImage, 0, 0);
 		graphics.setColor(Color.white);
-
 		// draw all active circles
 		drawActiveCircles(graphics);
-
-		graphics.drawImage(ceiling_Image, leftWall.getWidth() - 10, ceiling.getHeight() - 25);
-		
-		// draw all active gates
-		drawActiveGates(container, graphics);
-
-		// if shot, draw laser
-		if(shot) {
-			//graphics.fill(laser.getRectangle());
-			drawWeapon(graphics);
-		}
-		
+		graphics.drawImage(ceilingImage, leftWall.getWidth() - CEILING_DRAW_X_DEVIATION,
+				ceiling.getHeight() - CEILING_DRAW_Y_DEVIATION);
+		drawGatesLaser(container, graphics);
 		// draw player
-		if(player.getMovement() == 2) {
-			player.incrementMovementCounter();
-			int sp = 3;
-			if(player.getMovementCounter() > player.getMovementCounter_Max() * 0.5f)
-				sp = 4;
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX() - 30, player.getY() - 23);
-		} else if(player.getMovement() == 1) {
-			player.incrementMovementCounter();
-			int sp = 1;
-			if(player.getMovementCounter() > player.getMovementCounter_Max() * 0.5f)
-				sp = 0;
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX() - 30, player.getY() - 23);
-		} else {
-			player.resetMovementCounter();
-			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX() - 30, player.getY() - 23);
-		}
-		player.setMovement(0);
-		
-		
-		
+		drawPlayer(container, graphics);
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);
-		
 		// Draw timer countdown bar
 		drawCountdownBar(container, graphics);
-
 		// Draw level/Score data
-		mg.dosFont.drawString(container.getWidth() / 2 - 270, container.getHeight() - 84, "Level: " + Integer.toString(mg.levelCounter + 1));
-		mg.dosFont.drawString(container.getWidth() / 2, container.getHeight() - 84, "Score: " + Integer.toString(mg.score + score));
-		
+		mg.dosFont.drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
+				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
+						+ Integer.toString(mg.levelCounter + 1));
+		mg.dosFont.drawString(container.getWidth() / 2, container.getHeight() 
+				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.score + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
 			drawCountIn(container, graphics);
 		}
-
+		drawMiscellaneous(container, graphics);
+	}
+	
+	private void drawGatesLaser(GameContainer container, Graphics graphics) {
+		// draw all active gates
+				drawActiveGates(container, graphics);
+				// if shot, draw laser
+				if (shot) {
+					//graphics.fill(laser.getRectangle());
+					drawWeapon(graphics);
+				}
+	}
+	
+	private void drawMiscellaneous(GameContainer container, Graphics graphics) {
 		if (!playingState) {
 			drawPausedScreen(container, graphics);
 		}
-		
 		// draw version number
-		mg.dosFont.drawString(70, container.getHeight() - 190, "#Version 0.98");
-		
-		// draw foreground layer
-		graphics.drawImage(mg.foreGroundImage, 0, 0);
-		
-		// draw terminal
-		graphics.drawImage(mg.terminalImage, 0, 0);
-		
-		// disable button when paused
-		if(!playingState) {
-			graphics.drawImage(nobutton_Image, 0, 0);
+				mg.dosFont.drawString(VERSION_STRING_X, container.getHeight() 
+						- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
+				// draw foreground layer
+				graphics.drawImage(mg.foreGroundImage, 0, 0);
+				// draw terminal
+				graphics.drawImage(mg.terminalImage, 0, 0);
+				// disable button when paused
+				if (!playingState) {
+					graphics.drawImage(nobuttonImage, 0, 0);
+				}
+				// show correct health lights
+				drawHealth(graphics);
+	}
+	
+	private void drawPlayer(GameContainer container, Graphics graphics) {
+		if (player.getMovement() == 2) {
+			player.incrementMovementCounter();
+			int sp = SPRITE_SHEET_THREE;
+			if (player.getMovementCounter() > player.getMovementCounter_Max() 
+					* MOVEMENT_COUNTER_FACTOR) {
+				sp = SPRITE_SHEET_FOUR;
+			}
+			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX() 
+					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
+		} else if (player.getMovement() == 1) {
+			player.incrementMovementCounter();
+			int sp = 1;
+			if (player.getMovementCounter() > player.getMovementCounter_Max()
+					* MOVEMENT_COUNTER_FACTOR) {
+				sp = 0;
+			}
+			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX()
+					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
+		} else {
+			player.resetMovementCounter();
+			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX()
+					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
 		}
-		
-		// show correct health lights
-		drawHealth(graphics);
-
-		// experimenting with stretched laser textures -> MARK HERE: DONT DELETE THIS COMMENTED CODE, ITS A PAIN TO SET UP AGAIN
-		//graphics.drawImage(mg.laserHorizontalImage, 100, 70, 1495, 105, 0, 0, 128, 35);
-		//graphics.drawImage(mg.laserHorizontalImage, 100, 800, 1495, 835, 0, 0, 128, 35);
-		//graphics.drawImage(mg.laserVerticalImage, 100, 100, 135, 1400, 0, 0, 35, 128);
-		
-//		graphics.setColor(Color.green);
-//		graphics.drawString("Debug values ", 20, container.getHeight()-90);
-//		graphics.drawString("Lives: " + mg.getLifeCount(), 20, container.getHeight()-70);
-//		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);
-//		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -30);
-		
+		player.setMovement(0);
 	}
 
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
-		for(int x = 0; x < fractionTimeParts; x++) {
+		for (int x = 0; x < fractionTimeParts; x++) {
 			//counterBarImage.rotate(0.5f*x); // EPIC
-			graphics.drawImage(counterBarImage, container.getWidth()/2 - 80 - 5*(COUNTDOWN_BAR_PARTS) + x*10, container.getHeight() - 60);//
+			graphics.drawImage(counterBarImage, container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION 
+					- COUNTER_BAR_PARTS_FACTOR * (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR, 
+					container.getHeight() - COUNTER_BAR_Y_DEVIATION);
 			//counterBarImage.rotate(-10*x); // EPIC
 		}
 	}
 
 	private void drawWeapon(Graphics graphics) {
-		graphics.drawImage(laser_tip_image, laser.getX() - 18, laser.getY() - 14);
-		graphics.drawImage(laser_beam_image, laser.getX() - 18, laser.getRectangle().getMinY() + 13, laser.getX() + 17, laser.getRectangle().getMaxY(), 0, 0, 35, 300);
+		graphics.drawImage(lasertipimage, laser.getX() - LASER_X_DEVIATION,
+				laser.getY() - LASER_TIP_Y_DEVIATION);
+		graphics.drawImage(laserbeamimage, laser.getX() - LASER_X_DEVIATION,
+				laser.getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, laser.getX()
+				+ LASER_BEAM_X2_DEVIATION, laser.getRectangle().getMaxY(), 0, 0,
+				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2);
 	}
 
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
-		for(Gate gate : gateList) {
-
+		for (Gate gate : gateList) {
 			//upper
-			int left = 11;
-			int down = 9;
+			int left = GATE_LEFT;
+			int down = GATE_DOWN;
 			float x = gate.getMinX() - left;
-			float y = ceiling.getHeight() - 15;
+			float y = ceiling.getHeight() - GATE_Y_DEVIATION;
 			float x2 = x + gateUpper.getWidth();
-			float y2 = ceiling.getHeight() + 348*gate.getHeightPercentage() + down - 15;
+			float y2 = ceiling.getHeight() + GATE_Y_FACTOR * gate.getHeightPercentage() 
+				+ down - GATE_Y_DEVIATION;
 			float srcx = 0;
-			float srcy = gateUpper.getHeight() - 348*gate.getHeightPercentage();
+			float srcy = gateUpper.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
 			float srcx2 = gateUpper.getWidth();
 			float srcy2 = gateUpper.getHeight();
-			graphics.drawImage(gateUpper, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
-
+			graphics.drawImage(gateUpper, x, y, x2, y2, srcx, srcy, srcx2, srcy2); 
 			//lower
-			left = 9;
-			float up = 9;
-			x = gate.getMinX() - left -1;
-			y = container.getHeight() - floor.getHeight() - 347*gate.getHeightPercentage() - up;
+			left = GATE_LEFT_LOWER;
+			float up = GATE_UP;
+			x = gate.getMinX() - left - 1;
+			y = container.getHeight() - floor.getHeight()
+					- GATE_Y_FACTOR_LOWER * gate.getHeightPercentage() - up;
 			x2 = x + gateLower.getWidth() - 1;
 			y2 = container.getHeight() - floor.getHeight();
 			srcx = 0;
 			srcy = 0;
 			srcx2 = gateLower.getWidth();
-			srcy2 = 347*gate.getHeightPercentage();
+			srcy2 = GATE_Y_FACTOR_LOWER * gate.getHeightPercentage();
 			graphics.drawImage(gateLower, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
 		}
 	}
 
 	private void drawActiveCircles(Graphics graphics) {
-		for(BouncingCircle circle : circleList) {
+		for (BouncingCircle circle : circleList) {
 			//graphics.fill(circle.getCircle(), shapeFill);
-			int r = (int)circle.getRadius();
-			int offset = 13;
-			switch(r) {
-				case(90) : graphics.drawImage(balls_Images[0], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(65) : graphics.drawImage(balls_Images[1], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(45) : graphics.drawImage(balls_Images[2], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(30) : graphics.drawImage(balls_Images[3], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(20) : graphics.drawImage(balls_Images[4], circle.getMinX()-offset, circle.getMinY()-offset); break;
-				case(10) : graphics.drawImage(balls_Images[5], circle.getMinX()-offset, circle.getMinY()-offset); break;
+			int r = (int) circle.getRadius();
+			int offset = CIRCLE_DRAW_OFFSET;
+			switch (r) {
+				case(RADIUS_6) : graphics.drawImage(ballsImages[0],
+						circle.getMinX() - offset, circle.getMinY() - offset); break;
+				case(RADIUS_5) : graphics.drawImage(ballsImages[1],
+						circle.getMinX() - offset, circle.getMinY() - offset); break;
+				case(RADIUS_4) : graphics.drawImage(ballsImages[2],
+						circle.getMinX() - offset, circle.getMinY() - offset); break;
+				case(RADIUS_3) : 
+					graphics.drawImage(ballsImages[BALL_IMAGE_THREE],
+						circle.getMinX() - offset, circle.getMinY() - offset); break;
+				case(RADIUS_2) : graphics.drawImage(ballsImages[BALL_IMAGE_FOUR],
+						circle.getMinX() - offset, circle.getMinY() - offset); break;
+				case(MINIMUM_RADIUS) : graphics.drawImage(ballsImages[BALL_IMAGE_FIVE],
+						circle.getMinX() - offset, circle.getMinY() - offset); break;
+				default:
 			}
 		}
 	}
 
 	private void drawHealth(Graphics graphics) {
-		switch(mg.getLifeCount()) {
+		switch (mg.getLifeCount()) {
 			case(1) :
-				graphics.drawImage(health_1_Image, 0, 0);
+				graphics.drawImage(health1Image, 0, 0);
 			break;
 			case(2) :
-				graphics.drawImage(health_2_Image, 0, 0);
+				graphics.drawImage(health2Image, 0, 0);
 			break;
-			case(3) :
-				graphics.drawImage(health_3_Image, 0, 0);
+			case(HEALTH_IMAGE_THREE) :
+				graphics.drawImage(health3Image, 0, 0);
 			break;
-			case(4) :
-				graphics.drawImage(health_4_Image, 0, 0);
+			case(HEALTH_IMAGE_FOUR) :
+				graphics.drawImage(health4Image, 0, 0);
 			break;
-			case(5) :
-				graphics.drawImage(health_5_Image, 0, 0);
+			case(HEALTH_IMAGE_FIVE) :
+				graphics.drawImage(health5Image, 0, 0);
 			break;
+			default:
 		}
 	}
 
 	private void drawPausedScreen(GameContainer container, Graphics graphics) {
-		Color overLay = new Color(0f, 0f, 0f, 0.5f);
+		Color overLay = new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR);
 		graphics.setColor(overLay);
-		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
-		mg.dosFont.drawString(container.getWidth() / 2 - 130, container.getHeight() / 2 - 53, "Game is paused...");
+		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
+				- PAUSED_RECT_Y_DEVIATION);
+		mg.dosFont.drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION, 
+				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, "Game is paused...");
 	}
 
 	private void drawCountIn(GameContainer container, Graphics graphics) {
-		int count = (int)Math.ceil((3000.0-timeDelta)/1000.0), amount = Math.round((3000f-timeDelta)/3000f*15f);
+		int count = (int) Math.ceil((COUNT_IN_TIME - timeDelta) / SECOND_TO_MS_FACTOR),
+				amount = Math.round((COUNT_IN_TIME - timeDelta) / COUNT_IN_TIME * COUNT_FACTOR);
 
-		graphics.setColor(new Color(0f, 0f, 0f, 0.5f));
-		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() - 150);
-		mg.dosFont.drawString(container.getWidth() / 2 - 90, container.getHeight() / 2 - 130, "Starting in");
-		mg.dosFont.drawString(container.getWidth() / 2 - 5, container.getHeight() / 2 - 53, Integer.toString(count));
+		graphics.setColor(new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR));
+		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() 
+				- PAUSED_RECT_Y_DEVIATION);
+		mg.dosFont.drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION, 
+				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
+		mg.dosFont.drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
+				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
 
-		for(int i = 0; i < amount; i++) {
-            float degree = i*(360/15);
-            counterBarImage.setCenterOfRotation(12, 50);
+		for (int i = 0; i < amount; i++) {
+            float degree = i * (WHOLE_CIRCLE_DEGREES / COUNT_IN_DEGREES);
+            counterBarImage.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
             counterBarImage.rotate(degree);
-            graphics.drawImage(counterBarImage, container.getWidth() / 2 - 10, container.getHeight() / 2 - 91);
+            graphics.drawImage(counterBarImage, container.getWidth() / 2 
+            		- COUNTER_BAR_DRAW_X_DEVIATION, container.getHeight() / 2 
+            		- COUNTER_BAR_DRAW_Y_DEVIATION);
             counterBarImage.rotate(-degree);
         }
 	}
 
 
 	/**
-	 * return id of state
+	 * return id of state.
+	 * @return the id of gamestate
 	 */
 	@Override
 	public int getID() {
@@ -536,11 +650,12 @@ public class GameState extends BasicGameState {
 	}
 
 	/**
-	 * Player death
+	 * Player death.
+	 * @param sbg The stateBasedGame that uses this state.
 	 */
 	private void playerDeath(StateBasedGame sbg) {
 		mg.decreaselifeCount();
-		if(mg.getLifeCount() <= 0) {
+		if (mg.getLifeCount() <= 0) {
 			mg.score += score;
 			sbg.enterState(mg.GAMOVER_STATE);
 		} else {
@@ -548,80 +663,107 @@ public class GameState extends BasicGameState {
 		}
 	}
 	
-	private void loadImages() throws SlickException {
-		// load health images
-		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
-		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
-		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
-		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
-		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
-		// button image
-		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
-		// laser images
-		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
-		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
-		// counter bar images
-		counterBarImage = new Image("resources/counter_bar.png");
 
+	
+		
+		
+
+	private void loadImages() throws SlickException {
+		loadHealthAndBallImages();
+		// button image
+		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
+		// laser images
+		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
+		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
 		// gate images
 		gateUpper = new Image("resources/gate_upper.png");
 		gateLower = new Image("resources/gate_lower.png");
-		
 		// walls image
 		wallsImage = new Image("resources/walls_blue.png");
-		
 		// ceiling image
-		ceiling_Image = new Image("resources/ceiling.png");
-
-		// load health images
-		health_1_Image = new Image("resources/Terminal/Terminal_Lights_1.png");
-		health_2_Image = new Image("resources/Terminal/Terminal_Lights_2.png");
-		health_3_Image = new Image("resources/Terminal/Terminal_Lights_3.png");
-		health_4_Image = new Image("resources/Terminal/Terminal_Lights_4.png");
-		health_5_Image = new Image("resources/Terminal/Terminal_Lights_5.png");
-
+		ceilingImage = new Image("resources/ceiling.png");
 		// balls images
-		balls_Images = new Image[6];
-		balls_Images[0] = new Image("resources/Balls/Ball_90.png");
-		balls_Images[1] = new Image("resources/Balls/Ball_65.png");
-		balls_Images[2] = new Image("resources/Balls/Ball_45.png");
-		balls_Images[3] = new Image("resources/Balls/Ball_30.png");
-		balls_Images[4] = new Image("resources/Balls/Ball_20.png");
-		balls_Images[5] = new Image("resources/Balls/Ball_10.png");
-
-		// button image
-		nobutton_Image = new Image("resources/Terminal/Terminal_No_Button.png");
-
-		// laser images
-		laser_beam_image = new Image("resources/laser/laser_beam_blue.png");
-		laser_tip_image = new Image("resources/laser/laser_tip_blue.png");
 		
+		// button image
+		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
+		// laser images
+		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
+		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
+		// countdown bar images
+		counterBarImage = new Image("resources/counter_bar.png");
 	}
 	
+	private void loadHealthAndBallImages() throws SlickException {
+		// load health images
+		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health2Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health3Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health4Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+		
+		ballsImages = new Image[AMOUNT_OF_BALLS];
+		ballsImages[0] = new Image("resources/Balls/Ball_90.png");
+		ballsImages[1] = new Image("resources/Balls/Ball_65.png");
+		ballsImages[2] = new Image("resources/Balls/Ball_45.png");
+		ballsImages[BALL_IMAGE_THREE] = new Image("resources/Balls/Ball_30.png");
+		ballsImages[BALL_IMAGE_FOUR] = new Image("resources/Balls/Ball_20.png");
+		ballsImages[BALL_IMAGE_FIVE] = new Image("resources/Balls/Ball_10.png");
+	}
+	
+	/**
+	 * Set the ceiling.
+	 * @param c the ceiling to set
+	 */
 	public void setCeiling(MyRectangle c) {
 		ceiling = c;
 	}
 	
-	public void setFloor (MyRectangle floor) {
+	/**
+	 * Set the floor.
+	 * @param floor the floor to set
+	 */
+	public void setFloor(MyRectangle floor) {
 		this.floor = floor;
 	}
 	
-	public void setLeftWall (MyRectangle leftWall) {
+	/**
+	 * Set the left wall.
+	 * @param leftWall the left wall to set
+	 */
+	public void setLeftWall(MyRectangle leftWall) {
 		this.leftWall = leftWall;
 	}
 	
+	/**
+	 * Set the right wall.
+	 * @param rightWall the right wall to set
+	 */
 	public void setRightWall(MyRectangle rightWall) {
 		this.rightWall = rightWall;
 	}
 	
+	/**
+	 * set the gatelist.
+	 * @param gatelist the gatelist to set
+	 */
 	public void setGateList(ArrayList<Gate> gatelist) {
 		this.gateList = gatelist;
 	}
 
+	/**
+	 * Get the MainGame.
+	 * @return the maingame
+	 */
 	public MainGame getMg() {
 		return mg;
 	}
 
+	/**
+	 * Set the maingame.
+	 * @param mg the maingame to set.
+	 */
 	public void setMg(MainGame mg) {
 		this.mg = mg;
 	}

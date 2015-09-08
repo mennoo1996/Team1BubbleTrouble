@@ -1,4 +1,3 @@
-import org.newdawn.slick.geom.Rectangle;
 
 
 public class Laser {

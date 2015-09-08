@@ -3,6 +3,11 @@ import org.newdawn.slick.geom.Rectangle;
 public class MyRectangle extends Rectangle {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public MyRectangle(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	}

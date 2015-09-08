@@ -1,6 +1,5 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Rectangle;

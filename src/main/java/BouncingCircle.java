@@ -76,6 +76,7 @@ public class BouncingCircle extends Circle {
 	 */
 	public void update(GameState gs, GameContainer container, float deltaFloat) {
 		// Calculations for Y coordinates
+
 		this.setY(this.getY() + ySpeed * deltaFloat);
 		// When the ball hit the floor reverse it's speed
 		if (this.getMaxY() > container.getHeight() - gs.floor.getHeight()) {

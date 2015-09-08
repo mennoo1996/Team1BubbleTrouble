@@ -1,5 +1,4 @@
 import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Rectangle;
 
 /**
  * Class that respresents a button - you can click on it and something might happen.

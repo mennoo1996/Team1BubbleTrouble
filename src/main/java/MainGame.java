@@ -55,6 +55,18 @@ public class MainGame extends StateBasedGame {
 		this.lifeCount = LIVES;
 	}
 
+	public String getPlayerImage() {
+		return playerImage;
+	}
+
+	public void setPlayerImage(String playerImage) {
+		this.playerImage = playerImage;
+	}
+
+	public void setLifeCount(int lifeCount) {
+		this.lifeCount = lifeCount;
+	}
+
 	/**
 	 * Main function, starting the game happens in here
 	 * 
@@ -95,12 +107,18 @@ public class MainGame extends StateBasedGame {
 			this.numberImages[i] = new Image("resources/numbers/" + Integer.toString(i) + ".png");
 		}
 		
-		System.out.println(this.getStateCount());
-		
 		this.enterState(0);
 		
 	}
 	
+	public void setLevelCounter(int levelCounter) {
+		this.levelCounter = levelCounter;
+	}
+
+	public int getLevelCounter() {
+		return levelCounter;
+	}
+
 	public void decreaselifeCount() {
 		lifeCount = lifeCount -1;
 	}

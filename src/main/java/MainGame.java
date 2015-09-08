@@ -31,7 +31,7 @@ public class MainGame extends StateBasedGame {
 	
 	protected int score;
 	
-	private static int LIVES = 1;
+	private static int LIVES = 5;
 	protected int lifeCount;
 	protected int levelCounter = 0;
 	protected String highscoresFile = "resources/highscores.txt";

@@ -1,5 +1,4 @@
 import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Rectangle;
 
 
 public class Button {

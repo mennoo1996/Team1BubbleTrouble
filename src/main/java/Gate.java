@@ -98,12 +98,13 @@ public class Gate extends Rectangle {
 		this.done = done;
 	}
 
+
 	/**
 	 * 
 	 * @return the rectangle identical to the gate's
 	 */
-	public Rectangle getRectangle() {
-		return new Rectangle(x, y, width, height);
+public MyRectangle getRectangle() {
+	return new MyRectangle(x, y, width, height);
 	}
 	
 	/**

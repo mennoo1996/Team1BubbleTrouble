@@ -69,10 +69,10 @@ public class GameState extends BasicGameState {
 	
 	// level objects
 	protected Laser laser;
-	protected Rectangle floor;
-	protected Rectangle leftWall;
-	protected Rectangle rightWall;
-	protected Rectangle ceiling;
+	protected MyRectangle floor;
+	protected MyRectangle leftWall;
+	protected MyRectangle rightWall;
+	protected MyRectangle ceiling;
 	
 	private LevelContainer levels;
 	
@@ -121,10 +121,12 @@ public class GameState extends BasicGameState {
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage);
 		//player = new Rectangle(container.getWidth()/2 -22.5f,container.getHeight()-100,45,75);
-		floor = new Rectangle(0,container.getHeight()-210,container.getWidth(),210);
-		leftWall = new Rectangle(0,0,105,container.getHeight());
-		rightWall = new Rectangle(container.getWidth()-130,0,130,container.getHeight());
-		ceiling = new Rectangle(0,0,container.getWidth(),110);
+
+		floor = new MyRectangle(0,container.getHeight()-210,container.getWidth(),210);
+		leftWall = new MyRectangle(0,0,105,container.getHeight());
+		rightWall = new MyRectangle(container.getWidth()-130,0,130,container.getHeight());
+		ceiling = new MyRectangle(0,0,container.getWidth(),110);
+
 		
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
@@ -785,6 +787,26 @@ public class GameState extends BasicGameState {
 		
 		
 		
+	}
+	
+	public void setCeiling(MyRectangle c) {
+		ceiling = c;
+	}
+	
+	public void setFloor (MyRectangle floor) {
+		this.floor = floor;
+	}
+	
+	public void setLeftWall (MyRectangle leftWall) {
+		this.leftWall = leftWall;
+	}
+	
+	public void setRightWall(MyRectangle rightWall) {
+		this.rightWall = rightWall;
+	}
+	
+	public void setGateList(ArrayList<Gate> gatelist) {
+		this.gateList = gatelist;
 	}
 
 }

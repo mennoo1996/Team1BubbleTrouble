@@ -34,6 +34,8 @@ public class MainGame extends StateBasedGame {
 	private static int LIVES = 5;
 	protected int lifeCount;
 	protected int levelCounter = 0;
+	protected String highscoresFile = "resources/highscores.txt";
+	protected HighScores highscores;
 	
 	//////////////////////// STATES //////////////
 	protected final int START_STATE = 0;
@@ -53,6 +55,7 @@ public class MainGame extends StateBasedGame {
 		super(name);
 		this.playerImage = "Playersprite.png";
 		this.lifeCount = LIVES;
+		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 	}
 
 	public String getPlayerImage() {

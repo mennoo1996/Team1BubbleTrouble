@@ -36,15 +36,5 @@ public class Score {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-//	public boolean equals(Object other) {
-//		if (other instanceof Score) {
-//			Score that = (Score) other;
-//			if (this.getName() == that.getName() && this.getScore() == that.getScore()) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
 
 }

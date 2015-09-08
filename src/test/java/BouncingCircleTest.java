@@ -25,7 +25,7 @@ public class BouncingCircleTest {
 		mg = new MainGame("TestGame");
 		gs = new GameState(mg);
 		
-		gc = mock(GameContainer.class);
+		//gc = mock(GameContainer.class);
 		
 	}
 	
@@ -71,105 +71,7 @@ public class BouncingCircleTest {
 		assertFalse(c.isDone());
 	}
 	
-	@Test
-	public void testUpdateYDeltaChange() {
-		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
-		gs.setFloor(new MyRectangle(0, 0, 0, 100));
-		gs.setLeftWall(new MyRectangle(0, 0, 0, 0));
-		gs.setRightWall(new MyRectangle(0, 0, 0, 0));
-		when(gc.getHeight()).thenReturn(400);
-		when(gc.getWidth()).thenReturn(400);
-		c.update(gs, gc, 2);
-		assertEquals(9, c.getY(), 0);
-		
-	}
 	
-	@Test
-	public void testUpdateYReverseSpeed() {
-		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
-		gs.setFloor(new MyRectangle(0, 0, 0, 400));
-		gs.setLeftWall(new MyRectangle(0, 0, 0, 0));
-		gs.setRightWall(new MyRectangle(0, 0, 0, 0));
-		when(gc.getHeight()).thenReturn(400);
-		when(gc.getWidth()).thenReturn(400);
-		c.update(gs, gc, 2);
-		assertEquals(-400, c.getySpeed(), 0);
-	}
-	
-	@Test
-	public void testUpdateIncreaseYSpeed() {
-		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
-		gs.setFloor(new MyRectangle(0, 0, 0, 100));
-		gs.setLeftWall(new MyRectangle(0, 0, 0, 0));
-		gs.setRightWall(new MyRectangle(0, 0, 0, 0));
-		when(gc.getHeight()).thenReturn(400);
-		when(gc.getWidth()).thenReturn(400);
-		c.update(gs, gc, 2);
-		assertEquals(17, c.getySpeed(), 0);
-	}
-	
-	@Test
-	public void testUpdateXDeltaChange() {
-		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
-		gs.setFloor(new MyRectangle(0, 0, 0, 100));
-		gs.setLeftWall(new MyRectangle(0, 0, 0, 0));
-		gs.setRightWall(new MyRectangle(0, 0, 0, 0));
-		when(gc.getHeight()).thenReturn(400);
-		when(gc.getWidth()).thenReturn(400);
-		c.update(gs, gc, 2);
-		assertEquals(9, c.getCenterX(), 0);
-	}
-	
-	@Test
-	public void testUpdateXReverseSpeedLeftWall() {
-		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
-		gs.setFloor(new MyRectangle(0, 0, 0, 0));
-		gs.setLeftWall(new MyRectangle(0, 0, 100, 0));
-		gs.setRightWall(new MyRectangle(0, 0, 0, 0));
-		when(gc.getHeight()).thenReturn(400);
-		when(gc.getWidth()).thenReturn(400);
-		c.update(gs, gc, 2);
-		assertEquals(-4, c.getxSpeed(), 0);
-	}
-	
-	@Test
-	public void testUpdateXReverseSpeedRightWall() {
-		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
-		gs.setFloor(new MyRectangle(0, 0, 0, 0));
-		gs.setLeftWall(new MyRectangle(0, 0, 0, 0));
-		gs.setRightWall(new MyRectangle(0, 0, 400, 0));
-		when(gc.getHeight()).thenReturn(400);
-		when(gc.getWidth()).thenReturn(400);
-		c.update(gs, gc, 2);
-		assertEquals(-4, c.getxSpeed(), 0);	
-	}
-	
-	@Test
-	public void testUpdateXReverseSpeedGate() {
-		ArrayList<Gate> gates = new ArrayList<Gate>();
-		gates.add(new Gate(0, 0, 1000, 1000));
-		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
-		gs.setGateList(gates);
-		gs.setFloor(new MyRectangle(0, 0, 0, 0));
-		gs.setLeftWall(new MyRectangle(0, 0, 0, 0));
-		gs.setRightWall(new MyRectangle(0, 0, 0, 0));
-		when(gc.getHeight()).thenReturn(400);
-		when(gc.getWidth()).thenReturn(400);
-		c.update(gs, gc, 2);
-		assertEquals(-4, c.getxSpeed(), 0);
-	}
-	
-	@Test
-	public void testUpdateXNoReverse() {
-		c = new BouncingCircle(50, 2, 10, 4, 5, 6);
-		gs.setFloor(new MyRectangle(0, 0, 0, 0));
-		gs.setLeftWall(new MyRectangle(0, 0, 0, 0));
-		gs.setRightWall(new MyRectangle(0, 0, 0, 0));
-		when(gc.getHeight()).thenReturn(400);
-		when(gc.getWidth()).thenReturn(400);
-		c.update(gs,gc,2);
-		assertEquals(4, c.getxSpeed(), 0);
-	}
 	
 
 	@Test
@@ -182,21 +84,21 @@ public class BouncingCircleTest {
 	public void testGetSplittedCirclesUseMinimumSpeed() {
 		c = new BouncingCircle(1, 2, 20, 4, 5, 6);
 		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
-		assertEquals(-200, result.get(0).getySpeed(), 0);
+		assertEquals(-250, result.get(0).getySpeed(), 0);
 	}
 	
 	@Test
 	public void testGetSplittedCirclesUseBonusSpeed() {
 		c = new BouncingCircle(1, 2, 20, 4, -700, 0);
 		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
-		assertEquals(-800, result.get(0).getySpeed(), 0);
+		assertEquals(-750, result.get(0).getySpeed(), 0);
 	}
 	
 	@Test
 	public void testGetSplittedCirclesNothingSpecial() {
 		c = new BouncingCircle(1, 2, 20, 4, -400, 0);
 		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
-		assertEquals(-400, result.get(1).getySpeed(), 0);
+		assertEquals(-450, result.get(1).getySpeed(), 0);
 	}
 	
 	@Test

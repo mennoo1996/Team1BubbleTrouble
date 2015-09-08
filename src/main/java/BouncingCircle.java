@@ -130,9 +130,9 @@ public class BouncingCircle extends Circle {
 		
 		// add new balls to the active list
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed,
-				newYSpeed, mg.gravity));
+				newYSpeed, mg.getGravity()));
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed,
-				newYSpeed, mg.gravity));
+				newYSpeed, mg.getGravity()));
 		
 		return res;
 	}

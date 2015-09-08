@@ -63,7 +63,7 @@ public class WonState extends BasicGameState {
 			// If mouse is pressed inside the button, go to the gameState
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 				if (playAgainButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-					mg.levelCounter = 0;
+					mg.setLevelCounter(0);
 					sbg.enterState(1);
 				}
 			}
@@ -81,7 +81,7 @@ public class WonState extends BasicGameState {
 		
 		// draw string and button
 		graphics.drawString("You won, you are the champion!", WON_STRING_X, WON_STRING_Y);
-		graphics.drawString("Youre score was: " + mg.score, SCORE_STRING_X, SCORE_STRING_Y);
+		graphics.drawString("Youre score was: " + mg.getScore(), SCORE_STRING_X, SCORE_STRING_Y);
 		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(),
 				playAgainButton.getY());
 	}

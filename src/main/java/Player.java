@@ -36,6 +36,7 @@ public class Player {
 	 * @param width the width of the player
 	 * @param height the height of the player
 	 * @param image the image used on the player
+	 * @param mg the maingame used on the player
 	 */
 	public Player(float x, float y, float width, float height, Image image, MainGame mg) {
 		super();
@@ -46,7 +47,7 @@ public class Player {
 		this.image = image;
 		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mg = mg;
-		this.gs = (GameState) mg.getState(mg.GAME_STATE);
+		this.gs = (GameState) mg.getState(mg.getGameState());
 	}
 	
 	/**
@@ -80,7 +81,7 @@ public class Player {
             gs.shot = true;
             float x = this.getCenterX();
             gs.laser = new Laser(x, container.getHeight() - gs.floor.getHeight(),
-            		mg.laserSpeed, mg.laserWidth);
+            		mg.getLaserSpeed(), mg.getLaserWidth());
         }
 
 		// Update laser
@@ -97,7 +98,7 @@ public class Player {
 		// Walk left when left key pressed and not at left wall OR a gate
 		if (gs.input.isKeyDown(Input.KEY_LEFT) && this.getX() > gs.leftWall.getWidth()) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
-            	this.setX(this.getX() - mg.playerSpeed * deltaFloat);
+            	this.setX(this.getX() - mg.getPlayerSpeed() * deltaFloat);
             	this.movement = 1;
             }
         }
@@ -106,7 +107,7 @@ public class Player {
 		if (gs.input.isKeyDown(Input.KEY_RIGHT) && this.getMaxX()
 				< (container.getWidth() - gs.rightWall.getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
-        	   this.setX(this.getX() + mg.playerSpeed * deltaFloat);
+        	   this.setX(this.getX() + mg.getPlayerSpeed() * deltaFloat);
         	   this.movement = 2;
            }
         }

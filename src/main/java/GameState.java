@@ -169,14 +169,14 @@ public class GameState extends BasicGameState {
 		score = 0;
 		levels.initialize();
 		
-		totaltime = levels.getLevel(mg.levelCounter).getTime() * SECOND_TO_MS_FACTOR;
+		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
 		startTime = System.currentTimeMillis();
 		timeRemaining = totaltime;
 		prevTime = startTime;
 		countIn = true;
 		playingState = true;
 		// Add player sprite and walls
-		playerImage = new Image("resources/" + mg.playerImage);
+		playerImage = new Image("resources/" + mg.getPlayerImage());
 		player = new Player(container.getWidth() / 2 - PLAYER_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
 				playerImage, mg);
@@ -188,10 +188,10 @@ public class GameState extends BasicGameState {
 		ceiling = new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT);
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
-		circleList = levels.getLevel(mg.levelCounter).getCircles();
+		circleList = levels.getLevel(mg.getLevelCounter()).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		// Add gates
-		gateList = levels.getLevel(mg.levelCounter).getGates();
+		gateList = levels.getLevel(mg.getLevelCounter()).getGates();
 	}
 	
 	
@@ -384,14 +384,15 @@ public class GameState extends BasicGameState {
         }
 		if (waitForLevelEnd && timeRemaining == 1) {
             score += ((double) timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
-            mg.score += score; // update total score
-            if (mg.levelCounter < levels.size() - 1) {
+            mg.setScore(mg.getScore() + score); // update total score
+            int levelCounter = mg.getLevelCounter();
+			if (levelCounter < levels.size() - 1) {
                 waitForLevelEnd = false;
-                mg.levelCounter++;
-                sbg.enterState(mg.GAME_STATE); // next level
+                mg.setLevelCounter(mg.getLevelCounter() + 1);
+                sbg.enterState(mg.getGameState()); // next level
             } else {
                 waitForLevelEnd = false;
-                sbg.enterState(mg.WON_STATE); // game completed
+                sbg.enterState(mg.getWonState()); // game completed
             }
         }
 	}
@@ -430,7 +431,7 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		// draw background layer
-		graphics.drawImage(mg.backgroundImage, 0, 0);
+		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		graphics.setColor(Color.white);
 		// draw all active circles
 		drawActiveCircles(graphics);
@@ -444,11 +445,11 @@ public class GameState extends BasicGameState {
 		// Draw timer countdown bar
 		drawCountdownBar(container, graphics);
 		// Draw level/Score data
-		mg.dosFont.drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
+		mg.getDosFont().drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
-						+ Integer.toString(mg.levelCounter + 1));
-		mg.dosFont.drawString(container.getWidth() / 2, container.getHeight() 
-				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.score + score));
+						+ Integer.toString(mg.getLevelCounter() + 1));
+		mg.getDosFont().drawString(container.getWidth() / 2, container.getHeight() 
+				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
 			drawCountIn(container, graphics);
@@ -471,12 +472,12 @@ public class GameState extends BasicGameState {
 			drawPausedScreen(container, graphics);
 		}
 		// draw version number
-				mg.dosFont.drawString(VERSION_STRING_X, container.getHeight() 
+				mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight() 
 						- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
 				// draw foreground layer
-				graphics.drawImage(mg.foreGroundImage, 0, 0);
+				graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 				// draw terminal
-				graphics.drawImage(mg.terminalImage, 0, 0);
+				graphics.drawImage(mg.getTerminalImage(), 0, 0);
 				// disable button when paused
 				if (!playingState) {
 					graphics.drawImage(nobuttonImage, 0, 0);
@@ -612,7 +613,7 @@ public class GameState extends BasicGameState {
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.dosFont.drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, "Game is paused...");
 	}
 
@@ -623,9 +624,9 @@ public class GameState extends BasicGameState {
 		graphics.setColor(new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR));
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() 
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.dosFont.drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
-		mg.dosFont.drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
 
 		for (int i = 0; i < amount; i++) {
@@ -656,10 +657,10 @@ public class GameState extends BasicGameState {
 	private void playerDeath(StateBasedGame sbg) {
 		mg.decreaselifeCount();
 		if (mg.getLifeCount() <= 0) {
-			mg.score += score;
-			sbg.enterState(mg.GAMOVER_STATE);
+			mg.setScore(mg.getScore() + score);
+			sbg.enterState(mg.getGameOverState());
 		} else {
-			sbg.enterState(mg.GAME_STATE);
+			sbg.enterState(mg.getGameState());
 		}
 	}
 	

@@ -51,6 +51,14 @@ public class Score {
 		this.player = player;
 	}
 	
-	
+//	public boolean equals(Object other) {
+//		if (other instanceof Score) {
+//			Score that = (Score) other;
+//			if (this.getName() == that.getName() && this.getScore() == that.getScore()) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 
 }

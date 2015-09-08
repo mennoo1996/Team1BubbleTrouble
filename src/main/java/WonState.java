@@ -60,4 +60,12 @@ public class WonState extends BasicGameState {
 	public int getID() {
 		return 3;
 	}
+
+	public MainGame getMg() {
+		return mg;
+	}
+
+	public void setMg(MainGame mg) {
+		this.mg = mg;
+	}
 }

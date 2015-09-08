@@ -1,9 +1,7 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -253,7 +251,6 @@ public class GameState extends BasicGameState {
 	}
 
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
-		System.out.println("PLAYGAME");
 		processTime(sbg, curTime);
 
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
@@ -578,9 +575,6 @@ public class GameState extends BasicGameState {
 				case(RADIUS_4) : graphics.drawImage(ballsImages[2],
 						circle.getMinX() - offset, circle.getMinY() - offset); break;
 				case(RADIUS_3) : 
-					System.out.println("HIER" + graphics);
-				System.out.println(circle);
-				System.out.println(offset);
 					graphics.drawImage(ballsImages[BALL_IMAGE_THREE],
 						circle.getMinX() - offset, circle.getMinY() - offset); break;
 				case(RADIUS_2) : graphics.drawImage(ballsImages[BALL_IMAGE_FOUR],

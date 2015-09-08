@@ -3,7 +3,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
-
+/**
+ * This class represents a Player.
+ * @author Menno
+ *
+ */
 public class Player {
 	//Method 1 code
 	//int lifeCount;
@@ -13,7 +17,7 @@ public class Player {
 	private float height;
 	private int movement = 0;
 	private int movementCounter = 0;
-	private int movementCounter_max = 18;
+	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
 	private Image image;
 	private SpriteSheet spritesheet;
 	private boolean freeToRoam;
@@ -21,13 +25,17 @@ public class Player {
 	private GameState gs;
 	private Gate intersectingGate;
 	
+	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
+	private static final int SPRITESHEET_VALUE = 120;
+	private static final float HALF = 0.5f;
+	
 	
 	/**
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param image
+	 * @param x the x coordinate of the player
+	 * @param y the y coordinate of the player
+	 * @param width the width of the player
+	 * @param height the height of the player
+	 * @param image the image used on the player
 	 */
 	public Player(float x, float y, float width, float height, Image image, MainGame mg) {
 		super();
@@ -36,11 +44,15 @@ public class Player {
 		this.width = width;
 		this.height = height;
 		this.image = image;
-		this.spritesheet = new SpriteSheet(image, 120, 120);
+		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mg = mg;
 		this.gs = (GameState) mg.getState(mg.GAME_STATE);
 	}
 	
+	/**
+	 * Update this player.
+	 * @param deltaFloat the time in ms since the last frame.
+	 */
 	public void update(float deltaFloat) {
 		processGates();
 		processWeapon(mg.getContainer(), deltaFloat);
@@ -50,14 +62,14 @@ public class Player {
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
-		for(Gate someGate :gs.gateList) {
-			if(this.getRectangle().intersects(someGate.getRectangle())) {
+		for (Gate someGate :gs.gateList) {
+			if (this.getRectangle().intersects(someGate.getRectangle())) {
 				freeToRoam = false;
 				intersectingGate = someGate;
 			}
 		}
 		// Reset intersecting gate to none if there is no intersection
-		if(freeToRoam) {
+		if (freeToRoam) {
 			intersectingGate = null;
 		}
 	}
@@ -67,14 +79,15 @@ public class Player {
 		if (gs.input.isKeyPressed(Input.KEY_SPACE) && !gs.shot) {
             gs.shot = true;
             float x = this.getCenterX();
-            gs.laser = new Laser(x, container.getHeight() - gs.floor.getHeight(), mg.laserSpeed, mg.laserWidth);
+            gs.laser = new Laser(x, container.getHeight() - gs.floor.getHeight(),
+            		mg.laserSpeed, mg.laserWidth);
         }
 
 		// Update laser
 		if (gs.shot) {
             gs.laser.update(gs, deltaFloat);
             // Disable laser when it has reached the ceiling
-            if (!gs.laser.visible) {
+            if (!gs.laser.isVisible()) {
                 gs.shot = false;
             }
         }
@@ -83,15 +96,16 @@ public class Player {
 	private void processPlayerMovement(GameContainer container, float deltaFloat) {
 		// Walk left when left key pressed and not at left wall OR a gate
 		if (gs.input.isKeyDown(Input.KEY_LEFT) && this.getX() > gs.leftWall.getWidth()) {
-            if(freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
+            if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mg.playerSpeed * deltaFloat);
             	this.movement = 1;
             }
         }
 
 		// Walk right when right key pressed and not at right wall OR a gate
-		if (gs.input.isKeyDown(Input.KEY_RIGHT) && this.getMaxX() < (container.getWidth() - gs.rightWall.getWidth())) {
-           if(freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
+		if (gs.input.isKeyDown(Input.KEY_RIGHT) && this.getMaxX()
+				< (container.getWidth() - gs.rightWall.getWidth())) {
+           if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mg.playerSpeed * deltaFloat);
         	   this.movement = 2;
            }
@@ -99,40 +113,40 @@ public class Player {
 	}
 
 	/**
-	 * Return a bounding box rectangle of the player
-	 * @return
+	 * Return a bounding box rectangle of the player.
+	 * @return a bounding box rectangle
 	 */
 	public MyRectangle getRectangle() {
-		return new MyRectangle(x,y,width,height);
+		return new MyRectangle(x, y, width, height);
 	}
 	
 	/**
-	 * Get the center X coordinate
-	 * @return
+	 * Get the center X coordinate.
+	 * @return the center x
 	 */
 	public float getCenterX() {
-		return x + (0.5f * width);
+		return x + (HALF * width);
 	}
 	
 	/**
-	 * Get the center Y coordinate
-	 * @return
+	 * Get the center Y coordinate.
+	 * @return the center Y
 	 */
 	public float getCenterY() {
-		return y + (0.5f * height);
+		return y + (HALF * height);
 	}
 	
 	/**
-	 * Get the maximum x value
-	 * @return
+	 * Get the maximum x value.
+	 * @return the maximum x.
 	 */
 	public float getMaxX() {
 		return x + width;
 	}
 	
 	/**
-	 * Get the maximum Y value
-	 * @return
+	 * Get the maximum Y value.
+	 * @return the maximum Y.
 	 */
 	public float getMaxY() {
 		return y + height;
@@ -215,7 +229,7 @@ public class Player {
 		return spritesheet;
 	}
 	/**
-	 * @param Spritesheet the spritesheet to set
+	 * @param spritesheet the spritesheet to set.
 	 */
 	public void setSpritesheet(SpriteSheet spritesheet) {
 		this.spritesheet = spritesheet;
@@ -243,17 +257,17 @@ public class Player {
 	}
 	
 	/**
-	 * increment the movement counter used for spritesheets
+	 * increment the movement counter used for spritesheets.
 	 */
 	public void incrementMovementCounter() {
 		movementCounter++;
-		if(movementCounter > movementCounter_max) {
+		if (movementCounter > movementCounterMax) {
 			resetMovementCounter();
 		}
 	}
 	
 	/**
-	 * reset the movement counter used for spritesheets
+	 * reset the movement counter used for spritesheets.
 	 */
 	public void resetMovementCounter() {
 		movementCounter = 0;
@@ -263,22 +277,15 @@ public class Player {
 	 * @return movementCounter_max get the movement counter maximum used for spritesheets
 	 */
 	public int getMovementCounter_Max() {
-		return movementCounter_max;
+		return movementCounterMax;
 	}
 	
 	/**
-	 * @param MovementCounter_max set the movement counter maximum used for spritesheets
+	 * @param newMax set the movement counter maximum used for spritesheets
 	 */
 	public void setMovementCounter_Max(int newMax) {
-		movementCounter_max = newMax;
+		movementCounterMax = newMax;
 	}
 	
-	//Method 1 code
-//	public void decreaselifeCount() {
-//		lifeCount = lifeCount -1;
-//	}
-//	
-//	public int getLifeCount() {
-//		return lifeCount;
-//	}
+	
 }

@@ -1,5 +1,9 @@
 
-
+/**
+ * Class that represents a laser.
+ * @author Menno
+ *
+ */
 public class Laser {
 	
 	private float x;
@@ -7,19 +11,21 @@ public class Laser {
 	private float width;
 	private float height;
 	private float laserSpeed;
-	boolean visible;
+	private boolean visible;
+	
+	private static final float HALF = 0.5f;
 	
 	
 	/**
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param duration
+	 * Constructs a new laser.
+	 * @param x the x coordinate of the laser
+	 * @param y the y coordinate of the laser
+	 * @param laserWidth the width of the laser
+	 * @param laserSpeed the speed of the laser
 	 */
 	public Laser(float x, float y,  float laserSpeed, float laserWidth) {
 		super();
-		this.x = x - (0.5f * laserWidth);
+		this.x = x - (HALF * laserWidth);
 		this.y = y;
 		this.laserSpeed = laserSpeed;
 		this.width = laserWidth;
@@ -27,15 +33,24 @@ public class Laser {
 		this.visible = true;
 	}
 	
+	/**
+	 * Return the rectangle object of this laser.
+	 * @return the rectangle corresponding to this laser
+	 */
 	public MyRectangle getRectangle() {
-		return new MyRectangle(x,y,width,height);
+		return new MyRectangle(x, y, width, height);
 	}
 	
+	/**
+	 * Update the laser.
+	 * @param gs The gamestate that called the update
+	 * @param deltaFloat the time in ms since the last frame
+	 */
 	public void update(GameState gs, float deltaFloat) {
-		y -= laserSpeed*deltaFloat;
-		height += laserSpeed*deltaFloat;
+		y -= laserSpeed * deltaFloat;
+		height += laserSpeed * deltaFloat;
 		
-		if(y < gs.ceiling.getHeight()) {
+		if (y < gs.ceiling.getHeight()) {
 			this.visible = false;
 		}
 		

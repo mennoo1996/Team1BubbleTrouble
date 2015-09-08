@@ -3,10 +3,15 @@ import java.util.ArrayList;
 import org.newdawn.slick.geom.Rectangle;
 
 
+/**
+ * Gate class that represents a gate (a wall that will disappear on a certain condtition).
+ * @author Menno
+ *
+ */
 public class Gate extends Rectangle {
 
 	/**
-	 * variables
+	 * variables.
 	 */
 	private static final long serialVersionUID = 1L;
 	private float x;
@@ -19,12 +24,14 @@ public class Gate extends Rectangle {
 	private float heightPercentage;
 	private float fadingSpeed;
 	
+	private static final float FADING_SPEED = 1000;
+	
 	/**
-	 * Constructs a gate object
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
+	 * Constructs a gate object.
+	 * @param x the x coordinate of the gate
+	 * @param y the y coordinate of the gate
+	 * @param width the width of the gate
+	 * @param height the height of the gate
 	 */
 	public Gate(float x, float y, float width, float height) {
 		super(x, y, width, height);
@@ -35,20 +42,20 @@ public class Gate extends Rectangle {
 		done = false;
 		fading = false;
 		heightPercentage = 1;
-		fadingSpeed = 1000;
+		fadingSpeed = FADING_SPEED;
 	}
 	
 	/**
-	 * Updates the gate
-	 * @param delta
+	 * Updates the gate.
+	 * @param delta the time in ms since the last frame
 	 */
 	public void update(float delta) {
-		if(fading) {
-			if(heightPercentage <= 0) {
+		if (fading) {
+			if (heightPercentage <= 0) {
 				done = true;
 				fading = false;
 			} else {
-				heightPercentage -= (fadingSpeed/height) * delta;
+				heightPercentage -= (fadingSpeed / height) * delta;
 			}
 		}
 	}
@@ -108,7 +115,7 @@ public MyRectangle getRectangle() {
 	}
 	
 	/**
-	 * Add a BouncingCircle to the list that needs to be shot before the gate opens
+	 * Add a BouncingCircle to the list that needs to be shot before the gate opens.
 	 * @param circle the circle to add
 	 */
 	public void addToRequirements(BouncingCircle circle) {
@@ -116,7 +123,7 @@ public MyRectangle getRectangle() {
 	}
 	
 	/**
-	 * Remove a BouncingCircle from the required list
+	 * Remove a BouncingCircle from the required list.
 	 * @param circle the circle to remove
 	 */
 	public void removeFromRequirements(BouncingCircle circle) {
@@ -124,8 +131,8 @@ public MyRectangle getRectangle() {
 	}
 
 	/**
-	 * Return the required list
-	 * @return
+	 * Return the required list.
+	 * @return the required list.
 	 */
 	public ArrayList<BouncingCircle> getRequired() {
 		return required;
@@ -140,18 +147,18 @@ public MyRectangle getRectangle() {
 	}
 
 	/**
-	 * Add a list of circles to the required list of the gate
+	 * Add a list of circles to the required list of the gate.
 	 * @param splits the circles to add
 	 */
 	public void addToRequirements(ArrayList<BouncingCircle> splits) {
-		for(BouncingCircle circle : splits) {
+		for (BouncingCircle circle : splits) {
 			required.add(circle);
 		}
 	}
 
 	/**
-	 * Return the fadingSpeed
-	 * @return
+	 * Return the fadingSpeed.
+	 * @return the fadingSpeed.
 	 */
 	public float getFadingSpeed() {
 		return fadingSpeed;

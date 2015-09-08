@@ -125,11 +125,6 @@
 			<version>3.0.0a</version>
 		</dependency>
 		<dependency>
-			<groupId>org.newdawn.slick</groupId>
-			<artifactId>slick</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.lwjgl.util</groupId>
 			<artifactId>lwjgl_util</artifactId>
 			<version>1.0</version>
@@ -137,6 +132,11 @@
 		<dependency>
 			<groupId>net.java.games</groupId>
 			<artifactId>jinput</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.newdawn.slick</groupId>
+			<artifactId>slick</artifactId>
 			<version>1.0</version>
 		</dependency>
 	</dependencies>

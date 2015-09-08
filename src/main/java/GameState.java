@@ -75,6 +75,7 @@ public class GameState extends BasicGameState {
 	// CONSTANTS
 	private static final int LEVEL_POINTS = 1500;
 	private static final int SECOND_TO_MS_FACTOR = 1000;
+	private static final float SECOND_TO_MS_FACTOR_FLOAT = 1000f;
 	private static final int PLAYER_X_DEVIATION = 80;
 	private static final int PLAYER_Y_DEVIATION = 295;
 	private static final int PLAYER_WIDTH = 60;
@@ -252,9 +253,10 @@ public class GameState extends BasicGameState {
 	}
 
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
+		System.out.println("PLAYGAME");
 		processTime(sbg, curTime);
 
-		float deltaFloat = delta / SECOND_TO_MS_FACTOR;
+		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 
 		player.update(deltaFloat);
 		processPause();
@@ -575,7 +577,11 @@ public class GameState extends BasicGameState {
 						circle.getMinX() - offset, circle.getMinY() - offset); break;
 				case(RADIUS_4) : graphics.drawImage(ballsImages[2],
 						circle.getMinX() - offset, circle.getMinY() - offset); break;
-				case(RADIUS_3) : graphics.drawImage(ballsImages[BALL_IMAGE_THREE],
+				case(RADIUS_3) : 
+					System.out.println("HIER" + graphics);
+				System.out.println(circle);
+				System.out.println(offset);
+					graphics.drawImage(ballsImages[BALL_IMAGE_THREE],
 						circle.getMinX() - offset, circle.getMinY() - offset); break;
 				case(RADIUS_2) : graphics.drawImage(ballsImages[BALL_IMAGE_FOUR],
 						circle.getMinX() - offset, circle.getMinY() - offset); break;
@@ -669,7 +675,7 @@ public class GameState extends BasicGameState {
 		
 
 	private void loadImages() throws SlickException {
-		
+		loadHealthAndBallImages();
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 		// laser images

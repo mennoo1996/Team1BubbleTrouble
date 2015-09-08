@@ -30,13 +30,6 @@ public class floatingScore {
 	}
 	
 	/**
-	 * @return whether this floating score is still alive
-	 */
-	public boolean isDead() {
-		return LIFE <= 0;
-	}
-	
-	/**
 	 * Update function for floating score
 	 * @param deltaFloat time since last frame
 	 * @param timeDelta time passed in counter
@@ -48,6 +41,13 @@ public class floatingScore {
 		SPEED = MAX_SPEED * OPACITY;
 	}
 
+	/**
+	 * @return whether this floating score is still alive
+	 */
+	public boolean isDead() {
+		return LIFE <= 0;
+	}
+	
 	/**
 	 * @return The score this floating score displays
 	 */

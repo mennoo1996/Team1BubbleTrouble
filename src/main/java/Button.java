@@ -1,21 +1,27 @@
 import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 
-
+/**
+ * Class that respresents a button - you can click on it and something might happen.
+ * @author Menno
+ *
+ */
 public class Button {
-	float x;
-	float y;
-	float width;
-	float height;
-	Image image;
-	Image imageMouseover;
+	private float x;
+	private float y;
+	private float width;
+	private float height;
+	private Image image;
+	private Image imageMouseover;
+	
+	private static final float HALF = 0.5f;
 	
 	/**
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param image
+	 * @param x the x coordinate of this button
+	 * @param y the y coordinate of this button
+	 * @param width the width of the button
+	 * @param height the height of the button
+	 * @param image the image of the button
 	 */
 	public Button(float x, float y, float width, float height, Image image) {
 		super();
@@ -27,57 +33,58 @@ public class Button {
 	}
 	
 	/**
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param image
-	 * @param imageMouseover
+	 * @param x the x coordinate of this button
+	 * @param y the y coordinate of this button
+	 * @param width the width of the button
+	 * @param height the height of the button
+	 * @param image the image of the button
+	 * @param imageMouseover the image of the button when your mouse hovers over the button
 	 */
-	public Button(float x, float y, float width, float height, Image image, Image image2) {
+	public Button(float x, float y, float width, float height, Image image, Image imageMouseover) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.image = image;
-		this.imageMouseover = image2;
+		this.imageMouseover = imageMouseover;
 	}
 
 	/**
-	 * get bounding box rectangle of the button
-	 * @return
+	 * get bounding box rectangle of the button.
+	 * @return the Rectangle object of this button.
 	 */
 	public MyRectangle getRectangle() {
-		return new MyRectangle(x,y,width,height);
+		return new MyRectangle(x, y, width, height);
 	}
 	
 	/**
-	 * Get the center x value of the button
-	 * @return
+	 * Get the center x value of the button.
+	 * @return the x value of the center of the button.
 	 */
 	public float getCenterX() {
-		return x + (0.5f * width);
+		return x + (HALF * width);
 	}
 	
 	/**
-	 * Get the center y value of the button
+	 * Get the center y value of the button.
+	 * @return the y value of the center of the button.
 	 */
 	public float getCenterY() {
-		return y + (0.5f * height);
+		return y + (HALF * height);
 	}
 	
 	/**
-	 * Get the maximum x value of the button
-	 * @return
+	 * Get the maximum x value of the button.
+	 * @return the maximum x value of this button.
 	 */
 	public float getMaxX() {
 		return x + width;
 	}
 	
 	/**
-	 * Get the maximum y value of the button
-	 * @return
+	 * Get the maximum y value of the button.
+	 * @return the maximum y value of this button.
 	 */
 	public float getMaxY() {
 		return y + height;

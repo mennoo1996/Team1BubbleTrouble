@@ -84,7 +84,7 @@ public class GameState extends BasicGameState {
 	private static final int RIGHT_WALL_X_DEVIATION = 130;
 	private static final int RIGHT_WALL_WIDTH = 130;
 	private static final int CEILING_HEIGHT = 110;
-	private static final int COUNT_IN_TIME = 3000;
+	private static final float COUNT_IN_TIME = 3000f;
 	private static final float TIME_REMAINING_FACTOR = 0.01f;
 	private static final int MINIMUM_SPLIT_RADIUS = 20;
 	private static final int PAUSE_FACTOR = 300;

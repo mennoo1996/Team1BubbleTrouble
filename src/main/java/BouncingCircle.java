@@ -79,22 +79,22 @@ public class BouncingCircle extends Circle {
 
 		this.setY(this.getY() + ySpeed * deltaFloat);
 		// When the ball hit the floor reverse it's speed
-		if (this.getMaxY() > container.getHeight() - gs.floor.getHeight()) {
+		if (this.getMaxY() > container.getHeight() - gs.getFloor().getHeight()) {
 			ySpeed = -getSpeedForRadius();
 		} else {
 			// Else increase the speed
 			ySpeed += gravity * deltaFloat;
 		}
 		// When ball hits ceiling
-		if (this.getMinY() <= gs.ceiling.getHeight()) {
+		if (this.getMinY() <= gs.getCeiling().getHeight()) {
 			this.hitCeiling = true;
 		}
 		// Calculations for X coordinates
 		this.setX(this.getX() + xSpeed * deltaFloat);
 		// If the ball hit a wall reverse it's speed
-		if (this.getX() < gs.leftWall.getWidth()) {
+		if (this.getX() < gs.getLeftWall().getWidth()) {
 			xSpeed = -xSpeed;
-		} else if (this.getMaxX() > container.getWidth() - gs.rightWall.getWidth()) {
+		} else if (this.getMaxX() > container.getWidth() - gs.getRightWall().getWidth()) {
 			xSpeed = -xSpeed;
 		} else {
 			for (Gate gate : gs.getGateList()) {

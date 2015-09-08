@@ -9,7 +9,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -63,10 +62,10 @@ public class GameState extends BasicGameState {
 	
 	// level objects
 	protected Laser laser;
-	protected Rectangle floor;
-	protected Rectangle leftWall;
-	protected Rectangle rightWall;
-	protected Rectangle ceiling;
+	protected MyRectangle floor;
+	protected MyRectangle leftWall;
+	protected MyRectangle rightWall;
+	protected MyRectangle ceiling;
 	
 	private LevelContainer levels;
 	
@@ -102,6 +101,11 @@ public class GameState extends BasicGameState {
 		// Add player sprite and walls
 		playerImage = new Image("resources/" + mg.playerImage);
 		player = new Player(container.getWidth()/2 -22.5f,container.getHeight()-285,45,75, playerImage, mg);
+
+		floor = new MyRectangle(0,container.getHeight()-210,container.getWidth(),210);
+		leftWall = new MyRectangle(0,0,105,container.getHeight());
+		rightWall = new MyRectangle(container.getWidth()-130,0,130,container.getHeight());
+		ceiling = new MyRectangle(0,0,container.getWidth(),110);
 		
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
@@ -123,10 +127,10 @@ public class GameState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
 		loadImages();
-		floor = new Rectangle(0,container.getHeight()-210,container.getWidth(),210);
-		leftWall = new Rectangle(0,0,105,container.getHeight());
-		rightWall = new Rectangle(container.getWidth()-130,0,130,container.getHeight());
-		ceiling = new Rectangle(0,0,container.getWidth(),110);
+		floor = new MyRectangle(0,container.getHeight()-210,container.getWidth(),210);
+		leftWall = new MyRectangle(0,0,105,container.getHeight());
+		rightWall = new MyRectangle(container.getWidth()-130,0,130,container.getHeight());
+		ceiling = new MyRectangle(0,0,container.getWidth(),110);
 	}
 
 	
@@ -282,24 +286,24 @@ public class GameState extends BasicGameState {
 				gateList.remove(gate);
 			} else if(gateList.contains(gate) && gate.isFading()) {
 				gate.update(deltaFloat);
-			}
+				}
 		}
 	}
 
 	private void endLevel(StateBasedGame sbg) {
-		if(waitForLevelEnd == false) {
-            score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
-            mg.score += score;
+		if(!waitForLevelEnd) {
             waitForLevelEnd = true;
         }
 		if(waitForLevelEnd && timeRemaining == 1) {
+            score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS; // add level-ending score
+            mg.score += score; // update total score
             if (mg.levelCounter<levels.size()-1) {
                 waitForLevelEnd = false;
                 mg.levelCounter++;
-                sbg.enterState(1);
+                sbg.enterState(1); // next level
             } else {
                 waitForLevelEnd = false;
-                sbg.enterState(3);
+                sbg.enterState(3); // game completed
             }
         }
 	}
@@ -622,5 +626,24 @@ public class GameState extends BasicGameState {
 		ceiling_Image = new Image("resources/ceiling.png");
 	}
 	
+	public void setCeiling(MyRectangle c) {
+		ceiling = c;
+	}
+	
+	public void setFloor (MyRectangle floor) {
+		this.floor = floor;
+	}
+	
+	public void setLeftWall (MyRectangle leftWall) {
+		this.leftWall = leftWall;
+	}
+	
+	public void setRightWall(MyRectangle rightWall) {
+		this.rightWall = rightWall;
+	}
+	
+	public void setGateList(ArrayList<Gate> gatelist) {
+		this.gateList = gatelist;
+	}
 
 }

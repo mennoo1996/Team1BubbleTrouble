@@ -15,6 +15,7 @@ public class StartState extends BasicGameState {
 	private MainGame mg;
 	private Image miscText;
 	private Button playButton;
+
 	private Button optionsButton;
 	private Button quitButton;
 	
@@ -35,6 +36,7 @@ public class StartState extends BasicGameState {
 		optionsButton = new Button(250,325,1000,50, new Image("resources/menus/Menu_Button_Options.png"), new Image("resources/menus/Menu_Button_Options2.png"));
 		quitButton = new Button(250,375,1000,50, new Image("resources/menus/Menu_Button_Quit.png"), new Image("resources/menus/Menu_Button_Quit2.png"));
 		
+
 	}
 	
 	public void update(GameContainer container, StateBasedGame sbg, int delta) throws SlickException {

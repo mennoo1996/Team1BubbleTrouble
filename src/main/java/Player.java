@@ -1,7 +1,6 @@
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Rectangle;
 
 
 public class Player {
@@ -95,8 +94,8 @@ public class Player {
 	 * Return a bounding box rectangle of the player
 	 * @return
 	 */
-	public Rectangle getRectangle() {
-		return new Rectangle(x,y,width,height);
+	public MyRectangle getRectangle() {
+		return new MyRectangle(x,y,width,height);
 	}
 	
 	/**

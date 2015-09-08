@@ -618,4 +618,12 @@ public class GameState extends BasicGameState {
 		this.gateList = gatelist;
 	}
 
+	public MainGame getMg() {
+		return mg;
+	}
+
+	public void setMg(MainGame mg) {
+		this.mg = mg;
+	}
+
 }

@@ -42,9 +42,16 @@ public class PlayerTest {
 	}
 	
 	@Test
-	public void testPlayerImage() {
+	public void testPlayerGetImage() {
 		p = new Player(1, 2, 3, 4, i, mg);
 		assertEquals(i, p.getImage());
+	}
+	@Test
+	public void testPlayerSetImage() {
+		p = new Player(1, 2, 3, 4, i, mg);
+		Image j = mock(Image.class);
+		p.setImage(j);
+		assertEquals(j, p.getImage());
 	}
 
 	@Test

@@ -73,8 +73,6 @@ public class BouncingCircleTest {
 		//3 is radius, 5 is yspeed
 		c = new BouncingCircle(1,2,51,4,-15,6);
 		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
-		System.out.println("ySpeed = " + c.getySpeed());
-		System.out.println("Radius = " + c.getRadius());
 		assertEquals(-200.0, result.get(0).getySpeed(), 0);
 	}
 	

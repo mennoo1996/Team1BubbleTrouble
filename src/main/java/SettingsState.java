@@ -33,7 +33,6 @@ public class SettingsState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) {
-		System.out.println("got there though");
 	}
 	
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {

@@ -58,9 +58,7 @@ public class BouncingCircle extends Circle {
 		}
 		
 		// When ball hits ceiling
-		System.out.println(this.getMinX());
 		if(this.getMinY() <= gs.ceiling.getHeight()) {
-			System.out.println("hitceiling");
 			this.hitCeiling = true;
 		}
 		

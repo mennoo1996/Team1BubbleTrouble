@@ -13,7 +13,7 @@ public class HighScores {
 		String res = "";
 		
 		for(Score score : scoreList) {
-			String line = String.format("%5d%5s%10s%5s%10s\n", score.getScore(), "|", score.getName(), "|", score.getPlayer());
+			String line = String.format("%5d%5s%10s\n", score.getScore(), "|", score.getName());
 			res += line;
 		}
 		

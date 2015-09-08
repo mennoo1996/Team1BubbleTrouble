@@ -25,9 +25,8 @@ public class HighScoresParser {
 			String[] words = line.split(" ");
 			int points = Integer.parseInt(words[0]);
 			String name = words[1];
-			String player = words[2];
 			
-			Score score = new Score(points, name, player);
+			Score score = new Score(points, name);
 			hs.add(score);
 		}
 		
@@ -40,7 +39,7 @@ public class HighScoresParser {
 		try {
 			FileWriter fw = new FileWriter(fileName);
 			for(Score score : hs.getScoreList()) {
-				fw.write(String.format("%d %s %s", score.getScore(), score.getName(), score.getPlayer()));
+				fw.write(String.format("%d %s", score.getScore(), score.getName()));
 				if(hs.getScoreList().get(hs.getScoreList().size()-1) != score) {
 					fw.write("\n");
 				}
@@ -50,26 +49,6 @@ public class HighScoresParser {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private static Element writeScore(Score score, Document doc) {
-		Element scoreElement = doc.createElement("score");
-		
-		Element pointsElement = doc.createElement("points");
-		scoreElement.appendChild(pointsElement);
-		//pointsElement.appendChild(doc.createTextNode(String.format("%d", score.getScore())));
-		pointsElement.appendChild(doc.createTextNode("Score here"));
-		
-		
-//		Element nameElement = doc.createElement("name");
-//		nameElement.appendChild(pointsElement);
-//		pointsElement.appendChild(doc.createTextNode(score.getName()));
-//		
-//		Element playerElement = doc.createElement("player");
-//		playerElement.appendChild(pointsElement);
-//		pointsElement.appendChild(doc.createTextNode(score.getPlayer()));
-//		
-		return scoreElement;
 	}
 	
 	public static void main(String[] args) {

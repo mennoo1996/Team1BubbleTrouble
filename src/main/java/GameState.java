@@ -89,7 +89,8 @@ public class GameState extends BasicGameState {
 		shot = false;
 		score = 0;
 
-		levels = new LevelContainer(mg);
+		levels.initialize();
+		
 		
 		TOTAL_TIME = levels.getLevel(mg.levelCounter).getTime()*1000;
 		startTime = System.currentTimeMillis();
@@ -130,6 +131,8 @@ public class GameState extends BasicGameState {
 		leftWall = new MyRectangle(0,0,105,container.getHeight());
 		rightWall = new MyRectangle(container.getWidth()-130,0,130,container.getHeight());
 		ceiling = new MyRectangle(0,0,container.getWidth(),110);
+		
+		levels = new LevelContainer(mg);
 	}
 
 	

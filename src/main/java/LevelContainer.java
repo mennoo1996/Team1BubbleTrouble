@@ -20,8 +20,11 @@ public class LevelContainer {
 	public LevelContainer(MainGame mg) {
 		this.mg = mg;
 		this.container = mg.getContainer();
-		levels = initializeLevels();
-		
+		this.levels = new ArrayList<Level>();
+	}
+	
+	public void initialize() {
+		this.levels = initializeLevels();
 	}
 	
 	public ArrayList<Level> getLevels() {

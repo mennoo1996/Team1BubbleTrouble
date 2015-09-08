@@ -392,24 +392,24 @@ public class GameState extends BasicGameState {
 				gateList.remove(gate);
 			} else if(gateList.contains(gate) && gate.isFading()) {
 				gate.update(deltaFloat);
-			}
+				}
 		}
 	}
 
 	private void endLevel(StateBasedGame sbg) {
-		if(waitForLevelEnd == false) {
-            score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS;
-            mg.score += score;
+		if(!waitForLevelEnd) {
             waitForLevelEnd = true;
         }
 		if(waitForLevelEnd && timeRemaining == 1) {
+            score += ((double)timeRemaining / TOTAL_TIME) * LEVEL_POINTS; // add level-ending score
+            mg.score += score; // update total score
             if (mg.levelCounter<levels.size()-1) {
                 waitForLevelEnd = false;
                 mg.levelCounter++;
-                sbg.enterState(1);
+                sbg.enterState(1); // next level
             } else {
                 waitForLevelEnd = false;
-                sbg.enterState(3);
+                sbg.enterState(3); // game completed
             }
         }
 	}

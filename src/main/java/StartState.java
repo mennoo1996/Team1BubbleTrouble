@@ -105,7 +105,7 @@ public class StartState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) 
 			throws SlickException {
 		Input input = container.getInput();
-		graphics.drawImage(mg.backgroundImage, 0, 0);
+		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			graphics.drawImage(playButton.getImageMouseOver(), playButton.getX(), 
@@ -127,11 +127,11 @@ public class StartState extends BasicGameState {
 			graphics.drawImage(quitButton.getImage(), quitButton.getX(), quitButton.getY());
 		}
 		// draw version number
-		mg.dosFont.drawString(VERSION_STRING_X, container.getHeight() 
+		mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight() 
 				- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
 		graphics.drawImage(miscText, 0, 0);
-		graphics.drawImage(mg.foreGroundImage, 0, 0);
-		graphics.drawImage(mg.terminalImage, 0, 0);
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 	}
 
 	

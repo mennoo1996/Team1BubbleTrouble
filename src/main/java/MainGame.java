@@ -18,38 +18,38 @@ public class MainGame extends StateBasedGame {
 	private static final int DEFAULT_X_RES = 1600;
 	private static final int DEFAULT_Y_RES = 1000;
 	
-	protected float gravity = DEFAULT_GRAVITY;
-	protected float startingSpeed = DEFAULT_STARTING_SPEED;
-	protected float speedStep = DEFAULT_SPEED_STEP;
-	protected float playerSpeed = DEFAULT_PLAYER_SPEED;
-	protected float laserWidth = DEFAULT_LASER_WIDTH;
-	protected float laserSpeed = DEFAULT_LASER_SPEED;
-	protected static int xRes = DEFAULT_X_RES;
-	protected static int yRes = DEFAULT_Y_RES;
+	private float gravity = DEFAULT_GRAVITY;
+	private float startingSpeed = DEFAULT_STARTING_SPEED;
+	private float speedStep = DEFAULT_SPEED_STEP;
+	private float playerSpeed = DEFAULT_PLAYER_SPEED;
+	private float laserWidth = DEFAULT_LASER_WIDTH;
+	private float laserSpeed = DEFAULT_LASER_SPEED;
+	private static int xRes = DEFAULT_X_RES;
+	private static int yRes = DEFAULT_Y_RES;
 	
 	// Some often-used images
-	protected Image backgroundImage;
-	protected Image foreGroundImage;
-	protected Image terminalImage;
-	protected Image laserHorizontalImage;
-	protected Image laserVerticalImage;
-	protected AngelCodeFont dosFont;
-	protected String playerImage;
+	private Image backgroundImage;
+	private Image foreGroundImage;
+	private Image terminalImage;
+	private Image laserHorizontalImage;
+	private Image laserVerticalImage;
+	private AngelCodeFont dosFont;
+	private String playerImage;
 	
-	protected int score;
+	private int score;
 	
 	private static final int LIVES = 5;
-	protected int lifeCount;
-	protected int levelCounter = 0;
-	protected String highscoresFile = "resources/highscores.txt";
-	protected HighScores highscores;
+	private int lifeCount;
+	private int levelCounter = 0;
+	private String highscoresFile = "resources/highscores.txt";
+	private HighScores highscores;
 	
 	//////////////////////// STATES //////////////
-	protected final int START_STATE = 0;
-	protected final int GAME_STATE = 1;
-	protected final int GAMOVER_STATE = 2;
-	protected final int WON_STATE = 3;
-	protected final int SETTINGS_STATE = 4;
+	private final int startState = 0;
+	private final int gameState = 1;
+	private final int gameOverState = 2;
+	private final int wonState = 3;
+	private final int settingsState = 4;
 	
 	
 	private static AppGameContainer app;
@@ -136,7 +136,7 @@ public class MainGame extends StateBasedGame {
 		this.dosFont = new AngelCodeFont("resources/font/dosfont.fnt",
 				"resources/font/dosfont_0.png");
 		
-		this.enterState(START_STATE);
+		this.enterState(startState);
 		
 	}
 	
@@ -184,6 +184,365 @@ public class MainGame extends StateBasedGame {
 	public void resetLevelCount() {
 		levelCounter = 0;
 	}
+
+	/**
+	 * @return the gravity
+	 */
+	public float getGravity() {
+		return gravity;
+	}
+
+	/**
+	 * @param gravity the gravity to set
+	 */
+	public void setGravity(float gravity) {
+		this.gravity = gravity;
+	}
+
+	/**
+	 * @return the startingSpeed
+	 */
+	public float getStartingSpeed() {
+		return startingSpeed;
+	}
+
+	/**
+	 * @param startingSpeed the startingSpeed to set
+	 */
+	public void setStartingSpeed(float startingSpeed) {
+		this.startingSpeed = startingSpeed;
+	}
+
+	/**
+	 * @return the speedStep
+	 */
+	public float getSpeedStep() {
+		return speedStep;
+	}
+
+	/**
+	 * @param speedStep the speedStep to set
+	 */
+	public void setSpeedStep(float speedStep) {
+		this.speedStep = speedStep;
+	}
+
+	/**
+	 * @return the playerSpeed
+	 */
+	public float getPlayerSpeed() {
+		return playerSpeed;
+	}
+
+	/**
+	 * @param playerSpeed the playerSpeed to set
+	 */
+	public void setPlayerSpeed(float playerSpeed) {
+		this.playerSpeed = playerSpeed;
+	}
+
+	/**
+	 * @return the laserWidth
+	 */
+	public float getLaserWidth() {
+		return laserWidth;
+	}
+
+	/**
+	 * @param laserWidth the laserWidth to set
+	 */
+	public void setLaserWidth(float laserWidth) {
+		this.laserWidth = laserWidth;
+	}
+
+	/**
+	 * @return the laserSpeed
+	 */
+	public float getLaserSpeed() {
+		return laserSpeed;
+	}
+
+	/**
+	 * @param laserSpeed the laserSpeed to set
+	 */
+	public void setLaserSpeed(float laserSpeed) {
+		this.laserSpeed = laserSpeed;
+	}
+
+	/**
+	 * @return the xRes
+	 */
+	public static int getxRes() {
+		return xRes;
+	}
+
+	/**
+	 * @param xRes the xRes to set
+	 */
+	public static void setxRes(int xRes) {
+		MainGame.xRes = xRes;
+	}
+
+	/**
+	 * @return the yRes
+	 */
+	public static int getyRes() {
+		return yRes;
+	}
+
+	/**
+	 * @param yRes the yRes to set
+	 */
+	public static void setyRes(int yRes) {
+		MainGame.yRes = yRes;
+	}
+
+	/**
+	 * @return the backgroundImage
+	 */
+	public Image getBackgroundImage() {
+		return backgroundImage;
+	}
+
+	/**
+	 * @param backgroundImage the backgroundImage to set
+	 */
+	public void setBackgroundImage(Image backgroundImage) {
+		this.backgroundImage = backgroundImage;
+	}
+
+	/**
+	 * @return the foreGroundImage
+	 */
+	public Image getForeGroundImage() {
+		return foreGroundImage;
+	}
+
+	/**
+	 * @param foreGroundImage the foreGroundImage to set
+	 */
+	public void setForeGroundImage(Image foreGroundImage) {
+		this.foreGroundImage = foreGroundImage;
+	}
+
+	/**
+	 * @return the terminalImage
+	 */
+	public Image getTerminalImage() {
+		return terminalImage;
+	}
+
+	/**
+	 * @param terminalImage the terminalImage to set
+	 */
+	public void setTerminalImage(Image terminalImage) {
+		this.terminalImage = terminalImage;
+	}
+
+	/**
+	 * @return the laserHorizontalImage
+	 */
+	public Image getLaserHorizontalImage() {
+		return laserHorizontalImage;
+	}
+
+	/**
+	 * @param laserHorizontalImage the laserHorizontalImage to set
+	 */
+	public void setLaserHorizontalImage(Image laserHorizontalImage) {
+		this.laserHorizontalImage = laserHorizontalImage;
+	}
+
+	/**
+	 * @return the laserVerticalImage
+	 */
+	public Image getLaserVerticalImage() {
+		return laserVerticalImage;
+	}
+
+	/**
+	 * @param laserVerticalImage the laserVerticalImage to set
+	 */
+	public void setLaserVerticalImage(Image laserVerticalImage) {
+		this.laserVerticalImage = laserVerticalImage;
+	}
+
+	/**
+	 * @return the dosFont
+	 */
+	public AngelCodeFont getDosFont() {
+		return dosFont;
+	}
+
+	/**
+	 * @param dosFont the dosFont to set
+	 */
+	public void setDosFont(AngelCodeFont dosFont) {
+		this.dosFont = dosFont;
+	}
+
+	/**
+	 * @return the score
+	 */
+	public int getScore() {
+		return score;
+	}
+
+	/**
+	 * @param score the score to set
+	 */
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	/**
+	 * @return the highscoresFile
+	 */
+	public String getHighscoresFile() {
+		return highscoresFile;
+	}
+
+	/**
+	 * @param highscoresFile the highscoresFile to set
+	 */
+	public void setHighscoresFile(String highscoresFile) {
+		this.highscoresFile = highscoresFile;
+	}
+
+	/**
+	 * @return the highscores
+	 */
+	public HighScores getHighscores() {
+		return highscores;
+	}
+
+	/**
+	 * @param highscores the highscores to set
+	 */
+	public void setHighscores(HighScores highscores) {
+		this.highscores = highscores;
+	}
+
+	/**
+	 * @return the app
+	 */
+	public static AppGameContainer getApp() {
+		return app;
+	}
+
+	/**
+	 * @param app the app to set
+	 */
+	public static void setApp(AppGameContainer app) {
+		MainGame.app = app;
+	}
+
+	/**
+	 * @return the defaultXRes
+	 */
+	public static int getDefaultXRes() {
+		return DEFAULT_X_RES;
+	}
+
+	/**
+	 * @return the defaultYRes
+	 */
+	public static int getDefaultYRes() {
+		return DEFAULT_Y_RES;
+	}
+
+	/**
+	 * @return the lives
+	 */
+	public static int getLives() {
+		return LIVES;
+	}
+
+	
+	/**
+	 * @return the startState
+	 */
+	public int getStartState() {
+		return startState;
+	}
+
+	/**
+	 * @return the gameState
+	 */
+	public int getGameState() {
+		return gameState;
+	}
+
+	/**
+	 * @return the gameOverState
+	 */
+	public int getGameOverState() {
+		return gameOverState;
+	}
+
+	/**
+	 * @return the wonState
+	 */
+	public int getWonState() {
+		return wonState;
+	}
+
+	/**
+	 * @return the settingsState
+	 */
+	public int getSettingsState() {
+		return settingsState;
+	}
+
+	/**
+	 * @return the targetFramerate
+	 */
+	public static int getTargetFramerate() {
+		return TARGET_FRAMERATE;
+	}
+
+	/**
+	 * @return the defaultGravity
+	 */
+	public static float getDefaultGravity() {
+		return DEFAULT_GRAVITY;
+	}
+
+	/**
+	 * @return the defaultStartingSpeed
+	 */
+	public static float getDefaultStartingSpeed() {
+		return DEFAULT_STARTING_SPEED;
+	}
+
+	/**
+	 * @return the defaultSpeedStep
+	 */
+	public static float getDefaultSpeedStep() {
+		return DEFAULT_SPEED_STEP;
+	}
+
+	/**
+	 * @return the defaultPlayerSpeed
+	 */
+	public static float getDefaultPlayerSpeed() {
+		return DEFAULT_PLAYER_SPEED;
+	}
+
+	/**
+	 * @return the defaultLaserWidth
+	 */
+	public static float getDefaultLaserWidth() {
+		return DEFAULT_LASER_WIDTH;
+	}
+
+	/**
+	 * @return the defaultLaserSpeed
+	 */
+	public static float getDefaultLaserSpeed() {
+		return DEFAULT_LASER_SPEED;
+	}
+	
 	
 	
 }

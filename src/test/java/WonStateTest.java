@@ -1,8 +1,6 @@
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 
 public class WonStateTest {
@@ -11,7 +9,7 @@ public class WonStateTest {
 	public void testGetID() {
 		MainGame mg = new MainGame(null);
 		WonState won = new WonState(mg);
-		assertEquals(mg.WON_STATE, won.getID());
+		assertEquals(mg.getWonState(), won.getID());
 	}
 
 	@Test
@@ -42,6 +40,6 @@ public class WonStateTest {
 	public void testGetId() {
 		MainGame mg = new MainGame(null);
 		WonState won = new WonState(mg);
-		assertEquals(mg.WON_STATE,won.getID());
+		assertEquals(mg.getWonState(),won.getID());
 	}
 }

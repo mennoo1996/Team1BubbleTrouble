@@ -95,9 +95,9 @@ public class SettingsState extends BasicGameState {
 		
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			if (mannetjeRectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.playerImage = "Playersprite.png";
+				mg.setPlayerImage("Playersprite.png");
 			} else if (arieRectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.playerImage = "Ariesprite.png";
+				mg.setPlayerImage("Ariesprite.png");
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 				sbg.enterState(0);
 			}
@@ -116,12 +116,12 @@ public class SettingsState extends BasicGameState {
 			throws SlickException {
 		Input input = container.getInput();
 		// background
-		graphics.drawImage(mg.backgroundImage, 0, 0);
+		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		graphics.drawImage(background, 0, 0);
 		
-		if (mg.playerImage.equals("Playersprite.png")) {
+		if (mg.getPlayerImage().equals("Playersprite.png")) {
 			graphics.drawImage(highLight, MANNETJE_X, MANNETJE_Y);
-		} else if (mg.playerImage.equals("Ariesprite.png")) {
+		} else if (mg.getPlayerImage().equals("Ariesprite.png")) {
 			graphics.drawImage(highLight, ARIE_X, ARIE_Y);
 		}
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
@@ -135,19 +135,18 @@ public class SettingsState extends BasicGameState {
 		graphics.drawImage(arie.getSprite(2, 0), arieRectangle.getX(), arieRectangle.getY());
 		
 		// draw version number
-		mg.dosFont.drawString(VERSION_STRING_X, container.getHeight()
+		mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight()
 				- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
 		
 		// foreground and terminal
-		graphics.drawImage(mg.foreGroundImage, 0, 0);
-		graphics.drawImage(mg.terminalImage, 0, 0);
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		
 	}
 
 
 	@Override
 	public int getID() {
-		// TODO Auto-generated method stub
 		return STATE_ID;
 	}
 }

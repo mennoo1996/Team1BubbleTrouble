@@ -3,9 +3,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 import org.junit.Test;
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
 
 
 public class LevelContainerTest {
@@ -59,7 +56,7 @@ public class LevelContainerTest {
 	public void testSetLevels() {
 		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates = new ArrayList<Gate>();
-		circles.add(new BouncingCircle(200, 200, 45, mg.startingSpeed, -50, mg.gravity));
+		circles.add(new BouncingCircle(200, 200, 45, mg.getStartingSpeed(), -50, mg.getGravity()));
 		Level level = new Level(40, circles, gates);
 		
 		ArrayList<Level> result = new ArrayList<Level>();

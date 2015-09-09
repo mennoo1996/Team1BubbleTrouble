@@ -128,16 +128,16 @@ public class Player {
 
 	private Weapon getWeapon(GameContainer container) {
 		if (weapons.isEmpty()) {
-			return new Weapon(x, container.getHeight() - gs.getFloor().getHeight(),
+			return new Weapon(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
-			return new Spiky(x, container.getHeight() - gs.getFloor().getHeight(),
+			return new Spiky(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			return new InstantLaser(x, container.getHeight() - gs.getFloor().getHeight(),
+			return new InstantLaser(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
 					mg.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.

@@ -39,6 +39,10 @@ public class SettingsState extends BasicGameState {
 	private static final int RETURN_BUTTON_Y = 225;
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
+	private static final int CONTROL_X1 = 800;
+	private static final int CONTROL_X2 = 1000;
+	private static final int P1_CONTROL_Y = 225;
+	private static final int P2_CONTROL_Y = 375;
 	
 	private static final int TEXT_X = 164;
 	private static final int TEXT_1_Y = 288;
@@ -102,9 +106,9 @@ public class SettingsState extends BasicGameState {
 		
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			if (mannetjeRectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayerImage("Playersprite.png");
+				mg.setPlayerImageString("Playersprite.png");
 			} else if (arieRectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayerImage("Ariesprite.png");
+				mg.setPlayerImageString("Ariesprite.png");
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 				sbg.enterState(0);
 			}
@@ -121,18 +125,44 @@ public class SettingsState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		Input input = container.getInput();
+		this.input = container.getInput();
+		
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# You can choose a player skin");
 		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# by clicking on it");
 		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		
-		if (mg.getPlayerImage().equals("Playersprite.png")) {
+		drawSprites(graphics);
+
+		mg.drawWaterMark();
+		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		
+		drawControls();
+	}
+	
+	private void drawControls() {
+		String controlsPlayer1 = "Move left = left arrow\nMove right = right arrow\n";
+		controlsPlayer1 += "Shoot weapon = spacebar";
+		String controlsPlayer2 = "Move left = a\nMove right = d\nShoot weapon = w";
+		
+		mg.getDosFont().drawString(CONTROL_X1, P1_CONTROL_Y, "Player 1:");
+		mg.getDosFont().drawString(CONTROL_X2, P1_CONTROL_Y, controlsPlayer1);
+		mg.getDosFont().drawString(CONTROL_X1, P2_CONTROL_Y, "Player 2:");
+		mg.getDosFont().drawString(CONTROL_X2, P2_CONTROL_Y, controlsPlayer2);
+		
+	}
+	
+	private void drawSprites(Graphics graphics) {
+		if (mg.getPlayerImageString().equals("Playersprite.png")) {
 			graphics.drawImage(highLight, MANNETJE_X, MANNETJE_Y);
-		} else if (mg.getPlayerImage().equals("Ariesprite.png")) {
+		} else if (mg.getPlayerImageString().equals("Ariesprite.png")) {
 			graphics.drawImage(highLight, ARIE_X, ARIE_Y);
 		}
+		
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(),
 					returnButton.getY());
@@ -142,12 +172,6 @@ public class SettingsState extends BasicGameState {
 		graphics.drawImage(mannetje.getSprite(2, 0), mannetjeRectangle.getX(),
 				mannetjeRectangle.getY());
 		graphics.drawImage(arie.getSprite(2, 0), arieRectangle.getX(), arieRectangle.getY());
-
-		mg.drawWaterMark();
-		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
-		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
-		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 	}
 
 

@@ -6,7 +6,7 @@ import org.newdawn.slick.GameContainer;
 public class Coin {
     private final static float COIN_WIDTH = 20;
     private final static float COIN_HEIGHT = 20;
-    private final static float COIN_SPEED = 200f
+    private final static float COIN_SPEED = 200f;
 
     private int points;
     private float x, y, width, height;

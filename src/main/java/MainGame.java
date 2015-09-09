@@ -1,9 +1,9 @@
 import java.util.Calendar;
-
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -37,7 +37,10 @@ public class MainGame extends StateBasedGame {
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
 	private AngelCodeFont dosFont;
-	private String playerImage;
+	private String playerImageString;
+	
+	private PlayerList playerList;
+	private boolean multiplayer;
 	private String currentDate;
 	
 	private int score;
@@ -55,8 +58,11 @@ public class MainGame extends StateBasedGame {
 	private final int wonState = 3;
 	private final int settingsState = 4;
 	
+	private GameState gameStateState;
+	
 	
 	private static AppGameContainer app;
+	private GameContainer container;
 	
 	private static final int TARGET_FRAMERATE = 60;
 	private static final float DEFAULT_GRAVITY = 500f;
@@ -65,6 +71,11 @@ public class MainGame extends StateBasedGame {
 	private static final float DEFAULT_PLAYER_SPEED = 400f;
 	private static final float DEFAULT_LASER_WIDTH = 3f;
 	private static final float DEFAULT_LASER_SPEED = 1000f;
+	private static final int PLAYER1_X_DEVIATION = 80;
+	private static final int PLAYER2_X_DEVIATION = 380;
+	private static final int PLAYER_Y_DEVIATION = 295;
+	private static final int PLAYER_WIDTH = 60;
+	private static final int PLAYER_HEIGHT = 92;
 	private static final int VERSION_STRING_X = 164;
 	private static final int VERSION_STRING_Y_DEVIATION = 190;
 	
@@ -76,25 +87,26 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
-		this.playerImage = "Playersprite.png";
+		this.playerImageString = "Playersprite.png";
 		this.lifeCount = LIVES;
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
+		this.multiplayer = true;
 	}
 
 	/**
 	 * Get the playerImage.
 	 * @return the playerImage
 	 */
-	public String getPlayerImage() {
-		return playerImage;
+	public String getPlayerImageString() {
+		return playerImageString;
 	}
 
 	/**
 	 * Set the playerImage.
-	 * @param playerImage the playerImage to set
+	 * @param playerImageString the playerImage to set
 	 */
-	public void setPlayerImage(String playerImage) {
-		this.playerImage = playerImage;
+	public void setPlayerImageString(String playerImageString) {
+		this.playerImageString = playerImageString;
 	}
 
 	/**
@@ -127,10 +139,13 @@ public class MainGame extends StateBasedGame {
 	 * Add all states and start the first one
 	 */
 	@Override
-	public void initStatesList(GameContainer arg0) throws SlickException {
+	public void initStatesList(GameContainer container) throws SlickException {
+		this.container = container;
+		
+		this.gameStateState = new GameState(this);
 		
 		this.addState(new StartState(this));
-		this.addState(new GameState(this));
+		this.addState(gameStateState);
 		this.addState(new GameOverState(this));
 		this.addState(new WonState(this));
 		this.addState(new SettingsState(this));
@@ -143,14 +158,33 @@ public class MainGame extends StateBasedGame {
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
 		this.dosFont = new AngelCodeFont("resources/font/dosfont.fnt",
 				"resources/font/dosfont_0.png");
-		
+
+		initPlayers();
 		Calendar cal = Calendar.getInstance();
 		this.currentDate = cal.get(Calendar.DATE) 
 				+ "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
 		
 		this.enterState(startState);
+	
+	}
+	
+	private void initPlayers() throws SlickException {
+
+		Image playerImage = new Image("resources/" + playerImageString);
+		Player player1 = new Player(container.getWidth() / 2 - PLAYER1_X_DEVIATION,
+				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
+				playerImage, this);
 		
+		Player player2 = new Player(container.getWidth() / 2 - PLAYER2_X_DEVIATION,
+				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
+				playerImage, this);
+		player2.setMoveLeftKey(Input.KEY_A);
+		player2.setMoveRightKey(Input.KEY_D);
+		player2.setShootKey(Input.KEY_W);
+		
+		playerList = new PlayerList(player1, this, gameStateState);
+		playerList.add(player2);
 	}
 	
 	/**
@@ -580,5 +614,48 @@ public class MainGame extends StateBasedGame {
 				+ " #fps: " + Integer.toString(getFpsInGame())
 				);
 	}
+	
+	/**
+	 * @return the multiplayer
+	 */
+	public boolean isMultiplayer() {
+		return multiplayer;
+	}
+
+	/**
+	 * @param multiplayer the multiplayer to set
+	 */
+	public void setMultiplayer(boolean multiplayer) {
+		this.multiplayer = multiplayer;
+	}
+
+	/**
+	 * @return the container
+	 */
+	public GameContainer getContainer() {
+		return container;
+	}
+
+	/**
+	 * @param container the container to set
+	 */
+	public void setContainer(GameContainer container) {
+		this.container = container;
+	}
+
+	/**
+	 * @return the playerList
+	 */
+	public PlayerList getPlayerList() {
+		return playerList;
+	}
+
+	/**
+	 * @param playerList the playerList to set
+	 */
+	public void setPlayerList(PlayerList playerList) {
+		this.playerList = playerList;
+	}
+	
 	
 }

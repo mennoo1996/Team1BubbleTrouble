@@ -137,7 +137,11 @@ public class BouncingCircle extends Circle {
 		return res;
 	}
 	
-	private float getSpeedForRadius() {
+	/**
+	 * Get the speed that goes with a certain radius
+	 * @return the speed for the current radius
+	 */
+	public float getSpeedForRadius() {
 		if (radius == MINIMUM_RADIUS) {
 			return SPEED_FOR_MINIMUM_RADIUS;
 		} else if (radius == RADIUS_2) {
@@ -155,7 +159,7 @@ public class BouncingCircle extends Circle {
 		return 0f;
 	}
 	
-	private float getNewRadius() {
+	public float getNewRadius() {
 		if (radius == MINIMUM_RADIUS) {
 			return MINIMUM_RADIUS;
 		} else if (radius == RADIUS_2) {

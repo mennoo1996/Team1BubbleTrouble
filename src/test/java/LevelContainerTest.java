@@ -1,4 +1,6 @@
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
@@ -9,7 +11,7 @@ import org.newdawn.slick.SlickException;
 
 
 public class LevelContainerTest {
-	private MainGame mg = new MainGame("maingame");
+	private MainGame mg = mock(MainGame.class);
 
 	@Test
 	public void testLevelContainer() {
@@ -68,4 +70,8 @@ public class LevelContainerTest {
 		welp.setLevels(result);
 		assertEquals(welp.getLevels(),result);
 	}
+	
+
+		
+	
 }

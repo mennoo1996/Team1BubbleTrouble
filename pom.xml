@@ -14,7 +14,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<checkstyle.plugin.version>2.15</checkstyle.plugin.version>
-		<pmd.plugin.version>3.4</pmd.plugin.version>
+		<pmd.plugin.version>3.5</pmd.plugin.version>
 		<findbugs.version>3.0.0</findbugs.version>
 	</properties>
 
@@ -109,7 +109,7 @@
 		<dependency>
 			<groupId>pmd</groupId>
 			<artifactId>pmd</artifactId>
-				<version>4.3</version>
+				<version>3.5</version>
 		</dependency>
 		<dependency>
 			<groupId>findbugs</groupId>
@@ -176,7 +176,7 @@
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-pmd-plugin</artifactId>
-      <version>3.0.1</version>
+      <version>3.5</version>
       <configuration>
         <targetJdk>1.8</targetJdk>
         <rulesets>

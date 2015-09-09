@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -67,11 +65,11 @@ public class GameState extends BasicGameState {
 	private boolean waitForLevelEnd = false;
 	
 	// level objects
-	protected Weapon weapon;
-	protected MyRectangle floor;
-	protected MyRectangle leftWall;
-	protected MyRectangle rightWall;
-	protected MyRectangle ceiling;
+	private Weapon weapon;
+	private MyRectangle floor;
+	private MyRectangle leftWall;
+	private MyRectangle rightWall;
+	private MyRectangle ceiling;
 	private Input savedInput;
 	private boolean shot;
 
@@ -152,7 +150,7 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
-	
+	private static final int POWERUP_CHANCE = 5;
 	// Level ending, empty bar
 	
 	/**
@@ -176,7 +174,6 @@ public class GameState extends BasicGameState {
 		setShot(false);
 		score = 0;
 		levels.initialize();
-		
 		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
 		startTime = System.currentTimeMillis();
 		timeRemaining = totaltime;
@@ -336,9 +333,8 @@ public class GameState extends BasicGameState {
                 	splits = circle.getSplittedCircles(mg);
                     circleList.addAll(splits);
 					checkBonus(circle);
-                    // if it was part of the gate reqs, add to new gate reqs
                 }
-                // if it was part of the gate reqs remove it from the gate reqs (+ add new ones)
+				// if it was part of the gate reqs, add to new gate reqs
                 for (Gate gate : gateList) {
                 	if (gate.getRequired().contains(circle)) {
                 		gate.getRequired().remove(circle);
@@ -439,7 +435,8 @@ public class GameState extends BasicGameState {
 	private void processPause() {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
 			waitEsc = true;
-			Executors.newScheduledThreadPool(1).schedule(() -> waitEsc = false, PAUSE_FACTOR, TimeUnit.MILLISECONDS);
+			Executors.newScheduledThreadPool(1).schedule(() -> waitEsc = false,
+					PAUSE_FACTOR, TimeUnit.MILLISECONDS);
 			playingState = false;
         }
 	}
@@ -547,7 +544,8 @@ public class GameState extends BasicGameState {
 
 	private void drawPowerups(Graphics graphics) {
 		for (Powerup pow : droppedPowerups) {
-			graphics.fillRect(pow.getX(), pow.getY(), pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
+			graphics.fillRect(pow.getX(), pow.getY(),
+					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
 		}
 	}
 
@@ -802,13 +800,17 @@ public class GameState extends BasicGameState {
 
 	private void checkBonus(BouncingCircle circle) {
 		// 5% of the time
-		int randInt = new Random().nextInt(100) + 1;
-		if (randInt <= 5) dropPowerup(circle);
+		final int total = 100;
+		int randInt = new Random().nextInt(total) + 1;
+		if (randInt <= POWERUP_CHANCE) {
+			dropPowerup(circle);
+		}
 	}
 
 	private void dropPowerup(BouncingCircle circle) {
 		// Get a random powerup
-		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random().nextInt(Powerup.PowerupType.values().length)];
+		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
+				.nextInt(Powerup.PowerupType.values().length)];
 		droppedPowerups.add(new Powerup(circle.getX(), circle.getY(), newPowerup));
 	}
 

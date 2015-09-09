@@ -36,6 +36,7 @@ public class Player {
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final float HALF = 0.5f;
+	private static final int POWERUP_DURATION = 10;
 
 	/**
 	 * @param x the x coordinate of the player
@@ -125,14 +126,17 @@ public class Player {
 
 	private Weapon getWeapon(GameContainer container) {
 		if (weapons.isEmpty()) {
-			return new Weapon(x, container.getHeight() - gs.floor.getHeight(), mg.getLaserSpeed(), mg.getLaserWidth());
+			return new Weapon(x, container.getHeight() - gs.getFloor().getHeight(),
+					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
-			return new Spiky(x, container.getHeight() - gs.floor.getHeight(), mg.getLaserSpeed(), mg.getLaserWidth());
+			return new Spiky(x, container.getHeight() - gs.getFloor().getHeight(),
+					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			return new InstantLaser(x, container.getHeight() - gs.floor.getHeight(), mg.getLaserWidth());
+			return new InstantLaser(x, container.getHeight() - gs.getFloor().getHeight(),
+					mg.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
@@ -248,10 +252,17 @@ public class Player {
 		this.image = image;
 	}
 
+	/**
+	 * @return Whether or not the player has a shield
+	 */
 	public boolean hasShield() {
 		return shield;
 	}
 
+	/**
+	 * Add a powerup to the player.
+	 * @param type powerup type
+	 */
 	public void addPowerup(Powerup.PowerupType type) {
 		if (type == Powerup.PowerupType.INSTANT) {
 			addWeapon(type);
@@ -266,12 +277,14 @@ public class Player {
 
 	private void addShield() {
 		shield = true;
-		Executors.newScheduledThreadPool(1).schedule(() -> shield = false, 10, TimeUnit.SECONDS);
+		Executors.newScheduledThreadPool(1).schedule(() -> shield = false,
+				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
 
 	private void addWeapon(Powerup.PowerupType type) {
 		weapons.add(type);
-		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(), 10, TimeUnit.SECONDS);
+		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(),
+				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
 	
 	/**

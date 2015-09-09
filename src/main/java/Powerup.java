@@ -39,10 +39,10 @@ public class Powerup {
      * @param deltaFloat Delta
      */
     public void update(GameState gs, GameContainer container, float deltaFloat) {
-        if ((this.y + POWERUP_HEIGHT) < container.getHeight() - gs.floor.getHeight()) {
+        if ((this.y + POWERUP_HEIGHT) < container.getHeight() - gs.getFloor().getHeight()) {
             this.y += POWERUP_SPEED * deltaFloat;
         } else {
-            this.y = container.getHeight() - gs.floor.getHeight() - POWERUP_HEIGHT;
+            this.y = container.getHeight() - gs.getFloor().getHeight() - POWERUP_HEIGHT;
         }
     }
 

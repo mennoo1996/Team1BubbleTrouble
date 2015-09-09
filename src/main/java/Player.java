@@ -90,7 +90,7 @@ public class Player {
 		// Shoot laser when spacebar is pressed and no laser is active
 		if (gs.getSavedInput().isKeyPressed(Input.KEY_SPACE) && (!gs.isShot() || (gs.getWeapon().getClass() == Spiky.class))) {
             gs.setShot(true);
-            float x = this.getCenterX();
+            //float x = this.getCenterX();
             gs.setWeapon(this.getWeapon(container));
         }
 

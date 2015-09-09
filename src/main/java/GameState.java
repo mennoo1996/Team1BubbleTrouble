@@ -26,7 +26,7 @@ public class GameState extends BasicGameState {
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
-	protected ArrayList<Gate> gateList;
+	private ArrayList<Gate> gateList;
 	private Player player;
 	private int score;
 	private long startTime;
@@ -60,13 +60,13 @@ public class GameState extends BasicGameState {
 	private boolean waitForLevelEnd = false;
 	
 	// level objects
-	protected Laser laser;
-	protected MyRectangle floor;
-	protected MyRectangle leftWall;
-	protected MyRectangle rightWall;
-	protected MyRectangle ceiling;
-	protected Input input;
-	protected boolean shot;
+	private Laser laser;
+	private MyRectangle floor;
+	private MyRectangle leftWall;
+	private MyRectangle rightWall;
+	private MyRectangle ceiling;
+	private Input savedInput;
+	private boolean shot;
 	
 	private LevelContainer levels;
 	
@@ -165,33 +165,33 @@ public class GameState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		// If still shooting stop it
-		shot = false;
+		setShot(false);
 		score = 0;
 		levels.initialize();
 		
-		totaltime = levels.getLevel(mg.levelCounter).getTime() * SECOND_TO_MS_FACTOR;
+		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
 		startTime = System.currentTimeMillis();
 		timeRemaining = totaltime;
 		prevTime = startTime;
 		countIn = true;
 		playingState = true;
 		// Add player sprite and walls
-		playerImage = new Image("resources/" + mg.playerImage);
+		playerImage = new Image("resources/" + mg.getPlayerImage());
 		player = new Player(container.getWidth() / 2 - PLAYER_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
 				playerImage, mg);
-		floor = new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
-				container.getWidth(), FLOOR_HEIGHT);
-		leftWall = new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight());
-		rightWall = new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
-				0, RIGHT_WALL_WIDTH, container.getHeight());
-		ceiling = new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT);
+		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
+				container.getWidth(), FLOOR_HEIGHT));
+		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
+		setRightWall(new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
+				0, RIGHT_WALL_WIDTH, container.getHeight()));
+		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
-		circleList = levels.getLevel(mg.levelCounter).getCircles();
+		circleList = levels.getLevel(mg.getLevelCounter()).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		// Add gates
-		gateList = levels.getLevel(mg.levelCounter).getGates();
+		gateList = levels.getLevel(mg.getLevelCounter()).getGates();
 	}
 	
 	
@@ -204,12 +204,12 @@ public class GameState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
 		loadImages();
-		floor = new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
-				container.getWidth(), FLOOR_HEIGHT);
-		leftWall = new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight());
-		rightWall = new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
-				0, RIGHT_WALL_WIDTH, container.getHeight());
-		ceiling = new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT);
+		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
+				container.getWidth(), FLOOR_HEIGHT));
+		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
+		setRightWall(new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
+				0, RIGHT_WALL_WIDTH, container.getHeight()));
+		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		
 		levels = new LevelContainer(mg);
 	}
@@ -226,7 +226,7 @@ public class GameState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 
-		input = container.getInput();
+		setSavedInput(container.getInput());
 		if (playingState) {
 			// Timer logic
 			long curTime = System.currentTimeMillis();
@@ -241,7 +241,7 @@ public class GameState extends BasicGameState {
 				playGame(container, sbg, delta, curTime);
 			}
 		} else {
-			if (input.isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
+			if (getSavedInput().isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
 				// Reset time countdown
 				prevTime = System.currentTimeMillis();
 				countIn = true;
@@ -348,10 +348,10 @@ public class GameState extends BasicGameState {
             }
 
             // if laser intersects circle
-            if (shot && laser.getRectangle().intersects(circle)) {
+            if (isShot() && getLaser().getRectangle().intersects(circle)) {
                 // it has been shot and disabled
                 shotList.add(circle);
-                laser.setVisible(false);
+                getLaser().setVisible(false);
             }
 
             if (circle.isHitCeiling()) {
@@ -384,14 +384,15 @@ public class GameState extends BasicGameState {
         }
 		if (waitForLevelEnd && timeRemaining == 1) {
             score += ((double) timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
-            mg.score += score; // update total score
-            if (mg.levelCounter < levels.size() - 1) {
+            mg.setScore(mg.getScore() + score); // update total score
+            int levelCounter = mg.getLevelCounter();
+			if (levelCounter < levels.size() - 1) {
                 waitForLevelEnd = false;
-                mg.levelCounter++;
-                sbg.enterState(mg.GAME_STATE); // next level
+                mg.setLevelCounter(mg.getLevelCounter() + 1);
+                sbg.enterState(mg.getGameState()); // next level
             } else {
                 waitForLevelEnd = false;
-                sbg.enterState(mg.WON_STATE); // game completed
+                sbg.enterState(mg.getWonState()); // game completed
             }
         }
 	}
@@ -399,7 +400,7 @@ public class GameState extends BasicGameState {
 	
 
 	private void processPause() {
-		if (input.isKeyDown(Input.KEY_ESCAPE)) {
+		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
 			waitEsc = true;
 			new Timer().schedule(new TimerTask() {
 				@Override
@@ -430,12 +431,12 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		// draw background layer
-		graphics.drawImage(mg.backgroundImage, 0, 0);
+		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		graphics.setColor(Color.white);
 		// draw all active circles
 		drawActiveCircles(graphics);
-		graphics.drawImage(ceilingImage, leftWall.getWidth() - CEILING_DRAW_X_DEVIATION,
-				ceiling.getHeight() - CEILING_DRAW_Y_DEVIATION);
+		graphics.drawImage(ceilingImage, getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION,
+				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION);
 		drawGatesLaser(container, graphics);
 		// draw player
 		drawPlayer(container, graphics);
@@ -444,11 +445,11 @@ public class GameState extends BasicGameState {
 		// Draw timer countdown bar
 		drawCountdownBar(container, graphics);
 		// Draw level/Score data
-		mg.dosFont.drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
+		mg.getDosFont().drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
-						+ Integer.toString(mg.levelCounter + 1));
-		mg.dosFont.drawString(container.getWidth() / 2, container.getHeight() 
-				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.score + score));
+						+ Integer.toString(mg.getLevelCounter() + 1));
+		mg.getDosFont().drawString(container.getWidth() / 2, container.getHeight() 
+				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
 			drawCountIn(container, graphics);
@@ -460,7 +461,7 @@ public class GameState extends BasicGameState {
 		// draw all active gates
 				drawActiveGates(container, graphics);
 				// if shot, draw laser
-				if (shot) {
+				if (isShot()) {
 					//graphics.fill(laser.getRectangle());
 					drawWeapon(graphics);
 				}
@@ -471,12 +472,12 @@ public class GameState extends BasicGameState {
 			drawPausedScreen(container, graphics);
 		}
 		// draw version number
-				mg.dosFont.drawString(VERSION_STRING_X, container.getHeight() 
+				mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight() 
 						- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
 				// draw foreground layer
-				graphics.drawImage(mg.foreGroundImage, 0, 0);
+				graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 				// draw terminal
-				graphics.drawImage(mg.terminalImage, 0, 0);
+				graphics.drawImage(mg.getTerminalImage(), 0, 0);
 				// disable button when paused
 				if (!playingState) {
 					graphics.drawImage(nobuttonImage, 0, 0);
@@ -523,11 +524,11 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawWeapon(Graphics graphics) {
-		graphics.drawImage(lasertipimage, laser.getX() - LASER_X_DEVIATION,
-				laser.getY() - LASER_TIP_Y_DEVIATION);
-		graphics.drawImage(laserbeamimage, laser.getX() - LASER_X_DEVIATION,
-				laser.getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, laser.getX()
-				+ LASER_BEAM_X2_DEVIATION, laser.getRectangle().getMaxY(), 0, 0,
+		graphics.drawImage(lasertipimage, getLaser().getX() - LASER_X_DEVIATION,
+				getLaser().getY() - LASER_TIP_Y_DEVIATION);
+		graphics.drawImage(laserbeamimage, getLaser().getX() - LASER_X_DEVIATION,
+				getLaser().getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, getLaser().getX()
+				+ LASER_BEAM_X2_DEVIATION, getLaser().getRectangle().getMaxY(), 0, 0,
 				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2);
 	}
 
@@ -537,9 +538,9 @@ public class GameState extends BasicGameState {
 			int left = GATE_LEFT;
 			int down = GATE_DOWN;
 			float x = gate.getMinX() - left;
-			float y = ceiling.getHeight() - GATE_Y_DEVIATION;
+			float y = getCeiling().getHeight() - GATE_Y_DEVIATION;
 			float x2 = x + gateUpper.getWidth();
-			float y2 = ceiling.getHeight() + GATE_Y_FACTOR * gate.getHeightPercentage() 
+			float y2 = getCeiling().getHeight() + GATE_Y_FACTOR * gate.getHeightPercentage() 
 				+ down - GATE_Y_DEVIATION;
 			float srcx = 0;
 			float srcy = gateUpper.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
@@ -550,10 +551,10 @@ public class GameState extends BasicGameState {
 			left = GATE_LEFT_LOWER;
 			float up = GATE_UP;
 			x = gate.getMinX() - left - 1;
-			y = container.getHeight() - floor.getHeight()
+			y = container.getHeight() - getFloor().getHeight()
 					- GATE_Y_FACTOR_LOWER * gate.getHeightPercentage() - up;
 			x2 = x + gateLower.getWidth() - 1;
-			y2 = container.getHeight() - floor.getHeight();
+			y2 = container.getHeight() - getFloor().getHeight();
 			srcx = 0;
 			srcy = 0;
 			srcx2 = gateLower.getWidth();
@@ -612,7 +613,7 @@ public class GameState extends BasicGameState {
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.dosFont.drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, "Game is paused...");
 	}
 
@@ -623,9 +624,9 @@ public class GameState extends BasicGameState {
 		graphics.setColor(new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR));
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() 
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.dosFont.drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
-		mg.dosFont.drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
 
 		for (int i = 0; i < amount; i++) {
@@ -656,10 +657,10 @@ public class GameState extends BasicGameState {
 	private void playerDeath(StateBasedGame sbg) {
 		mg.decreaselifeCount();
 		if (mg.getLifeCount() <= 0) {
-			mg.score += score;
-			sbg.enterState(mg.GAMOVER_STATE);
+			mg.setScore(mg.getScore() + score);
+			sbg.enterState(mg.getGameOverState());
 		} else {
-			sbg.enterState(mg.GAME_STATE);
+			sbg.enterState(mg.getGameState());
 		}
 	}
 	
@@ -767,5 +768,77 @@ public class GameState extends BasicGameState {
 	public void setMg(MainGame mg) {
 		this.mg = mg;
 	}
+
+	/**
+	 * @return the floor
+	 */
+	public MyRectangle getFloor() {
+		return floor;
+	}
+
+	/**
+	 * @return the ceiling
+	 */
+	public MyRectangle getCeiling() {
+		return ceiling;
+	}
+
+	/**
+	 * @return the leftWall
+	 */
+	public MyRectangle getLeftWall() {
+		return leftWall;
+	}
+
+	/**
+	 * @return the rightWall
+	 */
+	public MyRectangle getRightWall() {
+		return rightWall;
+	}
+
+	/**
+	 * @return the shot
+	 */
+	public boolean isShot() {
+		return shot;
+	}
+
+	/**
+	 * @param shot the shot to set
+	 */
+	public void setShot(boolean shot) {
+		this.shot = shot;
+	}
+
+	/**
+	 * @return the savedInput
+	 */
+	public Input getSavedInput() {
+		return savedInput;
+	}
+
+	/**
+	 * @param savedInput the savedInput to set
+	 */
+	public void setSavedInput(Input savedInput) {
+		this.savedInput = savedInput;
+	}
+
+	/**
+	 * @return the laser
+	 */
+	public Laser getLaser() {
+		return laser;
+	}
+
+	/**
+	 * @param laser the laser to set
+	 */
+	public void setLaser(Laser laser) {
+		this.laser = laser;
+	}
+	
+	
 
 }

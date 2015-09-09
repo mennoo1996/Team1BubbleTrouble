@@ -11,7 +11,7 @@ public class GameStateTest {
 	public void testGetID() {
 		MainGame mg = new MainGame(null);
 		GameState gamestate = new GameState(mg);
-		assertEquals(mg.GAME_STATE, gamestate.getID());
+		assertEquals(mg.getGameState(), gamestate.getID());
 	}
 
 	@Test
@@ -35,7 +35,7 @@ public class GameStateTest {
 		MyRectangle a = new MyRectangle(3f, 4f, 200f, 100f);
 		gamestate.setCeiling(a);
 		
-		assertEquals(a,gamestate.ceiling);
+		assertEquals(a,gamestate.getCeiling());
 	}
 
 	@Test
@@ -45,7 +45,7 @@ public class GameStateTest {
 		MyRectangle a = new MyRectangle(3f, 4f, 200f, 100f);
 		gamestate.setFloor(a);
 		
-		assertEquals(a,gamestate.floor);
+		assertEquals(a,gamestate.getFloor());
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class GameStateTest {
 		MyRectangle a = new MyRectangle(3f, 4f, 200f, 100f);
 		gamestate.setLeftWall(a);
 		
-		assertEquals(a,gamestate.leftWall);
+		assertEquals(a,gamestate.getLeftWall());
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class GameStateTest {
 		MyRectangle a = new MyRectangle(3f, 4f, 210f, 100f);
 		gamestate.setRightWall(a);
 		
-		assertEquals(a,gamestate.rightWall);
+		assertEquals(a,gamestate.getRightWall());
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class GameStateTest {
 		ArrayList<Gate> gatelist = new ArrayList<Gate>();
 		gamestate.setGateList(gatelist);
 		
-		assertEquals(gatelist,gamestate.gateList);
+		assertEquals(gatelist,gamestate.getGateList());
 	}
 	
 	@Test

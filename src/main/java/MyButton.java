@@ -44,4 +44,12 @@ public class MyButton extends Button {
 	public int hashCode() {
 		return 0;
 	}
+
+	/**
+	 * Getter for serialVersionUID.
+	 * @return	the serialVersionUID
+	 */
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }

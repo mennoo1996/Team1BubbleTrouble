@@ -50,7 +50,7 @@ public class Laser {
 		y -= laserSpeed * deltaFloat;
 		height += laserSpeed * deltaFloat;
 		
-		if (y < gs.ceiling.getHeight()) {
+		if (y < gs.getCeiling().getHeight()) {
 			this.visible = false;
 		}
 		

@@ -64,7 +64,7 @@ public class GameOverState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
-		tf = new TextField(container, mg.dosFont, TEXT_FIELD_X, TEXT_FIELD_Y,
+		tf = new TextField(container, mg.getDosFont(), TEXT_FIELD_X, TEXT_FIELD_Y,
 				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 		tf.setBackgroundColor(null);
 		tf.setBorderColor(null);
@@ -94,11 +94,12 @@ public class GameOverState extends BasicGameState {
 			}
 			
 			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER)) {
-				Score score = new Score(mg.score, tf.getText());
-				mg.highscores.add(score);
-				HighScoresParser.writeHighScores(mg.highscoresFile, mg.highscores);
+				Score score = new Score(mg.getScore(), tf.getText());
+				mg.getHighscores().add(score);
+				HighScoresParser.writeHighScores(mg.getHighscoresFile(), mg.getHighscores());
 				
-				inputMessage = tf.getText() + ", your score of " + mg.score + " points is saved!";
+				inputMessage = tf.getText() + ", your score of " + mg.getScore();
+				inputMessage += " points is saved!";
 			}
 		}
 
@@ -114,9 +115,9 @@ public class GameOverState extends BasicGameState {
 		// draw string and button
 
 
-		mg.dosFont.drawString(GAME_OVER_X, GAME_OVER_Y , ">Game Over Sucker!");
-		mg.dosFont.drawString(POINTS_X, POINTS_Y, ">Your score was: " + mg.score);
-		mg.dosFont.drawString(NAME_X, NAME_Y, ">Please enter your name below");
+		mg.getDosFont().drawString(GAME_OVER_X, GAME_OVER_Y , ">Game Over Sucker!");
+		mg.getDosFont().drawString(POINTS_X, POINTS_Y, ">Your score was: " + mg.getScore());
+		mg.getDosFont().drawString(NAME_X, NAME_Y, ">Please enter your name below");
 		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(), 
 				playAgainButton.getY());
 		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
@@ -124,7 +125,7 @@ public class GameOverState extends BasicGameState {
 		tf.render(container, graphics);
 		
 		if (inputMessage != null) {
-			mg.dosFont.drawString(INPUT_MESSAGE_X, INPUT_MESSAGE_Y, inputMessage);
+			mg.getDosFont().drawString(INPUT_MESSAGE_X, INPUT_MESSAGE_Y, inputMessage);
 		}
 
 	}

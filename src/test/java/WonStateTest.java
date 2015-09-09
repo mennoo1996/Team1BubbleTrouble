@@ -11,7 +11,7 @@ public class WonStateTest {
 	public void testGetID() {
 		MainGame mg = new MainGame(null);
 		WonState won = new WonState(mg);
-		assertEquals(mg.WON_STATE, won.getID());
+		assertEquals(mg.getWonState(), won.getID());
 	}
 
 	@Test
@@ -42,6 +42,6 @@ public class WonStateTest {
 	public void testGetId() {
 		MainGame mg = new MainGame(null);
 		WonState won = new WonState(mg);
-		assertEquals(mg.WON_STATE,won.getID());
+		assertEquals(mg.getWonState(),won.getID());
 	}
 }

@@ -144,7 +144,9 @@ public class SettingsState extends BasicGameState {
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		
 		mg.getDosFont().drawString(800, RETURN_BUTTON_Y, "Player 1:");
-		mg.getDosFont().drawString(1000, RETURN_BUTTON_Y, "Move left = ");
+		mg.getDosFont().drawString(1000, RETURN_BUTTON_Y, "Move left = left arrow\nMove right = right arrow\nShoot weapon = spacebar");
+		mg.getDosFont().drawString(800, RETURN_BUTTON_Y + 150, "Player 2:");
+		mg.getDosFont().drawString(1000, RETURN_BUTTON_Y + 150, "Move left = a\nMove right = d\nShoot weapon = w");
 	}
 
 

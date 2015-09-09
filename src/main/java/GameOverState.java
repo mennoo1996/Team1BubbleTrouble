@@ -14,45 +14,47 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class GameOverState extends BasicGameState {
 
-	private Button playAgainButton;
-	private Button returnButton;
-	private Button saveHighscoreButton;
+	private Button playButton;
+	private Button menuButton;
+	private Button saveButton;
+	private Button exitButton;
 	
 	private MainGame mg;
 	private TextField tf;
 	private Image tfBackground;
 	private String inputMessage;
-	
 
-	private static final int SAVE_BUTTON_X = 100;
-	private static final int SAVE_BUTTON_Y = 350;
-	
-	private static final int PLAY_AGAIN_BUTTON_X = 100;
-	private static final int PLAY_AGAIN_BUTTON_Y = 450;
-	
-	private static final int RETURN_BUTTON_X = 100;
-	private static final int RETURN_BUTTON_Y = 500;
+	private static final int TEXT_X = 164;
+	private static final int TEXT_1_Y = 238;
+	private static final int TEXT_2_Y = 288;
+	private static final int TEXT_3_Y = 338;
+	private static final int TEXT_4_Y = 538;
 
+	private static final int BUTTON_X = 150;
+	private static final int SAVE_BUTTON_Y = 525;
+	private static final int PLAY_BUTTON_Y = 575;
+	private static final int MENU_BUTTON_Y = 625;
+	private static final int EXIT_BUTTON_Y = 675;
+	
+	private static final int HIGHSCORES_X = 1000;
+	
 	private static final int BUTTON_WIDTH = 1000;
 	private static final int BUTTON_HEIGHT = 50;
 	
+	private static final int LOGO_X = 160;
+	private static final int LOGO_Y = 110;
+	private static final int SEPARATOR_X = 164;
+	private static final int SEPARATOR_Y = 190;
+	
+	private static final int BOTTOM_TEXT_OFFSET_X = 250;
+	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
+	
 	private static final int MOUSE_OVER_RECT_X = 500;
-	private static final int GAME_OVER_X = 115;
-	private static final int GAME_OVER_Y = 100;
-	private static final int POINTS_X = 115;
-	private static final int POINTS_Y = 150;
-	private static final int NAME_X = 115;
-	private static final int NAME_Y = 200;
-	private static final int TEXT_FIELD_X = 115;
-	private static final int TEXT_FIELD_Y = 275;
+	private static final int TEXT_FIELD_X = 164;
+	private static final int TEXT_FIELD_Y = 438;
 	private static final int TEXT_FIELD_WIDTH = 700;
 	private static final int TEXT_FIELD_HEIGHT = 60;
 	private static final int TF_BACKGROUND_DEVIATION = 27;
-	private static final int INPUT_MESSAGE_X = 100;
-	private static final int INPUT_MESSAGE_Y = 320;
-	
-	private static final int HIGHSCORES_X = 1000;
-	private static final int HIGHSCORES_Y = 100;
 	
 	/**
 	 * Constructor.
@@ -70,18 +72,23 @@ public class GameOverState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
-
-		playAgainButton = new Button(PLAY_AGAIN_BUTTON_X, PLAY_AGAIN_BUTTON_Y,
+		
+		saveButton = new Button(BUTTON_X, SAVE_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_SaveHighscore.png"),
+				new Image("resources/Menus/Menu_Button_SaveHighscore2.png"));
+		
+		playButton = new Button(BUTTON_X, PLAY_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/Menus/Menu_Button_PlayAgain.png"),
 				new Image("resources/Menus/Menu_Button_PlayAgain2.png"));
 		
-		returnButton = new Button(RETURN_BUTTON_X, RETURN_BUTTON_Y,
+		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/Menus/Menu_Button_MainMenu.png"),
 				new Image("resources/Menus/Menu_Button_MainMenu2.png"));
 		
-		saveHighscoreButton = new Button(SAVE_BUTTON_X, SAVE_BUTTON_Y,
+		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/Menus/Menu_Button_SaveHighscore.png"),
 				new Image("resources/Menus/Menu_Button_SaveHighscore2.png"));
@@ -111,23 +118,30 @@ public class GameOverState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 			Input input = container.getInput();
-			
 			// If the mouse is pressed inside the playAgainButton, enter the gameState
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-				if (playAgainButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+				if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+					// Start over
 					mg.resetLifeCount();
 					mg.resetLevelCount();
 					sbg.enterState(1);
+				} 
+				else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+					// Save score
+					saveScore();
+				}
+				else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+					// Go to startState
+					mg.setLevelCounter(0);
+					sbg.enterState(0);
+				}
+				else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+					// Quit game
+					System.exit(0);
 				}
 			}
-			
-			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER)) {
-				Score score = new Score(mg.getScore(), tf.getText());
-				mg.getHighscores().add(score);
-				HighScoresParser.writeHighScores(mg.getHighscoresFile(), mg.getHighscores());
-				
-				inputMessage = tf.getText() + ", your score of " + mg.getScore();
-				inputMessage += " points is saved!";
+			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && inputMessage == null) {
+				saveScore();
 			}
 		}
 
@@ -140,62 +154,80 @@ public class GameOverState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-
-
-		// draw background
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-
-		mg.getDosFont().drawString(GAME_OVER_X, GAME_OVER_Y , "# Game Over Sucker!");
-		mg.getDosFont().drawString(POINTS_X, POINTS_Y, "# Your score was: " + mg.getScore());
-		mg.getDosFont().drawString(NAME_X, NAME_Y, "# Please enter your name below");
+		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
+		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# Game Over");
+		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
+		mg.getDosFont().drawString(TEXT_X, TEXT_3_Y, "# Please enter your name below");
 
 		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
 				tf.getY() - TF_BACKGROUND_DEVIATION);
 		tf.render(container, graphics);
 		
 		if (inputMessage != null) {
-			mg.getDosFont().drawString(INPUT_MESSAGE_X, INPUT_MESSAGE_Y, inputMessage);
+			mg.getDosFont().drawString(TEXT_X, TEXT_4_Y, inputMessage);
 		}
 
 		renderButtons(container, graphics);
 		
-		// watermark
-		mg.drawWaterMark();
+		String highScoresString = mg.getHighscores().toString();
+		mg.getDosFont().drawString(HIGHSCORES_X, SEPARATOR_Y, highScoresString);
 		
-		// draw foreground
+		mg.drawWaterMark();
+		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		
-		String highScoresString = mg.getHighscores().toString();
-		mg.getDosFont().drawString(HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 	}
 	
+	/**
+	 * Method renders buttons in GameOverState to screen.
+	 * @param container appgamecontainer used
+	 * @param graphics graphics context used
+	 */
 	private void renderButtons(GameContainer container, Graphics graphics) {
 		Input input = container.getInput();
-		if (playAgainButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(playAgainButton.getImageMouseOver(), playAgainButton.getX(), 
-					playAgainButton.getY());
+		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(playButton.getImageMouseOver(), playButton.getX(), 
+					playButton.getY());
 		} else {
-			graphics.drawImage(playAgainButton.getImage(), 
-					playAgainButton.getX(), playAgainButton.getY());
+			graphics.drawImage(playButton.getImage(), 
+					playButton.getX(), playButton.getY());
 		}
-		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), 
-					returnButton.getY());
+		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(menuButton.getImageMouseOver(), menuButton.getX(), 
+					menuButton.getY());
 		} else {
-			graphics.drawImage(returnButton.getImage(), 
-					returnButton.getX(), returnButton.getY());
+			graphics.drawImage(menuButton.getImage(), 
+					menuButton.getX(), menuButton.getY());
 		}
-		if (saveHighscoreButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(saveHighscoreButton.getImageMouseOver(), saveHighscoreButton.getX(), 
-					saveHighscoreButton.getY());
+		if (inputMessage == null) {
+			if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+				graphics.drawImage(saveButton.getImageMouseOver(), saveButton.getX(), 
+						saveButton.getY());
+			} else {
+				graphics.drawImage(saveButton.getImage(), 
+						saveButton.getX(), saveButton.getY());
+			} }
+		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(exitButton.getImageMouseOver(), exitButton.getX(), 
+					exitButton.getY());
 		} else {
-			graphics.drawImage(saveHighscoreButton.getImage(), 
-					saveHighscoreButton.getX(), saveHighscoreButton.getY());
-		}
+			graphics.drawImage(exitButton.getImage(), exitButton.getX(), exitButton.getY()); }
 	}
 
-	
+	/**
+	 * Saves score for this player.
+	 */
+	private void saveScore() {
+		Score score = new Score(mg.getScore(), tf.getText());
+		mg.getHighscores().add(score);
+		HighScoresParser.writeHighScores(mg.getHighscoresFile(), mg.getHighscores());
+		inputMessage = "# " + tf.getText() + ", your score of " + mg.getScore();
+		inputMessage += " points is saved!";
+	}
 	
 	/**
 	 * returns id of the state.

@@ -83,11 +83,13 @@ public class WonState extends BasicGameState {
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 				if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 					// Start over
+					//mg.setScore(0);
+					mg.resetLifeCount();
 					mg.setLevelCounter(0);
 					sbg.enterState(1);
 				} 
 				else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					// Go to settingsState
+					// Go to startState
 					mg.setLevelCounter(0);
 					sbg.enterState(0);
 				}

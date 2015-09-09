@@ -5,15 +5,15 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LaserTest {
+public class WeaponTest {
 	
-	Laser l;
+	Weapon l;
 	MainGame mg;
 	GameState gs;
 
 	@Before
 	public void setUp() throws Exception {
-		l = new Laser(1, 2, 3, 4);
+		l = new Weapon(1, 2, 3, 4);
 		mg = new MainGame("TestGame");
 		gs = new GameState(mg);
 	}
@@ -56,7 +56,7 @@ public class LaserTest {
 	
 	@Test
 	public void testGetRectangleNoConstantValue() {
-		Laser l2 = new Laser(4, -2, 8, 4);
+		Weapon l2 = new Weapon(4, -2, 8, 4);
 		MyRectangle r = l2.getRectangle();
 		assertEquals(new MyRectangle(2, -2, 4, 0), r);
 	}

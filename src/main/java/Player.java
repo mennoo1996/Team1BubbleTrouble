@@ -2,12 +2,16 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
+import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Player {
 	//Method 1 code
 	//int lifeCount;
+	enum PowerupType {
+		SHIELD, SPIKY, INSTANT
+	}
 
 	private boolean laser;
 	private boolean shield;
@@ -20,6 +24,8 @@ public class Player {
 	private MainGame mg;
 	private GameState gs;
 	private Gate intersectingGate;
+	// weapon management
+	private LinkedList<PowerupType> weapons;
 	
 	/**
 	 * @param x
@@ -41,6 +47,7 @@ public class Player {
 		//this.lifeCount = lifeCount;
 		this.mg = mg;
 		this.gs = (GameState) mg.getState(mg.GAME_STATE);
+		this.weapons = new LinkedList<>();
 	}
 	
 	public void update(float deltaFloat) {
@@ -69,14 +76,15 @@ public class Player {
 		if (gs.input.isKeyPressed(Input.KEY_SPACE) && !gs.shot) {
             gs.shot = true;
             float x = this.getCenterX();
-            gs.laser = new Laser(x, container.getHeight() - gs.floor.getHeight(), mg.laserSpeed, mg.laserWidth);
+            //gs.weapon = new Spiky(x, container.getHeight() - gs.floor.getHeight(), mg.laserSpeed, mg.laserWidth);
+			gs.weapon = getWeapon(container);
         }
 
 		// Update laser
 		if (gs.shot) {
-            gs.laser.update(gs, deltaFloat);
+            gs.weapon.update(gs, deltaFloat);
             // Disable laser when it has reached the ceiling
-            if (!gs.laser.visible) {
+            if (!gs.weapon.isVisible()) {
                 gs.shot = false;
             }
         }
@@ -96,6 +104,21 @@ public class Player {
         	   this.setX(this.getX() + mg.playerSpeed * deltaFloat);
            }
         }
+	}
+
+	private Weapon getWeapon(GameContainer container) {
+		if (weapons.isEmpty()) {
+			return new Weapon(x, container.getHeight() - gs.floor.getHeight(), mg.laserSpeed, mg.laserWidth);
+		}
+		PowerupType subType = weapons.peekLast();
+		if (subType == PowerupType.SPIKY) {
+			return new Spiky(x, container.getHeight() - gs.floor.getHeight(), mg.laserSpeed, mg.laserWidth);
+		}
+		if (subType == PowerupType.INSTANT) {
+			return new InstantLaser(x, container.getHeight() - gs.floor.getHeight(), mg.laserWidth);
+		}
+		// Wrong weapon type, time to crash hard.
+		throw new EnumConstantNotPresentException(PowerupType.class, subType.toString());
 	}
 
 	/**
@@ -213,13 +236,14 @@ public class Player {
 		Executors.newScheduledThreadPool(1).schedule(() -> shield = false, 10, TimeUnit.SECONDS);
 	}
 
-	public boolean hasLaser() {
-		return laser;
+	public void addInstantLaser() {
+		weapons.add(PowerupType.INSTANT);
+		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(), 10, TimeUnit.SECONDS);
 	}
 
-	public void addLaser() {
-		laser = true;
-		Executors.newScheduledThreadPool(1).schedule(() -> laser = false, 10, TimeUnit.SECONDS);
+	public void addSpikey() {
+		weapons.add(PowerupType.SPIKY);
+		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(), 10, TimeUnit.SECONDS);
 	}
 	
 	//Method 1 code

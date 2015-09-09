@@ -61,7 +61,7 @@ public class GameState extends BasicGameState {
 	private boolean waitForLevelEnd = false;
 	
 	// level objects
-	protected Laser laser;
+	protected Weapon weapon;
 	protected MyRectangle floor;
 	protected MyRectangle leftWall;
 	protected MyRectangle rightWall;
@@ -262,10 +262,10 @@ public class GameState extends BasicGameState {
             }
 
             // if laser intersects circle
-            if (shot && laser.getRectangle().intersects(circle)) {
+            if (shot && weapon.getRectangle().intersects(circle)) {
                 // it has been shot and disabled
                 shotList.add(circle);
-                laser.setVisible(false);
+                weapon.setVisible(false);
             }
 
             if (circle.isHitCeiling()) {
@@ -453,8 +453,8 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawWeapon(Graphics graphics) {
-		graphics.drawImage(laser_tip_image, laser.getX() - 18, laser.getY() - 14);
-		graphics.drawImage(laser_beam_image, laser.getX() - 18, laser.getRectangle().getMinY() + 13, laser.getX() + 17, laser.getRectangle().getMaxY(), 0, 0, 35, 300);
+		graphics.drawImage(laser_tip_image, weapon.getX() - 18, weapon.getY() - 14);
+		graphics.drawImage(laser_beam_image, weapon.getX() - 18, weapon.getRectangle().getMinY() + 13, weapon.getX() + 17, weapon.getRectangle().getMaxY(), 0, 0, 35, 300);
 	}
 
 	private void drawActiveGates(GameContainer container, Graphics graphics) {

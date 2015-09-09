@@ -1,13 +1,13 @@
 
 
-public class Laser {
+public class Weapon {
 	
 	private float x;
 	private float y;
 	private float width;
 	private float height;
 	private float laserSpeed;
-	boolean visible;
+	private boolean visible;
 	
 	
 	/**
@@ -17,7 +17,7 @@ public class Laser {
 	 * @param height
 	 * @param duration
 	 */
-	public Laser(float x, float y,  float laserSpeed, float laserWidth) {
+	public Weapon(float x, float y, float laserSpeed, float laserWidth) {
 		super();
 		this.x = x - (0.5f * laserWidth);
 		this.y = y;

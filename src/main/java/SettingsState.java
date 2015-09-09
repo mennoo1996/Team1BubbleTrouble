@@ -95,9 +95,9 @@ public class SettingsState extends BasicGameState {
 		
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			if (mannetjeRectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayerImage("Playersprite.png");
+				mg.setPlayerImageString("Playersprite.png");
 			} else if (arieRectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayerImage("Ariesprite.png");
+				mg.setPlayerImageString("Ariesprite.png");
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 				sbg.enterState(0);
 			}
@@ -119,11 +119,12 @@ public class SettingsState extends BasicGameState {
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		graphics.drawImage(background, 0, 0);
 		
-		if (mg.getPlayerImage().equals("Playersprite.png")) {
+		if (mg.getPlayerImageString().equals("Playersprite.png")) {
 			graphics.drawImage(highLight, MANNETJE_X, MANNETJE_Y);
-		} else if (mg.getPlayerImage().equals("Ariesprite.png")) {
+		} else if (mg.getPlayerImageString().equals("Ariesprite.png")) {
 			graphics.drawImage(highLight, ARIE_X, ARIE_Y);
 		}
+		
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(),
 					returnButton.getY());
@@ -142,6 +143,8 @@ public class SettingsState extends BasicGameState {
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		
+		mg.getDosFont().drawString(800, RETURN_BUTTON_Y, "Player 1:");
+		mg.getDosFont().drawString(1000, RETURN_BUTTON_Y, "Move left = ");
 	}
 
 

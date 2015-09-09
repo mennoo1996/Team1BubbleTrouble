@@ -28,6 +28,10 @@ public class Player {
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final float HALF = 0.5f;
+
+	private int moveLeftKey;
+	private int moveRightKey;
+	private int shootKey;
 	
 	
 	/**
@@ -48,6 +52,9 @@ public class Player {
 		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mg = mg;
 		this.gs = (GameState) mg.getState(mg.getGameState());
+		moveLeftKey = Input.KEY_LEFT;
+		moveRightKey = Input.KEY_RIGHT;
+		shootKey = Input.KEY_SPACE;
 	}
 	
 	/**
@@ -63,7 +70,6 @@ public class Player {
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
-		System.out.println(gs);
 		for (Gate someGate :gs.getGateList()) {
 			if (this.getRectangle().intersects(someGate.getRectangle())) {
 				freeToRoam = false;
@@ -78,7 +84,7 @@ public class Player {
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (gs.getSavedInput().isKeyPressed(Input.KEY_SPACE) && !gs.isShot()) {
+		if (gs.getSavedInput().isKeyPressed(shootKey) && !gs.isShot()) {
             gs.setShot(true);
             float x = this.getCenterX();
             gs.setLaser(new Laser(x, container.getHeight() - gs.getFloor().getHeight(),
@@ -97,7 +103,7 @@ public class Player {
 	
 	private void processPlayerMovement(GameContainer container, float deltaFloat) {
 		// Walk left when left key pressed and not at left wall OR a gate
-		boolean isKeyLeft = gs.getSavedInput().isKeyDown(Input.KEY_LEFT);
+		boolean isKeyLeft = gs.getSavedInput().isKeyDown(moveLeftKey);
 		if (isKeyLeft && this.getX() > gs.getLeftWall().getWidth()) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mg.getPlayerSpeed() * deltaFloat);
@@ -106,7 +112,7 @@ public class Player {
         }
 
 		// Walk right when right key pressed and not at right wall OR a gate
-		if (gs.getSavedInput().isKeyDown(Input.KEY_RIGHT) && this.getMaxX()
+		if (gs.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
 				< (container.getWidth() - gs.getRightWall().getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mg.getPlayerSpeed() * deltaFloat);
@@ -302,6 +308,48 @@ public class Player {
 	 */
 	public void setGs(GameState gs) {
 		this.gs = gs;
+	}
+
+	/**
+	 * @return the moveLeftKey
+	 */
+	public int getMoveLeftKey() {
+		return moveLeftKey;
+	}
+
+	/**
+	 * @param moveLeftKey the moveLeftKey to set
+	 */
+	public void setMoveLeftKey(int moveLeftKey) {
+		this.moveLeftKey = moveLeftKey;
+	}
+
+	/**
+	 * @return the moveRightKey
+	 */
+	public int getMoveRightKey() {
+		return moveRightKey;
+	}
+
+	/**
+	 * @param moveRightKey the moveRightKey to set
+	 */
+	public void setMoveRightKey(int moveRightKey) {
+		this.moveRightKey = moveRightKey;
+	}
+
+	/**
+	 * @return the shootKey
+	 */
+	public int getShootKey() {
+		return shootKey;
+	}
+
+	/**
+	 * @param shootKey the shootKey to set
+	 */
+	public void setShootKey(int shootKey) {
+		this.shootKey = shootKey;
 	}
 
 	

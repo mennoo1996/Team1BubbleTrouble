@@ -30,7 +30,6 @@ public class GameState extends BasicGameState {
 	private ArrayList<FloatingScore> floatingScoreList;
 	private ArrayList<Gate> gateList;
 
-	private Player player;
 	private int score;
 	private long startTime;
 	private long timeDelta;
@@ -41,7 +40,6 @@ public class GameState extends BasicGameState {
 	private boolean waitEsc;
 	
 	// Images
-	private Image playerImage;
 	private Image wallsImage;
 	private Image health1Image;
 	private Image health2Image;
@@ -77,10 +75,6 @@ public class GameState extends BasicGameState {
 	private static final int LEVEL_POINTS = 1500;
 	private static final int SECOND_TO_MS_FACTOR = 1000;
 	private static final float SECOND_TO_MS_FACTOR_FLOAT = 1000f;
-	private static final int PLAYER_X_DEVIATION = 80;
-	private static final int PLAYER_Y_DEVIATION = 295;
-	private static final int PLAYER_WIDTH = 60;
-	private static final int PLAYER_HEIGHT = 92;
 	private static final int FLOOR_Y_DEVIATION = 210;
 	private static final int FLOOR_HEIGHT = 210;
 	private static final int LEFT_WALL_WIDTH = 105;
@@ -98,11 +92,6 @@ public class GameState extends BasicGameState {
 	private static final int SCORE_STRING_Y_DEVIATION = 84;
 	private static final int VERSION_STRING_X = 70;
 	private static final int VERSION_STRING_Y_DEVIATION = 190;
-	private static final int SPRITE_SHEET_THREE = 3;
-	private static final int SPRITE_SHEET_FOUR = 4;
-	private static final float MOVEMENT_COUNTER_FACTOR = 0.5f;
-	private static final int PLAYER_DRAW_X_DEVIATION = 30;
-	private static final int PLAYER_DRAW_Y_DEVIATION = 23;
 	private static final int COUNTER_BAR_X_DEVIATION = 80;
 	private static final int COUNTER_BAR_Y_DEVIATION = 60;
 	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
@@ -180,10 +169,6 @@ public class GameState extends BasicGameState {
 		countIn = true;
 		playingState = true;
 		// Add player sprite and walls
-		playerImage = new Image("resources/" + mg.getPlayerImage());
-		player = new Player(container.getWidth() / 2 - PLAYER_X_DEVIATION,
-				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, mg);
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -259,7 +244,8 @@ public class GameState extends BasicGameState {
 
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 
-		player.update(deltaFloat);
+		// player-thingy
+		mg.getPlayerList().updatePlayers(deltaFloat);
 		processPause();
 		processCircles(container, sbg, deltaFloat);
 		updateFloatingScores(deltaFloat);
@@ -285,7 +271,7 @@ public class GameState extends BasicGameState {
 		}
 
 		if (timeRemaining <= 0) {
-            playerDeath(sbg);
+            mg.getPlayerList().playerDeath(sbg);
         }
 		prevTime = curTime;
 	}
@@ -344,12 +330,7 @@ public class GameState extends BasicGameState {
             //update circles
             circle.update(this, container, deltaFloat);
 
-            // if player touches circle (for the first frame)
-            if (player.getRectangle().intersects(circle)) {
-
-                //LIVES FUNCTIONALITY
-                playerDeath(sbg);
-            }
+            mg.getPlayerList().intersectPlayersWithCircle(circle);
 
             // if laser intersects circle
             if (isShot() && getLaser().getRectangle().intersects(circle)) {
@@ -456,7 +437,7 @@ public class GameState extends BasicGameState {
 				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION);
 		drawGatesLaser(container, graphics);
 		// draw player
-		drawPlayer(container, graphics);
+		mg.getPlayerList().drawPlayers(container, graphics);
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);
 		// Draw timer countdown bar
@@ -503,32 +484,7 @@ public class GameState extends BasicGameState {
 				drawHealth(graphics);
 	}
 	
-	private void drawPlayer(GameContainer container, Graphics graphics) {
-		if (player.getMovement() == 2) {
-			player.incrementMovementCounter();
-			int sp = SPRITE_SHEET_THREE;
-			if (player.getMovementCounter() > player.getMovementCounter_Max() 
-					* MOVEMENT_COUNTER_FACTOR) {
-				sp = SPRITE_SHEET_FOUR;
-			}
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX() 
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-		} else if (player.getMovement() == 1) {
-			player.incrementMovementCounter();
-			int sp = 1;
-			if (player.getMovementCounter() > player.getMovementCounter_Max()
-					* MOVEMENT_COUNTER_FACTOR) {
-				sp = 0;
-			}
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX()
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-		} else {
-			player.resetMovementCounter();
-			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX()
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-		}
-		player.setMovement(0);
-	}
+	
 
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
 		for (int x = 0; x < fractionTimeParts; x++) {
@@ -675,25 +631,6 @@ public class GameState extends BasicGameState {
 	public int getID() {
 		return 1;
 	}
-
-	/**
-	 * Player death.
-	 * @param sbg The stateBasedGame that uses this state.
-	 */
-	private void playerDeath(StateBasedGame sbg) {
-		mg.decreaselifeCount();
-		if (mg.getLifeCount() <= 0) {
-			mg.setScore(mg.getScore() + score);
-			sbg.enterState(mg.getGameOverState());
-		} else {
-			sbg.enterState(mg.getGameState());
-		}
-	}
-	
-
-	
-		
-		
 
 	private void loadImages() throws SlickException {
 		loadHealthAndBallImages();
@@ -864,7 +801,21 @@ public class GameState extends BasicGameState {
 	public void setLaser(Laser laser) {
 		this.laser = laser;
 	}
-	
-	
+
+	/**
+	 * @return the score
+	 */
+	public int getScore() {
+		return score;
+	}
+
+	/**
+	 * @param score the score to set
+	 */
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+		
 
 }

@@ -2,14 +2,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BouncingCircleTest {
 	
 	BouncingCircle c;
@@ -22,7 +26,7 @@ public class BouncingCircleTest {
 		mg = new MainGame("TestGame");
 		gs = new GameState(mg);
 		
-		//gc = mock(GameContainer.class);
+		mg = mock(MainGame.class);
 		
 	}
 	

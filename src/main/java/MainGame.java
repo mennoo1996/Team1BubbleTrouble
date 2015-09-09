@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-
+import java.util.Calendar;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -34,6 +33,7 @@ public class MainGame extends StateBasedGame {
 	private Image backgroundImage;
 	private Image foreGroundImage;
 	private Image terminalImage;
+	private Image gameLogo;
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
 	private AngelCodeFont dosFont;
@@ -41,6 +41,7 @@ public class MainGame extends StateBasedGame {
 	
 	private PlayerList playerList;
 	private boolean multiplayer;
+	private String currentDate;
 	
 	private int score;
 	
@@ -75,6 +76,8 @@ public class MainGame extends StateBasedGame {
 	private static final int PLAYER_Y_DEVIATION = 295;
 	private static final int PLAYER_WIDTH = 60;
 	private static final int PLAYER_HEIGHT = 92;
+	private static final int VERSION_STRING_X = 164;
+	private static final int VERSION_STRING_Y_DEVIATION = 190;
 	
 	
 	/**
@@ -100,7 +103,7 @@ public class MainGame extends StateBasedGame {
 
 	/**
 	 * Set the playerImage.
-	 * @param playerImage the playerImage to set
+	 * @param playerImageString the playerImage to set
 	 */
 	public void setPlayerImageString(String playerImageString) {
 		this.playerImageString = playerImageString;
@@ -125,6 +128,7 @@ public class MainGame extends StateBasedGame {
 		app.setDisplayMode(xRes, Math.round(yRes), false);
 		app.setVSync(true);
 		app.setTargetFrameRate(TARGET_FRAMERATE);
+		app.setShowFPS(false);
 		//app.setMaximumLogicUpdateInterval(10); // Do not touch this - Mark
 		app.start();
 		app.setSmoothDeltas(true);
@@ -149,12 +153,17 @@ public class MainGame extends StateBasedGame {
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
+		this.gameLogo = new Image("resources/menus/Menu_Logo.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
 		this.dosFont = new AngelCodeFont("resources/font/dosfont.fnt",
 				"resources/font/dosfont_0.png");
-		
+
 		initPlayers();
+		Calendar cal = Calendar.getInstance();
+		this.currentDate = cal.get(Calendar.DATE) 
+				+ "/" + cal.get(Calendar.MONTH) 
+				+ "/" + cal.get(Calendar.YEAR);
 		
 		this.enterState(startState);
 	
@@ -340,6 +349,13 @@ public class MainGame extends StateBasedGame {
 	 */
 	public Image getBackgroundImage() {
 		return backgroundImage;
+	}
+	
+	/**
+	 * @return the game logo image
+	 */
+	public Image getGameLogo() {
+		return gameLogo;
 	}
 
 	/**
@@ -581,7 +597,23 @@ public class MainGame extends StateBasedGame {
 		return DEFAULT_LASER_SPEED;
 	}
 	
+	/**
+	 * @return the fps
+	 */
+	public int getFpsInGame() {
+		return app.getFPS();
+	}
 	
+	/**
+	 * Draws version number, fps, and other info.
+	 */
+	public void drawWaterMark() {
+		dosFont.drawString(VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION, 
+				"#Version 1.0"  
+				+ " #Date: " + currentDate
+				+ " #fps: " + Integer.toString(getFpsInGame())
+				);
+	}
 	
 	/**
 	 * @return the multiplayer

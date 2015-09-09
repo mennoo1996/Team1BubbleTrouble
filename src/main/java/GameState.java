@@ -92,8 +92,6 @@ public class GameState extends BasicGameState {
 	private static final int LEVEL_STRING_X_DEVIATION = 270;
 	private static final int LEVEL_STRING_Y_DEVIATION = 84;
 	private static final int SCORE_STRING_Y_DEVIATION = 84;
-	private static final int VERSION_STRING_X = 70;
-	private static final int VERSION_STRING_Y_DEVIATION = 190;
 	private static final int COUNTER_BAR_X_DEVIATION = 80;
 	private static final int COUNTER_BAR_Y_DEVIATION = 60;
 	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
@@ -139,7 +137,7 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
-	private static final int POWERUP_CHANCE = 5;
+	private static final int POWERUP_CHANCE = 20;
 	// Level ending, empty bar
 	
 	/**
@@ -395,7 +393,6 @@ public class GameState extends BasicGameState {
 	}
 
 	
-
 	private void processPause() {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
 			waitEsc = true;
@@ -466,51 +463,18 @@ public class GameState extends BasicGameState {
 			drawPausedScreen(container, graphics);
 		}
 		// draw version number
-				mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight()
-						- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
-				// draw foreground layer
-				graphics.drawImage(mg.getForeGroundImage(), 0, 0);
-				// draw terminal
-				graphics.drawImage(mg.getTerminalImage(), 0, 0);
-				// disable button when paused
-				if (!playingState) {
-					graphics.drawImage(nobuttonImage, 0, 0);
-				}
-				// show correct health lights
-				drawHealth(graphics);
+		mg.drawWaterMark();
+		// draw foreground layer
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		// draw terminal
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		// disable button when paused
+		if (!playingState) {
+			graphics.drawImage(nobuttonImage, 0, 0);
+		}
+		// show correct health lights
+		drawHealth(graphics);
 	}
-//<<<<<<< HEAD
-//	
-//	
-//=======
-//
-//	private void drawPlayer(GameContainer container, Graphics graphics) {
-//		if (player.getMovement() == 2) {
-//			player.incrementMovementCounter();
-//			int sp = SPRITE_SHEET_THREE;
-//			if (player.getMovementCounter() > player.getMovementCounter_Max()
-//					* MOVEMENT_COUNTER_FACTOR) {
-//				sp = SPRITE_SHEET_FOUR;
-//			}
-//			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX()
-//					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-//		} else if (player.getMovement() == 1) {
-//			player.incrementMovementCounter();
-//			int sp = 1;
-//			if (player.getMovementCounter() > player.getMovementCounter_Max()
-//					* MOVEMENT_COUNTER_FACTOR) {
-//				sp = 0;
-//			}
-//			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX()
-//					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-//		} else {
-//			player.resetMovementCounter();
-//			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX()
-//					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-//		}
-//		player.setMovement(0);
-//	}
-//>>>>>>> 362cbe7547a6cba9f0389a32abb4c9e9528b27f2
 
 	private void drawPowerups(Graphics graphics) {
 		for (Powerup pow : droppedPowerups) {

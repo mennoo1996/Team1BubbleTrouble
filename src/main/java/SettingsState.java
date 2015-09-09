@@ -20,7 +20,6 @@ public class SettingsState extends BasicGameState {
 	private SpriteSheet arie;
 	
 	private Image highLight;
-	private Image background;
 	
 	private MyRectangle mannetjeRectangle;
 	private MyRectangle arieRectangle;
@@ -28,24 +27,37 @@ public class SettingsState extends BasicGameState {
 	private MainGame mg;
 	private Input input;
 	
-	private static final int RETURN_BUTTON_X = 228;
-	private static final int RETURN_BUTTON_Y = 190;
+	private static final int LOGO_X = 160;
+	private static final int LOGO_Y = 110;
+	private static final int SEPARATOR_X = 164;
+	private static final int SEPARATOR_Y = 190;
+	
+	private static final int BOTTOM_TEXT_OFFSET_X = 250;
+	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
+	
+	private static final int RETURN_BUTTON_X = 150;
+	private static final int RETURN_BUTTON_Y = 225;
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
+	private static final int CONTROL_X1 = 800;
+	private static final int CONTROL_X2 = 1000;
+	private static final int P1_CONTROL_Y = 225;
+	private static final int P2_CONTROL_Y = 375;
+	
+	private static final int TEXT_X = 164;
+	private static final int TEXT_1_Y = 288;
+	private static final int TEXT_2_Y = 338;
 	
 	private static final int PLAYER_SPRITE_WIDTH = 120;
 	private static final int PLAYER_SPRITE_HEIGHT = 120;
 	
-	private static final int MANNETJE_X = 320;
+	private static final int MANNETJE_X = 220;
 	private static final int MANNETJE_Y = 380;
 	
-	private static final int ARIE_X = 450;
+	private static final int ARIE_X = 380;
 	private static final int ARIE_Y = 380;
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
-	
-	private static final int VERSION_STRING_X = 70;
-	private static final int VERSION_STRING_Y_DEVIATION = 190;
 	
 	private static final int STATE_ID = 4;
 	
@@ -76,7 +88,6 @@ public class SettingsState extends BasicGameState {
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
 		arie = new SpriteSheet("resources/Ariesprite.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-		background = new Image("resources/menus/Menu_Options_Text.png");
 		mannetjeRectangle = new MyRectangle(MANNETJE_X, MANNETJE_Y, PLAYER_SPRITE_WIDTH,
 				PLAYER_SPRITE_HEIGHT);
 		arieRectangle = new MyRectangle(ARIE_X, ARIE_Y, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
@@ -114,11 +125,38 @@ public class SettingsState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		Input input = container.getInput();
-		// background
-		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		graphics.drawImage(background, 0, 0);
+		this.input = container.getInput();
 		
+		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
+		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# You can choose a player skin");
+		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# by clicking on it");
+		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
+		
+		drawSprites(graphics);
+
+		mg.drawWaterMark();
+		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		
+		drawControls();
+	}
+	
+	private void drawControls() {
+		String controlsPlayer1 = "Move left = left arrow\nMove right = right arrow\n";
+		controlsPlayer1 += "Shoot weapon = spacebar";
+		String controlsPlayer2 = "Move left = a\nMove right = d\nShoot weapon = w";
+		
+		mg.getDosFont().drawString(CONTROL_X1, P1_CONTROL_Y, "Player 1:");
+		mg.getDosFont().drawString(CONTROL_X2, P1_CONTROL_Y, controlsPlayer1);
+		mg.getDosFont().drawString(CONTROL_X1, P2_CONTROL_Y, "Player 2:");
+		mg.getDosFont().drawString(CONTROL_X2, P2_CONTROL_Y, controlsPlayer2);
+		
+	}
+	
+	private void drawSprites(Graphics graphics) {
 		if (mg.getPlayerImageString().equals("Playersprite.png")) {
 			graphics.drawImage(highLight, MANNETJE_X, MANNETJE_Y);
 		} else if (mg.getPlayerImageString().equals("Ariesprite.png")) {
@@ -134,19 +172,6 @@ public class SettingsState extends BasicGameState {
 		graphics.drawImage(mannetje.getSprite(2, 0), mannetjeRectangle.getX(),
 				mannetjeRectangle.getY());
 		graphics.drawImage(arie.getSprite(2, 0), arieRectangle.getX(), arieRectangle.getY());
-		
-		// draw version number
-		mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight()
-				- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
-		
-		// foreground and terminal
-		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mg.getTerminalImage(), 0, 0);
-		
-		mg.getDosFont().drawString(800, RETURN_BUTTON_Y, "Player 1:");
-		mg.getDosFont().drawString(1000, RETURN_BUTTON_Y, "Move left = left arrow\nMove right = right arrow\nShoot weapon = spacebar");
-		mg.getDosFont().drawString(800, RETURN_BUTTON_Y + 150, "Player 2:");
-		mg.getDosFont().drawString(1000, RETURN_BUTTON_Y + 150, "Move left = a\nMove right = d\nShoot weapon = w");
 	}
 
 

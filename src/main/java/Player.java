@@ -112,7 +112,10 @@ public class Player {
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (gs.getSavedInput().isKeyPressed(shootKey) && (!gs.isShot() || (gs.getWeapon().getClass() == Spiky.class))) {
+		
+		boolean spikyWeapon = (gs.getWeapon().getClass() == Spiky.class);
+		
+		if (gs.getSavedInput().isKeyPressed(shootKey) && (!gs.isShot() || spikyWeapon)) {
 			gs.setShot(true);
 			float x = this.getCenterX();
 			gs.setWeapon(this.getWeapon(container));

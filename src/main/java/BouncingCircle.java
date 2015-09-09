@@ -138,7 +138,7 @@ public class BouncingCircle extends Circle {
 	}
 	
 	/**
-	 * Get the speed that goes with a certain radius
+	 * Get the speed that goes with a certain radius.
 	 * @return the speed for the current radius
 	 */
 	public float getSpeedForRadius() {
@@ -159,6 +159,10 @@ public class BouncingCircle extends Circle {
 		return 0f;
 	}
 	
+	/**
+	 * Get new radius (of splitted circles).
+	 * @return the new radius
+	 */
 	public float getNewRadius() {
 		if (radius == MINIMUM_RADIUS) {
 			return MINIMUM_RADIUS;

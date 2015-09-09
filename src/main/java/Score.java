@@ -17,6 +17,13 @@ public class Score {
 		this.score = score;
 		this.name = name;
 	}
+	
+	@Override
+	public String toString() {
+		String res = String.format("%5d%5s%4s%s", score, "|", "", name);
+		return res;
+	}
+	
 	/**
 	 * @return the score
 	 */

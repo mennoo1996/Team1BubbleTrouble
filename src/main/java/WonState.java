@@ -79,11 +79,18 @@ public class WonState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		
+		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
+		
 		// draw string and button
 		graphics.drawString("You won, you are the champion!", WON_STRING_X, WON_STRING_Y);
 		graphics.drawString("Youre score was: " + mg.getScore(), SCORE_STRING_X, SCORE_STRING_Y);
 		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(),
 				playAgainButton.getY());
+		
+
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		
 	}
 
 	

@@ -1,8 +1,6 @@
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 
 public class WonStateTest {

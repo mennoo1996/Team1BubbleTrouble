@@ -114,6 +114,8 @@ public class GameOverState extends BasicGameState {
 			throws SlickException {
 		// draw string and button
 
+		// draw background
+		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 
 		mg.getDosFont().drawString(GAME_OVER_X, GAME_OVER_Y , ">Game Over Sucker!");
 		mg.getDosFont().drawString(POINTS_X, POINTS_Y, ">Your score was: " + mg.getScore());
@@ -128,6 +130,10 @@ public class GameOverState extends BasicGameState {
 			mg.getDosFont().drawString(INPUT_MESSAGE_X, INPUT_MESSAGE_Y, inputMessage);
 		}
 
+		// draw foreground
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		
 	}
 
 	

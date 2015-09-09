@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -23,6 +21,7 @@ public class GameState extends BasicGameState {
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
 	protected ArrayList<Gate> gateList;
+	private ArrayList<Powerup> droppedPowerups;
 	private Player player;
 	protected Input input;
 	protected boolean shot;
@@ -118,6 +117,8 @@ public class GameState extends BasicGameState {
 		// Add gates
 		gateList = levels.getLevel(mg.levelCounter).getGates();
 
+		droppedPowerups = new ArrayList<>();
+
 	}
 	
 	
@@ -175,6 +176,7 @@ public class GameState extends BasicGameState {
 		player.update(deltaFloat);
 		processPause();
 		processCircles(container, sbg, deltaFloat);
+		processPowerups(container, deltaFloat);
 		
 		// if there are no circles required to be shot by a gate, remove said gate
 		updateGateExistence(deltaFloat);
@@ -202,7 +204,21 @@ public class GameState extends BasicGameState {
 		prevTime = curTime;
 	}
 
-	
+	private void processPowerups(GameContainer container, float deltaFloat) {
+		ArrayList<Powerup> usedPowerups = new ArrayList<>();
+		for (Powerup powerup : droppedPowerups) {
+			powerup.update(this, container, deltaFloat);
+
+			if (powerup.getRectangle().intersects(player.getRectangle())) {
+				player.addPowerup(powerup.getType());
+				usedPowerups.add(powerup);
+			}
+		}
+
+		for (Powerup used : usedPowerups) {
+			droppedPowerups.remove(used);
+		}
+	}
 
 	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
 		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
@@ -226,6 +242,7 @@ public class GameState extends BasicGameState {
                 if (circle.getRadius() >= 20) {
                 	splits = circle.getSplittedCircles(mg);
                     circleList.addAll(splits);
+					checkBonus(circle);
                     // if it was part of the gate requirements, add to new gate requirements
                 }
                 //if it was part of the gate requirements remove it from the gate requirements (+ add new ones)
@@ -427,6 +444,8 @@ public class GameState extends BasicGameState {
 		if(!playingState) {
 			graphics.drawImage(nobutton_Image, 0, 0);
 		}
+
+		drawPowerups(graphics);
 		
 		// show correct health lights
 		drawHealth(graphics);
@@ -442,6 +461,12 @@ public class GameState extends BasicGameState {
 //		graphics.drawString("Score = " + (mg.score + score), 20, container.getHeight()-50);
 //		graphics.drawString("Level: " + (mg.levelCounter+1), 20, container.getHeight() -30);
 		
+	}
+
+	private void drawPowerups(Graphics graphics) {
+		for (Powerup pow : droppedPowerups) {
+			graphics.fillRect(pow.getX(), pow.getY(), pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
+		}
 	}
 
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
@@ -646,6 +671,18 @@ public class GameState extends BasicGameState {
 	
 	public void setGateList(ArrayList<Gate> gatelist) {
 		this.gateList = gatelist;
+	}
+
+	private void checkBonus(BouncingCircle circle) {
+		// 5% of the time
+		int randInt = new Random().nextInt(100) + 1;
+		if (randInt <= 5) dropPowerup(circle);
+	}
+
+	private void dropPowerup(BouncingCircle circle) {
+		// Get a random powerup
+		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random().nextInt(Powerup.PowerupType.values().length)];
+		droppedPowerups.add(new Powerup(circle.getX(), circle.getY(), newPowerup));
 	}
 
 }

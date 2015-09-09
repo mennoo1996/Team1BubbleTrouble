@@ -9,9 +9,6 @@ import java.util.concurrent.TimeUnit;
 public class Player {
 	//Method 1 code
 	//int lifeCount;
-	enum PowerupType {
-		SHIELD, SPIKY, INSTANT
-	}
 
 	private boolean laser;
 	private boolean shield;
@@ -25,7 +22,7 @@ public class Player {
 	private GameState gs;
 	private Gate intersectingGate;
 	// weapon management
-	private LinkedList<PowerupType> weapons;
+	private LinkedList<Powerup.PowerupType> weapons;
 	
 	/**
 	 * @param x
@@ -110,15 +107,15 @@ public class Player {
 		if (weapons.isEmpty()) {
 			return new Weapon(x, container.getHeight() - gs.floor.getHeight(), mg.laserSpeed, mg.laserWidth);
 		}
-		PowerupType subType = weapons.peekLast();
-		if (subType == PowerupType.SPIKY) {
+		Powerup.PowerupType subType = weapons.peekLast();
+		if (subType == Powerup.PowerupType.SPIKY) {
 			return new Spiky(x, container.getHeight() - gs.floor.getHeight(), mg.laserSpeed, mg.laserWidth);
 		}
-		if (subType == PowerupType.INSTANT) {
+		if (subType == Powerup.PowerupType.INSTANT) {
 			return new InstantLaser(x, container.getHeight() - gs.floor.getHeight(), mg.laserWidth);
 		}
 		// Wrong weapon type, time to crash hard.
-		throw new EnumConstantNotPresentException(PowerupType.class, subType.toString());
+		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
 	}
 
 	/**
@@ -231,18 +228,25 @@ public class Player {
 		return shield;
 	}
 
-	public void addShield() {
+	public void addPowerup(Powerup.PowerupType type) {
+		if (type == Powerup.PowerupType.INSTANT) {
+			addWeapon(type);
+		}
+		if (type == Powerup.PowerupType.SHIELD) {
+			addShield();
+		}
+		if (type == Powerup.PowerupType.SPIKY) {
+			addWeapon(type);
+		}
+	}
+
+	private void addShield() {
 		shield = true;
 		Executors.newScheduledThreadPool(1).schedule(() -> shield = false, 10, TimeUnit.SECONDS);
 	}
 
-	public void addInstantLaser() {
-		weapons.add(PowerupType.INSTANT);
-		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(), 10, TimeUnit.SECONDS);
-	}
-
-	public void addSpikey() {
-		weapons.add(PowerupType.SPIKY);
+	private void addWeapon(Powerup.PowerupType type) {
+		weapons.add(type);
 		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(), 10, TimeUnit.SECONDS);
 	}
 	

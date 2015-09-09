@@ -98,8 +98,6 @@ public class GameState extends BasicGameState {
 	private static final int LEVEL_STRING_X_DEVIATION = 270;
 	private static final int LEVEL_STRING_Y_DEVIATION = 84;
 	private static final int SCORE_STRING_Y_DEVIATION = 84;
-	private static final int VERSION_STRING_X = 70;
-	private static final int VERSION_STRING_Y_DEVIATION = 190;
 	private static final int SPRITE_SHEET_THREE = 3;
 	private static final int SPRITE_SHEET_FOUR = 4;
 	private static final float MOVEMENT_COUNTER_FACTOR = 0.5f;
@@ -414,7 +412,6 @@ public class GameState extends BasicGameState {
 	}
 
 	
-
 	private void processPause() {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
 			waitEsc = true;
@@ -484,18 +481,17 @@ public class GameState extends BasicGameState {
 			drawPausedScreen(container, graphics);
 		}
 		// draw version number
-				mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight()
-						- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
-				// draw foreground layer
-				graphics.drawImage(mg.getForeGroundImage(), 0, 0);
-				// draw terminal
-				graphics.drawImage(mg.getTerminalImage(), 0, 0);
-				// disable button when paused
-				if (!playingState) {
-					graphics.drawImage(nobuttonImage, 0, 0);
-				}
-				// show correct health lights
-				drawHealth(graphics);
+		mg.drawWaterMark();
+		// draw foreground layer
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		// draw terminal
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		// disable button when paused
+		if (!playingState) {
+			graphics.drawImage(nobuttonImage, 0, 0);
+		}
+		// show correct health lights
+		drawHealth(graphics);
 	}
 
 	private void drawPlayer(GameContainer container, Graphics graphics) {

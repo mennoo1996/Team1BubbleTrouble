@@ -14,7 +14,24 @@ import org.newdawn.slick.state.StateBasedGame;
 public class WonState extends BasicGameState {
 
 	private Button playAgainButton;
+	private Button mainMenuButton;
+	private Button exitButton;
 	private MainGame mg;
+	
+	private static final int LOGO_X = 160;
+	private static final int LOGO_Y = 110;
+	private static final int SEPARATOR_X = 164;
+	private static final int SEPARATOR_Y = 190;
+	
+	private static final int BOTTOM_TEXT_OFFSET_X = 250;
+	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
+	
+	private static final int BUTTON_WIDTH = 1000;
+	private static final int BUTTON_HEIGHT = 50;
+	private static final int BUTTON_X = 150;
+	private static final int PLAYBUTTON_Y = 325;
+	private static final int MENUBUTTON_Y = 375;
+	private static final int EXITBUTTON_Y = 425;
 	
 	private static final int PLAY_AGAIN_BUTTON_X = 300;
 	private static final int PLAY_AGAIN_BUTTON_Y = 275;
@@ -44,6 +61,18 @@ public class WonState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
+		
+		playAgainButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/menus/Menu_Button_Play.png"),
+				new Image("resources/menus/Menu_Button_Play2.png"));
+		mainMenuButton = new Button(BUTTON_X, MENUBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/menus/Menu_Button_MainMenu.png"), 
+				new Image("resources/menus/Menu_Button_MainMenu2.png"));
+		exitButton = new Button(BUTTON_X, EXITBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/menus/Menu_Button_Quit.png"),
+				new Image("resources/menus/Menu_Button_Quit2.png"));
+		
+		
 		playAgainButton = new Button(PLAY_AGAIN_BUTTON_X, PLAY_AGAIN_BUTTON_Y,
 				PLAY_AGAIN_BUTTON_WIDTH, PLAY_AGAIN_BUTTON_HEIGHT,
 				new Image("resources/play_again_button.png"));
@@ -78,9 +107,10 @@ public class WonState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		
+		Input input = container.getInput();
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		
+		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		// draw string and button
 		mg.getDosFont().drawString(WON_STRING_X, WON_STRING_Y,
 				"You won, you are the champion!");

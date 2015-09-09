@@ -15,18 +15,25 @@ public class StartState extends BasicGameState {
 
 	
 	private MainGame mg;
-	private Image miscText;
 	private Button playButton;
 
 	private Button optionsButton;
 	private Button quitButton;
 	
+	private static final int LOGO_X = 160;
+	private static final int LOGO_Y = 110;
+	private static final int SEPARATOR_X = 164;
+	private static final int SEPARATOR_Y = 190;
+	
+	private static final int BOTTOM_TEXT_OFFSET_X = 250;
+	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
+	
 	private static final int BUTTON_WIDTH = 1000;
 	private static final int BUTTON_HEIGHT = 50;
-	private static final int BUTTON_X = 250;
-	private static final int PLAYBUTTON_Y = 275;
-	private static final int OPTIONSBUTTON_Y = 325;
-	private static final int QUITBUTTON_Y = 375;
+	private static final int BUTTON_X = 150;
+	private static final int PLAYBUTTON_Y = 225;
+	private static final int OPTIONSBUTTON_Y = 275;
+	private static final int QUITBUTTON_Y = 325;
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 	private static final int SETTINGS_STATE_ID = 4;
@@ -49,8 +56,6 @@ public class StartState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		
-		miscText = new Image("resources/menus/Menu_Main_Text.png");
-		
 		playButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/menus/Menu_Button_Play.png"),
 				new Image("resources/menus/Menu_Button_Play2.png"));
@@ -61,7 +66,6 @@ public class StartState extends BasicGameState {
 				new Image("resources/menus/Menu_Button_Quit.png"),
 				new Image("resources/menus/Menu_Button_Quit2.png"));
 		
-
 	}
 	
 	/**
@@ -103,7 +107,8 @@ public class StartState extends BasicGameState {
 			throws SlickException {
 		Input input = container.getInput();
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		
+		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			graphics.drawImage(playButton.getImageMouseOver(), playButton.getX(), 
 					playButton.getY());
@@ -123,9 +128,9 @@ public class StartState extends BasicGameState {
 		} else {
 			graphics.drawImage(quitButton.getImage(), quitButton.getX(), quitButton.getY());
 		}
-		// draw version number
 		mg.drawWaterMark();
-		graphics.drawImage(miscText, 0, 0);
+		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 	}

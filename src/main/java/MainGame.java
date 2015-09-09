@@ -33,6 +33,7 @@ public class MainGame extends StateBasedGame {
 	private Image backgroundImage;
 	private Image foreGroundImage;
 	private Image terminalImage;
+	private Image gameLogo;
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
 	private AngelCodeFont dosFont;
@@ -43,7 +44,7 @@ public class MainGame extends StateBasedGame {
 	
 	private static final int LIVES = 5;
 	private int lifeCount;
-	private int levelCounter = 0;
+	private int levelCounter = 9;
 	private String highscoresFile = "resources/highscores.txt";
 	private HighScores highscores;
 	
@@ -64,7 +65,7 @@ public class MainGame extends StateBasedGame {
 	private static final float DEFAULT_PLAYER_SPEED = 400f;
 	private static final float DEFAULT_LASER_WIDTH = 3f;
 	private static final float DEFAULT_LASER_SPEED = 1000f;
-	private static final int VERSION_STRING_X = 70;
+	private static final int VERSION_STRING_X = 164;
 	private static final int VERSION_STRING_Y_DEVIATION = 190;
 	
 	
@@ -137,6 +138,7 @@ public class MainGame extends StateBasedGame {
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
+		this.gameLogo = new Image("resources/menus/Menu_Logo.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
 		this.dosFont = new AngelCodeFont("resources/font/dosfont.fnt",
@@ -313,6 +315,13 @@ public class MainGame extends StateBasedGame {
 	 */
 	public Image getBackgroundImage() {
 		return backgroundImage;
+	}
+	
+	/**
+	 * @return the game logo image
+	 */
+	public Image getGameLogo() {
+		return gameLogo;
 	}
 
 	/**

@@ -412,7 +412,6 @@ public class GameState extends BasicGameState {
 	}
 
 	
-
 	private void processPause() {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
 			waitEsc = true;

@@ -73,7 +73,7 @@ public final class HighScoresParser {
 	public static void main(String[] args) {
 		HighScores hs = readHighScores("resources/highscores.txt");
 		//writeHighScores("resources/highscores.txt", hs);
-		System.out.println(hs.printHighScores());
+		System.out.println(hs.toString());
 	}
 
 }

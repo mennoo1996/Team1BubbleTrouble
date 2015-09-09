@@ -9,10 +9,12 @@ public class ButtonTest {
 	
 	Image i;
 	Button p;
+	Image i2;
 
 	@Before
 	public void setUp() throws Exception {
 		i = mock(Image.class);
+		i2 = mock(Image.class);
 	}
 
 	@Test
@@ -201,6 +203,58 @@ public class ButtonTest {
 		p = new Button(1, 2, 3, 4, i);
 		p.setHeight(18);
 		assertEquals(18, p.getHeight(), 0);
+	}
+	
+	@Test
+	public void testSecondConstructorX() {
+		p = new Button(1, 2, 3, 4, i, i2);
+		assertEquals(1, p.getX(), 0);
+	}
+	
+	@Test
+	public void testSecondConstructorY() {
+		p = new Button(1, 2, 3, 4, i, i2);
+		assertEquals(2, p.getY(), 0);
+		
+	}
+	
+	@Test
+	public void testSecondConstructurWidth() {
+		p = new Button(1, 2, 3, 4, i, i2);
+		assertEquals(3, p.getWidth(), 0);
+		
+	}
+	
+	@Test
+	public void testSecondConstructorHeight() {
+		p = new Button(1, 2, 3, 4, i, i2);
+		assertEquals(4, p.getHeight(), 0);
+	}
+	
+	@Test
+	public void testSecondConstructorImage() {
+		p = new Button(1, 2, 3, 4, i, i2);
+		assertEquals(i, p.getImage());
+	}
+	
+	@Test
+	public void testSecondConstructurSecondImage() {
+		p = new Button(1, 2, 3, 4, i, i2);
+		assertEquals(i2, p.getImageMouseOver());
+	}
+	
+	@Test
+	public void testSetImage() {
+		p = new Button(1, 2, 3, 4, i, i2);
+		p.setImage(i2);
+		assertEquals(i2, p.getImage());
+	}
+	
+	@Test
+	public void testSetImageMouseOver() {
+		p = new Button(1, 2, 3, 4, i, i2);
+		p.setImageMouseOver(i);
+		assertEquals(i, p.getImageMouseOver());
 	}
 
 

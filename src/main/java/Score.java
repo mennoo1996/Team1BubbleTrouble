@@ -1,17 +1,29 @@
 
+/**
+ * This class represents a score that a player has set.
+ * @author Menno
+ *
+ */
 public class Score {
 	
 	private int score;
 	private String name;
 	/**
-	 * @param score
-	 * @param name
+	 * @param score the score of the player
+	 * @param name the name of the player
 	 */
 	public Score(int score, String name) {
 		super();
 		this.score = score;
 		this.name = name;
 	}
+	
+	@Override
+	public String toString() {
+		String res = String.format("%5d%5s%4s%s", score, "|", "", name);
+		return res;
+	}
+	
 	/**
 	 * @return the score
 	 */
@@ -36,7 +48,5 @@ public class Score {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
 
 }

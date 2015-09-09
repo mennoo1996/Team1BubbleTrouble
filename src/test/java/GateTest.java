@@ -72,7 +72,6 @@ public class GateTest {
 		gate1.setFading(true);
 		gate1.update(0.1f);
 		
-		System.out.println(gate1.getHeightPercentage());
 		assertEquals(gate1.getHeightPercentage(), 0.5, 0);
 	}
 	
@@ -115,7 +114,7 @@ public class GateTest {
 
 	@Test
 	public void testIsDone() {
-		Gate gate1 = new Gate(500,550,50,200);
+		Gate gate1 = new Gate(500,550,50,200); 
 		assertFalse(gate1.isDone());
 	}
 
@@ -129,8 +128,7 @@ public class GateTest {
 	@Test
 	public void testGetRectangle() {
 		Gate gate1 = new Gate(500,550,50,200);
-		//Wait for the extension of the rectangle class
-		//assertEquals(gate1.getRectangle(), new Rectangle(500,550,50,200));
+		assertEquals(gate1.getRectangle(), new MyRectangle(500,550,50,200));
 	}
 
 	@Test

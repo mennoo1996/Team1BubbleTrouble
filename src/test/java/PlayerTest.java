@@ -1,20 +1,29 @@
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SpriteSheet;
 
 public class PlayerTest {
 	
 	MainGame mg;
 	Image i;
 	Player p;
+	SpriteSheet s;
+	GameState gs;
 
 	@Before
 	public void setUp() throws Exception {
 		i = mock(Image.class);
 		mg = new MainGame("maingame");
+		s = mock(SpriteSheet.class);
+		gs = mock(GameState.class);
 	}
 
 	@Test
@@ -42,9 +51,16 @@ public class PlayerTest {
 	}
 	
 	@Test
-	public void testPlayerImage() {
+	public void testPlayerGetImage() {
 		p = new Player(1, 2, 3, 4, i, mg);
 		assertEquals(i, p.getImage());
+	}
+	@Test
+	public void testPlayerSetImage() {
+		p = new Player(1, 2, 3, 4, i, mg);
+		Image j = mock(Image.class);
+		p.setImage(j);
+		assertEquals(j, p.getImage());
 	}
 
 	@Test
@@ -204,6 +220,49 @@ public class PlayerTest {
 		p.setHeight(18);
 		assertEquals(18, p.getHeight(), 0);
 	}
+	
+	@Test
+	public void testSpriteSheet() {
+		p = new Player(1, 2, 3, 4, i, mg);
+		p.setSpritesheet(s);
+		assertEquals(s, p.getSpritesheet());
+		
+	}
+	
+	@Test
+	public void testMovement() {
+		p = new Player(1, 2, 3, 4, i, mg);
+		p.setMovement(8);
+		assertEquals(8, p.getMovement());
+	}
+	
+	@Test
+	public void testMovementCounter() {
+		p = new Player(1, 2, 3, 4, i, mg);
+		p.resetMovementCounter();
+		p.incrementMovementCounter();
+		assertEquals(1, p.getMovementCounter());
+	}
+	
+	@Test
+	public void testMovementCounter2() {
+		p = new Player(1, 2, 3, 4, i, mg);
+		p.setMovementCounter_Max(0);
+		p.resetMovementCounter();
+		p.incrementMovementCounter();
+		assertEquals(0, p.getMovementCounter());
+	}
+	
+	@Test
+	public void testMovementCounterMax() {
+		p = new Player(1, 2, 3, 4, i, mg);
+		p.setMovementCounter_Max(5);
+		assertEquals(5, p.getMovementCounter_Max());
+	}
+	
+	
+	
+	
 
 
 }

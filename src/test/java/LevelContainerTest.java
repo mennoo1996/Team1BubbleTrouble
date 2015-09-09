@@ -1,4 +1,6 @@
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
@@ -6,7 +8,7 @@ import org.junit.Test;
 
 
 public class LevelContainerTest {
-	private MainGame mg = new MainGame("maingame");
+	private MainGame mg = mock(MainGame.class);
 
 	@Test
 	public void testLevelContainer() {
@@ -44,4 +46,38 @@ public class LevelContainerTest {
 		assertEquals(welp.size(),0);
 	}
 
+	// If anyone knows how to make the maingame have a container that isn't null be my guest
+//	@Test
+//	public void testInitialize1() throws SlickException {
+//		LevelContainer welp = new LevelContainer(mg);
+//		welp.initialize();
+//		assertEquals(welp.getLevels().size(), 10);
+//	}
+	
+	@Test
+	public void testSetLevels() {
+		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates = new ArrayList<Gate>();
+		circles.add(new BouncingCircle(200, 200, 45, mg.getStartingSpeed(), -50, mg.getGravity()));
+		Level level = new Level(40, circles, gates);
+		
+		ArrayList<Level> result = new ArrayList<Level>();
+		result.add(level);
+		LevelContainer welp = new LevelContainer(mg);
+		welp.setLevels(result);
+		assertEquals(welp.getLevels(),result);
+	}
+	
+	@Test
+	public void testInitialize() {
+		LevelContainer.setTesting(true);
+		LevelContainer lc = new LevelContainer(mg);
+		lc.initialize();
+		assertEquals(10, lc.size());
+		LevelContainer.setTesting(false);
+	}
+	
+
+		
+	
 }

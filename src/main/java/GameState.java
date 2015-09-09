@@ -149,6 +149,7 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
+	private static final int COIN_CHANCE = 20;
 	// Level ending, empty bar
 	
 	/**

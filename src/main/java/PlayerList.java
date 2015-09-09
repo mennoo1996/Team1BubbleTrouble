@@ -42,12 +42,12 @@ public class PlayerList {
 	}
 	
 	public void intersectPlayersWithCircle(BouncingCircle circle) {
-		if (playerList.get(0).getRectangle().intersects(circle)) {
+		if (playerList.get(0).getRectangle().intersects(circle) && !playerList.get(0).hasShield()) {
 			//LIVES FUNCTIONALITY
 			playerDeath(mg);
 		}
 		
-		if (mg.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)) {
+		if (mg.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)&& !playerList.get(1).hasShield()) {
 			//LIVES FUNCTIONALITY
 			playerDeath(mg);
 		}

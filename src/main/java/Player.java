@@ -3,6 +3,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 /**
  * This class represents a Player.
  * @author Menno
@@ -11,6 +16,8 @@ import org.newdawn.slick.SpriteSheet;
 public class Player {
 	//Method 1 code
 	//int lifeCount;
+
+	private boolean shield;
 	private float x;
 	private float y;
 	private float width;
@@ -24,16 +31,18 @@ public class Player {
 	private MainGame mg;
 	private GameState gs;
 	private Gate intersectingGate;
-	
+	// weapon management
+	private LinkedList<Powerup.PowerupType> weapons;
+
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final float HALF = 0.5f;
-
 	private int moveLeftKey;
 	private int moveRightKey;
 	private int shootKey;
 	
-	
+	private static final int POWERUP_DURATION = 10;
+
 	/**
 	 * @param x the x coordinate of the player
 	 * @param y the y coordinate of the player
@@ -55,6 +64,8 @@ public class Player {
 		moveLeftKey = Input.KEY_LEFT;
 		moveRightKey = Input.KEY_RIGHT;
 		shootKey = Input.KEY_SPACE;
+		this.weapons = new LinkedList<>();
+		this.shield = false;
 	}
 	
 	/**
@@ -65,6 +76,7 @@ public class Player {
 		processGates();
 		processWeapon(mg.getContainer(), deltaFloat);
 		processPlayerMovement(mg.getContainer(), deltaFloat);
+		processPowerups(mg.getContainer(), deltaFloat);
 	}
 	
 	private void processGates() {
@@ -81,24 +93,39 @@ public class Player {
 			intersectingGate = null;
 		}
 	}
+	
+	private void processPowerups(GameContainer container, float deltaFloat) {
+		ArrayList<Powerup> usedPowerups = new ArrayList<>();
+		for (Powerup powerup : gs.getDroppedPowerups()) {
+			powerup.update(gs, container, deltaFloat);
+
+			if (powerup.getRectangle().intersects(this.getRectangle())) {
+				this.addPowerup(powerup.getType());
+				usedPowerups.add(powerup);
+			}
+		}
+
+		for (Powerup used : usedPowerups) {
+			gs.getDroppedPowerups().remove(used);
+		}
+	}
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (gs.getSavedInput().isKeyPressed(shootKey) && !gs.isShot()) {
-            gs.setShot(true);
-            float x = this.getCenterX();
-            gs.setLaser(new Laser(x, container.getHeight() - gs.getFloor().getHeight(),
-            		mg.getLaserSpeed(), mg.getLaserWidth()));
-        }
+		if (gs.getSavedInput().isKeyPressed(shootKey) && (!gs.isShot() || (gs.getWeapon().getClass() == Spiky.class))) {
+			gs.setShot(true);
+			float x = this.getCenterX();
+			gs.setWeapon(this.getWeapon(container));
+		}
 
 		// Update laser
 		if (gs.isShot()) {
-            gs.getLaser().update(gs, deltaFloat);
-            // Disable laser when it has reached the ceiling
-            if (!gs.getLaser().isVisible()) {
-                gs.setShot(false);
-            }
-        }
+			gs.getWeapon().update(gs, deltaFloat);
+			// Disable laser when it has reached the ceiling
+			if (!gs.getWeapon().isVisible()) {
+				gs.setShot(false);
+			}
+		}
 	}
 	
 	private void processPlayerMovement(GameContainer container, float deltaFloat) {
@@ -119,6 +146,24 @@ public class Player {
         	   this.movement = 2;
            }
         }
+	}
+
+	private Weapon getWeapon(GameContainer container) {
+		if (weapons.isEmpty()) {
+			return new Weapon(x, container.getHeight() - gs.getFloor().getHeight(),
+					mg.getLaserSpeed(), mg.getLaserWidth());
+		}
+		Powerup.PowerupType subType = weapons.peekLast();
+		if (subType == Powerup.PowerupType.SPIKY) {
+			return new Spiky(x, container.getHeight() - gs.getFloor().getHeight(),
+					mg.getLaserSpeed(), mg.getLaserWidth());
+		}
+		if (subType == Powerup.PowerupType.INSTANT) {
+			return new InstantLaser(x, container.getHeight() - gs.getFloor().getHeight(),
+					mg.getLaserWidth());
+		}
+		// Wrong weapon type, time to crash hard.
+		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
 	}
 
 	/**
@@ -229,6 +274,41 @@ public class Player {
 	 */
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	/**
+	 * @return Whether or not the player has a shield
+	 */
+	public boolean hasShield() {
+		return shield;
+	}
+
+	/**
+	 * Add a powerup to the player.
+	 * @param type powerup type
+	 */
+	public void addPowerup(Powerup.PowerupType type) {
+		if (type == Powerup.PowerupType.INSTANT) {
+			addWeapon(type);
+		}
+		if (type == Powerup.PowerupType.SHIELD) {
+			addShield();
+		}
+		if (type == Powerup.PowerupType.SPIKY) {
+			addWeapon(type);
+		}
+	}
+
+	private void addShield() {
+		shield = true;
+		Executors.newScheduledThreadPool(1).schedule(() -> shield = false,
+				POWERUP_DURATION, TimeUnit.SECONDS);
+	}
+
+	private void addWeapon(Powerup.PowerupType type) {
+		weapons.add(type);
+		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(),
+				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
 	
 	/**

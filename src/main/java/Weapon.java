@@ -1,21 +1,18 @@
-
 /**
- * Class that represents a laser.
+ * Class that represents a weapon.
  * @author Menno
  *
  */
-public class Laser {
-	
+public class Weapon {
+
 	private float x;
 	private float y;
 	private float width;
 	private float height;
 	private float laserSpeed;
 	private boolean visible;
-	
 	private static final float HALF = 0.5f;
-	
-	
+
 	/**
 	 * Constructs a new laser.
 	 * @param x the x coordinate of the laser
@@ -23,7 +20,7 @@ public class Laser {
 	 * @param laserWidth the width of the laser
 	 * @param laserSpeed the speed of the laser
 	 */
-	public Laser(float x, float y,  float laserSpeed, float laserWidth) {
+	public Weapon(float x, float y, float laserSpeed, float laserWidth) {
 		super();
 		this.x = x - (HALF * laserWidth);
 		this.y = y;
@@ -133,8 +130,4 @@ public class Laser {
 	public void setLaserSpeed(float laserSpeed) {
 		this.laserSpeed = laserSpeed;
 	}
-	
-	
-	
-
 }

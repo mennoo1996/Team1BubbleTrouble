@@ -90,7 +90,7 @@ public class MainGame extends StateBasedGame {
 		this.playerImageString = "Playersprite.png";
 		this.lifeCount = LIVES;
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
-		this.multiplayer = true;
+		this.multiplayer = false;
 	}
 
 	/**

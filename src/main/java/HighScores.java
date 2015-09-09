@@ -61,6 +61,12 @@ public class HighScores {
 	 */
 	public void sort() {
 		Collections.sort(scoreList, new ScoresComparator());
+		
+		if(scoreList.size() > 10) {
+			for(int i = 10; i < scoreList.size(); i++) {
+				scoreList.remove(i);
+			}
+		}
 	}
 	
 }

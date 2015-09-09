@@ -70,7 +70,7 @@ public class MainGame extends StateBasedGame {
 	private static final float DEFAULT_SPEED_STEP = 0.5f;
 	private static final float DEFAULT_PLAYER_SPEED = 400f;
 	private static final float DEFAULT_LASER_WIDTH = 3f;
-	private static final float DEFAULT_LASER_SPEED = 1000f;
+	private static final float DEFAULT_LASER_SPEED = 500f;
 	private static final int PLAYER1_X_DEVIATION = 80;
 	private static final int PLAYER2_X_DEVIATION = 380;
 	private static final int PLAYER_Y_DEVIATION = 295;

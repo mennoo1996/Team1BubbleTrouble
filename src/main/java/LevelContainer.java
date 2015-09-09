@@ -50,6 +50,10 @@ public class LevelContainer {
 	private static final int LEVEL_10_AMOUNT_OF_BALLS = 20;
 	private static final int LEVEL_10_BALL_FACTOR = 10;
 	private static final int LEVEL_10_XSPEED = 50;
+	private static final int TESTING_CONTAINER_WIDTH_HALF = 800;
+	private static final int TESTING_CONTAINER_HEIGHT = 1000;
+	
+	private static boolean testing = false;
 	
 	/**
 	 * Initialize the container.
@@ -96,8 +100,14 @@ public class LevelContainer {
 						RADIUS_3, mg.getStartingSpeed(), DEFAULT_YSPEED, mg.getGravity()));
 				circles.add(circle11);
 				ArrayList<Gate> gates = new ArrayList<Gate>();
-				Gate gate11 = new Gate(container.getWidth() / 2 + LEVEL_1_GATE_X_DEVIATION,
-						0, LEVEL_1_GATE_WIDTH, container.getHeight());
+				Gate gate11;
+				if (!testing) {
+					gate11 = new Gate(container.getWidth() / 2 + LEVEL_1_GATE_X_DEVIATION,
+							0, LEVEL_1_GATE_WIDTH, container.getHeight());
+				} else {
+					gate11 = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION,
+							0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
+				}
 				gate11.addToRequirements(circle11);
 				gates.add(gate11);
 				Level level = new Level(LEVEL_1_TIME, circles, gates);
@@ -245,6 +255,20 @@ public class LevelContainer {
 	 */
 	public int size() {
 		return levels.size();
+	}
+
+	/**
+	 * @return the testing
+	 */
+	public static boolean isTesting() {
+		return testing;
+	}
+
+	/**
+	 * @param testing the testing to set
+	 */
+	public static void setTesting(boolean testing) {
+		LevelContainer.testing = testing;
 	}
 	
 	

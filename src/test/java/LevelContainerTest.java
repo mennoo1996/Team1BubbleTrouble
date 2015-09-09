@@ -68,6 +68,15 @@ public class LevelContainerTest {
 		assertEquals(welp.getLevels(),result);
 	}
 	
+	@Test
+	public void testInitialize() {
+		LevelContainer.setTesting(true);
+		LevelContainer lc = new LevelContainer(mg);
+		lc.initialize();
+		assertEquals(10, lc.size());
+		LevelContainer.setTesting(false);
+	}
+	
 
 		
 	

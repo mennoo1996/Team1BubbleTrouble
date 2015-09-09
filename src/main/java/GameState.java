@@ -27,7 +27,7 @@ public class GameState extends BasicGameState {
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
-	private ArrayList<floatingScore> floatingScoreList;
+	private ArrayList<FloatingScore> floatingScoreList;
 	protected ArrayList<Gate> gateList;
 	private Player player;
 	private int score;
@@ -192,7 +192,7 @@ public class GameState extends BasicGameState {
 		// Add arraylists of circles
 		//circleList = new ArrayList<BouncingCircle>(); // active list
 		circleList = levels.getLevel(mg.levelCounter).getCircles();
-		floatingScoreList = new ArrayList<floatingScore>();
+		floatingScoreList = new ArrayList<FloatingScore>();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		// Add gates
 		gateList = levels.getLevel(mg.levelCounter).getGates();
@@ -303,7 +303,7 @@ public class GameState extends BasicGameState {
 		for (BouncingCircle circle : shotList) {
             // if the circle hasn't been handled
             if (!circle.isDone()) {
-            	floatingScoreList.add(new floatingScore(circle));
+            	floatingScoreList.add(new FloatingScore(circle));
                 // remove circle from active list
                 if (circleList.contains(circle)) {
                     circleList.remove(circle);
@@ -367,9 +367,9 @@ public class GameState extends BasicGameState {
 	}
 
 	private void updateFloatingScores(float deltaFloat) {
-		Iterator<floatingScore> scoreListIterator = floatingScoreList.iterator();
+		Iterator<FloatingScore> scoreListIterator = floatingScoreList.iterator();
 		while(scoreListIterator.hasNext()) {
-			floatingScore score = scoreListIterator.next();
+			FloatingScore score = scoreListIterator.next();
 			if(score.isDead()) {
 				scoreListIterator.remove();
 			} else {
@@ -605,7 +605,7 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawFloatingScores() {
-		for (floatingScore score : floatingScoreList) {
+		for (FloatingScore score : floatingScoreList) {
 			mg.dosFont.drawString(score.getX(), score.getY(), Integer.toString(score.getScore()), 
 					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS, score.getOpacity()));
 		}

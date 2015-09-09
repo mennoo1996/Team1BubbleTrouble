@@ -114,7 +114,7 @@ public class GateTest {
 
 	@Test
 	public void testIsDone() {
-		Gate gate1 = new Gate(500,550,50,200);
+		Gate gate1 = new Gate(500,550,50,200); 
 		assertFalse(gate1.isDone());
 	}
 

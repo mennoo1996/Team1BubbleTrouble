@@ -7,7 +7,7 @@ import org.junit.Test;
 public class floatingScoreTest {
 
 	BouncingCircle c;
-	floatingScore s;
+	FloatingScore s;
 	
 	@Before
 	public void setup() {
@@ -16,46 +16,46 @@ public class floatingScoreTest {
 	
 	@Test
 	public void updateTest() {
-		s = new floatingScore(c);
+		s = new FloatingScore(c);
 		s.update(0.1f, 10);
 		assertFalse(s.getY() == c.getCenterY());
 	}
 	
 	@Test
 	public void isDeadTest() {
-		s = new floatingScore(c);
+		s = new FloatingScore(c);
 		s.update(0.1f, 1000);
 		assertTrue(s.isDead());
 	}
 	
 	@Test
 	public void isDeadTest_Negative() {
-		s = new floatingScore(c);
+		s = new FloatingScore(c);
 		assertFalse(s.isDead());
 	}
 	
 	@Test
 	public void getScoreTest() {
-		s = new floatingScore(c);
+		s = new FloatingScore(c);
 		assertEquals(50, s.getScore());
 	}
 	
 	@Test
 	public void getOpacityTest() {
-		s = new floatingScore(c);
+		s = new FloatingScore(c);
 		s.update(0.1f, 500);
 		assertTrue(s.getOpacity() == 0.5f);
 	}
 
 	@Test
 	public void getXTest() {
-		s = new floatingScore(c);
+		s = new FloatingScore(c);
 		assertTrue(s.getX() == c.getCenterX());
 	}
 	
 	@Test
 	public void getYTest() {
-		s = new floatingScore(c);
+		s = new FloatingScore(c);
 		assertTrue(s.getY() == c.getCenterY());
 	}
 	

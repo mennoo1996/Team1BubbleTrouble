@@ -2,7 +2,7 @@
  * Class that represents a floating score element.
  * @author Mark
  */
-public class floatingScore {
+public class FloatingScore {
 	
 	private static final float MAX_SPEED = 100f;
 	private static final float MAX_LIFE = 1000;
@@ -10,70 +10,70 @@ public class floatingScore {
 	/**
 	 * Variables.
 	 */
-	private int SCORE;
-	private float X;
-	private float Y;
-	private float SPEED;
-	private float LIFE;
-	private float OPACITY = 1.0f;
+	private int score;
+	private float x;
+	private float y;
+	private float speed;
+	private float life;
+	private float opacity = 1.0f;
 	
 	/**
-	 * Constructor class for a floating score
+	 * Constructor class for a floating score.
 	 * @param circle the circle this score draws its information from
 	 */
-	public floatingScore(BouncingCircle circle) {
-		this.SCORE = circle.getScore();
-		this.X = circle.getCenterX();
-		this.Y = circle.getCenterY();
-		this.SPEED = MAX_SPEED;
-		this.LIFE = MAX_LIFE;
+	public FloatingScore(BouncingCircle circle) {
+		this.score = circle.getScore();
+		this.x = circle.getCenterX();
+		this.y = circle.getCenterY();
+		this.speed = MAX_SPEED;
+		this.life = MAX_LIFE;
 	}
 	
 	/**
-	 * Update function for floating score
+	 * Update function for floating score.
 	 * @param deltaFloat time since last frame
 	 * @param timeDelta time passed in counter
 	 */
 	public void update(float deltaFloat, long timeDelta) {
-		Y -= SPEED*deltaFloat;
-		LIFE -= timeDelta;
-		OPACITY = LIFE/MAX_LIFE;
-		SPEED = MAX_SPEED * OPACITY;
+		y -= speed * deltaFloat;
+		life -= timeDelta;
+		opacity = life / MAX_LIFE;
+		speed = MAX_SPEED * opacity;
 	}
 
 	/**
 	 * @return whether this floating score is still alive
 	 */
 	public boolean isDead() {
-		return LIFE <= 0;
+		return life <= 0;
 	}
 	
 	/**
 	 * @return The score this floating score displays
 	 */
 	public int getScore() {
-		return SCORE;
+		return score;
 	}
 	
 	/**
 	 * @return Opacity of this floating score
 	 */
 	public float getOpacity() {
-		return OPACITY;
+		return opacity;
 	}
 	
 	/**
 	 * @return X-position of this floating score
 	 */
 	public float getX() {
-		return X;
+		return x;
 	}
 	
 	/**
 	 * @return Y-position of this floating score
 	 */
 	public float getY() {
-		return Y;
+		return y;
 	}
 	
 }

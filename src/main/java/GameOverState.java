@@ -41,20 +41,20 @@ public class GameOverState extends BasicGameState {
 	private static final int BUTTON_WIDTH = 1000;
 	private static final int BUTTON_HEIGHT = 50;
 	
-	private static final int LOGO_X = 160;
-	private static final int LOGO_Y = 110;
-	private static final int SEPARATOR_X = 164;
-	private static final int SEPARATOR_Y = 190;
-	
-	private static final int BOTTOM_TEXT_OFFSET_X = 250;
-	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
-	
 	private static final int MOUSE_OVER_RECT_X = 500;
+	
 	private static final int TEXT_FIELD_X = 164;
 	private static final int TEXT_FIELD_Y = 438;
 	private static final int TEXT_FIELD_WIDTH = 700;
 	private static final int TEXT_FIELD_HEIGHT = 60;
 	private static final int TF_BACKGROUND_DEVIATION = 27;
+	
+	private static final int LOGO_X = 160;
+	private static final int LOGO_Y = 110;
+	private static final int SEPARATOR_X = 164;
+	private static final int SEPARATOR_Y = 190;
+	private static final int BOTTOM_TEXT_OFFSET_X = 250;
+	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
 	
 	/**
 	 * Constructor.
@@ -90,8 +90,8 @@ public class GameOverState extends BasicGameState {
 		
 		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_SaveHighscore.png"),
-				new Image("resources/Menus/Menu_Button_SaveHighscore2.png"));
+				new Image("resources/Menus/Menu_Button_Quit.png"),
+				new Image("resources/Menus/Menu_Button_Quit2.png"));
 		
 		tfBackground = new Image("resources/textfield.png");
 
@@ -105,7 +105,6 @@ public class GameOverState extends BasicGameState {
 		tf.setBorderColor(null);
 		tf.setFocus(true);
 		inputMessage = null;
-
 	}
 	
 	/**
@@ -124,6 +123,7 @@ public class GameOverState extends BasicGameState {
 					// Start over
 					mg.resetLifeCount();
 					mg.resetLevelCount();
+					mg.setScore(0);
 					sbg.enterState(1);
 				} 
 				else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
@@ -132,6 +132,7 @@ public class GameOverState extends BasicGameState {
 				}
 				else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 					// Go to startState
+					mg.setScore(0);
 					mg.setLevelCounter(0);
 					sbg.enterState(0);
 				}
@@ -179,7 +180,6 @@ public class GameOverState extends BasicGameState {
 		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
-		
 	}
 	
 	/**

@@ -123,8 +123,8 @@ public class SettingsState extends BasicGameState {
 			throws SlickException {
 		Input input = container.getInput();
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "> You can choose a player skin");
-		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "> by clicking on it");
+		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# You can choose a player skin");
+		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# by clicking on it");
 		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		

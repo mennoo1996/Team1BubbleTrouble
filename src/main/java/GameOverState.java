@@ -142,11 +142,10 @@ public class GameOverState extends BasicGameState {
 		// draw background
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 
-		mg.getDosFont().drawString(GAME_OVER_X, GAME_OVER_Y , "> Game Over Sucker!");
-		mg.getDosFont().drawString(POINTS_X, POINTS_Y, "> Your score was: " + mg.getScore());
-		mg.getDosFont().drawString(NAME_X, NAME_Y, "> Please enter your name below");
-//		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(), 
-//				playAgainButton.getY());
+		mg.getDosFont().drawString(GAME_OVER_X, GAME_OVER_Y , "# Game Over Sucker!");
+		mg.getDosFont().drawString(POINTS_X, POINTS_Y, "# Your score was: " + mg.getScore());
+		mg.getDosFont().drawString(NAME_X, NAME_Y, "# Please enter your name below");
+
 		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
 				tf.getY() - TF_BACKGROUND_DEVIATION);
 		tf.render(container, graphics);

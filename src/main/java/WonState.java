@@ -97,14 +97,6 @@ public class WonState extends BasicGameState {
 				}
 			}
 			
-			// If mouse is pressed inside the button, go to the gameState
-//			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-//				if (playAgainButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-//					mg.setLevelCounter(0);
-//					sbg.enterState(1);
-//				}
-//			}
-			
 		}
 
 	/**
@@ -121,9 +113,9 @@ public class WonState extends BasicGameState {
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		// draw string and button
 		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y,
-				"> You won, you are the champion!");
+				"# You won, you are the champion!");
 		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y,
-				"> Your score was: " + mg.getScore());
+				"# Your score was: " + mg.getScore());
 		renderButtons(container, graphics);
 		mg.drawWaterMark();
 		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);

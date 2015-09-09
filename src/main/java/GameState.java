@@ -255,7 +255,7 @@ public class GameState extends BasicGameState {
             circle.update(this, container, deltaFloat);
 
             // if player touches circle (for the first frame)
-            if (player.getRectangle().intersects(circle)) {
+            if (player.getRectangle().intersects(circle) && !player.hasShield()) {
 
                 //LIVES FUNCTIONALITY
                 playerDeath(sbg);

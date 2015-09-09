@@ -150,7 +150,7 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
-	private static final int POWERUP_CHANCE = 5;
+	private static final int POWERUP_CHANCE = 20;
 	// Level ending, empty bar
 	
 	/**
@@ -264,7 +264,6 @@ public class GameState extends BasicGameState {
 		player.update(deltaFloat);
 		processPause();
 		processCircles(container, sbg, deltaFloat);
-		processPowerups(container, deltaFloat);
 		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate
 		updateGateExistence(deltaFloat);
@@ -291,22 +290,6 @@ public class GameState extends BasicGameState {
             playerDeath(sbg);
         }
 		prevTime = curTime;
-	}
-
-	private void processPowerups(GameContainer container, float deltaFloat) {
-		ArrayList<Powerup> usedPowerups = new ArrayList<>();
-		for (Powerup powerup : droppedPowerups) {
-			powerup.update(this, container, deltaFloat);
-
-			if (powerup.getRectangle().intersects(player.getRectangle())) {
-				player.addPowerup(powerup.getType());
-				usedPowerups.add(powerup);
-			}
-		}
-
-		for (Powerup used : usedPowerups) {
-			droppedPowerups.remove(used);
-		}
 	}
 
 	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
@@ -667,9 +650,9 @@ public class GameState extends BasicGameState {
 				amount = Math.round((COUNT_IN_TIME - timeDelta) / COUNT_IN_TIME * COUNT_FACTOR);
 
 		graphics.setColor(new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR));
-		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() 
+		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
 				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
 		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
@@ -898,5 +881,12 @@ public class GameState extends BasicGameState {
 	 */
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
+	}
+
+	/**
+	 * @return the dropped powerups
+	 */
+	public ArrayList<Powerup> getDroppedPowerups() {
+		return this.droppedPowerups;
 	}
 }

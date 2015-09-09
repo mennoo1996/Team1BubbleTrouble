@@ -3,6 +3,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -68,6 +69,7 @@ public class Player {
 		processGates();
 		processWeapon(mg.getContainer(), deltaFloat);
 		processPlayerMovement(mg.getContainer(), deltaFloat);
+		processPowerups(mg.getContainer(), deltaFloat);
 	}
 	
 	private void processGates() {
@@ -366,7 +368,20 @@ public class Player {
 		this.gs = gs;
 	}
 
-	
-	
-	
+
+	void processPowerups(GameContainer container, float deltaFloat) {
+		ArrayList<Powerup> usedPowerups = new ArrayList<>();
+		for (Powerup powerup : gs.getDroppedPowerups()) {
+			powerup.update(gs, container, deltaFloat);
+
+			if (powerup.getRectangle().intersects(getRectangle())) {
+				addPowerup(powerup.getType());
+				usedPowerups.add(powerup);
+			}
+		}
+
+		for (Powerup used : usedPowerups) {
+			gs.getDroppedPowerups().remove(used);
+		}
+	}
 }

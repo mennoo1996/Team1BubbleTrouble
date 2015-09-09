@@ -51,6 +51,9 @@ public class GameOverState extends BasicGameState {
 	private static final int INPUT_MESSAGE_X = 100;
 	private static final int INPUT_MESSAGE_Y = 320;
 	
+	private static final int HIGHSCORES_X = 1000;
+	private static final int HIGHSCORES_Y = 100;
+	
 	/**
 	 * Constructor.
 	 * @param mg the maingame in which this state will be used.
@@ -163,6 +166,8 @@ public class GameOverState extends BasicGameState {
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		
+		String highScoresString = mg.getHighscores().toString();
+		mg.getDosFont().drawString(HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 	}
 	
 	private void renderButtons(GameContainer container, Graphics graphics) {
@@ -190,6 +195,7 @@ public class GameOverState extends BasicGameState {
 		}
 	}
 
+	
 	
 	/**
 	 * returns id of the state.

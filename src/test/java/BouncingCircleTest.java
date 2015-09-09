@@ -2,14 +2,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BouncingCircleTest {
 	
 	BouncingCircle c;
@@ -22,7 +26,7 @@ public class BouncingCircleTest {
 		mg = new MainGame("TestGame");
 		gs = new GameState(mg);
 		
-		//gc = mock(GameContainer.class);
+		mg = mock(MainGame.class);
 		
 	}
 	
@@ -405,6 +409,90 @@ public class BouncingCircleTest {
 		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
 		c.setHitCeiling(true);
 		assertTrue(c.isHitCeiling());
+	}
+	
+	@Test
+	public void testGetSpeedForRadius20() {
+		c = new BouncingCircle(1, 2, 20, 4, 5, 6);
+		assertEquals(470, c.getSpeedForRadius(), 0);
+	}
+	
+	@Test
+	public void testGetSpeedForRadius30() {
+		c = new BouncingCircle(1, 2, 30, 4, 5, 6);
+		assertEquals(530, c.getSpeedForRadius(), 0);
+	}
+	
+	@Test
+	public void testGetSpeedForRadius45() {
+		c = new BouncingCircle(1, 2, 45, 4, 5, 6);
+		assertEquals(570, c.getSpeedForRadius(), 0);
+	}
+	
+	@Test
+	public void testGetSpeedForRadius65() {
+		c = new BouncingCircle(1, 2, 65, 4, 5, 6);
+		assertEquals(610, c.getSpeedForRadius(), 0);
+	}
+	
+	@Test
+	public void testGetSpeedForRadius90() {
+		c = new BouncingCircle(1, 2, 90, 4, 5, 6);
+		assertEquals(650, c.getSpeedForRadius(), 0);
+	}
+	
+	@Test
+	public void testGetSpeedForRadius10() {
+		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
+		assertEquals(360, c.getSpeedForRadius(), 0);
+	}
+	
+	@Test
+	public void testGetSpeedForRadiusWrongRadius() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(0, c.getSpeedForRadius(), 0);
+	}
+	
+	@Test
+	public void testGetNewRadius10() {
+		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
+		assertEquals(10, c.getNewRadius(), 0);
+	}
+	
+	@Test
+	public void testGetNewRadius20() {
+		c = new BouncingCircle(1, 2, 20, 4, 5, 6);
+		assertEquals(10, c.getNewRadius(), 0);
+	}
+	
+	@Test
+	public void testGetNewRadius30() {
+		c = new BouncingCircle(1, 2, 30, 4, 5, 6);
+		assertEquals(20, c.getNewRadius(), 0);
+	}
+	
+	@Test
+	public void testGetNewRadius45() {
+		c = new BouncingCircle(1, 2, 45, 4, 5, 6);
+		assertEquals(30, c.getNewRadius(), 0);
+	}
+	
+	@Test
+	public void testGetNewRadius65() {
+		c = new BouncingCircle(1, 2, 65, 4, 5, 6);
+		assertEquals(45, c.getNewRadius(), 0);
+	}
+	
+	@Test
+	public void testGetNewRadius90() {
+		c = new BouncingCircle(1, 2, 90, 4, 5, 6);
+		assertEquals(65, c.getNewRadius(), 0);
+	}
+	
+	@Test
+	public void testGetNewRadiusWrongRadius() {
+		c = new BouncingCircle(1, 2, 3, 4, 5, 6);
+		assertEquals(0, c.getNewRadius(), 0);
 	}
 	
 

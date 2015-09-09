@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 
@@ -6,7 +7,7 @@ import org.junit.Test;
 
 
 public class LevelContainerTest {
-	private MainGame mg = new MainGame("maingame");
+	private MainGame mg = mock(MainGame.class);
 
 	@Test
 	public void testLevelContainer() {
@@ -65,4 +66,17 @@ public class LevelContainerTest {
 		welp.setLevels(result);
 		assertEquals(welp.getLevels(),result);
 	}
+	
+	@Test
+	public void testInitialize() {
+		LevelContainer.setTesting(true);
+		LevelContainer lc = new LevelContainer(mg);
+		lc.initialize();
+		assertEquals(10, lc.size());
+		LevelContainer.setTesting(false);
+	}
+	
+
+		
+	
 }

@@ -1,11 +1,11 @@
+import java.util.Calendar;
+
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-
-import com.ibm.icu.util.Calendar;
 
 /**
  * The main game object - basically the overall control system.
@@ -42,7 +42,7 @@ public class MainGame extends StateBasedGame {
 	
 	private int score;
 	
-	private static final int LIVES = 1;
+	private static final int LIVES = 5;
 	private int lifeCount;
 	private int levelCounter = 0;
 	private String highscoresFile = "resources/highscores.txt";

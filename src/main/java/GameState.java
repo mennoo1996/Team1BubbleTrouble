@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -27,6 +28,7 @@ public class GameState extends BasicGameState {
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
+	private ArrayList<Powerup> droppedPowerups;
 	private ArrayList<FloatingScore> floatingScoreList;
 	private ArrayList<Gate> gateList;
 
@@ -63,14 +65,14 @@ public class GameState extends BasicGameState {
 	private boolean waitForLevelEnd = false;
 	
 	// level objects
-	private Laser laser;
+	private Weapon weapon;
 	private MyRectangle floor;
 	private MyRectangle leftWall;
 	private MyRectangle rightWall;
 	private MyRectangle ceiling;
 	private Input savedInput;
 	private boolean shot;
-	
+
 	private LevelContainer levels;
 	
 	// CONSTANTS
@@ -146,7 +148,7 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
-	
+	private static final int POWERUP_CHANCE = 20;
 	// Level ending, empty bar
 	
 	/**
@@ -170,7 +172,6 @@ public class GameState extends BasicGameState {
 		setShot(false);
 		score = 0;
 		levels.initialize();
-		
 		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
 		startTime = System.currentTimeMillis();
 		timeRemaining = totaltime;
@@ -194,6 +195,7 @@ public class GameState extends BasicGameState {
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		// Add gates
 		gateList = levels.getLevel(mg.getLevelCounter()).getGates();
+		droppedPowerups = new ArrayList<>();
 	}
 	
 	
@@ -260,6 +262,7 @@ public class GameState extends BasicGameState {
 		player.update(deltaFloat);
 		processPause();
 		processCircles(container, sbg, deltaFloat);
+		processPowerups(container, deltaFloat);
 		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate
 		updateGateExistence(deltaFloat);
@@ -288,7 +291,21 @@ public class GameState extends BasicGameState {
 		prevTime = curTime;
 	}
 
-	
+	private void processPowerups(GameContainer container, float deltaFloat) {
+		ArrayList<Powerup> usedPowerups = new ArrayList<>();
+		for (Powerup powerup : droppedPowerups) {
+			powerup.update(this, container, deltaFloat);
+
+			if (powerup.getRectangle().intersects(player.getRectangle())) {
+				player.addPowerup(powerup.getType());
+				usedPowerups.add(powerup);
+			}
+		}
+
+		for (Powerup used : usedPowerups) {
+			droppedPowerups.remove(used);
+		}
+	}
 
 	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
 		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
@@ -313,9 +330,9 @@ public class GameState extends BasicGameState {
                 if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
                 	splits = circle.getSplittedCircles(mg);
                     circleList.addAll(splits);
-                    // if it was part of the gate reqs, add to new gate reqs
+					checkBonus(circle);
                 }
-                // if it was part of the gate reqs remove it from the gate reqs (+ add new ones)
+				// if it was part of the gate reqs, add to new gate reqs
                 for (Gate gate : gateList) {
                 	if (gate.getRequired().contains(circle)) {
                 		gate.getRequired().remove(circle);
@@ -343,17 +360,17 @@ public class GameState extends BasicGameState {
             circle.update(this, container, deltaFloat);
 
             // if player touches circle (for the first frame)
-            if (player.getRectangle().intersects(circle)) {
+            if (player.getRectangle().intersects(circle) && !player.hasShield()) {
 
                 //LIVES FUNCTIONALITY
                 playerDeath(sbg);
             }
 
             // if laser intersects circle
-            if (isShot() && getLaser().getRectangle().intersects(circle)) {
+            if (isShot() && getWeapon().getRectangle().intersects(circle)) {
                 // it has been shot and disabled
                 shotList.add(circle);
-                getLaser().setVisible(false);
+                getWeapon().setVisible(false);
             }
 
             if (circle.isHitCeiling()) {
@@ -415,12 +432,8 @@ public class GameState extends BasicGameState {
 	private void processPause() {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
 			waitEsc = true;
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					waitEsc = false;
-				}
-			}, PAUSE_FACTOR);
+			Executors.newScheduledThreadPool(1).schedule(() -> waitEsc = false,
+					PAUSE_FACTOR, TimeUnit.MILLISECONDS);
 			playingState = false;
         }
 	}
@@ -452,17 +465,16 @@ public class GameState extends BasicGameState {
 		graphics.drawImage(ceilingImage, getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION,
 				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION);
 		drawGatesLaser(container, graphics);
-		// draw player
 		drawPlayer(container, graphics);
+		drawPowerups(graphics);
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);
-		// Draw timer countdown bar
 		drawCountdownBar(container, graphics);
 		// Draw level/Score data
 		mg.getDosFont().drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mg.getLevelCounter() + 1));
-		mg.getDosFont().drawString(container.getWidth() / 2, container.getHeight() 
+		mg.getDosFont().drawString(container.getWidth() / 2, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
@@ -470,7 +482,7 @@ public class GameState extends BasicGameState {
 		}
 		drawMiscellaneous(container, graphics);
 	}
-	
+
 	private void drawGatesLaser(GameContainer container, Graphics graphics) {
 		// draw all active gates
 				drawActiveGates(container, graphics);
@@ -480,7 +492,7 @@ public class GameState extends BasicGameState {
 					drawWeapon(graphics);
 				}
 	}
-	
+
 	private void drawMiscellaneous(GameContainer container, Graphics graphics) {
 		if (!playingState) {
 			drawPausedScreen(container, graphics);
@@ -498,16 +510,16 @@ public class GameState extends BasicGameState {
 		// show correct health lights
 		drawHealth(graphics);
 	}
-	
+
 	private void drawPlayer(GameContainer container, Graphics graphics) {
 		if (player.getMovement() == 2) {
 			player.incrementMovementCounter();
 			int sp = SPRITE_SHEET_THREE;
-			if (player.getMovementCounter() > player.getMovementCounter_Max() 
+			if (player.getMovementCounter() > player.getMovementCounter_Max()
 					* MOVEMENT_COUNTER_FACTOR) {
 				sp = SPRITE_SHEET_FOUR;
 			}
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX() 
+			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX()
 					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
 		} else if (player.getMovement() == 1) {
 			player.incrementMovementCounter();
@@ -526,6 +538,13 @@ public class GameState extends BasicGameState {
 		player.setMovement(0);
 	}
 
+	private void drawPowerups(Graphics graphics) {
+		for (Powerup pow : droppedPowerups) {
+			graphics.fillRect(pow.getX(), pow.getY(),
+					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
+		}
+	}
+
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
 		for (int x = 0; x < fractionTimeParts; x++) {
 			//counterBarImage.rotate(0.5f*x); // EPIC
@@ -537,11 +556,11 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawWeapon(Graphics graphics) {
-		graphics.drawImage(lasertipimage, getLaser().getX() - LASER_X_DEVIATION,
-				getLaser().getY() - LASER_TIP_Y_DEVIATION);
-		graphics.drawImage(laserbeamimage, getLaser().getX() - LASER_X_DEVIATION,
-				getLaser().getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, getLaser().getX()
-				+ LASER_BEAM_X2_DEVIATION, getLaser().getRectangle().getMaxY(), 0, 0,
+		graphics.drawImage(lasertipimage, getWeapon().getX() - LASER_X_DEVIATION,
+				getWeapon().getY() - LASER_TIP_Y_DEVIATION);
+		graphics.drawImage(laserbeamimage, getWeapon().getX() - LASER_X_DEVIATION,
+				getWeapon().getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, getWeapon().getX()
+				+ LASER_BEAM_X2_DEVIATION, getWeapon().getRectangle().getMaxY(), 0, 0,
 				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2);
 	}
 
@@ -775,6 +794,22 @@ public class GameState extends BasicGameState {
 		this.gateList = gatelist;
 	}
 
+	private void checkBonus(BouncingCircle circle) {
+		// 5% of the time
+		final int total = 100;
+		int randInt = new Random().nextInt(total) + 1;
+		if (randInt <= POWERUP_CHANCE) {
+			dropPowerup(circle);
+		}
+	}
+
+	private void dropPowerup(BouncingCircle circle) {
+		// Get a random powerup
+		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
+				.nextInt(Powerup.PowerupType.values().length)];
+		droppedPowerups.add(new Powerup(circle.getX(), circle.getY(), newPowerup));
+	}
+
 	/**
 	 * Get the MainGame.
 	 * @return the maingame
@@ -850,17 +885,14 @@ public class GameState extends BasicGameState {
 	/**
 	 * @return the laser
 	 */
-	public Laser getLaser() {
-		return laser;
+	public Weapon getWeapon() {
+		return weapon;
 	}
 
 	/**
-	 * @param laser the laser to set
+	 * @param weapon the weapon to set
 	 */
-	public void setLaser(Laser laser) {
-		this.laser = laser;
+	public void setWeapon(Weapon weapon) {
+		this.weapon = weapon;
 	}
-	
-	
-
 }

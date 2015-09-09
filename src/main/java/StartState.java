@@ -140,4 +140,12 @@ public class StartState extends BasicGameState {
 	public int getID() {
 		return 0;
 	}
+	
+	/**
+	 * Get the main game.
+	 * @return the maingame
+	 */
+	public MainGame getMainGame() {
+		return mg;
+	}
 }

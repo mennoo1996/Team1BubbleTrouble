@@ -63,6 +63,7 @@ public class Player {
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
+		System.out.println(gs);
 		for (Gate someGate :gs.getGateList()) {
 			if (this.getRectangle().intersects(someGate.getRectangle())) {
 				freeToRoam = false;
@@ -288,6 +289,22 @@ public class Player {
 	public void setMovementCounter_Max(int newMax) {
 		movementCounterMax = newMax;
 	}
+
+	/**
+	 * @return the gs
+	 */
+	public GameState getGs() {
+		return gs;
+	}
+
+	/**
+	 * @param gs the gs to set
+	 */
+	public void setGs(GameState gs) {
+		this.gs = gs;
+	}
+
+	
 	
 	
 }

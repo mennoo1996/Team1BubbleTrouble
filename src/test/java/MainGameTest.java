@@ -288,7 +288,7 @@ public class MainGameTest {
 	
 	@Test
 	public void testGetDefaultLaserSpeed() {
-		assertEquals(1000, MainGame.getDefaultLaserSpeed(), 0);
+		assertEquals(500, MainGame.getDefaultLaserSpeed(), 0);
 	}
 
 }

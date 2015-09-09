@@ -149,4 +149,20 @@ public class SettingsState extends BasicGameState {
 	public int getID() {
 		return STATE_ID;
 	}
+
+	/**
+	 * @return the mg
+	 */
+	public MainGame getMg() {
+		return mg;
+	}
+
+	/**
+	 * @param mg the mg to set
+	 */
+	public void setMg(MainGame mg) {
+		this.mg = mg;
+	}
+	
+	
 }

@@ -138,6 +138,7 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
+	private static final int COIN_CHANCE = 20;
 	// Level ending, empty bar
 	
 	/**
@@ -559,9 +560,9 @@ public class GameState extends BasicGameState {
 
 	private void drawFloatingScores() {
 		for (FloatingScore score : floatingScoreList) {
-			mg.getDosFont().drawString(score.getX(), score.getY(), 
-					Integer.toString(score.getScore()), 
-					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS, 
+			mg.getDosFont().drawString(score.getX(), score.getY(),
+					Integer.toString(score.getScore()),
+					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS,
 							FLOATING_SCORE_BRIGHTNESS, score.getOpacity()));
 		}
 	}
@@ -592,7 +593,7 @@ public class GameState extends BasicGameState {
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION,
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, "Game is paused...");
 	}
 
@@ -601,9 +602,9 @@ public class GameState extends BasicGameState {
 				amount = Math.round((COUNT_IN_TIME - timeDelta) / COUNT_IN_TIME * COUNT_FACTOR);
 
 		graphics.setColor(new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR));
-		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() 
+		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
 				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
 		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
@@ -814,6 +815,7 @@ public class GameState extends BasicGameState {
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
 	}
+
 	/**
 	 * @return the score
 	 */
@@ -841,6 +843,4 @@ public class GameState extends BasicGameState {
 	public void setDroppedPowerups(ArrayList<Powerup> droppedPowerups) {
 		this.droppedPowerups = droppedPowerups;
 	}
-
-	
 }

@@ -105,10 +105,24 @@ public class StartState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) 
 			throws SlickException {
-		Input input = container.getInput();
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
+		renderButtons(container, graphics);
+		mg.drawWaterMark();
+		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+	}
+
+	/**
+	 * Method renders buttons in StartState to screen.
+	 * @param container appgamecontainer used
+	 * @param graphics graphics context used
+	 */
+	private void renderButtons(GameContainer container, Graphics graphics) {
+		Input input = container.getInput();
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			graphics.drawImage(playButton.getImageMouseOver(), playButton.getX(), 
 					playButton.getY());
@@ -128,14 +142,7 @@ public class StartState extends BasicGameState {
 		} else {
 			graphics.drawImage(quitButton.getImage(), quitButton.getX(), quitButton.getY());
 		}
-		mg.drawWaterMark();
-		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
-		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
-		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 	}
-
-	
 
 	@Override
 	public int getID() {

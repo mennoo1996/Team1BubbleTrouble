@@ -148,7 +148,6 @@ public class SettingsState extends BasicGameState {
 		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
-		
 	}
 
 

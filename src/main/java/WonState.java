@@ -13,8 +13,8 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class WonState extends BasicGameState {
 
-	private Button playAgainButton;
-	private Button mainMenuButton;
+	private Button playButton;
+	private Button menuButton;
 	private Button exitButton;
 	private MainGame mg;
 	
@@ -33,16 +33,11 @@ public class WonState extends BasicGameState {
 	private static final int MENUBUTTON_Y = 375;
 	private static final int EXITBUTTON_Y = 425;
 	
-	private static final int PLAY_AGAIN_BUTTON_X = 300;
-	private static final int PLAY_AGAIN_BUTTON_Y = 275;
-	private static final int PLAY_AGAIN_BUTTON_WIDTH = 200;
-	private static final int PLAY_AGAIN_BUTTON_HEIGHT = 45;
-	
-	private static final int WON_STRING_X = 100;
-	private static final int WON_STRING_Y = 100;
-	private static final int SCORE_STRING_X = 100;
-	private static final int SCORE_STRING_Y = 140;
-	
+	private static final int TEXT_X = 164;
+	private static final int TEXT_1_Y = 238;
+	private static final int TEXT_2_Y = 288;
+
+	private static final int MOUSE_OVER_RECT_X = 500;
 	private static final int STATE_ID = 3;
 	
 	/**
@@ -62,20 +57,16 @@ public class WonState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
 		
-		playAgainButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/menus/Menu_Button_Play.png"),
-				new Image("resources/menus/Menu_Button_Play2.png"));
-		mainMenuButton = new Button(BUTTON_X, MENUBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
+		playButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/menus/Menu_Button_PlayAgain.png"),
+				new Image("resources/menus/Menu_Button_PlayAgain2.png"));
+		menuButton = new Button(BUTTON_X, MENUBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/menus/Menu_Button_MainMenu.png"), 
 				new Image("resources/menus/Menu_Button_MainMenu2.png"));
 		exitButton = new Button(BUTTON_X, EXITBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/menus/Menu_Button_Quit.png"),
 				new Image("resources/menus/Menu_Button_Quit2.png"));
 		
-		
-		playAgainButton = new Button(PLAY_AGAIN_BUTTON_X, PLAY_AGAIN_BUTTON_Y,
-				PLAY_AGAIN_BUTTON_WIDTH, PLAY_AGAIN_BUTTON_HEIGHT,
-				new Image("resources/play_again_button.png"));
 	}
 	
 	/**
@@ -89,13 +80,31 @@ public class WonState extends BasicGameState {
 			throws SlickException {
 			Input input = container.getInput();
 			
-			// If mouse is pressed inside the button, go to the gameState
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-				if (playAgainButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+				if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+					// Start over
 					mg.setLevelCounter(0);
 					sbg.enterState(1);
+				} 
+				else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+					// Go to settingsState
+					mg.setLevelCounter(0);
+					sbg.enterState(0);
+				}
+				else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+					// Quit game
+					System.exit(0);
 				}
 			}
+			
+			// If mouse is pressed inside the button, go to the gameState
+//			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+//				if (playAgainButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+//					mg.setLevelCounter(0);
+//					sbg.enterState(1);
+//				}
+//			}
+			
 		}
 
 	/**
@@ -107,26 +116,49 @@ public class WonState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		Input input = container.getInput();
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		// draw string and button
-		mg.getDosFont().drawString(WON_STRING_X, WON_STRING_Y,
-				"You won, you are the champion!");
-		mg.getDosFont().drawString(SCORE_STRING_X, SCORE_STRING_Y,
-				"Your score was: " + mg.getScore());
-		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(),
-				playAgainButton.getY());
-		
-		// watermark
+		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y,
+				"> You won, you are the champion!");
+		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y,
+				"> Your score was: " + mg.getScore());
+		renderButtons(container, graphics);
 		mg.drawWaterMark();
-		
+		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
-		
 	}
 
+	/**
+	 * Method renders buttons in WonState to screen.
+	 * @param container appgamecontainer used
+	 * @param graphics graphics context used
+	 */
+	private void renderButtons(GameContainer container, Graphics graphics) {
+		Input input = container.getInput();
+		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(playButton.getImageMouseOver(), playButton.getX(), 
+					playButton.getY());
+		} else {
+			graphics.drawImage(playButton.getImage(), playButton.getX(), playButton.getY());
+		}
+		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(menuButton.getImageMouseOver(), menuButton.getX(),
+					menuButton.getY());
+		} else {
+			graphics.drawImage(menuButton.getImage(), menuButton.getX(), 
+					menuButton.getY());
+		}
+		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(exitButton.getImageMouseOver(), exitButton.getX(), 
+					exitButton.getY());
+		} else {
+			graphics.drawImage(exitButton.getImage(), exitButton.getX(), exitButton.getY());
+		}
+	}
 	
 	/**
 	 * return the id of the state.

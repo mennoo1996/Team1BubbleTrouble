@@ -44,9 +44,6 @@ public class SettingsState extends BasicGameState {
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 	
-	private static final int VERSION_STRING_X = 70;
-	private static final int VERSION_STRING_Y_DEVIATION = 190;
-	
 	private static final int STATE_ID = 4;
 	
 	/**
@@ -135,9 +132,8 @@ public class SettingsState extends BasicGameState {
 		graphics.drawImage(arie.getSprite(2, 0), arieRectangle.getX(), arieRectangle.getY());
 		
 		// draw version number
-		mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight()
-				- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
-		
+		mg.drawWaterMark();
+
 		// foreground and terminal
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);

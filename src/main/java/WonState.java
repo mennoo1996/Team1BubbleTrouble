@@ -24,7 +24,7 @@ public class WonState extends BasicGameState {
 	private static final int WON_STRING_X = 100;
 	private static final int WON_STRING_Y = 100;
 	private static final int SCORE_STRING_X = 100;
-	private static final int SCORE_STRING_Y = 120;
+	private static final int SCORE_STRING_Y = 140;
 	
 	private static final int STATE_ID = 3;
 	
@@ -82,12 +82,16 @@ public class WonState extends BasicGameState {
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		
 		// draw string and button
-		graphics.drawString("You won, you are the champion!", WON_STRING_X, WON_STRING_Y);
-		graphics.drawString("Youre score was: " + mg.getScore(), SCORE_STRING_X, SCORE_STRING_Y);
+		mg.getDosFont().drawString(WON_STRING_X, WON_STRING_Y,
+				"You won, you are the champion!");
+		mg.getDosFont().drawString(SCORE_STRING_X, SCORE_STRING_Y,
+				"Your score was: " + mg.getScore());
 		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(),
 				playAgainButton.getY());
 		
-
+		// watermark
+		mg.drawWaterMark();
+		
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		

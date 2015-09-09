@@ -15,24 +15,36 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GameOverState extends BasicGameState {
 
 	private Button playAgainButton;
+	private Button returnButton;
+	private Button saveHighscoreButton;
+	
 	private MainGame mg;
 	private TextField tf;
 	private Image tfBackground;
 	private String inputMessage;
 	
-	private static final int PLAY_AGAIN_BUTTON_X = 300;
-	private static final int PLAY_AGAIN_BUTTON_Y = 475;
-	private static final int PLAY_AGAIN_BUTTON_WIDTH = 200;
-	private static final int PLAY_AGAIN_BUTTON_HEIGHT = 45;
+
+	private static final int SAVE_BUTTON_X = 100;
+	private static final int SAVE_BUTTON_Y = 350;
 	
-	private static final int GAME_OVER_X = 100;
+	private static final int PLAY_AGAIN_BUTTON_X = 100;
+	private static final int PLAY_AGAIN_BUTTON_Y = 450;
+	
+	private static final int RETURN_BUTTON_X = 100;
+	private static final int RETURN_BUTTON_Y = 500;
+
+	private static final int BUTTON_WIDTH = 1000;
+	private static final int BUTTON_HEIGHT = 50;
+	
+	private static final int MOUSE_OVER_RECT_X = 500;
+	private static final int GAME_OVER_X = 115;
 	private static final int GAME_OVER_Y = 100;
-	private static final int POINTS_X = 100;
-	private static final int POINTS_Y = 140;
-	private static final int NAME_X = 100;
-	private static final int NAME_Y = 180;
+	private static final int POINTS_X = 115;
+	private static final int POINTS_Y = 150;
+	private static final int NAME_X = 115;
+	private static final int NAME_Y = 200;
 	private static final int TEXT_FIELD_X = 115;
-	private static final int TEXT_FIELD_Y = 245;
+	private static final int TEXT_FIELD_Y = 275;
 	private static final int TEXT_FIELD_WIDTH = 700;
 	private static final int TEXT_FIELD_HEIGHT = 60;
 	private static final int TF_BACKGROUND_DEVIATION = 27;
@@ -57,10 +69,23 @@ public class GameOverState extends BasicGameState {
 			throws SlickException {
 
 		playAgainButton = new Button(PLAY_AGAIN_BUTTON_X, PLAY_AGAIN_BUTTON_Y,
-				PLAY_AGAIN_BUTTON_WIDTH, PLAY_AGAIN_BUTTON_HEIGHT,
-				new Image("resources/play_again_button.png"));
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_PlayAgain.png"),
+				new Image("resources/Menus/Menu_Button_PlayAgain2.png"));
+		
+		returnButton = new Button(RETURN_BUTTON_X, RETURN_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_MainMenu.png"),
+				new Image("resources/Menus/Menu_Button_MainMenu2.png"));
+		
+		saveHighscoreButton = new Button(SAVE_BUTTON_X, SAVE_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_SaveHighscore.png"),
+				new Image("resources/Menus/Menu_Button_SaveHighscore2.png"));
+		
 		tfBackground = new Image("resources/textfield.png");
-			}
+
+	}
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
@@ -112,16 +137,16 @@ public class GameOverState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		// draw string and button
+
 
 		// draw background
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 
-		mg.getDosFont().drawString(GAME_OVER_X, GAME_OVER_Y , ">Game Over Sucker!");
-		mg.getDosFont().drawString(POINTS_X, POINTS_Y, ">Your score was: " + mg.getScore());
-		mg.getDosFont().drawString(NAME_X, NAME_Y, ">Please enter your name below");
-		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(), 
-				playAgainButton.getY());
+		mg.getDosFont().drawString(GAME_OVER_X, GAME_OVER_Y , "> Game Over Sucker!");
+		mg.getDosFont().drawString(POINTS_X, POINTS_Y, "> Your score was: " + mg.getScore());
+		mg.getDosFont().drawString(NAME_X, NAME_Y, "> Please enter your name below");
+//		graphics.drawImage(playAgainButton.getImage(), playAgainButton.getX(), 
+//				playAgainButton.getY());
 		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
 				tf.getY() - TF_BACKGROUND_DEVIATION);
 		tf.render(container, graphics);
@@ -130,10 +155,40 @@ public class GameOverState extends BasicGameState {
 			mg.getDosFont().drawString(INPUT_MESSAGE_X, INPUT_MESSAGE_Y, inputMessage);
 		}
 
+		renderButtons(container, graphics);
+		
+		// watermark
+		mg.drawWaterMark();
+		
 		// draw foreground
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		
+	}
+	
+	private void renderButtons(GameContainer container, Graphics graphics) {
+		Input input = container.getInput();
+		if (playAgainButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(playAgainButton.getImageMouseOver(), playAgainButton.getX(), 
+					playAgainButton.getY());
+		} else {
+			graphics.drawImage(playAgainButton.getImage(), 
+					playAgainButton.getX(), playAgainButton.getY());
+		}
+		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), 
+					returnButton.getY());
+		} else {
+			graphics.drawImage(returnButton.getImage(), 
+					returnButton.getX(), returnButton.getY());
+		}
+		if (saveHighscoreButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(saveHighscoreButton.getImageMouseOver(), saveHighscoreButton.getX(), 
+					saveHighscoreButton.getY());
+		} else {
+			graphics.drawImage(saveHighscoreButton.getImage(), 
+					saveHighscoreButton.getX(), saveHighscoreButton.getY());
+		}
 	}
 
 	

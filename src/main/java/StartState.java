@@ -30,9 +30,6 @@ public class StartState extends BasicGameState {
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 	private static final int SETTINGS_STATE_ID = 4;
-	
-	private static final int VERSION_STRING_X = 70;
-	private static final int VERSION_STRING_Y_DEVIATION = 190;
 
 	
 	/**
@@ -127,8 +124,7 @@ public class StartState extends BasicGameState {
 			graphics.drawImage(quitButton.getImage(), quitButton.getX(), quitButton.getY());
 		}
 		// draw version number
-		mg.getDosFont().drawString(VERSION_STRING_X, container.getHeight() 
-				- VERSION_STRING_Y_DEVIATION, "#Version 0.98");
+		mg.drawWaterMark();
 		graphics.drawImage(miscText, 0, 0);
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);

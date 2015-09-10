@@ -32,7 +32,6 @@ public class GameState extends BasicGameState {
 	private ArrayList<FloatingScore> floatingScoreList;
 	private ArrayList<Gate> gateList;
 
-	private Player player;
 	private int score;
 	private long startTime;
 	private long timeDelta;
@@ -43,7 +42,6 @@ public class GameState extends BasicGameState {
 	private boolean waitEsc;
 	
 	// Images
-	private Image playerImage;
 	private Image wallsImage;
 	private Image health1Image;
 	private Image health2Image;
@@ -79,10 +77,6 @@ public class GameState extends BasicGameState {
 	private static final int LEVEL_POINTS = 1500;
 	private static final int SECOND_TO_MS_FACTOR = 1000;
 	private static final float SECOND_TO_MS_FACTOR_FLOAT = 1000f;
-	private static final int PLAYER_X_DEVIATION = 80;
-	private static final int PLAYER_Y_DEVIATION = 295;
-	private static final int PLAYER_WIDTH = 60;
-	private static final int PLAYER_HEIGHT = 92;
 	private static final int FLOOR_Y_DEVIATION = 210;
 	private static final int FLOOR_HEIGHT = 210;
 	private static final int LEFT_WALL_WIDTH = 105;
@@ -98,11 +92,6 @@ public class GameState extends BasicGameState {
 	private static final int LEVEL_STRING_X_DEVIATION = 270;
 	private static final int LEVEL_STRING_Y_DEVIATION = 84;
 	private static final int SCORE_STRING_Y_DEVIATION = 84;
-	private static final int SPRITE_SHEET_THREE = 3;
-	private static final int SPRITE_SHEET_FOUR = 4;
-	private static final float MOVEMENT_COUNTER_FACTOR = 0.5f;
-	private static final int PLAYER_DRAW_X_DEVIATION = 30;
-	private static final int PLAYER_DRAW_Y_DEVIATION = 23;
 	private static final int COUNTER_BAR_X_DEVIATION = 80;
 	private static final int COUNTER_BAR_Y_DEVIATION = 60;
 	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
@@ -149,6 +138,7 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
+	private static final int COIN_CHANCE = 20;
 	// Level ending, empty bar
 	
 	/**
@@ -179,10 +169,6 @@ public class GameState extends BasicGameState {
 		countIn = true;
 		playingState = true;
 		// Add player sprite and walls
-		playerImage = new Image("resources/" + mg.getPlayerImage());
-		player = new Player(container.getWidth() / 2 - PLAYER_X_DEVIATION,
-				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, mg);
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -259,10 +245,10 @@ public class GameState extends BasicGameState {
 
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 
-		player.update(deltaFloat);
+		// player-thingy
+		mg.getPlayerList().updatePlayers(deltaFloat);
 		processPause();
 		processCircles(container, sbg, deltaFloat);
-		processPowerups(container, deltaFloat);
 		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate
 		updateGateExistence(deltaFloat);
@@ -286,25 +272,9 @@ public class GameState extends BasicGameState {
 		}
 
 		if (timeRemaining <= 0) {
-            playerDeath(sbg);
+            mg.getPlayerList().playerDeath(sbg);
         }
 		prevTime = curTime;
-	}
-
-	private void processPowerups(GameContainer container, float deltaFloat) {
-		ArrayList<Powerup> usedPowerups = new ArrayList<>();
-		for (Powerup powerup : droppedPowerups) {
-			powerup.update(this, container, deltaFloat);
-
-			if (powerup.getRectangle().intersects(player.getRectangle())) {
-				player.addPowerup(powerup.getType());
-				usedPowerups.add(powerup);
-			}
-		}
-
-		for (Powerup used : usedPowerups) {
-			droppedPowerups.remove(used);
-		}
 	}
 
 	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
@@ -359,12 +329,7 @@ public class GameState extends BasicGameState {
             //update circles
             circle.update(this, container, deltaFloat);
 
-            // if player touches circle (for the first frame)
-            if (player.getRectangle().intersects(circle) && !player.hasShield()) {
-
-                //LIVES FUNCTIONALITY
-                playerDeath(sbg);
-            }
+            mg.getPlayerList().intersectPlayersWithCircle(circle);
 
             // if laser intersects circle
             if (isShot() && getWeapon().getRectangle().intersects(circle)) {
@@ -465,7 +430,8 @@ public class GameState extends BasicGameState {
 		graphics.drawImage(ceilingImage, getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION,
 				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION);
 		drawGatesLaser(container, graphics);
-		drawPlayer(container, graphics);
+		// draw player
+		mg.getPlayerList().drawPlayers(container, graphics);
 		drawPowerups(graphics);
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);
@@ -509,33 +475,6 @@ public class GameState extends BasicGameState {
 		}
 		// show correct health lights
 		drawHealth(graphics);
-	}
-
-	private void drawPlayer(GameContainer container, Graphics graphics) {
-		if (player.getMovement() == 2) {
-			player.incrementMovementCounter();
-			int sp = SPRITE_SHEET_THREE;
-			if (player.getMovementCounter() > player.getMovementCounter_Max()
-					* MOVEMENT_COUNTER_FACTOR) {
-				sp = SPRITE_SHEET_FOUR;
-			}
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX()
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-		} else if (player.getMovement() == 1) {
-			player.incrementMovementCounter();
-			int sp = 1;
-			if (player.getMovementCounter() > player.getMovementCounter_Max()
-					* MOVEMENT_COUNTER_FACTOR) {
-				sp = 0;
-			}
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX()
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-		} else {
-			player.resetMovementCounter();
-			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX()
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
-		}
-		player.setMovement(0);
 	}
 
 	private void drawPowerups(Graphics graphics) {
@@ -621,9 +560,9 @@ public class GameState extends BasicGameState {
 
 	private void drawFloatingScores() {
 		for (FloatingScore score : floatingScoreList) {
-			mg.getDosFont().drawString(score.getX(), score.getY(), 
-					Integer.toString(score.getScore()), 
-					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS, 
+			mg.getDosFont().drawString(score.getX(), score.getY(),
+					Integer.toString(score.getScore()),
+					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS,
 							FLOATING_SCORE_BRIGHTNESS, score.getOpacity()));
 		}
 	}
@@ -654,7 +593,7 @@ public class GameState extends BasicGameState {
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION,
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, "Game is paused...");
 	}
 
@@ -663,9 +602,9 @@ public class GameState extends BasicGameState {
 				amount = Math.round((COUNT_IN_TIME - timeDelta) / COUNT_IN_TIME * COUNT_FACTOR);
 
 		graphics.setColor(new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR));
-		graphics.fillRect(0, 0, container.getWidth(), container.getHeight() 
+		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION, 
+		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
 				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
 		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
@@ -690,25 +629,6 @@ public class GameState extends BasicGameState {
 	public int getID() {
 		return 1;
 	}
-
-	/**
-	 * Player death.
-	 * @param sbg The stateBasedGame that uses this state.
-	 */
-	private void playerDeath(StateBasedGame sbg) {
-		mg.decreaselifeCount();
-		if (mg.getLifeCount() <= 0) {
-			mg.setScore(mg.getScore() + score);
-			sbg.enterState(mg.getGameOverState());
-		} else {
-			sbg.enterState(mg.getGameState());
-		}
-	}
-	
-
-	
-		
-		
 
 	private void loadImages() throws SlickException {
 		loadHealthAndBallImages();
@@ -894,5 +814,33 @@ public class GameState extends BasicGameState {
 	 */
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
+	}
+
+	/**
+	 * @return the score
+	 */
+	public int getScore() {
+		return score;
+	}
+
+	/**
+	 * @param score the score to set
+	 */
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	/**
+	 * @return the droppedPowerups
+	 */
+	public ArrayList<Powerup> getDroppedPowerups() {
+		return droppedPowerups;
+	}
+
+	/**
+	 * @param droppedPowerups the droppedPowerups to set
+	 */
+	public void setDroppedPowerups(ArrayList<Powerup> droppedPowerups) {
+		this.droppedPowerups = droppedPowerups;
 	}
 }

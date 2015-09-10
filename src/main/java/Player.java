@@ -3,6 +3,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +37,10 @@ public class Player {
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final float HALF = 0.5f;
+	private int moveLeftKey;
+	private int moveRightKey;
+	private int shootKey;
+	
 	private static final int POWERUP_DURATION = 10;
 
 	/**
@@ -56,6 +61,9 @@ public class Player {
 		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mg = mg;
 		this.gs = (GameState) mg.getState(mg.getGameState());
+		moveLeftKey = Input.KEY_LEFT;
+		moveRightKey = Input.KEY_RIGHT;
+		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
 		this.shield = false;
 	}
@@ -68,12 +76,12 @@ public class Player {
 		processGates();
 		processWeapon(mg.getContainer(), deltaFloat);
 		processPlayerMovement(mg.getContainer(), deltaFloat);
+		processPowerups(mg.getContainer(), deltaFloat);
 	}
 	
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
-		System.out.println(gs);
 		for (Gate someGate :gs.getGateList()) {
 			if (this.getRectangle().intersects(someGate.getRectangle())) {
 				freeToRoam = false;
@@ -85,28 +93,45 @@ public class Player {
 			intersectingGate = null;
 		}
 	}
+	
+	private void processPowerups(GameContainer container, float deltaFloat) {
+		ArrayList<Powerup> usedPowerups = new ArrayList<>();
+		for (Powerup powerup : gs.getDroppedPowerups()) {
+			powerup.update(gs, container, deltaFloat);
+
+			if (powerup.getRectangle().intersects(this.getRectangle())) {
+				this.addPowerup(powerup.getType());
+				usedPowerups.add(powerup);
+			}
+		}
+
+		for (Powerup used : usedPowerups) {
+			gs.getDroppedPowerups().remove(used);
+		}
+	}
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (gs.getSavedInput().isKeyPressed(Input.KEY_SPACE) && (!gs.isShot() || (gs.getWeapon().getClass() == Spiky.class))) {
-            gs.setShot(true);
-            //float x = this.getCenterX();
-            gs.setWeapon(this.getWeapon(container));
-        }
+		if (gs.getSavedInput().isKeyPressed(shootKey) &&
+				(!gs.isShot() || (gs.getWeapon().getClass() == Spiky.class))) {
+			gs.setShot(true);
+			float x = this.getCenterX();
+			gs.setWeapon(this.getWeapon(container));
+		}
 
 		// Update laser
 		if (gs.isShot()) {
-            gs.getWeapon().update(gs, deltaFloat);
-            // Disable laser when it has reached the ceiling
-            if (!gs.getWeapon().isVisible()) {
-                gs.setShot(false);
-            }
-        }
+			gs.getWeapon().update(gs, deltaFloat);
+			// Disable laser when it has reached the ceiling
+			if (!gs.getWeapon().isVisible()) {
+				gs.setShot(false);
+			}
+		}
 	}
 	
 	private void processPlayerMovement(GameContainer container, float deltaFloat) {
 		// Walk left when left key pressed and not at left wall OR a gate
-		boolean isKeyLeft = gs.getSavedInput().isKeyDown(Input.KEY_LEFT);
+		boolean isKeyLeft = gs.getSavedInput().isKeyDown(moveLeftKey);
 		if (isKeyLeft && this.getX() > gs.getLeftWall().getWidth()) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mg.getPlayerSpeed() * deltaFloat);
@@ -115,7 +140,7 @@ public class Player {
         }
 
 		// Walk right when right key pressed and not at right wall OR a gate
-		if (gs.getSavedInput().isKeyDown(Input.KEY_RIGHT) && this.getMaxX()
+		if (gs.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
 				< (container.getWidth() - gs.getRightWall().getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mg.getPlayerSpeed() * deltaFloat);
@@ -126,16 +151,16 @@ public class Player {
 
 	private Weapon getWeapon(GameContainer container) {
 		if (weapons.isEmpty()) {
-			return new Weapon(x, container.getHeight() - gs.getFloor().getHeight(),
+			return new Weapon(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
-			return new Spiky(x, container.getHeight() - gs.getFloor().getHeight(),
+			return new Spiky(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			return new InstantLaser(x, container.getHeight() - gs.getFloor().getHeight(),
+			return new InstantLaser(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
 					mg.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
@@ -366,7 +391,45 @@ public class Player {
 		this.gs = gs;
 	}
 
-	
-	
-	
+	/**
+	 * @return the moveLeftKey
+	 */
+	public int getMoveLeftKey() {
+		return moveLeftKey;
+	}
+
+	/**
+	 * @param moveLeftKey the moveLeftKey to set
+	 */
+	public void setMoveLeftKey(int moveLeftKey) {
+		this.moveLeftKey = moveLeftKey;
+	}
+
+	/**
+	 * @return the moveRightKey
+	 */
+	public int getMoveRightKey() {
+		return moveRightKey;
+	}
+
+	/**
+	 * @param moveRightKey the moveRightKey to set
+	 */
+	public void setMoveRightKey(int moveRightKey) {
+		this.moveRightKey = moveRightKey;
+	}
+
+	/**
+	 * @return the shootKey
+	 */
+	public int getShootKey() {
+		return shootKey;
+	}
+
+	/**
+	 * @param shootKey the shootKey to set
+	 */
+	public void setShootKey(int shootKey) {
+		this.shootKey = shootKey;
+	}
 }

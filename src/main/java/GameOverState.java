@@ -141,8 +141,20 @@ public class GameOverState extends BasicGameState {
 					System.exit(0);
 				}
 			}
+<<<<<<< HEAD
 			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && inputMessage == null) {
 				saveScore();
+=======
+			
+			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER)) {
+				Score score = new Score(mg.getScore(), tf.getText());
+				mg.getHighscores().add(score);
+				mg.getHighscores().sort();
+				HighScoresParser.writeHighScores(mg.getHighscoresFile(), mg.getHighscores());
+				
+				inputMessage = tf.getText() + ", your score of " + mg.getScore();
+				inputMessage += " points is saved!";
+>>>>>>> master
 			}
 		}
 
@@ -180,6 +192,13 @@ public class GameOverState extends BasicGameState {
 		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+<<<<<<< HEAD
+=======
+		
+		mg.getHighscores().sort();
+		String highScoresString = mg.getHighscores().toString();
+		mg.getDosFont().drawString(HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
+>>>>>>> master
 	}
 	
 	/**

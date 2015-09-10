@@ -3,7 +3,7 @@
  */
 public class InstantLaser extends Weapon {
 
-    private static final float INSTANT_SPEED = 8000f;
+    private static final float INSTANT_SPEED = 4000f;
 
     /**
      * Create instant laser.

@@ -11,7 +11,7 @@ public class MainGameTest {
 	@Test
 	public void testMainGamePlayerImage() throws SlickException {
 		MainGame game = new MainGame("hello");
-		assertEquals("Playersprite.png", game.getPlayerImage());
+		assertEquals("Playersprite.png", game.getPlayerImageString());
 	}
 
 	@Test
@@ -23,14 +23,14 @@ public class MainGameTest {
 	@Test
 	public void testGetPlayerImage() throws SlickException {
 		MainGame game = new MainGame("hello");
-		assertEquals("Playersprite.png", game.getPlayerImage());
+		assertEquals("Playersprite.png", game.getPlayerImageString());
 	}
 	
 	@Test
 	public void testSetPlayerImage() throws SlickException {
 		MainGame game = new MainGame("hello");
-		game.setPlayerImage("laser_vertical.png");
-		assertEquals(game.getPlayerImage(),game.getPlayerImage());
+		game.setPlayerImageString("laser_vertical.png");
+		assertEquals(game.getPlayerImageString(),game.getPlayerImageString());
 	}
 	
 	@Test
@@ -288,7 +288,7 @@ public class MainGameTest {
 	
 	@Test
 	public void testGetDefaultLaserSpeed() {
-		assertEquals(1000, MainGame.getDefaultLaserSpeed(), 0);
+		assertEquals(500, MainGame.getDefaultLaserSpeed(), 0);
 	}
 
 }

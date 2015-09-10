@@ -389,7 +389,7 @@ public class GameState extends BasicGameState {
                 sbg.enterState(mg.getGameState()); // next level
             } else {
                 waitForLevelEnd = false;
-                sbg.enterState(mg.getWonState()); // game completed
+                sbg.enterState(mg.getGameOverState()); // game completed
             }
         }
 	}

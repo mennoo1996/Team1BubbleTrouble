@@ -55,8 +55,7 @@ public class MainGame extends StateBasedGame {
 	private final int startState = 0;
 	private final int gameState = 1;
 	private final int gameOverState = 2;
-	private final int wonState = 3;
-	private final int settingsState = 4;
+	private final int settingsState = 3;
 	
 	private GameState gameStateState;
 	
@@ -90,7 +89,7 @@ public class MainGame extends StateBasedGame {
 		this.playerImageString = "Playersprite.png";
 		this.lifeCount = LIVES;
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
-		this.multiplayer = true;
+		this.multiplayer = false;
 	}
 
 	/**
@@ -147,7 +146,6 @@ public class MainGame extends StateBasedGame {
 		this.addState(new StartState(this));
 		this.addState(gameStateState);
 		this.addState(new GameOverState(this));
-		this.addState(new WonState(this));
 		this.addState(new SettingsState(this));
 		
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
@@ -539,13 +537,6 @@ public class MainGame extends StateBasedGame {
 	 */
 	public int getGameOverState() {
 		return gameOverState;
-	}
-
-	/**
-	 * @return the wonState
-	 */
-	public int getWonState() {
-		return wonState;
 	}
 
 	/**

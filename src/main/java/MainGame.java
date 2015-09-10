@@ -448,6 +448,13 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
+	 * @param points the number to increment score
+	 */
+	public void addToScore(int points) {
+		this.score += points;
+	}
+
+	/**
 	 * @return the highscoresFile
 	 */
 	public String getHighscoresFile() {

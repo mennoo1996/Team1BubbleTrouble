@@ -160,4 +160,14 @@ public class PlayerList {
 		this.playerList = playerList;
 	}
 
+	public MainGame getMg() {
+		return mg;
+	}
+
+	public GameState getGs() {
+		return gs;
+	}
+	
+	
+
 }

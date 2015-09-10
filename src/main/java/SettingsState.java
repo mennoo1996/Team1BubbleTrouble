@@ -59,8 +59,6 @@ public class SettingsState extends BasicGameState {
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 	
-	private static final int STATE_ID = 3;
-	
 	/**
 	 * Construct a SettingsState.
 	 * @param mg the MainGame that uses this state.
@@ -177,7 +175,7 @@ public class SettingsState extends BasicGameState {
 
 	@Override
 	public int getID() {
-		return STATE_ID;
+		return mg.getSettingsState();
 	}
 
 	/**

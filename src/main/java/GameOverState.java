@@ -23,6 +23,8 @@ public class GameOverState extends BasicGameState {
 	private Image tfBackground;
 	private String inputMessage;
 	
+	private boolean highScoreEntered;
+	
 
 	private static final int SAVE_BUTTON_X = 100;
 	private static final int SAVE_BUTTON_Y = 350;
@@ -98,6 +100,7 @@ public class GameOverState extends BasicGameState {
 		tf.setBorderColor(null);
 		tf.setFocus(true);
 		inputMessage = null;
+		highScoreEntered = false;
 
 	}
 	
@@ -121,10 +124,12 @@ public class GameOverState extends BasicGameState {
 				}
 			}
 			
-			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER)) {
+			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && !highScoreEntered) {
+				highScoreEntered = true;
 				Score score = new Score(mg.getScore(), tf.getText());
 				mg.getHighscores().add(score);
 				mg.getHighscores().sort();
+				System.out.println("HIER");
 				HighScoresParser.writeHighScores(mg.getHighscoresFile(), mg.getHighscores());
 				
 				inputMessage = tf.getText() + ", your score of " + mg.getScore();

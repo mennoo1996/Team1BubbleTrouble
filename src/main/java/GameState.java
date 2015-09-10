@@ -359,11 +359,7 @@ public class GameState extends BasicGameState {
 	}
 
 	private void removeCeilingCircles(ArrayList<BouncingCircle> ceilingList) {
-		for (BouncingCircle circle : ceilingList) {
-			if (circleList.contains(circle)) {
-				circleList.remove(circle);
-			}
-		}
+		circleList.removeAll(ceilingList);
 	}
 
 	private void updateActiveCircles(GameContainer container, StateBasedGame sbg,

@@ -130,14 +130,12 @@ public class Player {
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
 				gs.addToScore(coin.getPoints());
+				gs.getFloatingScores().add(new FloatingScore(coin));
 				usedCoins.add(coin);
 			}
 		}
 
-		for (Coin used : usedCoins) {
-			gs.getFloatingScores().add(new FloatingScore(used));
-			gs.getDroppedCoins().remove(used);
-		}
+		gs.getDroppedCoins().removeAll(usedCoins);
 	}
 
 	private void processWeapon(GameContainer container, float deltaFloat) {

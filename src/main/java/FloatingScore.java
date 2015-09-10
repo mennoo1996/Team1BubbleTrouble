@@ -6,11 +6,12 @@ public class FloatingScore {
 	
 	private static final float MAX_SPEED = 100f;
 	private static final float MAX_LIFE = 1000;
+	private static final float Y_OFFSET = 120;
 	
 	/**
 	 * Variables.
 	 */
-	private int score;
+	private String score;
 	private float x;
 	private float y;
 	private float speed;
@@ -22,13 +23,37 @@ public class FloatingScore {
 	 * @param circle the circle this score draws its information from
 	 */
 	public FloatingScore(BouncingCircle circle) {
-		this.score = circle.getScore();
+		this.score = Integer.toString(circle.getScore());
 		this.x = circle.getCenterX();
 		this.y = circle.getCenterY();
 		this.speed = MAX_SPEED;
 		this.life = MAX_LIFE;
 	}
 	
+	/**
+	 * Constructor class for a floating score.
+	 * @param coin the coin this score draws its information from
+	 */
+	public FloatingScore(Coin coin) {
+		this.score = Integer.toString(coin.getPoints());
+		this.x = coin.getCenterX();
+		this.y = coin.getCenterY() - Y_OFFSET;
+		this.speed = MAX_SPEED;
+		this.life = MAX_LIFE;
+	}
+	
+	/**
+	 * Constructor class for a floating score.
+	 * @param powerup the powerup this score draws its information from
+	 */
+	public FloatingScore(Powerup powerup) {
+		this.score = "> " + powerup.getType().toString() + "();";
+		this.x = powerup.getCenterX();
+		this.y = powerup.getCenterY() - Y_OFFSET;
+		this.speed = MAX_SPEED;
+		this.life = MAX_LIFE;
+	}
+
 	/**
 	 * Update function for floating score.
 	 * @param deltaFloat time since last frame
@@ -51,7 +76,7 @@ public class FloatingScore {
 	/**
 	 * @return The score this floating score displays
 	 */
-	public int getScore() {
+	public String getScore() {
 		return score;
 	}
 	

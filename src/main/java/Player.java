@@ -83,6 +83,7 @@ public class Player {
 		processWeapon(mg.getContainer(), deltaFloat);
 		processPlayerMovement(mg.getContainer(), deltaFloat);
 		processPowerups(mg.getContainer(), deltaFloat);
+		processCoins(mg.getContainer(), deltaFloat);
 	}
 	
 	private void processGates() {
@@ -112,7 +113,25 @@ public class Player {
 		}
 
 		for (Powerup used : usedPowerups) {
+			gs.getFloatingScores().add(new FloatingScore(used));
 			gs.getDroppedPowerups().remove(used);
+		}
+	}
+
+	private void processCoins(GameContainer container, float deltaFloat) {
+		ArrayList<Coin> usedCoins = new ArrayList<>();
+		for (Coin coin : gs.getDroppedCoins()) {
+			coin.update(gs, container, deltaFloat);
+
+			if (coin.getRectangle().intersects(this.getRectangle())) {
+				mg.addToScore(coin.getPoints());
+				usedCoins.add(coin);
+			}
+		}
+
+		for (Coin used : usedCoins) {
+			gs.getFloatingScores().add(new FloatingScore(used));
+			gs.getDroppedCoins().remove(used);
 		}
 	}
 

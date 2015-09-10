@@ -66,6 +66,20 @@ public class Powerup {
     public float getY() {
         return y;
     }
+    
+    /**
+     * @return powerup's x coord center
+     */
+    public float getCenterX() {
+        return x + POWERUP_WIDTH / 2;
+    }
+
+    /**
+     * @return powerup's x coord center
+     */
+    public float getCenterY() {
+        return y + POWERUP_WIDTH / 2;
+    }
 
     /**
      * @return powerup's type

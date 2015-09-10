@@ -1,4 +1,3 @@
-import org.newdawn.slick.GameContainer;
 
 /**
  * Created by alexandergeenen on 09/09/15.

@@ -240,19 +240,13 @@ public class MainGameTest {
 	@Test
 	public void testSettingsState() {
 		MainGame game = new MainGame("hello");
-		assertEquals(4, game.getSettingsState());
+		assertEquals(3, game.getSettingsState());
 	}
 	
 	@Test
 	public void testGameState() {
 		MainGame game = new MainGame("hello");
 		assertEquals(1, game.getGameState());
-	}
-	
-	@Test
-	public void testWonState() {
-		MainGame game = new MainGame("hello");
-		assertEquals(3, game.getWonState());
 	}
 	
 	@Test

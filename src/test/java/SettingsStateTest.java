@@ -13,7 +13,7 @@ public class SettingsStateTest {
 	public void testGetID() {
 		MainGame mg = new MainGame("Test");
 		SettingsState s = new SettingsState(mg);
-		assertEquals(4, s.getID());
+		assertEquals(3, s.getID());
 	}
 
 	@Test

@@ -16,6 +16,7 @@ public class StartState extends BasicGameState {
 	
 	private MainGame mg;
 	private Button playButton;
+	private Button play2Button;
 
 	private Button optionsButton;
 	private Button quitButton;
@@ -32,8 +33,9 @@ public class StartState extends BasicGameState {
 	private static final int BUTTON_HEIGHT = 50;
 	private static final int BUTTON_X = 150;
 	private static final int PLAYBUTTON_Y = 225;
-	private static final int OPTIONSBUTTON_Y = 275;
-	private static final int QUITBUTTON_Y = 325;
+	private static final int PLAYBUTTON2_Y = 275;
+	private static final int OPTIONSBUTTON_Y = 325;
+	private static final int QUITBUTTON_Y = 375;
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 
@@ -56,8 +58,11 @@ public class StartState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		
 		playButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/menus/Menu_Button_Play.png"),
-				new Image("resources/menus/Menu_Button_Play2.png"));
+				new Image("resources/menus/Menu_Button_1Player.png"),
+				new Image("resources/menus/Menu_Button_1Player2.png"));
+		play2Button = new Button(BUTTON_X, PLAYBUTTON2_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/menus/Menu_Button_2Player.png"), 
+				new Image("resources/menus/Menu_Button_2Player2.png"));
 		optionsButton = new Button(BUTTON_X, OPTIONSBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/menus/Menu_Button_Options.png"), 
 				new Image("resources/menus/Menu_Button_Options2.png"));
@@ -80,7 +85,13 @@ public class StartState extends BasicGameState {
 
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				// Go to gamestate
+				// Go to gamestate in singleplayer
+				mg.setMultiplayer(false);
+				sbg.enterState(mg.getGameState());
+			} 
+			if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+				// Go to gamestate in multiplayer
+				mg.setMultiplayer(true);
 				sbg.enterState(mg.getGameState());
 			} 
 			else if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
@@ -127,6 +138,12 @@ public class StartState extends BasicGameState {
 					playButton.getY());
 		} else {
 			graphics.drawImage(playButton.getImage(), playButton.getX(), playButton.getY());
+		}
+		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(play2Button.getImageMouseOver(), play2Button.getX(), 
+					play2Button.getY());
+		} else {
+			graphics.drawImage(play2Button.getImage(), play2Button.getX(), play2Button.getY());
 		}
 		if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			graphics.drawImage(optionsButton.getImageMouseOver(), optionsButton.getX(),

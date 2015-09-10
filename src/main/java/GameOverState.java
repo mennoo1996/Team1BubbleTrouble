@@ -181,11 +181,11 @@ public class GameOverState extends BasicGameState {
 		mg.drawWaterMark();
 		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
 		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
-		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		mg.getHighscores().sort();
 		String highScoresString = mg.getHighscores().toString();
 		mg.getDosFont().drawString(HIGHSCORES_X, SEPARATOR_Y, highScoresString);
+		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 	}
 	
 	/**

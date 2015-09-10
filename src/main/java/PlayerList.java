@@ -138,7 +138,6 @@ public class PlayerList {
 		player.setMovement(0);
 	}
 	
-
 	/**
 	 * Player death.
 	 * @param sbg The stateBasedGame that uses this state.

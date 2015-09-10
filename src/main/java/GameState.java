@@ -486,9 +486,14 @@ public class GameState extends BasicGameState {
 		drawMiscellaneous(container, graphics);
 	}
 
+	private void drawPowerupStatus() {
+		String outputPlayer1 = "";
+		
+	}
+	
 	private void drawGates(GameContainer container, Graphics graphics) {
 		// draw all active gates
-				drawActiveGates(container, graphics);
+		drawActiveGates(container, graphics);
 	}
 
 	private void drawMiscellaneous(GameContainer container, Graphics graphics) {

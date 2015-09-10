@@ -7,6 +7,8 @@ public class Coin {
     private final static float COIN_WIDTH = 20;
     private final static float COIN_HEIGHT = 20;
     private final static float COIN_SPEED = 200f;
+    private final static int COIN_CHEAP = 200;
+    private final static int COIN_EXPENSIVE = 400;
 
     private int points;
     private float x, y, width, height;
@@ -17,12 +19,12 @@ public class Coin {
      * @param y y coord
      * @param value the points value of the coin
      */
-    public Coin(float x, float y, int value) {
+    public Coin(float x, float y, boolean largeAmount) {
         this.x = x;
         this.y = y;
-        this.points = value;
         this.width = COIN_WIDTH;
         this.height = COIN_HEIGHT;
+        this.points = largeAmount ? COIN_EXPENSIVE : COIN_CHEAP;
     }
 
     /**

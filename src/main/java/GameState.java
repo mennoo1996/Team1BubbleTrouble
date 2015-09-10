@@ -29,6 +29,7 @@ public class GameState extends BasicGameState {
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
 	private ArrayList<Powerup> droppedPowerups;
+	private ArrayList<Coin> droppedCoins;
 	private ArrayList<FloatingScore> floatingScoreList;
 	private ArrayList<Gate> gateList;
 
@@ -138,7 +139,7 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
-	private static final int COIN_CHANCE = 20;
+	private static final int COIN_CHANCE = 10;
 	// Level ending, empty bar
 	
 	/**
@@ -179,9 +180,9 @@ public class GameState extends BasicGameState {
 		floatingScoreList = new ArrayList<FloatingScore>();
 		circleList = levels.getLevel(mg.getLevelCounter()).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
-		// Add gates
 		gateList = levels.getLevel(mg.getLevelCounter()).getGates();
 		droppedPowerups = new ArrayList<>();
+		droppedCoins = new ArrayList<>();
 	}
 	
 	
@@ -432,7 +433,7 @@ public class GameState extends BasicGameState {
 		drawGatesLaser(container, graphics);
 		// draw player
 		mg.getPlayerList().drawPlayers(container, graphics);
-		drawPowerups(graphics);
+		drawItems(graphics);
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);
 		drawCountdownBar(container, graphics);
@@ -477,11 +478,24 @@ public class GameState extends BasicGameState {
 		drawHealth(graphics);
 	}
 
+	private void drawItems(Graphics graphics) {
+		drawPowerups(graphics);
+		drawCoins(graphics);
+	}
+
 	private void drawPowerups(Graphics graphics) {
 		for (Powerup pow : droppedPowerups) {
 			graphics.fillRect(pow.getX(), pow.getY(),
 					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
 		}
+	}
+
+	private void drawCoins(Graphics graphics) {
+		graphics.setColor(Color.blue);
+		for (Coin coin : droppedCoins) {
+			graphics.fillRect(coin.getX(), coin.getY(), coin.getRectangle().getWidth(), coin.getRectangle().getHeight());
+		}
+		graphics.setColor(Color.white);
 	}
 
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
@@ -721,13 +735,21 @@ public class GameState extends BasicGameState {
 		if (randInt <= POWERUP_CHANCE) {
 			dropPowerup(circle);
 		}
+		else if (randInt <= POWERUP_CHANCE + COIN_CHANCE) {
+			dropCoin(circle);
+		}
+	}
+
+	private void dropCoin(BouncingCircle circle) {
+		boolean bigMoney = new Random().nextBoolean();
+		droppedCoins.add(new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney));
 	}
 
 	private void dropPowerup(BouncingCircle circle) {
 		// Get a random powerup
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
 				.nextInt(Powerup.PowerupType.values().length)];
-		droppedPowerups.add(new Powerup(circle.getX(), circle.getY(), newPowerup));
+		droppedPowerups.add(new Powerup(circle.getCenterX(), circle.getCenterY(), newPowerup));
 	}
 
 	/**
@@ -842,5 +864,16 @@ public class GameState extends BasicGameState {
 	 */
 	public void setDroppedPowerups(ArrayList<Powerup> droppedPowerups) {
 		this.droppedPowerups = droppedPowerups;
+	}
+
+	/**
+	 * @return dropped coins
+	 */
+	public ArrayList<Coin> getDroppedCoins() {
+		return droppedCoins;
+	}
+
+	public void setDroppedCoins(ArrayList<Coin> droppedCoins) {
+		this.droppedCoins = droppedCoins;
 	}
 }

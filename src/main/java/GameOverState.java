@@ -143,9 +143,13 @@ public class GameOverState extends BasicGameState {
 				}
 			}
 			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) 
-					&& inputMessage == null && !highScoreEntered) {
-                highScoreEntered = true;
-                saveScore();
+					&& (inputMessage == null || inputMessage.equals("Maximum length is 34 characters")) && !highScoreEntered) {
+				if (tf.getText().length()<34) {
+	                highScoreEntered = true;
+	                saveScore(); }
+				else {
+					inputMessage = "Maximum length is 34 characters";
+                }
 			}
 		}
 

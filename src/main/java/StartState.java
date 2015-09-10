@@ -36,7 +36,6 @@ public class StartState extends BasicGameState {
 	private static final int QUITBUTTON_Y = 325;
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
-	private static final int SETTINGS_STATE_ID = 4;
 
 	
 	/**
@@ -82,11 +81,11 @@ public class StartState extends BasicGameState {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Go to gamestate
-				sbg.enterState(1);
+				sbg.enterState(mg.getGameState());
 			} 
 			else if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Go to settingsState
-				sbg.enterState(SETTINGS_STATE_ID);
+				sbg.enterState(mg.getSettingsState());
 			}
 			else if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Quit game

@@ -11,7 +11,7 @@ public class MainGameTest {
 	@Test
 	public void testMainGamePlayerImage() throws SlickException {
 		MainGame game = new MainGame("hello");
-		assertEquals("Playersprite.png", game.getPlayerImageString());
+		assertEquals("Playersprite.png", game.getPlayer1ImageString());
 	}
 
 	@Test
@@ -23,14 +23,14 @@ public class MainGameTest {
 	@Test
 	public void testGetPlayerImage() throws SlickException {
 		MainGame game = new MainGame("hello");
-		assertEquals("Playersprite.png", game.getPlayerImageString());
+		assertEquals("Playersprite.png", game.getPlayer1ImageString());
 	}
 	
 	@Test
 	public void testSetPlayerImage() throws SlickException {
 		MainGame game = new MainGame("hello");
-		game.setPlayerImageString("laser_vertical.png");
-		assertEquals(game.getPlayerImageString(),game.getPlayerImageString());
+		game.setPlayer1ImageString("laser_vertical.png");
+		assertEquals(game.getPlayer1ImageString(),game.getPlayer1ImageString());
 	}
 	
 	@Test

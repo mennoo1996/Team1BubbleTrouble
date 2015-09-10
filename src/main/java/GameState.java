@@ -175,6 +175,7 @@ public class GameState extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		// If still shooting stop it
 		mg.getPlayerList().setAllPlayersShot(false);
+		mg.getPlayerList().resetPlayerLocations();
 		score = 0;
 		levels.initialize();
 		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;

@@ -37,5 +37,11 @@ public class ScoreTest {
 		score.setName("henk");
 		assertEquals(score.getName(), "henk");
 	}
+	
+	@Test
+	public void testToString() {
+		Score score = new Score(1000, "bob");
+		assertEquals(" 1000    |    bob",score.toString());
+	}
 
 }

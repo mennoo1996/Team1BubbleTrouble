@@ -140,15 +140,13 @@ public class Player {
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
-		
 		if (gs.getSavedInput().isKeyPressed(shootKey)
-				&& (!shot || (weapon.getClass() == Spiky.class))) {
+				&& !shot) {
 			shot = true;
 			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(container));
 		}
 		
-		weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
+		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
 
 		// Update laser
 		if (shot) {
@@ -191,7 +189,7 @@ public class Player {
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			return new InstantLaser(this.getCenterX(), 
+			return new InstantLaser(this.getCenterX(),
 					container.getHeight() - gs.getFloor().getHeight(), mg.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.

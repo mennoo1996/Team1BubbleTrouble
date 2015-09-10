@@ -60,6 +60,12 @@ public class PlayerList {
 		}
 	}
 	
+	public void setAllPlayersShot(boolean shot) {
+		for(Player player : playerList) {
+			player.setShot(shot);
+		}
+	}
+	
 	private void drawPlayer(Player player, GameContainer container, Graphics graphics) {
 		if (player.getMovement() == 2) {
 			player.incrementMovementCounter();

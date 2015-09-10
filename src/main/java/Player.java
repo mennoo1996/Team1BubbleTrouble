@@ -33,6 +33,8 @@ public class Player {
 	private Gate intersectingGate;
 	// weapon management
 	private LinkedList<Powerup.PowerupType> weapons;
+	private boolean shot;
+	private int playerNumber;
 
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
@@ -51,7 +53,7 @@ public class Player {
 	 * @param image the image used on the player
 	 * @param mg the maingame used on the player
 	 */
-	public Player(float x, float y, float width, float height, Image image, MainGame mg) {
+	public Player(float x, float y, float width, float height, Image image, MainGame mg, int playerNumber) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -66,6 +68,8 @@ public class Player {
 		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
 		this.shield = false;
+		this.shot = false;
+		this.playerNumber = playerNumber;
 	}
 	
 	/**
@@ -129,19 +133,25 @@ public class Player {
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
+		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
+		System.out.println("processing weapon");
+		
 		if (gs.getSavedInput().isKeyPressed(shootKey) &&
-				(!gs.isShot() || (gs.getWeapon().getClass() == Spiky.class))) {
-			gs.setShot(true);
+				(!shot || (weapon.getClass() == Spiky.class))) {
+			System.out.println("intigin weapon dthough");
+			shot = true;
 			float x = this.getCenterX();
-			gs.setWeapon(this.getWeapon(container));
+			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(container));
 		}
+		
+		weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
 
 		// Update laser
-		if (gs.isShot()) {
-			gs.getWeapon().update(gs, deltaFloat);
+		if (shot) {
+			weapon.update(gs, deltaFloat);
 			// Disable laser when it has reached the ceiling
-			if (!gs.getWeapon().isVisible()) {
-				gs.setShot(false);
+			if (!weapon.isVisible()) {
+				shot = false;
 			}
 		}
 	}
@@ -449,4 +459,34 @@ public class Player {
 	public void setShootKey(int shootKey) {
 		this.shootKey = shootKey;
 	}
+
+	/**
+	 * @return the shot
+	 */
+	public boolean isShot() {
+		return shot;
+	}
+
+	/**
+	 * @param shot the shot to set
+	 */
+	public void setShot(boolean shot) {
+		this.shot = shot;
+	}
+
+	/**
+	 * @return the playerNumber
+	 */
+	public int getPlayerNumber() {
+		return playerNumber;
+	}
+
+	/**
+	 * @param playerNumber the playerNumber to set
+	 */
+	public void setPlayerNumber(int playerNumber) {
+		this.playerNumber = playerNumber;
+	}
+	
+	
 }

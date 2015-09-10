@@ -52,8 +52,6 @@ public class GameState extends BasicGameState {
 	private Image nobuttonImage;
 	private Image[] ballsImages;
 	private Image ceilingImage;
-	private Image laserbeamimage;
-	private Image lasertipimage;
 	private Image counterBarImage;
 	private Image gateUpper;
 	private Image gateLower;
@@ -64,13 +62,12 @@ public class GameState extends BasicGameState {
 	private boolean waitForLevelEnd = false;
 	
 	// level objects
-	private Weapon weapon;
+	private WeaponList weaponList;
 	private MyRectangle floor;
 	private MyRectangle leftWall;
 	private MyRectangle rightWall;
 	private MyRectangle ceiling;
 	private Input savedInput;
-	private boolean shot;
 
 	private LevelContainer levels;
 	
@@ -97,12 +94,6 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_Y_DEVIATION = 60;
 	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
 	private static final int COUNTER_BAR_X_FACTOR = 10;
-	private static final int LASER_X_DEVIATION = 18;
-	private static final int LASER_TIP_Y_DEVIATION = 14;
-	private static final int LASER_BEAM_Y_DEVIATION = 13;
-	private static final int LASER_BEAM_X2_DEVIATION = 17;
-	private static final int LASER_BEAM_SRCX2 = 35;
-	private static final int LASER_BEAM_SRCY2 = 300;
 	private static final int GATE_LEFT = 11;
 	private static final int GATE_DOWN = 9;
 	private static final int GATE_Y_DEVIATION = 15;
@@ -160,7 +151,7 @@ public class GameState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		// If still shooting stop it
-		setShot(false);
+		mg.getPlayerList().setAllPlayersShot(false);
 		score = 0;
 		levels.initialize();
 		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
@@ -203,6 +194,11 @@ public class GameState extends BasicGameState {
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		
 		levels = new LevelContainer(mg);
+		
+		Weapon weapon1 = null;
+		Weapon weapon2 = null;
+		weaponList = new WeaponList(weapon1, mg, this);
+		weaponList.add(weapon2);
 	}
 
 
@@ -331,13 +327,8 @@ public class GameState extends BasicGameState {
             circle.update(this, container, deltaFloat);
 
             mg.getPlayerList().intersectPlayersWithCircle(circle);
-
-            // if laser intersects circle
-            if (isShot() && getWeapon().getRectangle().intersects(circle)) {
-                // it has been shot and disabled
-                shotList.add(circle);
-                getWeapon().setVisible(false);
-            }
+            
+            weaponList.intersectWeaponsWithCircle(circle);
 
             if (circle.isHitCeiling()) {
             	ceilingList.add(circle);
@@ -430,7 +421,8 @@ public class GameState extends BasicGameState {
 		drawFloatingScores();
 		graphics.drawImage(ceilingImage, getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION,
 				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION);
-		drawGatesLaser(container, graphics);
+		drawGates(container, graphics);
+		weaponList.drawWeapons(graphics);
 		// draw player
 		mg.getPlayerList().drawPlayers(container, graphics);
 		drawItems(graphics);
@@ -450,14 +442,9 @@ public class GameState extends BasicGameState {
 		drawMiscellaneous(container, graphics);
 	}
 
-	private void drawGatesLaser(GameContainer container, Graphics graphics) {
+	private void drawGates(GameContainer container, Graphics graphics) {
 		// draw all active gates
 				drawActiveGates(container, graphics);
-				// if shot, draw laser
-				if (isShot()) {
-					//graphics.fill(laser.getRectangle());
-					drawWeapon(graphics);
-				}
 	}
 
 	private void drawMiscellaneous(GameContainer container, Graphics graphics) {
@@ -506,15 +493,6 @@ public class GameState extends BasicGameState {
 					container.getHeight() - COUNTER_BAR_Y_DEVIATION);
 			//counterBarImage.rotate(-10*x); // EPIC
 		}
-	}
-
-	private void drawWeapon(Graphics graphics) {
-		graphics.drawImage(lasertipimage, getWeapon().getX() - LASER_X_DEVIATION,
-				getWeapon().getY() - LASER_TIP_Y_DEVIATION);
-		graphics.drawImage(laserbeamimage, getWeapon().getX() - LASER_X_DEVIATION,
-				getWeapon().getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, getWeapon().getX()
-				+ LASER_BEAM_X2_DEVIATION, getWeapon().getRectangle().getMaxY(), 0, 0,
-				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2);
 	}
 
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
@@ -648,9 +626,6 @@ public class GameState extends BasicGameState {
 		loadHealthAndBallImages();
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		// laser images
-		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
-		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
 		// gate images
@@ -664,9 +639,6 @@ public class GameState extends BasicGameState {
 		
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		// laser images
-		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
-		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
 	}
@@ -796,19 +768,6 @@ public class GameState extends BasicGameState {
 		return rightWall;
 	}
 
-	/**
-	 * @return the shot
-	 */
-	public boolean isShot() {
-		return shot;
-	}
-
-	/**
-	 * @param shot the shot to set
-	 */
-	public void setShot(boolean shot) {
-		this.shot = shot;
-	}
 
 	/**
 	 * @return the savedInput
@@ -824,18 +783,20 @@ public class GameState extends BasicGameState {
 		this.savedInput = savedInput;
 	}
 
+	
+
 	/**
-	 * @return the laser
+	 * @return the weaponList
 	 */
-	public Weapon getWeapon() {
-		return weapon;
+	public WeaponList getWeaponList() {
+		return weaponList;
 	}
 
 	/**
-	 * @param weapon the weapon to set
+	 * @param weaponList the weaponList to set
 	 */
-	public void setWeapon(Weapon weapon) {
-		this.weapon = weapon;
+	public void setWeaponList(WeaponList weaponList) {
+		this.weaponList = weaponList;
 	}
 
 	/**
@@ -871,6 +832,20 @@ public class GameState extends BasicGameState {
 	 */
 	public ArrayList<Coin> getDroppedCoins() {
 		return droppedCoins;
+	}
+
+	/**
+	 * @return the shotList
+	 */
+	public ArrayList<BouncingCircle> getShotList() {
+		return shotList;
+	}
+
+	/**
+	 * @param shotList the shotList to set
+	 */
+	public void setShotList(ArrayList<BouncingCircle> shotList) {
+		this.shotList = shotList;
 	}
 
 	public void setDroppedCoins(ArrayList<Coin> droppedCoins) {

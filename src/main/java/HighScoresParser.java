@@ -41,8 +41,6 @@ public final class HighScoresParser {
 		}
 		
 		return hs;
-				
-		
 	}
 	
 	/**

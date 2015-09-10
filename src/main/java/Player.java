@@ -1,13 +1,12 @@
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SpriteSheet;
 
 /**
  * This class represents a Player.
@@ -33,6 +32,8 @@ public class Player {
 	private Gate intersectingGate;
 	// weapon management
 	private LinkedList<Powerup.PowerupType> weapons;
+	private boolean shot;
+	private int playerNumber;
 
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
@@ -70,6 +71,7 @@ public class Player {
 		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
 		this.shield = false;
+		this.shot = false;
 	}
 	
 	/**
@@ -135,19 +137,23 @@ public class Player {
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (gs.getSavedInput().isKeyPressed(shootKey) &&
-				(!gs.isShot() || (gs.getWeapon().getClass() == Spiky.class))) {
-			gs.setShot(true);
-			float x = this.getCenterX();
-			gs.setWeapon(this.getWeapon(container));
+		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
+		
+		if (gs.getSavedInput().isKeyPressed(shootKey)
+				&& (!shot || (weapon.getClass() == Spiky.class))) {
+			System.out.println("intigin weapon dthough");
+			shot = true;
+			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(container));
 		}
+		
+		weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
 
 		// Update laser
-		if (gs.isShot()) {
-			gs.getWeapon().update(gs, deltaFloat);
+		if (shot) {
+			weapon.update(gs, deltaFloat);
 			// Disable laser when it has reached the ceiling
-			if (!gs.getWeapon().isVisible()) {
-				gs.setShot(false);
+			if (!weapon.isVisible()) {
+				shot = false;
 			}
 		}
 	}
@@ -183,8 +189,8 @@ public class Player {
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			return new InstantLaser(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
-					mg.getLaserWidth());
+			return new InstantLaser(this.getCenterX(), 
+					container.getHeight() - gs.getFloor().getHeight(), mg.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
@@ -462,4 +468,34 @@ public class Player {
 	public void setShootKey(int shootKey) {
 		this.shootKey = shootKey;
 	}
+
+	/**
+	 * @return the shot
+	 */
+	public boolean isShot() {
+		return shot;
+	}
+
+	/**
+	 * @param shot the shot to set
+	 */
+	public void setShot(boolean shot) {
+		this.shot = shot;
+	}
+
+	/**
+	 * @return the playerNumber
+	 */
+	public int getPlayerNumber() {
+		return playerNumber;
+	}
+
+	/**
+	 * @param playerNumber the playerNumber to set
+	 */
+	public void setPlayerNumber(int playerNumber) {
+		this.playerNumber = playerNumber;
+	}
+	
+	
 }

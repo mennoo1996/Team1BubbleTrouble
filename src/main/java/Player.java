@@ -39,6 +39,9 @@ public class Player {
 
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
+	private static final int PLAYER1_X_DEVIATION = 720;
+	private static final int PLAYER2_X_DEVIATION = 420;
+	private static final int PLAYER_Y_DEVIATION = 705;
 	private static final float HALF = 0.5f;
 	private int moveLeftKey;
 	private int moveRightKey;
@@ -198,6 +201,19 @@ public class Player {
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
 	}
 
+	/**
+	 * Reset this player to its original location.
+	 * @param m multiplayer index of player
+	 */
+	public void resetPlayerLocation(int m) {
+		if (m == 0) {
+			this.x = PLAYER1_X_DEVIATION;
+		} else {
+			this.x = PLAYER2_X_DEVIATION;
+		}
+		this.y = PLAYER_Y_DEVIATION;
+	}
+	
 	/**
 	 * Return a bounding box rectangle of the player.
 	 * @return a bounding box rectangle

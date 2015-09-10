@@ -178,6 +178,7 @@ public class GameState extends BasicGameState {
 		// If still shooting stop it
 		random = new Random();
 		mg.getPlayerList().setAllPlayersShot(false);
+		//mg.getPlayerList().resetPlayerLocations();
 		score = 0;
 		levels.initialize();
 		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
@@ -490,9 +491,14 @@ public class GameState extends BasicGameState {
 		drawMiscellaneous(container, graphics);
 	}
 
+	private void drawPowerupStatus() {
+		String outputPlayer1 = "";
+		
+	}
+	
 	private void drawGates(GameContainer container, Graphics graphics) {
 		// draw all active gates
-				drawActiveGates(container, graphics);
+		drawActiveGates(container, graphics);
 	}
 
 	private void drawMiscellaneous(GameContainer container, Graphics graphics) {

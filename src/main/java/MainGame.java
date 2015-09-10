@@ -88,7 +88,7 @@ public class MainGame extends StateBasedGame {
 	public MainGame(String name) {
 		super(name);
 		this.player1ImageString = "Playersprite.png";
-		this.player2ImageString = "Ariesprite.png";
+		this.player2ImageString = "Player2sprite.png";
 		this.lifeCount = LIVES;
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;

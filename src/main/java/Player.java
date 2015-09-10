@@ -325,7 +325,11 @@ public class Player {
 
 	private void addWeapon(Powerup.PowerupType type) {
 		weapons.add(type);
-		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(),
+		Executors.newScheduledThreadPool(1).schedule(() -> {
+					if (!weapons.isEmpty()) {
+						weapons.removeFirst();
+					}
+				},
 				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
 	
@@ -448,5 +452,13 @@ public class Player {
 	 */
 	public void setShootKey(int shootKey) {
 		this.shootKey = shootKey;
+	}
+
+	/**
+	 * Respawn player (i.e. reset powerups)
+	 */
+	public void respawn() {
+		weapons = new LinkedList<>();
+		shieldCount = 0;
 	}
 }

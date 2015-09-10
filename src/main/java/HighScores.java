@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,13 +25,14 @@ public class HighScores {
 	 * @return a String representation of the highscores.
 	 */
 	public String toString() {
-		String res = "";
+		StringBuffer buf = new StringBuffer();
 		
 		for (Score score : scoreList) {
-			res += score.toString() + "\n";
+			buf.append(score.toString());
+			buf.append("\n");
 		}
 		
-		res = res.substring(0, res.length() - 1);
+		String res = buf.toString();
 		return res;
 	}
 
@@ -77,7 +79,12 @@ public class HighScores {
  * @author Bart
  *
  */
-final class ScoresComparator implements Comparator<Score> {
+final class ScoresComparator implements Comparator<Score>, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5401083012573568914L;
 
 	/**
 	 * Compare the 2 scores and return the highest.

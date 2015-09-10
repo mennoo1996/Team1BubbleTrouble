@@ -102,7 +102,7 @@ public class LevelContainer {
 				ArrayList<Gate> gates = new ArrayList<Gate>();
 				Gate gate11;
 				if (!testing) {
-					gate11 = new Gate(container.getWidth() / 2 + LEVEL_1_GATE_X_DEVIATION,
+					gate11 = new Gate((float)container.getWidth() / 2.0f + LEVEL_1_GATE_X_DEVIATION,
 							0, LEVEL_1_GATE_WIDTH, container.getHeight());
 				} else {
 					gate11 = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION,

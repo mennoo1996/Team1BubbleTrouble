@@ -52,10 +52,10 @@ public class MainGame extends StateBasedGame {
 	private HighScores highscores;
 	
 	//////////////////////// STATES //////////////
-	private final int startState = 0;
-	private final int gameState = 1;
-	private final int gameOverState = 2;
-	private final int settingsState = 3;
+	private static  final int START_STATE = 0;
+	private static final int GAME_STATE = 1;
+	private static final int GAME_OVER_STATE = 2;
+	private static final int SETTINGS_STATE = 3;
 	
 	private GameState gameStateState;
 	
@@ -89,7 +89,7 @@ public class MainGame extends StateBasedGame {
 		this.playerImageString = "Playersprite.png";
 		this.lifeCount = LIVES;
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
-		this.multiplayer = true;
+		this.multiplayer = false;
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
-		app.setDisplayMode(xRes, Math.round(yRes), false);
+		app.setDisplayMode(xRes, yRes, false);
 		app.setVSync(true);
 		app.setTargetFrameRate(TARGET_FRAMERATE);
 		app.setShowFPS(false);
@@ -163,7 +163,7 @@ public class MainGame extends StateBasedGame {
 				+ "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
 		
-		this.enterState(startState);
+		this.enterState(START_STATE);
 	
 	}
 	
@@ -525,28 +525,28 @@ public class MainGame extends StateBasedGame {
 	 * @return the startState
 	 */
 	public int getStartState() {
-		return startState;
+		return START_STATE;
 	}
 
 	/**
 	 * @return the gameState
 	 */
 	public int getGameState() {
-		return gameState;
+		return GAME_STATE;
 	}
 
 	/**
 	 * @return the gameOverState
 	 */
 	public int getGameOverState() {
-		return gameOverState;
+		return GAME_OVER_STATE;
 	}
 
 	/**
 	 * @return the settingsState
 	 */
 	public int getSettingsState() {
-		return settingsState;
+		return SETTINGS_STATE;
 	}
 
 	/**

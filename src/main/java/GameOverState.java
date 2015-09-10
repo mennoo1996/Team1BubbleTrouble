@@ -139,7 +139,7 @@ public class GameOverState extends BasicGameState {
 					sbg.enterState(0);
 				}
 				else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					System.exit(0);
+					container.exit();
 				}
 			}
 			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) 

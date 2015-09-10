@@ -10,6 +10,7 @@ import java.util.Comparator;
 public class HighScores {
 	
 	private ArrayList<Score> scoreList;
+	private static final int MAX_HIGHSCORES = 10;
 	
 	/**
 	 * Construct a new HighScores object. 
@@ -62,8 +63,8 @@ public class HighScores {
 	public void sort() {
 		Collections.sort(scoreList, new ScoresComparator());
 		
-		if(scoreList.size() > 10) {
-			for(int i = 10; i < scoreList.size(); i++) {
+		if (scoreList.size() > MAX_HIGHSCORES) {
+			for (int i = MAX_HIGHSCORES; i < scoreList.size(); i++) {
 				scoreList.remove(i);
 			}
 		}

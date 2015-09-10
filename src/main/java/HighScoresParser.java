@@ -15,6 +15,11 @@ public final class HighScoresParser {
 		// do not even call this
 	}
 	
+	/**
+	 * Read highscores from file.
+	 * @param fileName	- the file to read from
+	 * @return	- the read highscores
+	 */
 	public static HighScores readHighScores(String fileName) {
 		BufferedReader reader;
 		HighScores hs = null;
@@ -22,7 +27,7 @@ public final class HighScoresParser {
 			reader = new BufferedReader(new FileReader(fileName));
 			hs = new HighScores();
 			String line = reader.readLine();
-			while (line!=null) {
+			while (line != null) {
 				String[] splitted = line.split(",");
 				int points = Integer.parseInt(splitted[0]);
 				String name = splitted[1];
@@ -36,10 +41,13 @@ public final class HighScoresParser {
 		}
 		
 		return hs;
-				
-		
 	}
 	
+	/**
+	 * Write highscores to a file.
+	 * @param fileName	- the file to write to
+	 * @param hs		- the highscores to write
+	 */
 	public static void writeHighScores(String fileName, HighScores hs) {
 		System.out.println("HIER OOK");
 		PrintWriter writer;

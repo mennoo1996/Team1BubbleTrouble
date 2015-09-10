@@ -3,9 +3,12 @@ import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Circle;
 
-
+/**
+ * A list of weapons.
+ * @author Bart
+ *
+ */
 public class WeaponList {
 	
 	private ArrayList<Weapon> weaponList;
@@ -20,10 +23,12 @@ public class WeaponList {
 	private static final int LASER_BEAM_SRCY2 = 300;
 	private Image laserbeamimage;
 	private Image lasertipimage;
+	
 	/**
-	 * @param weaponList
-	 * @param mg
-	 * @param gs
+	 * The constructor of weaponlist.
+	 * @param weapon1 	- the first weapon of the list
+	 * @param mg		- the maingame 
+	 * @param gs		- the gamestate
 	 */
 	public WeaponList(Weapon weapon1, MainGame mg, GameState gs) {
 		super();
@@ -39,10 +44,14 @@ public class WeaponList {
 		}
 	}
 	
+	/**
+	 * Inserct all weapons with a circle.
+	 * @param circle	- the circle to intersect with
+	 */
 	public void intersectWeaponsWithCircle(BouncingCircle circle) {
 		intersectWeaponWithCircle(circle, 0);
 		
-		if(mg.isMultiplayer()) {
+		if (mg.isMultiplayer()) {
 			intersectWeaponWithCircle(circle, 1);
 		}
 	}
@@ -51,7 +60,7 @@ public class WeaponList {
 		Weapon weapon = weaponList.get(weaponNumber);
 		Player player = mg.getPlayerList().getPlayerList().get(weaponNumber);
 		
-		if(player.isShot() && weapon.getRectangle().intersects(circle)) {
+		if (player.isShot() && weapon.getRectangle().intersects(circle)) {
 			gs.getShotList().add(circle);
 			weapon.setVisible(false);
 		}
@@ -63,22 +72,35 @@ public class WeaponList {
 		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 	}
 	
+	/**
+	 * Add a weapon to the list.
+	 * @param weapon 	- the weapon to add
+	 */
 	public void add(Weapon weapon) {
-		if(weaponList.size() < 2) {
+		if (weaponList.size() < 2) {
 			weaponList.add(weapon);
 		}
 	}
 	
+	/**
+	 * Draw all weapons.
+	 * @param graphics	- the graphics to draw with
+	 */
 	public void drawWeapons(Graphics graphics) {
-		if(mg.getPlayerList().getPlayerList().get(0).isShot()) {
+		if (mg.getPlayerList().getPlayerList().get(0).isShot()) {
 			drawWeapon(graphics, 0);
 		}
 		
-		if(mg.isMultiplayer() && mg.getPlayerList().getPlayerList().get(1).isShot()) {
+		if (mg.isMultiplayer() && mg.getPlayerList().getPlayerList().get(1).isShot()) {
 			drawWeapon(graphics, 1);
 		}
 	}
 	
+	/**
+	 * Set a weapon.
+	 * @param weaponNumber	- the number of the weapon to set
+	 * @param weapon		- the weapon to set
+	 */
 	public void setWeapon(int weaponNumber, Weapon weapon) {
 		weaponList.set(weaponNumber, weapon);
 	}

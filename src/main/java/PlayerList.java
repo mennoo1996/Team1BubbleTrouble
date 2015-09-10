@@ -16,6 +16,8 @@ public class PlayerList {
 	private static final float MOVEMENT_COUNTER_FACTOR = 0.5f;
 	private static final int PLAYER_DRAW_X_DEVIATION = 30;
 	private static final int PLAYER_DRAW_Y_DEVIATION = 23;
+	private static final int SHIELD_DRAW_X_DEVIATION = 43;
+	private static final int SHIELD_DRAW_Y_DEVIATION = 40;
 	
 	/**
 	 * 
@@ -52,10 +54,9 @@ public class PlayerList {
 			playerDeath(mg);
 		}
 	}
-	
 	public void drawPlayers(GameContainer container, Graphics graphics) {
 		drawPlayer(playerList.get(0), container, graphics);
-		if(mg.isMultiplayer()) {
+		if (mg.isMultiplayer()) {
 			drawPlayer(playerList.get(1), container, graphics);
 		}
 	}
@@ -83,6 +84,10 @@ public class PlayerList {
 			player.resetMovementCounter();
 			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX()
 					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
+		}
+		if (player.hasShield()) {
+			graphics.drawImage(player.getShieldImage(), player.getX() 
+					- SHIELD_DRAW_X_DEVIATION, player.getY() - SHIELD_DRAW_X_DEVIATION);
 		}
 		player.setMovement(0);
 	}

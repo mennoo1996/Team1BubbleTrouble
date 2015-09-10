@@ -49,6 +49,9 @@ public class GameState extends BasicGameState {
 	private Image health3Image;
 	private Image health4Image;
 	private Image health5Image;
+	private Image laserImage;
+	private Image shieldImage;
+	private Image vineImage;
 	private Image nobuttonImage;
 	private Image[] ballsImages;
 	private Image ceilingImage;
@@ -57,6 +60,12 @@ public class GameState extends BasicGameState {
 	private Image counterBarImage;
 	private Image gateUpper;
 	private Image gateLower;
+	private Image coinImage;
+	
+	// pause game buttons
+	private Button returnButton;
+	private Button menuButton;
+	private Button exitButton;
 	
 	// Countdown Bar Logic
 	private static final int COUNTDOWN_BAR_PARTS = 56;
@@ -73,6 +82,18 @@ public class GameState extends BasicGameState {
 	private boolean shot;
 
 	private LevelContainer levels;
+	
+	// PAUSE MENU
+	private static final int BUTTON_X = 150;
+	private static final int RETURN_BUTTON_Y = 225;
+	private static final int MENU_BUTTON_Y = 275;
+	private static final int EXIT_BUTTON_Y = 325;
+	private static final int TEXT_X = 164;
+	private static final int TEXT_1_Y = 142;
+	private static final int TEXT_2_Y = 190;
+	private static final int BUTTON_WIDTH = 1000;
+	private static final int BUTTON_HEIGHT = 50;
+	private static final int MOUSE_OVER_RECT_X = 500;
 	
 	// CONSTANTS
 	private static final int LEVEL_POINTS = 1500;
@@ -139,7 +160,9 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
-	private static final int COIN_CHANCE = 10;
+	private static final int COIN_CHANCE = 30;
+	private static final int POWERUP_IMAGE_OFFSET = 12;
+	private static final int COIN_IMAGE_OFFSET = 3;
 	// Level ending, empty bar
 	
 	/**
@@ -195,6 +218,7 @@ public class GameState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
 		loadImages();
+		loadButtons();
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -238,6 +262,7 @@ public class GameState extends BasicGameState {
 				countIn = true;
 				playingState = true;
 			}
+			processPauseButtons(container, sbg);
 		}
 	}
 
@@ -278,6 +303,24 @@ public class GameState extends BasicGameState {
 		prevTime = curTime;
 	}
 
+	private void processPauseButtons(GameContainer container, StateBasedGame sbg) {
+		Input input = container.getInput();
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY()) 
+					&& !waitEsc) {
+				prevTime = System.currentTimeMillis();
+				countIn = true;
+				playingState = true;
+			} else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+				mg.setScore(0);
+				mg.setLevelCounter(0);
+				sbg.enterState(0);
+			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+				System.exit(0);
+			}
+		}
+	}
+	
 	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
 		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
 		updateActiveCircles(container, sbg, deltaFloat, ceilingList);
@@ -484,16 +527,28 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawPowerups(Graphics graphics) {
+
 		for (Powerup pow : droppedPowerups) {
-			graphics.fillRect(pow.getX(), pow.getY(),
-					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
+			if (pow.getType() == Powerup.PowerupType.SHIELD) {
+				graphics.drawImage(shieldImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
+				graphics.drawImage(vineImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
+				graphics.drawImage(laserImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			}
+//			graphics.fillRect(pow.getX(), pow.getY(),
+//					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
 		}
 	}
 
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		for (Coin coin : droppedCoins) {
-			graphics.fillRect(coin.getX(), coin.getY(), coin.getRectangle().getWidth(), coin.getRectangle().getHeight());
+			graphics.drawImage(coinImage, coin.getX() 
+					- COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET);
 		}
 		graphics.setColor(Color.white);
 	}
@@ -575,7 +630,7 @@ public class GameState extends BasicGameState {
 	private void drawFloatingScores() {
 		for (FloatingScore score : floatingScoreList) {
 			mg.getDosFont().drawString(score.getX(), score.getY(),
-					Integer.toString(score.getScore()),
+					score.getScore(),
 					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS,
 							FLOATING_SCORE_BRIGHTNESS, score.getOpacity()));
 		}
@@ -607,8 +662,30 @@ public class GameState extends BasicGameState {
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION,
-				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, "Game is paused...");
+		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# Game is paused...");
+		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "========================");
+		Input input = container.getInput();
+		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), 
+					returnButton.getY());
+		} else {
+			graphics.drawImage(returnButton.getImage(), 
+					returnButton.getX(), returnButton.getY());
+		}
+		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(menuButton.getImageMouseOver(), menuButton.getX(), 
+					menuButton.getY());
+		} else {
+			graphics.drawImage(menuButton.getImage(), 
+					menuButton.getX(), menuButton.getY());
+		}
+		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(exitButton.getImageMouseOver(), exitButton.getX(), 
+					exitButton.getY());
+		} else {
+			graphics.drawImage(exitButton.getImage(), 
+					exitButton.getX(), exitButton.getY());
+		}
 	}
 
 	private void drawCountIn(GameContainer container, Graphics graphics) {
@@ -646,6 +723,7 @@ public class GameState extends BasicGameState {
 
 	private void loadImages() throws SlickException {
 		loadHealthAndBallImages();
+		loadPowerupImages();
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 		// laser images
@@ -669,6 +747,29 @@ public class GameState extends BasicGameState {
 		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
+		coinImage = new Image("resources/coin.png");
+	}
+	
+	private void loadButtons() throws SlickException {
+		returnButton = new Button(BUTTON_X, RETURN_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_Return.png"),
+				new Image("resources/Menus/Menu_Button_Return2.png"));
+		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_MainMenu.png"),
+				new Image("resources/Menus/Menu_Button_MainMenu2.png"));
+		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_Quit.png"),
+				new Image("resources/Menus/Menu_Button_Quit2.png"));
+	}
+	
+	private void loadPowerupImages() throws SlickException {
+		// load powerup images
+		laserImage = new Image("resources/Powerups/Laser.png");
+		shieldImage = new Image("resources/Powerups/Shield.png");
+		vineImage = new Image("resources/Powerups/Vine.png");
 	}
 	
 	private void loadHealthAndBallImages() throws SlickException {
@@ -873,7 +974,18 @@ public class GameState extends BasicGameState {
 		return droppedCoins;
 	}
 
+	/**
+ 	* @param droppedCoins list to set
+ 	*/
 	public void setDroppedCoins(ArrayList<Coin> droppedCoins) {
 		this.droppedCoins = droppedCoins;
 	}
+	
+	/**
+	 * @return floating scores
+	 */
+	public ArrayList<FloatingScore> getFloatingScores() {
+		return floatingScoreList;
+	}
+	
 }

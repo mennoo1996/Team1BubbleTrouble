@@ -61,6 +61,20 @@ public class Coin {
     public float getY() {
         return this.y;
     }
+    
+    /**
+     * @return x coord
+     */
+    public float getCenterX() {
+        return this.x + this.width / 2;
+    }
+
+    /**
+     * @return y coord
+     */
+    public float getCenterY() {
+        return this.y + this.height / 2;
+    }
 
     /**
      * Return a bounding box rectangle of the coin.

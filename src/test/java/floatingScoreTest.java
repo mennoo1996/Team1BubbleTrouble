@@ -37,7 +37,8 @@ public class floatingScoreTest {
 	@Test
 	public void getScoreTest() {
 		s = new FloatingScore(c);
-		assertEquals(50, s.getScore());
+		String t = "50";
+		assertTrue(t.equals(s.getScore()));
 	}
 	
 	@Test

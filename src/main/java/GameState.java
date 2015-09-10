@@ -48,6 +48,9 @@ public class GameState extends BasicGameState {
 	private Image health3Image;
 	private Image health4Image;
 	private Image health5Image;
+	private Image laserImage;
+	private Image shieldImage;
+	private Image vineImage;
 	private Image nobuttonImage;
 	private Image[] ballsImages;
 	private Image ceilingImage;
@@ -139,6 +142,7 @@ public class GameState extends BasicGameState {
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
 	private static final int COIN_CHANCE = 20;
+	private static final int POWERUP_IMAGE_OFFSET = 12;
 	// Level ending, empty bar
 	
 	/**
@@ -478,9 +482,20 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawPowerups(Graphics graphics) {
+
 		for (Powerup pow : droppedPowerups) {
-			graphics.fillRect(pow.getX(), pow.getY(),
-					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
+			if (pow.getType() == Powerup.PowerupType.SHIELD) {
+				graphics.drawImage(shieldImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
+				graphics.drawImage(vineImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
+				graphics.drawImage(laserImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			}
+//			graphics.fillRect(pow.getX(), pow.getY(),
+//					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
 		}
 	}
 
@@ -632,6 +647,7 @@ public class GameState extends BasicGameState {
 
 	private void loadImages() throws SlickException {
 		loadHealthAndBallImages();
+		loadPowerupImages();
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 		// laser images
@@ -655,6 +671,13 @@ public class GameState extends BasicGameState {
 		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
+	}
+	
+	private void loadPowerupImages() throws SlickException {
+		// load powerup images
+		laserImage = new Image("resources/Powerups/Laser.png");
+		shieldImage = new Image("resources/Powerups/Shield.png");
+		vineImage = new Image("resources/Powerups/Vine.png");
 	}
 	
 	private void loadHealthAndBallImages() throws SlickException {

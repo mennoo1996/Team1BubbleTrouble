@@ -139,7 +139,7 @@ public class GameOverState extends BasicGameState {
 					sbg.enterState(0);
 				}
 				else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					System.exit(0);
+					container.exit();
 				}
 			}
 			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) 
@@ -164,7 +164,8 @@ public class GameOverState extends BasicGameState {
 		if (mg.getLifeCount() <= 0) {
 			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# Game Over");
 		} else {
-			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# You won! You are the champion of soup!");
+			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , 
+					"# You won! You are the champion of soup!");
 		}
 		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
 		mg.getDosFont().drawString(TEXT_X, TEXT_3_Y, "# Please enter your name below");
@@ -185,7 +186,6 @@ public class GameOverState extends BasicGameState {
 		mg.getHighscores().sort();
 		String highScoresString = mg.getHighscores().toString();
 		mg.getDosFont().drawString(HIGHSCORES_X, SEPARATOR_Y, highScoresString);
-
 	}
 	
 	/**

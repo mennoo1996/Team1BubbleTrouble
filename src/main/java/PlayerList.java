@@ -4,7 +4,11 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
-
+/**
+ * A list of players.
+ * @author Bart
+ *
+ */
 public class PlayerList {
 	
 	private ArrayList<Player> playerList;
@@ -16,9 +20,13 @@ public class PlayerList {
 	private static final float MOVEMENT_COUNTER_FACTOR = 0.5f;
 	private static final int PLAYER_DRAW_X_DEVIATION = 30;
 	private static final int PLAYER_DRAW_Y_DEVIATION = 23;
+	private static final int SHIELD_DRAW_X_DEVIATION = 43;
 	
 	/**
-	 * 
+	 * The constructor of playerlist.
+	 * @param player1	- the first player of the list
+	 * @param mg		- the maingame
+	 * @param gs		- the gamestate
 	 */
 	public PlayerList(Player player1, MainGame mg, GameState gs) {
 		super();
@@ -28,35 +36,63 @@ public class PlayerList {
 		this.gs = gs;
 	}
 	
-	public void updatePlayers(float deltaFloat){
+	/**
+	 * Update all players.
+	 * @param deltaFloat	- time since last frame
+	 */
+	public void updatePlayers(float deltaFloat) {
 		playerList.get(0).update(deltaFloat);
-		if(mg.isMultiplayer()) {
+		if (mg.isMultiplayer()) {
 			playerList.get(1).update(deltaFloat);	
 		}
 	}
 	
+	/**
+	 * Add a player to the list.
+	 * @param player	- the player to add
+	 */
 	public void add(Player player) {
-		if(playerList.size() < 2) {
+		if (playerList.size() < 2) {
 			playerList.add(player);
 		}
 	}
 	
+	/**
+	 * Inserct all players with a circle.
+	 * @param circle	- the circle to intersect with
+	 */
 	public void intersectPlayersWithCircle(BouncingCircle circle) {
 		if (playerList.get(0).getRectangle().intersects(circle) && !playerList.get(0).hasShield()) {
 			//LIVES FUNCTIONALITY
 			playerDeath(mg);
 		}
 		
-		if (mg.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)&& !playerList.get(1).hasShield()) {
+		if (mg.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)
+				&& !playerList.get(1).hasShield()) {
 			//LIVES FUNCTIONALITY
 			playerDeath(mg);
 		}
 	}
 	
+	/**
+	 * Draw all players.
+	 * @param container	- the container to draw to
+	 * @param graphics	- the graphics to draw with
+	 */
 	public void drawPlayers(GameContainer container, Graphics graphics) {
 		drawPlayer(playerList.get(0), container, graphics);
-		if(mg.isMultiplayer()) {
+		if (mg.isMultiplayer()) {
 			drawPlayer(playerList.get(1), container, graphics);
+		}
+	}
+	
+	/**
+	 * Set shot variable of all players.
+	 * @param shot	- the value to set
+	 */
+	public void setAllPlayersShot(boolean shot) {
+		for (Player player : playerList) {
+			player.setShot(shot);
 		}
 	}
 	
@@ -83,6 +119,10 @@ public class PlayerList {
 			player.resetMovementCounter();
 			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX()
 					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
+		}
+		if (player.hasShield()) {
+			graphics.drawImage(player.getShieldImage(), player.getX() 
+					- SHIELD_DRAW_X_DEVIATION, player.getY() - SHIELD_DRAW_X_DEVIATION);
 		}
 		player.setMovement(0);
 	}

@@ -11,8 +11,8 @@ public class Powerup {
         SHIELD, SPIKY, INSTANT
     }
 
-    private static final float POWERUP_WIDTH = 20;
-    private static final float POWERUP_HEIGHT = 20;
+    private static final float POWERUP_WIDTH = 40;
+    private static final float POWERUP_HEIGHT = 40;
     private static final float POWERUP_SPEED = 200f;
 
     private float x, y, width, height;
@@ -65,6 +65,20 @@ public class Powerup {
      */
     public float getY() {
         return y;
+    }
+    
+    /**
+     * @return powerup's x coord center
+     */
+    public float getCenterX() {
+        return x + POWERUP_WIDTH / 2;
+    }
+
+    /**
+     * @return powerup's x coord center
+     */
+    public float getCenterY() {
+        return y + POWERUP_WIDTH / 2;
     }
 
     /**

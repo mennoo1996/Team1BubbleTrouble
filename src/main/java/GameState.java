@@ -23,7 +23,7 @@ public class GameState extends BasicGameState {
 
 	
 	
-	private static int totaltime;
+	private  int totaltime;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -49,14 +49,21 @@ public class GameState extends BasicGameState {
 	private Image health3Image;
 	private Image health4Image;
 	private Image health5Image;
+	private Image laserImage;
+	private Image shieldImage;
+	private Image vineImage;
 	private Image nobuttonImage;
 	private Image[] ballsImages;
 	private Image ceilingImage;
-	private Image laserbeamimage;
-	private Image lasertipimage;
 	private Image counterBarImage;
 	private Image gateUpper;
 	private Image gateLower;
+	private Image coinImage;
+	
+	// pause game buttons
+	private Button returnButton;
+	private Button menuButton;
+	private Button exitButton;
 	
 	// Countdown Bar Logic
 	private static final int COUNTDOWN_BAR_PARTS = 56;
@@ -64,15 +71,26 @@ public class GameState extends BasicGameState {
 	private boolean waitForLevelEnd = false;
 	
 	// level objects
-	private Weapon weapon;
+	private WeaponList weaponList;
 	private MyRectangle floor;
 	private MyRectangle leftWall;
 	private MyRectangle rightWall;
 	private MyRectangle ceiling;
 	private Input savedInput;
-	private boolean shot;
 
 	private LevelContainer levels;
+	
+	// PAUSE MENU
+	private static final int BUTTON_X = 150;
+	private static final int RETURN_BUTTON_Y = 225;
+	private static final int MENU_BUTTON_Y = 275;
+	private static final int EXIT_BUTTON_Y = 325;
+	private static final int TEXT_X = 164;
+	private static final int TEXT_1_Y = 142;
+	private static final int TEXT_2_Y = 190;
+	private static final int BUTTON_WIDTH = 1000;
+	private static final int BUTTON_HEIGHT = 50;
+	private static final int MOUSE_OVER_RECT_X = 500;
 	
 	// CONSTANTS
 	private static final int LEVEL_POINTS = 1500;
@@ -97,12 +115,6 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_Y_DEVIATION = 60;
 	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
 	private static final int COUNTER_BAR_X_FACTOR = 10;
-	private static final int LASER_X_DEVIATION = 18;
-	private static final int LASER_TIP_Y_DEVIATION = 14;
-	private static final int LASER_BEAM_Y_DEVIATION = 13;
-	private static final int LASER_BEAM_X2_DEVIATION = 17;
-	private static final int LASER_BEAM_SRCX2 = 35;
-	private static final int LASER_BEAM_SRCY2 = 300;
 	private static final int GATE_LEFT = 11;
 	private static final int GATE_DOWN = 9;
 	private static final int GATE_Y_DEVIATION = 15;
@@ -139,8 +151,12 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
-	private static final int COIN_CHANCE = 10;
+	private static final int COIN_CHANCE = 30;
+	private static final int POWERUP_IMAGE_OFFSET = 12;
+	private static final int COIN_IMAGE_OFFSET = 3;
 	// Level ending, empty bar
+	
+	private Random random;
 	
 	/**
 	 * constructor.
@@ -160,7 +176,8 @@ public class GameState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		// If still shooting stop it
-		setShot(false);
+		random = new Random();
+		mg.getPlayerList().setAllPlayersShot(false);
 		score = 0;
 		levels.initialize();
 		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
@@ -195,6 +212,7 @@ public class GameState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
 		loadImages();
+		loadButtons();
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -203,6 +221,11 @@ public class GameState extends BasicGameState {
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		
 		levels = new LevelContainer(mg);
+		
+		Weapon weapon1 = null;
+		Weapon weapon2 = null;
+		weaponList = new WeaponList(weapon1, mg, this);
+		weaponList.add(weapon2);
 	}
 
 
@@ -238,6 +261,7 @@ public class GameState extends BasicGameState {
 				countIn = true;
 				playingState = true;
 			}
+			processPauseButtons(container, sbg);
 		}
 	}
 
@@ -263,7 +287,7 @@ public class GameState extends BasicGameState {
 
 	private void processTime(StateBasedGame sbg, long curTime) {
 		timeRemaining -= timeDelta;
-		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / totaltime);
+		fractionTimeParts = Math.round((float)COUNTDOWN_BAR_PARTS * (float)timeRemaining / (float)totaltime);
 
 		if (waitForLevelEnd) {
 			timeRemaining -= TIME_REMAINING_FACTOR * totaltime;
@@ -278,6 +302,24 @@ public class GameState extends BasicGameState {
 		prevTime = curTime;
 	}
 
+	private void processPauseButtons(GameContainer container, StateBasedGame sbg) {
+		Input input = container.getInput();
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY()) 
+					&& !waitEsc) {
+				prevTime = System.currentTimeMillis();
+				countIn = true;
+				playingState = true;
+			} else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+				mg.setScore(0);
+				mg.setLevelCounter(0);
+				sbg.enterState(0);
+			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+				container.exit();
+			}
+		}
+	}
+	
 	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
 		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
 		updateActiveCircles(container, sbg, deltaFloat, ceilingList);
@@ -331,13 +373,8 @@ public class GameState extends BasicGameState {
             circle.update(this, container, deltaFloat);
 
             mg.getPlayerList().intersectPlayersWithCircle(circle);
-
-            // if laser intersects circle
-            if (isShot() && getWeapon().getRectangle().intersects(circle)) {
-                // it has been shot and disabled
-                shotList.add(circle);
-                getWeapon().setVisible(false);
-            }
+            
+            weaponList.intersectWeaponsWithCircle(circle);
 
             if (circle.isHitCeiling()) {
             	ceilingList.add(circle);
@@ -430,7 +467,8 @@ public class GameState extends BasicGameState {
 		drawFloatingScores();
 		graphics.drawImage(ceilingImage, getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION,
 				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION);
-		drawGatesLaser(container, graphics);
+		drawGates(container, graphics);
+		weaponList.drawWeapons(graphics);
 		// draw player
 		mg.getPlayerList().drawPlayers(container, graphics);
 		drawItems(graphics);
@@ -441,7 +479,7 @@ public class GameState extends BasicGameState {
 		mg.getDosFont().drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mg.getLevelCounter() + 1));
-		mg.getDosFont().drawString(container.getWidth() / 2, container.getHeight()
+		mg.getDosFont().drawString((float)container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
@@ -450,14 +488,9 @@ public class GameState extends BasicGameState {
 		drawMiscellaneous(container, graphics);
 	}
 
-	private void drawGatesLaser(GameContainer container, Graphics graphics) {
+	private void drawGates(GameContainer container, Graphics graphics) {
 		// draw all active gates
 				drawActiveGates(container, graphics);
-				// if shot, draw laser
-				if (isShot()) {
-					//graphics.fill(laser.getRectangle());
-					drawWeapon(graphics);
-				}
 	}
 
 	private void drawMiscellaneous(GameContainer container, Graphics graphics) {
@@ -484,16 +517,28 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawPowerups(Graphics graphics) {
+
 		for (Powerup pow : droppedPowerups) {
-			graphics.fillRect(pow.getX(), pow.getY(),
-					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
+			if (pow.getType() == Powerup.PowerupType.SHIELD) {
+				graphics.drawImage(shieldImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
+				graphics.drawImage(vineImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
+				graphics.drawImage(laserImage,
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+			}
+//			graphics.fillRect(pow.getX(), pow.getY(),
+//					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
 		}
 	}
 
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		for (Coin coin : droppedCoins) {
-			graphics.fillRect(coin.getX(), coin.getY(), coin.getRectangle().getWidth(), coin.getRectangle().getHeight());
+			graphics.drawImage(coinImage, coin.getX() 
+					- COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET);
 		}
 		graphics.setColor(Color.white);
 	}
@@ -506,15 +551,6 @@ public class GameState extends BasicGameState {
 					container.getHeight() - COUNTER_BAR_Y_DEVIATION);
 			//counterBarImage.rotate(-10*x); // EPIC
 		}
-	}
-
-	private void drawWeapon(Graphics graphics) {
-		graphics.drawImage(lasertipimage, getWeapon().getX() - LASER_X_DEVIATION,
-				getWeapon().getY() - LASER_TIP_Y_DEVIATION);
-		graphics.drawImage(laserbeamimage, getWeapon().getX() - LASER_X_DEVIATION,
-				getWeapon().getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, getWeapon().getX()
-				+ LASER_BEAM_X2_DEVIATION, getWeapon().getRectangle().getMaxY(), 0, 0,
-				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2);
 	}
 
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
@@ -568,6 +604,11 @@ public class GameState extends BasicGameState {
 				case(MINIMUM_RADIUS) : graphics.drawImage(ballsImages[BALL_IMAGE_FIVE],
 						circle.getMinX() - offset, circle.getMinY() - offset); break;
 				default:
+					try {
+						throw new SlickException("Radius was not one of the supported");
+					} catch (SlickException e) {
+						e.printStackTrace();
+					}
 			}
 		}
 	}
@@ -575,7 +616,7 @@ public class GameState extends BasicGameState {
 	private void drawFloatingScores() {
 		for (FloatingScore score : floatingScoreList) {
 			mg.getDosFont().drawString(score.getX(), score.getY(),
-					Integer.toString(score.getScore()),
+					score.getScore(),
 					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS,
 							FLOATING_SCORE_BRIGHTNESS, score.getOpacity()));
 		}
@@ -599,6 +640,11 @@ public class GameState extends BasicGameState {
 				graphics.drawImage(health5Image, 0, 0);
 			break;
 			default:
+				try {
+					throw new SlickException("Life count was not in the correct range");
+				} catch (SlickException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 
@@ -607,8 +653,30 @@ public class GameState extends BasicGameState {
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(container.getWidth() / 2 - PAUSED_STRING_X_DEVIATION,
-				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, "Game is paused...");
+		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# Game is paused...");
+		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "========================");
+		Input input = container.getInput();
+		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), 
+					returnButton.getY());
+		} else {
+			graphics.drawImage(returnButton.getImage(), 
+					returnButton.getX(), returnButton.getY());
+		}
+		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(menuButton.getImageMouseOver(), menuButton.getX(), 
+					menuButton.getY());
+		} else {
+			graphics.drawImage(menuButton.getImage(), 
+					menuButton.getX(), menuButton.getY());
+		}
+		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			graphics.drawImage(exitButton.getImageMouseOver(), exitButton.getX(), 
+					exitButton.getY());
+		} else {
+			graphics.drawImage(exitButton.getImage(), 
+					exitButton.getX(), exitButton.getY());
+		}
 	}
 
 	private void drawCountIn(GameContainer container, Graphics graphics) {
@@ -646,11 +714,9 @@ public class GameState extends BasicGameState {
 
 	private void loadImages() throws SlickException {
 		loadHealthAndBallImages();
+		loadPowerupImages();
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		// laser images
-		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
-		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
 		// gate images
@@ -664,11 +730,31 @@ public class GameState extends BasicGameState {
 		
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		// laser images
-		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
-		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
 		// countdown bar images
 		counterBarImage = new Image("resources/counter_bar.png");
+		coinImage = new Image("resources/coin.png");
+	}
+	
+	private void loadButtons() throws SlickException {
+		returnButton = new Button(BUTTON_X, RETURN_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_Return.png"),
+				new Image("resources/Menus/Menu_Button_Return2.png"));
+		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_MainMenu.png"),
+				new Image("resources/Menus/Menu_Button_MainMenu2.png"));
+		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
+				BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/Menus/Menu_Button_Quit.png"),
+				new Image("resources/Menus/Menu_Button_Quit2.png"));
+	}
+	
+	private void loadPowerupImages() throws SlickException {
+		// load powerup images
+		laserImage = new Image("resources/Powerups/Laser.png");
+		shieldImage = new Image("resources/Powerups/Shield.png");
+		vineImage = new Image("resources/Powerups/Vine.png");
 	}
 	
 	private void loadHealthAndBallImages() throws SlickException {
@@ -741,7 +827,7 @@ public class GameState extends BasicGameState {
 	}
 
 	private void dropCoin(BouncingCircle circle) {
-		boolean bigMoney = new Random().nextBoolean();
+		boolean bigMoney = random.nextBoolean();
 		droppedCoins.add(new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney));
 	}
 
@@ -796,19 +882,6 @@ public class GameState extends BasicGameState {
 		return rightWall;
 	}
 
-	/**
-	 * @return the shot
-	 */
-	public boolean isShot() {
-		return shot;
-	}
-
-	/**
-	 * @param shot the shot to set
-	 */
-	public void setShot(boolean shot) {
-		this.shot = shot;
-	}
 
 	/**
 	 * @return the savedInput
@@ -824,18 +897,20 @@ public class GameState extends BasicGameState {
 		this.savedInput = savedInput;
 	}
 
+	
+
 	/**
-	 * @return the laser
+	 * @return the weaponList
 	 */
-	public Weapon getWeapon() {
-		return weapon;
+	public WeaponList getWeaponList() {
+		return weaponList;
 	}
 
 	/**
-	 * @param weapon the weapon to set
+	 * @param weaponList the weaponList to set
 	 */
-	public void setWeapon(Weapon weapon) {
-		this.weapon = weapon;
+	public void setWeaponList(WeaponList weaponList) {
+		this.weaponList = weaponList;
 	}
 
 	/**
@@ -880,7 +955,32 @@ public class GameState extends BasicGameState {
 		return droppedCoins;
 	}
 
+	/**
+	 * @return the shotList
+	 */
+	public ArrayList<BouncingCircle> getShotList() {
+		return shotList;
+	}
+
+	/**
+	 * @param shotList the shotList to set
+	 */
+	public void setShotList(ArrayList<BouncingCircle> shotList) {
+		this.shotList = shotList;
+	}
+
+	/**
+ 	* @param droppedCoins list to set
+ 	*/
 	public void setDroppedCoins(ArrayList<Coin> droppedCoins) {
 		this.droppedCoins = droppedCoins;
 	}
+	
+	/**
+	 * @return floating scores
+	 */
+	public ArrayList<FloatingScore> getFloatingScores() {
+		return floatingScoreList;
+	}
+	
 }

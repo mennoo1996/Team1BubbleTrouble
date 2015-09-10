@@ -1,6 +1,6 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -15,6 +15,11 @@ public final class HighScoresParser {
 		// do not even call this
 	}
 	
+	/**
+	 * Reads file into highscores.
+	 * @param fileName the filename
+	 * @return the highscores
+	 */
 	public static HighScores readHighScores(String fileName) {
 		BufferedReader reader;
 		HighScores hs = null;
@@ -22,7 +27,7 @@ public final class HighScoresParser {
 			reader = new BufferedReader(new FileReader(fileName));
 			hs = new HighScores();
 			String line = reader.readLine();
-			while (line!=null) {
+			while (line != null) {
 				String[] splitted = line.split(",");
 				int points = Integer.parseInt(splitted[0]);
 				String name = splitted[1];
@@ -36,15 +41,19 @@ public final class HighScoresParser {
 		}
 		
 		return hs;
-				
-		
 	}
 	
+	/**
+	 * Writes highscores into file.
+	 * @param fileName the filename
+	 * @param hs the highscores
+	 */
 	public static void writeHighScores(String fileName, HighScores hs) {
 		System.out.println("HIER OOK");
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(new FileWriter(fileName));
+			File file = new File(fileName);
+			writer = new PrintWriter(file, "UTF-8");
 			for (Score s: hs.getScoreList()) {
 				System.out.println(s);
 				String line = s.getScore() + "," + s.getName();
@@ -107,14 +116,14 @@ public final class HighScoresParser {
 //		}
 //	}
 	
-	/**
-	 * To test the parser?
-	 * @param args for command line arguments - not used
-	 */
-	public static void main(String[] args) {
-		HighScores hs = readHighScores("resources/highscores.txt");
-		//writeHighScores("resources/highscores.txt", hs);
-		System.out.println(hs.toString());
-	}
+//	/**
+//	 * To test the parser?
+//	 * @param args for command line arguments - not used
+//	 */
+//	public static void main(String[] args) {
+//		HighScores hs = readHighScores("resources/highscores.txt");
+//		//writeHighScores("resources/highscores.txt", hs);
+//		System.out.println(hs.toString());
+//	}
 
 }

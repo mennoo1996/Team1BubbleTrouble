@@ -1,12 +1,12 @@
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SpriteSheet;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SpriteSheet;
 
 /**
  * This class represents a Player.
@@ -14,8 +14,6 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class Player {
-	//Method 1 code
-	//int lifeCount;
 
 	private int shieldCount;
 	private float x;
@@ -26,6 +24,7 @@ public class Player {
 	private int movementCounter = 0;
 	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
 	private Image image;
+	private Image shieldImage;
 	private SpriteSheet spritesheet;
 	private boolean freeToRoam;
 	private MainGame mg;
@@ -33,6 +32,8 @@ public class Player {
 	private Gate intersectingGate;
 	// weapon management
 	private LinkedList<Powerup.PowerupType> weapons;
+	private boolean shot;
+	private int playerNumber;
 
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
@@ -49,15 +50,18 @@ public class Player {
 	 * @param width the width of the player
 	 * @param height the height of the player
 	 * @param image the image used on the player
+	 * @param shieldImage the image used for the player's shield
 	 * @param mg the maingame used on the player
 	 */
-	public Player(float x, float y, float width, float height, Image image, MainGame mg) {
+	public Player(float x, float y, float width, float height, Image image, Image shieldImage, 
+			MainGame mg) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.image = image;
+		this.shieldImage = shieldImage;
 		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mg = mg;
 		this.gs = (GameState) mg.getState(mg.getGameState());
@@ -66,6 +70,7 @@ public class Player {
 		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
 		this.shieldCount = 0;
+		this.shot = false;
 	}
 	
 	/**
@@ -95,7 +100,7 @@ public class Player {
 		}
 	}
 	
-	private void processPowerups(GameContainer container, float deltaFloat) {
+	private void processPowerups(GameContainer container, float deltaFloat) { // MARKED
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		for (Powerup powerup : gs.getDroppedPowerups()) {
 			powerup.update(gs, container, deltaFloat);
@@ -107,6 +112,7 @@ public class Player {
 		}
 
 		for (Powerup used : usedPowerups) {
+			gs.getFloatingScores().add(new FloatingScore(used));
 			gs.getDroppedPowerups().remove(used);
 		}
 	}
@@ -114,7 +120,7 @@ public class Player {
 	private void processCoins(GameContainer container, float deltaFloat) {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		for (Coin coin : gs.getDroppedCoins()) {
-			coin.update(gs, container, deltaFloat);
+			coin.update(gs.getFloor(), container.getHeight(), deltaFloat);
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
 				gs.addToScore(coin.getPoints());
@@ -123,25 +129,30 @@ public class Player {
 		}
 
 		for (Coin used : usedCoins) {
+			gs.getFloatingScores().add(new FloatingScore(used));
 			gs.getDroppedCoins().remove(used);
 		}
 	}
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (gs.getSavedInput().isKeyPressed(shootKey) &&
-				(!gs.isShot() || (gs.getWeapon().getClass() == Spiky.class))) {
-			gs.setShot(true);
-			float x = this.getCenterX();
-			gs.setWeapon(this.getWeapon(container));
+		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
+		
+		if (gs.getSavedInput().isKeyPressed(shootKey)
+				&& (!shot || (weapon.getClass() == Spiky.class))) {
+			System.out.println("intigin weapon dthough");
+			shot = true;
+			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(container));
 		}
+		
+		weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
 
 		// Update laser
-		if (gs.isShot()) {
-			gs.getWeapon().update(gs, deltaFloat);
+		if (shot) {
+			weapon.update(gs, deltaFloat);
 			// Disable laser when it has reached the ceiling
-			if (!gs.getWeapon().isVisible()) {
-				gs.setShot(false);
+			if (!weapon.isVisible()) {
+				shot = false;
 			}
 		}
 	}
@@ -177,8 +188,8 @@ public class Player {
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			return new InstantLaser(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
-					mg.getLaserWidth());
+			return new InstantLaser(this.getCenterX(), 
+					container.getHeight() - gs.getFloor().getHeight(), mg.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
@@ -292,6 +303,13 @@ public class Player {
 	 */
 	public void setImage(Image image) {
 		this.image = image;
+	}
+	
+	/**
+	 * @return the shield image
+	 */
+	public Image getShieldImage() {
+		return shieldImage;
 	}
 
 	/**
@@ -460,5 +478,33 @@ public class Player {
 	public void respawn() {
 		weapons = new LinkedList<>();
 		shieldCount = 0;
+	}
+
+	/**
+	 * @return the shot
+	 */
+	public boolean isShot() {
+		return shot;
+	}
+
+	/**
+	 * @param shot the shot to set
+	 */
+	public void setShot(boolean shot) {
+		this.shot = shot;
+	}
+
+	/**
+	 * @return the playerNumber
+	 */
+	public int getPlayerNumber() {
+		return playerNumber;
+	}
+
+	/**
+	 * @param playerNumber the playerNumber to set
+	 */
+	public void setPlayerNumber(int playerNumber) {
+		this.playerNumber = playerNumber;
 	}
 }

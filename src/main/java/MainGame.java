@@ -52,10 +52,10 @@ public class MainGame extends StateBasedGame {
 	private HighScores highscores;
 	
 	//////////////////////// STATES //////////////
-	private final int startState = 0;
-	private final int gameState = 1;
-	private final int gameOverState = 2;
-	private final int settingsState = 3;
+	private static  final int START_STATE = 0;
+	private static final int GAME_STATE = 1;
+	private static final int GAME_OVER_STATE = 2;
+	private static final int SETTINGS_STATE = 3;
 	
 	private GameState gameStateState;
 	
@@ -69,7 +69,7 @@ public class MainGame extends StateBasedGame {
 	private static final float DEFAULT_SPEED_STEP = 0.5f;
 	private static final float DEFAULT_PLAYER_SPEED = 400f;
 	private static final float DEFAULT_LASER_WIDTH = 3f;
-	private static final float DEFAULT_LASER_SPEED = 500f;
+	private static final float DEFAULT_LASER_SPEED = 1000f;
 	private static final int PLAYER1_X_DEVIATION = 80;
 	private static final int PLAYER2_X_DEVIATION = 380;
 	private static final int PLAYER_Y_DEVIATION = 295;
@@ -124,7 +124,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
-		app.setDisplayMode(xRes, Math.round(yRes), false);
+		app.setDisplayMode(xRes, yRes, false);
 		app.setVSync(true);
 		app.setTargetFrameRate(TARGET_FRAMERATE);
 		app.setShowFPS(false);
@@ -163,20 +163,23 @@ public class MainGame extends StateBasedGame {
 				+ "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
 		
-		this.enterState(startState);
+		this.enterState(START_STATE);
 	
 	}
 	
 	private void initPlayers() throws SlickException {
 
 		Image playerImage = new Image("resources/" + playerImageString);
+		Image shieldImage = new Image("resources/powerups/shield_ingame.png");
 		Player player1 = new Player(container.getWidth() / 2 - PLAYER1_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, this);
+				playerImage, shieldImage, this);
+		player1.setPlayerNumber(0);
 		
 		Player player2 = new Player(container.getWidth() / 2 - PLAYER2_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, this);
+				playerImage, shieldImage, this);
+		player2.setPlayerNumber(1);
 		player2.setMoveLeftKey(Input.KEY_A);
 		player2.setMoveRightKey(Input.KEY_D);
 		player2.setShootKey(Input.KEY_W);
@@ -515,28 +518,28 @@ public class MainGame extends StateBasedGame {
 	 * @return the startState
 	 */
 	public int getStartState() {
-		return startState;
+		return START_STATE;
 	}
 
 	/**
 	 * @return the gameState
 	 */
 	public int getGameState() {
-		return gameState;
+		return GAME_STATE;
 	}
 
 	/**
 	 * @return the gameOverState
 	 */
 	public int getGameOverState() {
-		return gameOverState;
+		return GAME_OVER_STATE;
 	}
 
 	/**
 	 * @return the settingsState
 	 */
 	public int getSettingsState() {
-		return settingsState;
+		return SETTINGS_STATE;
 	}
 
 	/**

@@ -94,7 +94,7 @@ public class SettingsState extends BasicGameState {
 		highLight = new Image("resources/menus/Menu_Highlight.png");
 		mannetje = new SpriteSheet("resources/Playersprite.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-		arie = new SpriteSheet("resources/Ariesprite.png",
+		arie = new SpriteSheet("resources/Player2sprite.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
 		mannetje1Rectangle = new MyRectangle(MANNETJE_1_X, MANNETJE_1_Y, PLAYER_SPRITE_WIDTH,
 				PLAYER_SPRITE_HEIGHT);
@@ -122,13 +122,13 @@ public class SettingsState extends BasicGameState {
 				mg.setPlayer1ImageString("Playersprite.png");
 				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
 			} else if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayer1ImageString("Ariesprite.png");
+				mg.setPlayer1ImageString("Player2sprite.png");
 				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
 			} else if (mannetje2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 				mg.setPlayer2ImageString("Playersprite.png");
 				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageString());
 			} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayer2ImageString("Ariesprite.png");
+				mg.setPlayer2ImageString("Player2sprite.png");
 				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageString());
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 				sbg.enterState(0);
@@ -186,13 +186,13 @@ public class SettingsState extends BasicGameState {
 	private void drawSprites(Graphics graphics) {
 		if (mg.getPlayer1ImageString().equals("Playersprite.png")) {
 			graphics.drawImage(highLight, MANNETJE_1_X, MANNETJE_1_Y);
-		} else if (mg.getPlayer1ImageString().equals("Ariesprite.png")) {
+		} else if (mg.getPlayer1ImageString().equals("Player2sprite.png")) {
 			graphics.drawImage(highLight, ARIE_1_X, ARIE_1_Y);
 		}
 		
 		if (mg.getPlayer2ImageString().equals("Playersprite.png")) {
 			graphics.drawImage(highLight, MANNETJE_2_X, MANNETJE_2_Y);
-		} else if (mg.getPlayer2ImageString().equals("Ariesprite.png")) {
+		} else if (mg.getPlayer2ImageString().equals("Player2sprite.png")) {
 			graphics.drawImage(highLight, ARIE_2_X, ARIE_2_Y);
 		}
 		

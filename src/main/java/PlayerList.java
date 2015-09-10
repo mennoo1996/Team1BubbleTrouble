@@ -89,6 +89,17 @@ public class PlayerList {
 	}
 	
 	/**
+	 * Resets the players to their starting positions. 
+	 * Use this on death/levelswitch.
+	 */
+	public void resetPlayerLocations() {
+		playerList.get(0).resetPlayerLocation(0);
+		if (mg.isMultiplayer()) {
+			playerList.get(1).resetPlayerLocation(1);
+		}
+	}
+	
+	/**
 	 * Set shot variable of all players.
 	 * @param shot	- the value to set
 	 */
@@ -143,7 +154,6 @@ public class PlayerList {
 		player.setMovement(0);
 	}
 	
-
 	/**
 	 * Player death.
 	 * @param sbg The stateBasedGame that uses this state.
@@ -157,6 +167,7 @@ public class PlayerList {
 			sbg.enterState(mg.getGameOverState());
 		} else {
 			sbg.enterState(mg.getGameState());
+			//mg.getPlayerList().
 		}
 	}
 	

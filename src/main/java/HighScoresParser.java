@@ -1,6 +1,6 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -52,7 +52,8 @@ public final class HighScoresParser {
 		System.out.println("HIER OOK");
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(new FileWriter(fileName));
+			File file = new File(fileName);
+			writer = new PrintWriter(file, "UTF-8");
 			for (Score s: hs.getScoreList()) {
 				System.out.println(s);
 				String line = s.getScore() + "," + s.getName();

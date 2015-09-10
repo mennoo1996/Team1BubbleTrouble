@@ -46,7 +46,7 @@ public class Player {
 	private int shootKey;
 	
 	private static final int POWERUP_DURATION = 10;
-	private float shieldSpawnTime;
+	private long shieldSpawnTime;
 
 	/**
 	 * @param x the x coordinate of the player
@@ -114,14 +114,13 @@ public class Player {
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
 				this.addPowerup(powerup.getType());
+				gs.getFloatingScores().add(new FloatingScore(powerup));
 				usedPowerups.add(powerup);
 			}
 		}
 
-		for (Powerup used : usedPowerups) {
-			gs.getFloatingScores().add(new FloatingScore(used));
-			gs.getDroppedPowerups().remove(used);
-		}
+		gs.getDroppedPowerups().removeAll(usedPowerups);
+		gs.getDroppedPowerups().removeIf(Powerup::removePowerup);
 	}
 
 	private void processCoins(GameContainer container, float deltaFloat) {

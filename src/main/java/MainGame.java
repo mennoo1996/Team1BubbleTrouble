@@ -37,7 +37,8 @@ public class MainGame extends StateBasedGame {
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
 	private AngelCodeFont dosFont;
-	private String playerImageString;
+	private String player1ImageString;
+	private String player2ImageString;
 	
 	private PlayerList playerList;
 	private boolean multiplayer;
@@ -52,10 +53,10 @@ public class MainGame extends StateBasedGame {
 	private HighScores highscores;
 	
 	//////////////////////// STATES //////////////
-	private final int startState = 0;
-	private final int gameState = 1;
-	private final int gameOverState = 2;
-	private final int settingsState = 3;
+	private static  final int START_STATE = 0;
+	private static final int GAME_STATE = 1;
+	private static final int GAME_OVER_STATE = 2;
+	private static final int SETTINGS_STATE = 3;
 	
 	private GameState gameStateState;
 	
@@ -86,7 +87,8 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
-		this.playerImageString = "Playersprite.png";
+		this.player1ImageString = "Playersprite.png";
+		this.player2ImageString = "Ariesprite.png";
 		this.lifeCount = LIVES;
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
@@ -96,16 +98,30 @@ public class MainGame extends StateBasedGame {
 	 * Get the playerImage.
 	 * @return the playerImage
 	 */
-	public String getPlayerImageString() {
-		return playerImageString;
+	public String getPlayer1ImageString() {
+		return player1ImageString;
 	}
 
 	/**
 	 * Set the playerImage.
 	 * @param playerImageString the playerImage to set
 	 */
-	public void setPlayerImageString(String playerImageString) {
-		this.playerImageString = playerImageString;
+	public void setPlayer1ImageString(String playerImageString) {
+		this.player1ImageString = playerImageString;
+	}
+
+	/**
+	 * @return the player2ImageString
+	 */
+	public String getPlayer2ImageString() {
+		return player2ImageString;
+	}
+
+	/**
+	 * @param player2ImageString the player2ImageString to set
+	 */
+	public void setPlayer2ImageString(String player2ImageString) {
+		this.player2ImageString = player2ImageString;
 	}
 
 	/**
@@ -124,7 +140,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
-		app.setDisplayMode(xRes, Math.round(yRes), false);
+		app.setDisplayMode(xRes, yRes, false);
 		app.setVSync(true);
 		app.setTargetFrameRate(TARGET_FRAMERATE);
 		app.setShowFPS(false);
@@ -163,22 +179,23 @@ public class MainGame extends StateBasedGame {
 				+ "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
 		
-		this.enterState(startState);
+		this.enterState(START_STATE);
 	
 	}
 	
 	private void initPlayers() throws SlickException {
 
-		Image playerImage = new Image("resources/" + playerImageString);
+		Image player1Image = new Image("resources/" + player1ImageString);
+		Image player2Image = new Image("resources/" + player2ImageString);
 		Image shieldImage = new Image("resources/powerups/shield_ingame.png");
 		Player player1 = new Player(container.getWidth() / 2 - PLAYER1_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, shieldImage, this);
+				player1Image, shieldImage, this);
 		player1.setPlayerNumber(0);
 		
 		Player player2 = new Player(container.getWidth() / 2 - PLAYER2_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, shieldImage, this);
+				player2Image, shieldImage, this);
 		player2.setPlayerNumber(1);
 		player2.setMoveLeftKey(Input.KEY_A);
 		player2.setMoveRightKey(Input.KEY_D);
@@ -451,13 +468,6 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
-	 * @param points the number to increment score
-	 */
-	public void addToScore(int points) {
-		this.score += points;
-	}
-
-	/**
 	 * @return the highscoresFile
 	 */
 	public String getHighscoresFile() {
@@ -525,28 +535,28 @@ public class MainGame extends StateBasedGame {
 	 * @return the startState
 	 */
 	public int getStartState() {
-		return startState;
+		return START_STATE;
 	}
 
 	/**
 	 * @return the gameState
 	 */
 	public int getGameState() {
-		return gameState;
+		return GAME_STATE;
 	}
 
 	/**
 	 * @return the gameOverState
 	 */
 	public int getGameOverState() {
-		return gameOverState;
+		return GAME_OVER_STATE;
 	}
 
 	/**
 	 * @return the settingsState
 	 */
 	public int getSettingsState() {
-		return settingsState;
+		return SETTINGS_STATE;
 	}
 
 	/**

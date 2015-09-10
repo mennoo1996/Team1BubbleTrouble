@@ -100,7 +100,7 @@ public class StartState extends BasicGameState {
 			}
 			else if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Quit game
-				System.exit(0);
+				container.exit();
 			}
 		}
 

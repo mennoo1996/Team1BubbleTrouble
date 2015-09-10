@@ -15,7 +15,7 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Player {
 
-	private boolean shield;
+	private int shieldCount;
 	private float x;
 	private float y;
 	private float width;
@@ -34,6 +34,8 @@ public class Player {
 	private LinkedList<Powerup.PowerupType> weapons;
 	private boolean shot;
 	private int playerNumber;
+	private final float startX;
+	private final float startY;
 
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
@@ -55,13 +57,14 @@ public class Player {
 	 * @param image the image used on the player
 	 * @param shieldImage the image used for the player's shield
 	 * @param mg the maingame used on the player
-	 * @throws SlickException shield image missing
 	 */
 	public Player(float x, float y, float width, float height, Image image, Image shieldImage, 
 			MainGame mg) {
 		super();
 		this.x = x;
 		this.y = y;
+		this.startX = x;
+		this.startY = y;
 		this.width = width;
 		this.height = height;
 		this.image = image;
@@ -73,7 +76,7 @@ public class Player {
 		moveRightKey = Input.KEY_RIGHT;
 		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
-		this.shield = false;
+		this.shieldCount = 0;
 		this.shot = false;
 	}
 	
@@ -127,7 +130,7 @@ public class Player {
 			coin.update(gs.getFloor(), container.getHeight(), deltaFloat);
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
-				mg.addToScore(coin.getPoints());
+				gs.addToScore(coin.getPoints());
 				usedCoins.add(coin);
 			}
 		}
@@ -144,7 +147,6 @@ public class Player {
 		
 		if (gs.getSavedInput().isKeyPressed(shootKey)
 				&& (!shot || (weapon.getClass() == Spiky.class))) {
-			System.out.println("intigin weapon dthough");
 			shot = true;
 			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(container));
 		}
@@ -320,6 +322,7 @@ public class Player {
 	 */
 	public void setImage(Image image) {
 		this.image = image;
+		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 	}
 	
 	/**
@@ -333,7 +336,7 @@ public class Player {
 	 * @return Whether or not the player has a shield
 	 */
 	public boolean hasShield() {
-		return shield;
+		return shieldCount > 0;
 	}
 
 	/**
@@ -353,14 +356,18 @@ public class Player {
 	}
 
 	private void addShield() {
-		shield = true;
-		Executors.newScheduledThreadPool(1).schedule(() -> shield = false,
+		shieldCount += 1;
+		Executors.newScheduledThreadPool(1).schedule(() -> shieldCount -= 1,
 				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
 
 	private void addWeapon(Powerup.PowerupType type) {
 		weapons.add(type);
-		Executors.newScheduledThreadPool(1).schedule(() -> weapons.removeFirst(),
+		Executors.newScheduledThreadPool(1).schedule(() -> {
+					if (!weapons.isEmpty()) {
+						weapons.removeFirst();
+					}
+				},
 				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
 	
@@ -486,6 +493,16 @@ public class Player {
 	}
 
 	/**
+	 * Respawn player (i.e. reset powerups)
+	 */
+	public void respawn() {
+		weapons = new LinkedList<>();
+		shieldCount = 0;
+		this.x = startX;
+		this.y = startY;
+	}
+
+	/**
 	 * @return the shot
 	 */
 	public boolean isShot() {
@@ -512,6 +529,4 @@ public class Player {
 	public void setPlayerNumber(int playerNumber) {
 		this.playerNumber = playerNumber;
 	}
-	
-	
 }

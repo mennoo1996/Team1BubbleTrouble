@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
@@ -107,6 +109,20 @@ public class PlayerList {
 		}
 	}
 	
+	/**
+	 * Set the image of the given player.
+	 * @param playerNumber	- the number of the player
+	 * @param imageString	- the string of the image to set
+	 */
+	public void setPlayerImage(int playerNumber, String imageString) {
+		try {
+			Image image = new Image("resources/" + imageString);
+			playerList.get(playerNumber).setImage(image);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void drawPlayer(Player player, GameContainer container, Graphics graphics) {
 		if (player.getMovement() == 2) {
 			player.incrementMovementCounter();
@@ -145,6 +161,7 @@ public class PlayerList {
 	public void playerDeath(StateBasedGame sbg) {
 		System.out.println("Playerdeath");
 		mg.decreaselifeCount();
+		playerList.forEach(Player::respawn);
 		if (mg.getLifeCount() <= 0) {
 			mg.setScore(mg.getScore() + gs.getScore());
 			sbg.enterState(mg.getGameOverState());
@@ -170,5 +187,15 @@ public class PlayerList {
 	public void setPlayerList(ArrayList<Player> playerList) {
 		this.playerList = playerList;
 	}
+
+	public MainGame getMg() {
+		return mg;
+	}
+
+	public GameState getGs() {
+		return gs;
+	}
+	
+	
 
 }

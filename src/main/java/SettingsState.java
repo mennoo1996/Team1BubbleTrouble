@@ -120,12 +120,19 @@ public class SettingsState extends BasicGameState {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			if (mannetje1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 				mg.setPlayer1ImageString("Playersprite.png");
+				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
 			} else if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 				mg.setPlayer1ImageString("Ariesprite.png");
+				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
+			} else if (mannetje2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+				mg.setPlayer2ImageString("Playersprite.png");
+				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageString());
+			} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+				mg.setPlayer2ImageString("Ariesprite.png");
+				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageString());
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 				sbg.enterState(0);
 			}
-			mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
 		}
 		
 	}

@@ -37,7 +37,8 @@ public class MainGame extends StateBasedGame {
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
 	private AngelCodeFont dosFont;
-	private String playerImageString;
+	private String player1ImageString;
+	private String player2ImageString;
 	
 	private PlayerList playerList;
 	private boolean multiplayer;
@@ -86,7 +87,8 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
-		this.playerImageString = "Playersprite.png";
+		this.player1ImageString = "Playersprite.png";
+		this.player2ImageString = "Ariesprite.png";
 		this.lifeCount = LIVES;
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
@@ -96,16 +98,30 @@ public class MainGame extends StateBasedGame {
 	 * Get the playerImage.
 	 * @return the playerImage
 	 */
-	public String getPlayerImageString() {
-		return playerImageString;
+	public String getPlayer1ImageString() {
+		return player1ImageString;
 	}
 
 	/**
 	 * Set the playerImage.
 	 * @param playerImageString the playerImage to set
 	 */
-	public void setPlayerImageString(String playerImageString) {
-		this.playerImageString = playerImageString;
+	public void setPlayer1ImageString(String playerImageString) {
+		this.player1ImageString = playerImageString;
+	}
+
+	/**
+	 * @return the player2ImageString
+	 */
+	public String getPlayer2ImageString() {
+		return player2ImageString;
+	}
+
+	/**
+	 * @param player2ImageString the player2ImageString to set
+	 */
+	public void setPlayer2ImageString(String player2ImageString) {
+		this.player2ImageString = player2ImageString;
 	}
 
 	/**
@@ -169,16 +185,17 @@ public class MainGame extends StateBasedGame {
 	
 	private void initPlayers() throws SlickException {
 
-		Image playerImage = new Image("resources/" + playerImageString);
+		Image player1Image = new Image("resources/" + player1ImageString);
+		Image player2Image = new Image("resources/" + player2ImageString);
 		Image shieldImage = new Image("resources/powerups/shield_ingame.png");
 		Player player1 = new Player(container.getWidth() / 2 - PLAYER1_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, shieldImage, this);
+				player1Image, shieldImage, this);
 		player1.setPlayerNumber(0);
 		
 		Player player2 = new Player(container.getWidth() / 2 - PLAYER2_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, shieldImage, this);
+				player2Image, shieldImage, this);
 		player2.setPlayerNumber(1);
 		player2.setMoveLeftKey(Input.KEY_A);
 		player2.setMoveRightKey(Input.KEY_D);

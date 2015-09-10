@@ -144,7 +144,6 @@ public class Player {
 		
 		if (gs.getSavedInput().isKeyPressed(shootKey)
 				&& (!shot || (weapon.getClass() == Spiky.class))) {
-			System.out.println("intigin weapon dthough");
 			shot = true;
 			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(container));
 		}
@@ -307,6 +306,7 @@ public class Player {
 	 */
 	public void setImage(Image image) {
 		this.image = image;
+		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 	}
 	
 	/**

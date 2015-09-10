@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
@@ -93,6 +95,20 @@ public class PlayerList {
 	public void setAllPlayersShot(boolean shot) {
 		for (Player player : playerList) {
 			player.setShot(shot);
+		}
+	}
+	
+	/**
+	 * Set the image of the given player.
+	 * @param playerNumber	- the number of the player
+	 * @param imageString	- the string of the image to set
+	 */
+	public void setPlayerImage(int playerNumber, String imageString) {
+		try {
+			Image image = new Image("resources/" + imageString);
+			playerList.get(playerNumber).setImage(image);
+		} catch (SlickException e) {
+			e.printStackTrace();
 		}
 	}
 	

@@ -21,8 +21,10 @@ public class SettingsState extends BasicGameState {
 	
 	private Image highLight;
 	
-	private MyRectangle mannetjeRectangle;
-	private MyRectangle arieRectangle;
+	private MyRectangle mannetje1Rectangle;
+	private MyRectangle arie1Rectangle;
+	private MyRectangle mannetje2Rectangle;
+	private MyRectangle arie2Rectangle;
 
 	private MainGame mg;
 	private Input input;
@@ -47,15 +49,23 @@ public class SettingsState extends BasicGameState {
 	private static final int TEXT_X = 164;
 	private static final int TEXT_1_Y = 288;
 	private static final int TEXT_2_Y = 338;
+	private static final int TEXT_3_Y = 388;
+	private static final int TEXT_4_Y = 438;
+	private static final int PLAYER_1_TEXT_Y = 550;
+	private static final int PLAYER_2_TEXT_Y = 700;
 	
 	private static final int PLAYER_SPRITE_WIDTH = 120;
 	private static final int PLAYER_SPRITE_HEIGHT = 120;
 	
-	private static final int MANNETJE_X = 220;
-	private static final int MANNETJE_Y = 380;
-	
-	private static final int ARIE_X = 380;
-	private static final int ARIE_Y = 380;
+	private static final int MANNETJE_1_X = 390;
+	private static final int MANNETJE_1_Y = 500;
+	private static final int ARIE_1_X = 550;
+	private static final int ARIE_1_Y = 500;
+
+	private static final int MANNETJE_2_X = 390;
+	private static final int MANNETJE_2_Y = 650;
+	private static final int ARIE_2_X = 550;
+	private static final int ARIE_2_Y = 650;
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 	
@@ -86,9 +96,14 @@ public class SettingsState extends BasicGameState {
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
 		arie = new SpriteSheet("resources/Ariesprite.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-		mannetjeRectangle = new MyRectangle(MANNETJE_X, MANNETJE_Y, PLAYER_SPRITE_WIDTH,
+		mannetje1Rectangle = new MyRectangle(MANNETJE_1_X, MANNETJE_1_Y, PLAYER_SPRITE_WIDTH,
 				PLAYER_SPRITE_HEIGHT);
-		arieRectangle = new MyRectangle(ARIE_X, ARIE_Y, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
+		arie1Rectangle = new MyRectangle(ARIE_1_X, ARIE_1_Y, PLAYER_SPRITE_WIDTH, 
+				PLAYER_SPRITE_HEIGHT);
+		mannetje2Rectangle = new MyRectangle(MANNETJE_2_X, MANNETJE_2_Y, PLAYER_SPRITE_WIDTH,
+				PLAYER_SPRITE_HEIGHT);
+		arie2Rectangle = new MyRectangle(ARIE_2_X, ARIE_2_Y, PLAYER_SPRITE_WIDTH, 
+				PLAYER_SPRITE_HEIGHT);
 	}
 	
 	/**
@@ -103,10 +118,18 @@ public class SettingsState extends BasicGameState {
 		input = container.getInput();
 		
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-			if (mannetjeRectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayerImageString("Playersprite.png");
-			} else if (arieRectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayerImageString("Ariesprite.png");
+			if (mannetje1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+				mg.setPlayer1ImageString("Playersprite.png");
+				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
+			} else if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+				mg.setPlayer1ImageString("Ariesprite.png");
+				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
+			} else if (mannetje2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+				mg.setPlayer2ImageString("Playersprite.png");
+				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageString());
+			} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+				mg.setPlayer2ImageString("Ariesprite.png");
+				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageString());
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 				sbg.enterState(0);
 			}
@@ -126,8 +149,14 @@ public class SettingsState extends BasicGameState {
 		this.input = container.getInput();
 		
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# You can choose a player skin");
-		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# by clicking on it");
+		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
+		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
+		mg.getDosFont().drawString(TEXT_X, TEXT_3_Y, "# we advice different sprites for");
+		mg.getDosFont().drawString(TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
+	
+		mg.getDosFont().drawString(TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
+		mg.getDosFont().drawString(TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
+	
 		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		
@@ -155,10 +184,16 @@ public class SettingsState extends BasicGameState {
 	}
 	
 	private void drawSprites(Graphics graphics) {
-		if (mg.getPlayerImageString().equals("Playersprite.png")) {
-			graphics.drawImage(highLight, MANNETJE_X, MANNETJE_Y);
-		} else if (mg.getPlayerImageString().equals("Ariesprite.png")) {
-			graphics.drawImage(highLight, ARIE_X, ARIE_Y);
+		if (mg.getPlayer1ImageString().equals("Playersprite.png")) {
+			graphics.drawImage(highLight, MANNETJE_1_X, MANNETJE_1_Y);
+		} else if (mg.getPlayer1ImageString().equals("Ariesprite.png")) {
+			graphics.drawImage(highLight, ARIE_1_X, ARIE_1_Y);
+		}
+		
+		if (mg.getPlayer2ImageString().equals("Playersprite.png")) {
+			graphics.drawImage(highLight, MANNETJE_2_X, MANNETJE_2_Y);
+		} else if (mg.getPlayer2ImageString().equals("Ariesprite.png")) {
+			graphics.drawImage(highLight, ARIE_2_X, ARIE_2_Y);
 		}
 		
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
@@ -167,9 +202,14 @@ public class SettingsState extends BasicGameState {
 		} else {
 			graphics.drawImage(returnButton.getImage(), returnButton.getX(), returnButton.getY());
 		}
-		graphics.drawImage(mannetje.getSprite(2, 0), mannetjeRectangle.getX(),
-				mannetjeRectangle.getY());
-		graphics.drawImage(arie.getSprite(2, 0), arieRectangle.getX(), arieRectangle.getY());
+		
+		graphics.drawImage(mannetje.getSprite(2, 0), mannetje1Rectangle.getX(),
+				mannetje1Rectangle.getY());
+		graphics.drawImage(arie.getSprite(2, 0), arie1Rectangle.getX(), arie1Rectangle.getY());
+		
+		graphics.drawImage(mannetje.getSprite(2, 0), mannetje2Rectangle.getX(),
+				mannetje2Rectangle.getY());
+		graphics.drawImage(arie.getSprite(2, 0), arie2Rectangle.getX(), arie2Rectangle.getY());
 	}
 
 

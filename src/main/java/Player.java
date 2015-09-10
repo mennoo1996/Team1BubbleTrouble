@@ -1,3 +1,4 @@
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
@@ -45,6 +46,7 @@ public class Player {
 	private int shootKey;
 	
 	private static final int POWERUP_DURATION = 10;
+	private float shieldSpawnTime;
 
 	/**
 	 * @param x the x coordinate of the player
@@ -74,6 +76,7 @@ public class Player {
 		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
 		this.shieldCount = 0;
+		this.shieldSpawnTime = 0;
 		this.shot = false;
 	}
 	
@@ -339,6 +342,7 @@ public class Player {
 
 	private void addShield() {
 		shieldCount += 1;
+		shieldSpawnTime = System.currentTimeMillis();
 		Executors.newScheduledThreadPool(1).schedule(() -> shieldCount -= 1,
 				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
@@ -480,6 +484,7 @@ public class Player {
 	public void respawn() {
 		weapons = new LinkedList<>();
 		shieldCount = 0;
+		shieldSpawnTime = 0;
 		this.x = startX;
 		this.y = startY;
 	}
@@ -510,5 +515,12 @@ public class Player {
 	 */
 	public void setPlayerNumber(int playerNumber) {
 		this.playerNumber = playerNumber;
+	}
+
+	/**
+	 * @return shield time remaing (MS)
+	 */
+	public float shieldTimeRemaining() {
+		return shieldCount > 0 ? TimeUnit.SECONDS.toMillis(POWERUP_DURATION) - (System.currentTimeMillis() - shieldSpawnTime) : 0;
 	}
 }

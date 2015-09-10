@@ -1,3 +1,4 @@
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
@@ -48,6 +49,7 @@ public class Player {
 	private int shootKey;
 	
 	private static final int POWERUP_DURATION = 10;
+	private long shieldSpawnTime;
 
 	/**
 	 * @param x the x coordinate of the player
@@ -77,6 +79,7 @@ public class Player {
 		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
 		this.shieldCount = 0;
+		this.shieldSpawnTime = 0;
 		this.shot = false;
 	}
 	
@@ -114,14 +117,13 @@ public class Player {
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
 				this.addPowerup(powerup.getType());
+				gs.getFloatingScores().add(new FloatingScore(powerup));
 				usedPowerups.add(powerup);
 			}
 		}
 
-		for (Powerup used : usedPowerups) {
-			gs.getFloatingScores().add(new FloatingScore(used));
-			gs.getDroppedPowerups().remove(used);
-		}
+		gs.getDroppedPowerups().removeAll(usedPowerups);
+		gs.getDroppedPowerups().removeIf(Powerup::removePowerup);
 	}
 
 	private void processCoins(GameContainer container, float deltaFloat) {
@@ -131,27 +133,23 @@ public class Player {
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
 				gs.addToScore(coin.getPoints());
+				gs.getFloatingScores().add(new FloatingScore(coin));
 				usedCoins.add(coin);
 			}
 		}
 
-		for (Coin used : usedCoins) {
-			gs.getFloatingScores().add(new FloatingScore(used));
-			gs.getDroppedCoins().remove(used);
-		}
+		gs.getDroppedCoins().removeAll(usedCoins);
 	}
 
 	private void processWeapon(GameContainer container, float deltaFloat) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
-		
 		if (gs.getSavedInput().isKeyPressed(shootKey)
-				&& (!shot || (weapon.getClass() == Spiky.class))) {
+				&& !shot) {
 			shot = true;
 			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(container));
 		}
 		
-		weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
+		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
 
 		// Update laser
 		if (shot) {
@@ -194,7 +192,7 @@ public class Player {
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			return new InstantLaser(this.getCenterX(), 
+			return new InstantLaser(this.getCenterX(),
 					container.getHeight() - gs.getFloor().getHeight(), mg.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
@@ -357,6 +355,7 @@ public class Player {
 
 	private void addShield() {
 		shieldCount += 1;
+		shieldSpawnTime = System.currentTimeMillis();
 		Executors.newScheduledThreadPool(1).schedule(() -> shieldCount -= 1,
 				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
@@ -498,6 +497,7 @@ public class Player {
 	public void respawn() {
 		weapons = new LinkedList<>();
 		shieldCount = 0;
+		shieldSpawnTime = 0;
 		this.x = startX;
 		this.y = startY;
 	}
@@ -528,5 +528,12 @@ public class Player {
 	 */
 	public void setPlayerNumber(int playerNumber) {
 		this.playerNumber = playerNumber;
+	}
+
+	/**
+	 * @return shield time remaing (MS)
+	 */
+	public float shieldTimeRemaining() {
+		return shieldCount > 0 ? TimeUnit.SECONDS.toMillis(POWERUP_DURATION) - (System.currentTimeMillis() - shieldSpawnTime) : 0;
 	}
 }

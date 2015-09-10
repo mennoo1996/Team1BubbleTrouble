@@ -1,5 +1,7 @@
 import org.newdawn.slick.GameContainer;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by alexandergeenen on 09/09/15.
  */
@@ -14,8 +16,10 @@ public class Powerup {
     private static final float POWERUP_WIDTH = 40;
     private static final float POWERUP_HEIGHT = 40;
     private static final float POWERUP_SPEED = 200f;
+    private static final int POWERUP_TIME = 5;
 
     private float x, y, width, height;
+    private long timeCreated;
     private PowerupType type;
 
     /**
@@ -30,6 +34,7 @@ public class Powerup {
         this.width = POWERUP_WIDTH;
         this.height = POWERUP_HEIGHT;
         this.type = power;
+        this.timeCreated = System.currentTimeMillis();
     }
 
     /**
@@ -86,5 +91,12 @@ public class Powerup {
      */
     public PowerupType getType() {
         return type;
+    }
+
+    /**
+     * @return whether or not to remove item
+     */
+    public boolean removePowerup() {
+        return (TimeUnit.SECONDS.toMillis(POWERUP_TIME) - (System.currentTimeMillis() - timeCreated)) <= 0;
     }
 }

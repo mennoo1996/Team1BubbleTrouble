@@ -124,6 +124,7 @@ public class GameOverState extends BasicGameState {
 			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER)) {
 				Score score = new Score(mg.getScore(), tf.getText());
 				mg.getHighscores().add(score);
+				mg.getHighscores().sort();
 				HighScoresParser.writeHighScores(mg.getHighscoresFile(), mg.getHighscores());
 				
 				inputMessage = tf.getText() + ", your score of " + mg.getScore();
@@ -166,6 +167,7 @@ public class GameOverState extends BasicGameState {
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		
+		mg.getHighscores().sort();
 		String highScoresString = mg.getHighscores().toString();
 		mg.getDosFont().drawString(HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 	}

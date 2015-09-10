@@ -93,7 +93,7 @@ public class GameState extends BasicGameState {
 	private static final int MOUSE_OVER_RECT_X = 500;
 	
 	// CONSTANTS
-	private static final int LEVEL_POINTS = 1500;
+	private static final int LEVEL_POINTS = 150;
 	private static final int SECOND_TO_MS_FACTOR = 1000;
 	private static final float SECOND_TO_MS_FACTOR_FLOAT = 1000f;
 	private static final int FLOOR_Y_DEVIATION = 210;
@@ -416,8 +416,10 @@ public class GameState extends BasicGameState {
 		if (!waitForLevelEnd) {
             waitForLevelEnd = true;
         }
+		score += ((double) timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
+		
 		if (waitForLevelEnd && timeRemaining == 1) {
-            score += ((double) timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
+            
             mg.setScore(mg.getScore() + score); // update total score
             int levelCounter = mg.getLevelCounter();
 			if (levelCounter < levels.size() - 1) {

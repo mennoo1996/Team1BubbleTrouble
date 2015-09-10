@@ -23,12 +23,8 @@ public class GameOverState extends BasicGameState {
 	private TextField tf;
 	private Image tfBackground;
 	private String inputMessage;
-<<<<<<< HEAD
-	
+
 	private boolean highScoreEntered;
-	
-=======
->>>>>>> marks_ui_improvements
 
 	private static final int TEXT_X = 164;
 	private static final int TEXT_1_Y = 238;
@@ -111,11 +107,7 @@ public class GameOverState extends BasicGameState {
 		tf.setBorderColor(null);
 		tf.setFocus(true);
 		inputMessage = null;
-<<<<<<< HEAD
 		highScoreEntered = false;
-
-=======
->>>>>>> marks_ui_improvements
 	}
 	
 	/**
@@ -152,24 +144,10 @@ public class GameOverState extends BasicGameState {
 					System.exit(0);
 				}
 			}
-<<<<<<< HEAD
-			
-			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && !highScoreEntered) {
-				highScoreEntered = true;
-				Score score = new Score(mg.getScore(), tf.getText());
-				mg.getHighscores().add(score);
-				mg.getHighscores().sort();
-				System.out.println("HIER");
-				HighScoresParser.writeHighScores(mg.getHighscoresFile(), mg.getHighscores());
-				
-				inputMessage = tf.getText() + ", your score of " + mg.getScore();
-				inputMessage += " points is saved!";
-=======
-
-			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && inputMessage == null) {
-				saveScore();
-
->>>>>>> marks_ui_improvements
+			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) 
+					&& inputMessage == null && !highScoreEntered) {
+                highScoreEntered = true;
+                saveScore();
 			}
 		}
 
@@ -196,18 +174,12 @@ public class GameOverState extends BasicGameState {
 		if (inputMessage != null) {
 			mg.getDosFont().drawString(TEXT_X, TEXT_4_Y, inputMessage);
 		}
-
 		renderButtons(container, graphics);
-		
-		
-		
 		mg.drawWaterMark();
 		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
 		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
-
-		
 		mg.getHighscores().sort();
 		String highScoresString = mg.getHighscores().toString();
 		mg.getDosFont().drawString(HIGHSCORES_X, SEPARATOR_Y, highScoresString);

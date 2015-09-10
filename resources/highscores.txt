@@ -1,5 +1,4 @@
-1,test
-0,menno
-0,menno2
-
-
+100,test
+10,menno
+10,menno2
+0,Markiepark

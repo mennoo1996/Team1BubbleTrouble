@@ -29,15 +29,15 @@ public class Coin {
 
     /**
      * Update Powerups graphical thingy.
-     * @param gs Game State
-     * @param container Game Container
+     * @param floor - floor of the game.
+     * @param containerHeight - height of gamecontainer.
      * @param deltaFloat Delta
      */
-    public void update(GameState gs, GameContainer container, float deltaFloat) {
-        if ((this.y + COIN_HEIGHT) < container.getHeight() - gs.getFloor().getHeight()) {
+    public void update(MyRectangle floor, int containerHeight, float deltaFloat) {
+        if ((this.y + COIN_HEIGHT) < containerHeight - floor.getHeight()) {
             this.y += COIN_SPEED * deltaFloat;
         } else {
-            this.y = container.getHeight() - gs.getFloor().getHeight() - COIN_HEIGHT;
+            this.y = containerHeight - floor.getHeight() - COIN_HEIGHT;
         }
     }
 

@@ -11,6 +11,15 @@ public class CoinTest {
     private final static float COIN_WIDTH = 20;
     private final static float COIN_HEIGHT = 20;
 	
+    @Test
+    public void updateTest() {
+    	Coin c = new Coin(100,500,false);
+    	MyRectangle rect = new MyRectangle(0,100,300,10);
+    	c.update(rect, 1000, 1.0f);
+    	c.update(rect, 10, 1.0f);
+    	assertTrue(c.getX() == 100);
+    }
+    
 	@Test
 	public void getPointsLargeTest() {
 		Coin c = new Coin(100, 100, true);

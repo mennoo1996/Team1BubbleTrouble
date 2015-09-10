@@ -164,7 +164,8 @@ public class GameOverState extends BasicGameState {
 		if (mg.getLifeCount() <= 0) {
 			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# Game Over");
 		} else {
-			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# You won! You are the champion of soup!");
+			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , 
+					"# You won! You are the champion of soup!");
 		}
 		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
 		mg.getDosFont().drawString(TEXT_X, TEXT_3_Y, "# Please enter your name below");
@@ -185,7 +186,6 @@ public class GameOverState extends BasicGameState {
 		mg.getHighscores().sort();
 		String highScoresString = mg.getHighscores().toString();
 		mg.getDosFont().drawString(HIGHSCORES_X, SEPARATOR_Y, highScoresString);
-
 	}
 	
 	/**

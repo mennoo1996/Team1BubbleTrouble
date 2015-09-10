@@ -69,7 +69,7 @@ public class MainGame extends StateBasedGame {
 	private static final float DEFAULT_SPEED_STEP = 0.5f;
 	private static final float DEFAULT_PLAYER_SPEED = 400f;
 	private static final float DEFAULT_LASER_WIDTH = 3f;
-	private static final float DEFAULT_LASER_SPEED = 500f;
+	private static final float DEFAULT_LASER_SPEED = 1000f;
 	private static final int PLAYER1_X_DEVIATION = 80;
 	private static final int PLAYER2_X_DEVIATION = 380;
 	private static final int PLAYER_Y_DEVIATION = 295;
@@ -89,7 +89,7 @@ public class MainGame extends StateBasedGame {
 		this.playerImageString = "Playersprite.png";
 		this.lifeCount = LIVES;
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
-		this.multiplayer = false;
+		this.multiplayer = true;
 	}
 
 	/**
@@ -174,10 +174,12 @@ public class MainGame extends StateBasedGame {
 		Player player1 = new Player(container.getWidth() / 2 - PLAYER1_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
 				playerImage, shieldImage, this);
+		player1.setPlayerNumber(0);
 		
 		Player player2 = new Player(container.getWidth() / 2 - PLAYER2_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
 				playerImage, shieldImage, this);
+		player2.setPlayerNumber(1);
 		player2.setMoveLeftKey(Input.KEY_A);
 		player2.setMoveRightKey(Input.KEY_D);
 		player2.setShootKey(Input.KEY_W);

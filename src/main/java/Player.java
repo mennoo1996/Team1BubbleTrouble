@@ -17,7 +17,7 @@ public class Player {
 	//Method 1 code
 	//int lifeCount;
 
-	private boolean shield;
+	private int shieldCount;
 	private float x;
 	private float y;
 	private float width;
@@ -65,7 +65,7 @@ public class Player {
 		moveRightKey = Input.KEY_RIGHT;
 		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
-		this.shield = false;
+		this.shieldCount = 0;
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public class Player {
 			coin.update(gs, container, deltaFloat);
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
-				mg.addToScore(coin.getPoints());
+				gs.addToScore(coin.getPoints());
 				usedCoins.add(coin);
 			}
 		}
@@ -298,7 +298,7 @@ public class Player {
 	 * @return Whether or not the player has a shield
 	 */
 	public boolean hasShield() {
-		return shield;
+		return shieldCount > 0;
 	}
 
 	/**
@@ -318,8 +318,8 @@ public class Player {
 	}
 
 	private void addShield() {
-		shield = true;
-		Executors.newScheduledThreadPool(1).schedule(() -> shield = false,
+		shieldCount += 1;
+		Executors.newScheduledThreadPool(1).schedule(() -> shieldCount -= 1,
 				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
 

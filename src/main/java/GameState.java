@@ -853,6 +853,13 @@ public class GameState extends BasicGameState {
 	}
 
 	/**
+	 * @param points the number to increment score
+	 */
+	public void addToScore(int points) {
+		this.score += points;
+	}
+
+	/**
 	 * @return the droppedPowerups
 	 */
 	public ArrayList<Powerup> getDroppedPowerups() {

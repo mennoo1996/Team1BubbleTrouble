@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
@@ -76,7 +77,10 @@ public class LevelContainerTest {
 		LevelContainer.setTesting(false);
 	}
 	
-
+	@Test
+	public void testIsTesting() {
+		assertFalse(LevelContainer.isTesting());
+	}
 		
 	
 }

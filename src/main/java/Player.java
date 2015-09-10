@@ -1,6 +1,7 @@
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class Player {
 	private int movementCounter = 0;
 	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
 	private Image image;
+	private Image shieldImage;
 	private SpriteSheet spritesheet;
 	private boolean freeToRoam;
 	private MainGame mg;
@@ -49,15 +51,19 @@ public class Player {
 	 * @param width the width of the player
 	 * @param height the height of the player
 	 * @param image the image used on the player
+	 * @param shieldImage the image used for the player's shield
 	 * @param mg the maingame used on the player
+	 * @throws SlickException shield image missing
 	 */
-	public Player(float x, float y, float width, float height, Image image, MainGame mg) {
+	public Player(float x, float y, float width, float height, Image image, Image shieldImage, 
+			MainGame mg) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.image = image;
+		this.shieldImage = shieldImage;
 		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mg = mg;
 		this.gs = (GameState) mg.getState(mg.getGameState());
@@ -275,6 +281,13 @@ public class Player {
 	 */
 	public void setImage(Image image) {
 		this.image = image;
+	}
+	
+	/**
+	 * @return the shield image
+	 */
+	public Image getShieldImage() {
+		return shieldImage;
 	}
 
 	/**

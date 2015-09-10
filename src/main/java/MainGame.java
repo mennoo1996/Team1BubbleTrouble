@@ -170,13 +170,14 @@ public class MainGame extends StateBasedGame {
 	private void initPlayers() throws SlickException {
 
 		Image playerImage = new Image("resources/" + playerImageString);
+		Image shieldImage = new Image("resources/powerups/shield_ingame.png");
 		Player player1 = new Player(container.getWidth() / 2 - PLAYER1_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, this);
+				playerImage, shieldImage, this);
 		
 		Player player2 = new Player(container.getWidth() / 2 - PLAYER2_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				playerImage, this);
+				playerImage, shieldImage, this);
 		player2.setMoveLeftKey(Input.KEY_A);
 		player2.setMoveRightKey(Input.KEY_D);
 		player2.setShootKey(Input.KEY_W);

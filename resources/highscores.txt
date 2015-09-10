@@ -1,3 +1,5 @@
+2000,Mark die won
+1050,Mark die verloor
 100,test
 10,menno
 10,menno2

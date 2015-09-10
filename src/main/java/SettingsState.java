@@ -59,7 +59,7 @@ public class SettingsState extends BasicGameState {
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 	
-	private static final int STATE_ID = 4;
+	private static final int STATE_ID = 3;
 	
 	/**
 	 * Construct a SettingsState.

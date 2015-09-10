@@ -120,7 +120,6 @@ public class GameOverState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 			Input input = container.getInput();
-			// If the mouse is pressed inside the playAgainButton, enter the gameState
 			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 				if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 					// Start over
@@ -140,7 +139,6 @@ public class GameOverState extends BasicGameState {
 					sbg.enterState(0);
 				}
 				else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					// Quit game
 					System.exit(0);
 				}
 			}
@@ -163,7 +161,11 @@ public class GameOverState extends BasicGameState {
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
 		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
-		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# Game Over");
+		if (mg.getLifeCount() <= 0) {
+			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# Game Over");
+		} else {
+			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# You won! You are the champion of soup!");
+		}
 		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
 		mg.getDosFont().drawString(TEXT_X, TEXT_3_Y, "# Please enter your name below");
 

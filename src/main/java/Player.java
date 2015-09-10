@@ -34,6 +34,8 @@ public class Player {
 	private LinkedList<Powerup.PowerupType> weapons;
 	private boolean shot;
 	private int playerNumber;
+	private final float startX;
+	private final float startY;
 
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
@@ -58,6 +60,8 @@ public class Player {
 		super();
 		this.x = x;
 		this.y = y;
+		this.startX = x;
+		this.startY = y;
 		this.width = width;
 		this.height = height;
 		this.image = image;
@@ -478,6 +482,8 @@ public class Player {
 	public void respawn() {
 		weapons = new LinkedList<>();
 		shieldCount = 0;
+		this.x = startX;
+		this.y = startY;
 	}
 
 	/**

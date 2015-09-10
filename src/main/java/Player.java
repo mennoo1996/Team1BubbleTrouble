@@ -14,8 +14,6 @@ import org.newdawn.slick.SpriteSheet;
  *
  */
 public class Player {
-	//Method 1 code
-	//int lifeCount;
 
 	private boolean shield;
 	private float x;
@@ -103,7 +101,7 @@ public class Player {
 		}
 	}
 	
-	private void processPowerups(GameContainer container, float deltaFloat) {
+	private void processPowerups(GameContainer container, float deltaFloat) { // MARKED
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		for (Powerup powerup : gs.getDroppedPowerups()) {
 			powerup.update(gs, container, deltaFloat);
@@ -123,7 +121,7 @@ public class Player {
 	private void processCoins(GameContainer container, float deltaFloat) {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		for (Coin coin : gs.getDroppedCoins()) {
-			coin.update(gs, container, deltaFloat);
+			coin.update(gs.getFloor(), container.getHeight(), deltaFloat);
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
 				mg.addToScore(coin.getPoints());

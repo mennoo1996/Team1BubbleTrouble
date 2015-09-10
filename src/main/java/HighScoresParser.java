@@ -16,9 +16,9 @@ public final class HighScoresParser {
 	}
 	
 	/**
-	 * Read highscores from file.
-	 * @param fileName	- the file to read from
-	 * @return	- the read highscores
+	 * Reads file into highscores.
+	 * @param fileName the filename
+	 * @return the highscores
 	 */
 	public static HighScores readHighScores(String fileName) {
 		BufferedReader reader;
@@ -44,9 +44,9 @@ public final class HighScoresParser {
 	}
 	
 	/**
-	 * Write highscores to a file.
-	 * @param fileName	- the file to write to
-	 * @param hs		- the highscores to write
+	 * Writes highscores into file.
+	 * @param fileName the filename
+	 * @param hs the highscores
 	 */
 	public static void writeHighScores(String fileName, HighScores hs) {
 		System.out.println("HIER OOK");
@@ -115,14 +115,14 @@ public final class HighScoresParser {
 //		}
 //	}
 	
-	/**
-	 * To test the parser?
-	 * @param args for command line arguments - not used
-	 */
-	public static void main(String[] args) {
-		HighScores hs = readHighScores("resources/highscores.txt");
-		//writeHighScores("resources/highscores.txt", hs);
-		System.out.println(hs.toString());
-	}
+//	/**
+//	 * To test the parser?
+//	 * @param args for command line arguments - not used
+//	 */
+//	public static void main(String[] args) {
+//		HighScores hs = readHighScores("resources/highscores.txt");
+//		//writeHighScores("resources/highscores.txt", hs);
+//		System.out.println(hs.toString());
+//	}
 
 }

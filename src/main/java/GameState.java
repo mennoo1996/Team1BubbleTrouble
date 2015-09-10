@@ -23,7 +23,7 @@ public class GameState extends BasicGameState {
 
 	
 	
-	private static int totaltime;
+	private  int totaltime;
 	
 	private MainGame mg;
 	private ArrayList<BouncingCircle> circleList;
@@ -93,7 +93,7 @@ public class GameState extends BasicGameState {
 	private static final int MOUSE_OVER_RECT_X = 500;
 	
 	// CONSTANTS
-	private static final int LEVEL_POINTS = 1500;
+	private static final int LEVEL_POINTS = 150;
 	private static final int SECOND_TO_MS_FACTOR = 1000;
 	private static final float SECOND_TO_MS_FACTOR_FLOAT = 1000f;
 	private static final int FLOOR_Y_DEVIATION = 210;
@@ -156,6 +156,8 @@ public class GameState extends BasicGameState {
 	private static final int COIN_IMAGE_OFFSET = 3;
 	// Level ending, empty bar
 	
+	private Random random;
+	
 	/**
 	 * constructor.
 	 * 
@@ -174,6 +176,7 @@ public class GameState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		// If still shooting stop it
+		random = new Random();
 		mg.getPlayerList().setAllPlayersShot(false);
 		score = 0;
 		levels.initialize();
@@ -284,7 +287,7 @@ public class GameState extends BasicGameState {
 
 	private void processTime(StateBasedGame sbg, long curTime) {
 		timeRemaining -= timeDelta;
-		fractionTimeParts = Math.round(COUNTDOWN_BAR_PARTS * (timeRemaining) / totaltime);
+		fractionTimeParts = Math.round((float)COUNTDOWN_BAR_PARTS * (float)timeRemaining / (float)totaltime);
 
 		if (waitForLevelEnd) {
 			timeRemaining -= TIME_REMAINING_FACTOR * totaltime;
@@ -312,7 +315,7 @@ public class GameState extends BasicGameState {
 				mg.setLevelCounter(0);
 				sbg.enterState(0);
 			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				System.exit(0);
+				container.exit();
 			}
 		}
 	}
@@ -413,8 +416,10 @@ public class GameState extends BasicGameState {
 		if (!waitForLevelEnd) {
             waitForLevelEnd = true;
         }
+		score += ((double) timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
+		
 		if (waitForLevelEnd && timeRemaining == 1) {
-            score += ((double) timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
+            
             mg.setScore(mg.getScore() + score); // update total score
             int levelCounter = mg.getLevelCounter();
 			if (levelCounter < levels.size() - 1) {
@@ -476,7 +481,7 @@ public class GameState extends BasicGameState {
 		mg.getDosFont().drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mg.getLevelCounter() + 1));
-		mg.getDosFont().drawString(container.getWidth() / 2, container.getHeight()
+		mg.getDosFont().drawString((float)container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
@@ -601,6 +606,11 @@ public class GameState extends BasicGameState {
 				case(MINIMUM_RADIUS) : graphics.drawImage(ballsImages[BALL_IMAGE_FIVE],
 						circle.getMinX() - offset, circle.getMinY() - offset); break;
 				default:
+					try {
+						throw new SlickException("Radius was not one of the supported");
+					} catch (SlickException e) {
+						e.printStackTrace();
+					}
 			}
 		}
 	}
@@ -632,6 +642,11 @@ public class GameState extends BasicGameState {
 				graphics.drawImage(health5Image, 0, 0);
 			break;
 			default:
+				try {
+					throw new SlickException("Life count was not in the correct range");
+				} catch (SlickException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 
@@ -814,7 +829,7 @@ public class GameState extends BasicGameState {
 	}
 
 	private void dropCoin(BouncingCircle circle) {
-		boolean bigMoney = new Random().nextBoolean();
+		boolean bigMoney = random.nextBoolean();
 		droppedCoins.add(new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney));
 	}
 
@@ -912,6 +927,13 @@ public class GameState extends BasicGameState {
 	 */
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	/**
+	 * @param points the number to increment score
+	 */
+	public void addToScore(int points) {
+		this.score += points;
 	}
 
 	/**

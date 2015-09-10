@@ -18,7 +18,7 @@ public class HighScoresTest {
 		HighScores a = new HighScores();
 		Score score = new Score(0, "bob");
 		a.add(score);
-		assertEquals("    0    |    bob",a.toString());
+		assertEquals("    0    |    bob\n",a.toString());
 	}
 
 	@Test

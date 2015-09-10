@@ -151,6 +151,7 @@ public class PlayerList {
 	public void playerDeath(StateBasedGame sbg) {
 		System.out.println("Playerdeath");
 		mg.decreaselifeCount();
+		playerList.forEach(Player::respawn);
 		if (mg.getLifeCount() <= 0) {
 			mg.setScore(mg.getScore() + gs.getScore());
 			sbg.enterState(mg.getGameOverState());
@@ -175,5 +176,15 @@ public class PlayerList {
 	public void setPlayerList(ArrayList<Player> playerList) {
 		this.playerList = playerList;
 	}
+
+	public MainGame getMg() {
+		return mg;
+	}
+
+	public GameState getGs() {
+		return gs;
+	}
+	
+	
 
 }

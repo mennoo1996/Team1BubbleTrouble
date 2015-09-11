@@ -22,10 +22,16 @@ public class GameOverState extends BasicGameState {
 	private MainGame mg;
 	private TextField tf;
 	private Image tfBackground;
+	private Image health0Image;
+	private Image health1Image;
+	private Image health2Image;
+	private Image health3Image;
+	private Image health4Image;
+	private Image health5Image;
 	private String inputMessage;
 
 	private boolean highScoreEntered;
-
+	
 	private static final int TEXT_X = 164;
 	private static final int TEXT_1_Y = 238;
 	private static final int TEXT_2_Y = 288;
@@ -51,6 +57,10 @@ public class GameOverState extends BasicGameState {
 	private static final int TEXT_FIELD_HEIGHT = 60;
 	private static final int TF_BACKGROUND_DEVIATION = 27;
 	
+	private static final int HEALTH_IMAGE_THREE = 3;
+	private static final int HEALTH_IMAGE_FOUR = 4;
+	private static final int HEALTH_IMAGE_FIVE = 5;
+	
 	private static final int LOGO_X = 160;
 	private static final int LOGO_Y = 110;
 	private static final int SEPARATOR_X = 164;
@@ -58,6 +68,9 @@ public class GameOverState extends BasicGameState {
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
 	private static final int MAX_NAME_LENGTH = 34;
+	
+	private int displayLives;
+	
 	/**
 	 * Constructor.
 	 * @param mg the maingame in which this state will be used.
@@ -94,9 +107,19 @@ public class GameOverState extends BasicGameState {
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/Menus/Menu_Button_Quit.png"),
 				new Image("resources/Menus/Menu_Button_Quit2.png"));
+
+		initHealthImages();
 		
 		tfBackground = new Image("resources/textfield.png");
-
+	}
+	
+	private void initHealthImages() throws SlickException {
+		health0Image = new Image("resources/Terminal/Terminal_Lights_0.png");
+		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+		health2Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+		health3Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+		health4Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 	}
 	
 	@Override
@@ -106,6 +129,8 @@ public class GameOverState extends BasicGameState {
 		tf.setBackgroundColor(null);
 		tf.setBorderColor(null);
 		tf.setFocus(true);
+		displayLives = mg.getLifeCount();
+		mg.setLifeCount(MainGame.getLives());
 		inputMessage = null;
 		highScoreEntered = false;
 	}
@@ -182,7 +207,6 @@ public class GameOverState extends BasicGameState {
 		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
 				tf.getY() - TF_BACKGROUND_DEVIATION);
 		tf.render(container, graphics);
-		
 		if (inputMessage != null) {
 			mg.getDosFont().drawString(TEXT_X, TEXT_4_Y, inputMessage);
 		}
@@ -195,6 +219,40 @@ public class GameOverState extends BasicGameState {
 		mg.getDosFont().drawString(HIGHSCORES_X, SEPARATOR_Y, highScoresString);
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		renderLives(graphics);
+	}
+	
+	/**
+	 * Renders the life-lights in the bottom left corner.
+	 * @param graphics the graphics to render to
+	 */
+	private void renderLives(Graphics graphics) {
+		switch (displayLives) {
+		case(0) :
+			graphics.drawImage(health0Image, 0, 0);
+		break;
+		case(1) :
+			graphics.drawImage(health1Image, 0, 0);
+		break;
+		case(2) :
+			graphics.drawImage(health2Image, 0, 0);
+		break;
+		case(HEALTH_IMAGE_THREE) :
+			graphics.drawImage(health3Image, 0, 0);
+		break;
+		case(HEALTH_IMAGE_FOUR) :
+			graphics.drawImage(health4Image, 0, 0);
+		break;
+		case(HEALTH_IMAGE_FIVE) :
+			graphics.drawImage(health5Image, 0, 0);
+		break;
+		default:
+			try {
+				throw new SlickException("Life count was not in the correct range");
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+	}
 	}
 	
 	/**

@@ -30,18 +30,20 @@ public class WeaponList {
 	 * @param mg		- the maingame 
 	 * @param gs		- the gamestate
 	 */
-	public WeaponList(Weapon weapon1, MainGame mg, GameState gs) {
+	public WeaponList(Weapon weapon1, MainGame mg, GameState gs, boolean testing) {
 		super();
 		this.weaponList = new ArrayList<Weapon>();
 		weaponList.add(weapon1);
 		this.mg = mg;
 		this.gs = gs;
 		
-		try {
-			initImages();
-		} catch (Exception e) {
-			System.out.println("exception");
-		}
+		if (!testing) {
+			try {
+				initImages();
+			} catch (Exception e) {
+				System.out.println("exception");
+			}
+		} 
 	}
 	
 	/**

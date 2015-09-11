@@ -37,7 +37,7 @@ public final class HighScoresParser {
 			}
 			reader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("exception");
 		}
 		
 		return hs;

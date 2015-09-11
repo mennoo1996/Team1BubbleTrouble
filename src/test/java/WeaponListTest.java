@@ -32,7 +32,7 @@ public class WeaponListTest {
 		mg = mock(MainGame.class);
 
 		w = new Weapon(1, 2, 3, 4);
-		wl = new WeaponList(w,mg,gs);
+		wl = new WeaponList(w,mg,gs, true);
 		wl.add(w);
 
 		Player player = mock(Player.class);

@@ -95,17 +95,6 @@ public class PlayerList {
 	}
 	
 	/**
-	 * Resets the players to their starting positions. 
-	 * Use this on death/levelswitch.
-	 */
-	public void resetPlayerLocations() {
-		playerList.get(0).resetPlayerLocation(0);
-		if (mg.isMultiplayer()) {
-			playerList.get(1).resetPlayerLocation(1);
-		}
-	}
-	
-	/**
 	 * Set shot variable of all players.
 	 * @param shot	- the value to set
 	 */
@@ -177,12 +166,10 @@ public class PlayerList {
 		}
 	}
 	
-
-	
 	/**
 	 * @return the playerList
 	 */
-	public ArrayList<Player> getPlayerList() {
+	public ArrayList<Player> getPlayers() {
 		return playerList;
 	}
 	
@@ -190,7 +177,7 @@ public class PlayerList {
 	/**
 	 * @param playerList the playerList to set
 	 */
-	public void setPlayerList(ArrayList<Player> playerList) {
+	public void setPlayers(ArrayList<Player> playerList) {
 		this.playerList = playerList;
 	}
 

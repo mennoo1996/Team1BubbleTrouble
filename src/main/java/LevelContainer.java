@@ -102,8 +102,9 @@ public class LevelContainer {
 				ArrayList<Gate> gates = new ArrayList<Gate>();
 				Gate gate11;
 				if (!testing) {
-					gate11 = new Gate((float)container.getWidth() / 2.0f + LEVEL_1_GATE_X_DEVIATION,
-							0, LEVEL_1_GATE_WIDTH, container.getHeight());
+					gate11 = new Gate((float) container.getWidth() / 2.0f 
+							+ LEVEL_1_GATE_X_DEVIATION, 0, LEVEL_1_GATE_WIDTH, 
+							container.getHeight());
 				} else {
 					gate11 = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION,
 							0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
@@ -117,8 +118,7 @@ public class LevelContainer {
 				circles2.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, 
 						RADIUS_4, mg.getStartingSpeed(), DEFAULT_YSPEED, mg.getGravity()));
 				level = new Level(LEVEL_2_TIME, circles2, gates2);
-				res.add(level);
-				
+				res.add(level);	
 				return res;
 	}
 	

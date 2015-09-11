@@ -43,8 +43,8 @@ public class SettingsState extends BasicGameState {
 	private static final int RETURN_BUTTON_HEIGHT = 50;
 	private static final int CONTROL_X1 = 800;
 	private static final int CONTROL_X2 = 1000;
-	private static final int P1_CONTROL_Y = 225;
-	private static final int P2_CONTROL_Y = 375;
+	private static final int P1_CONTROL_Y = 238;
+	private static final int P2_CONTROL_Y = 388;
 	
 	private static final int TEXT_X = 164;
 	private static final int TEXT_1_Y = 288;
@@ -164,7 +164,9 @@ public class SettingsState extends BasicGameState {
 
 		mg.drawWaterMark();
 		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
-		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
+		String tempString = "========================================";
+		tempString += "=======================================";
+		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, tempString);
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		

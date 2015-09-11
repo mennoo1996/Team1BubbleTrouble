@@ -97,6 +97,7 @@ public class Powerup {
      * @return whether or not to remove item
      */
     public boolean removePowerup() {
-        return (TimeUnit.SECONDS.toMillis(POWERUP_TIME) - (System.currentTimeMillis() - timeCreated)) <= 0;
+        return (TimeUnit.SECONDS.toMillis(POWERUP_TIME)
+        		- (System.currentTimeMillis() - timeCreated)) <= 0;
     }
 }

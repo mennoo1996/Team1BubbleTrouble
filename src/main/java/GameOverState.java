@@ -57,7 +57,7 @@ public class GameOverState extends BasicGameState {
 	private static final int SEPARATOR_Y = 190;
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
-	
+	private static final int MAX_NAME_LENGTH = 34;
 	/**
 	 * Constructor.
 	 * @param mg the maingame in which this state will be used.
@@ -142,16 +142,21 @@ public class GameOverState extends BasicGameState {
 					container.exit();
 				}
 			}
-			if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) 
-					&& (inputMessage == null || inputMessage.equals("Maximum length is 34 characters")) && !highScoreEntered) {
-				if (tf.getText().length()<34) {
-	                highScoreEntered = true;
-	                saveScore(); }
-				else {
-					inputMessage = "Maximum length is 34 characters";
-                }
-			}
+			handleTF(input);
 		}
+	
+	private void handleTF(Input input) {
+		if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
+				|| inputMessage.equals("Maximum length is 34 characters")) 
+				&& !highScoreEntered) {
+			if (tf.getText().length() < MAX_NAME_LENGTH) {
+                highScoreEntered = true;
+                saveScore(); }
+			else {
+				inputMessage = "Maximum length is 34 characters";
+            }
+		}
+	}
 
 	/**
 	 * Render method - draw things to screen.

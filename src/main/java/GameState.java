@@ -283,12 +283,12 @@ public class GameState extends BasicGameState {
 		if (circleList.isEmpty()) {
 			endLevel(sbg);
 		}
-
 	}
 
 	private void processTime(StateBasedGame sbg, long curTime) {
 		timeRemaining -= timeDelta;
-		fractionTimeParts = Math.round((float)COUNTDOWN_BAR_PARTS * (float)timeRemaining / (float)totaltime);
+		fractionTimeParts = Math.round((float) COUNTDOWN_BAR_PARTS 
+				* (float) timeRemaining / (float) totaltime);
 
 		if (waitForLevelEnd) {
 			timeRemaining -= TIME_REMAINING_FACTOR * totaltime;
@@ -478,18 +478,13 @@ public class GameState extends BasicGameState {
 		mg.getDosFont().drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mg.getLevelCounter() + 1));
-		mg.getDosFont().drawString((float)container.getWidth() / 2.0f, container.getHeight()
+		mg.getDosFont().drawString((float) container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
 			drawCountIn(container, graphics);
 		}
 		drawMiscellaneous(container, graphics);
-	}
-
-	private void drawPowerupStatus() {
-		String outputPlayer1 = "";
-		
 	}
 	
 	private void drawGates(GameContainer container, Graphics graphics) {

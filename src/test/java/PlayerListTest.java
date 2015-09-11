@@ -1,15 +1,26 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 import gui.GameState;
 import gui.MainGame;
 
 import java.util.ArrayList;
 
+import logic.BouncingCircle;
 import logic.Player;
 import logic.PlayerList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.newdawn.slick.AngelCodeFont;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -32,6 +43,103 @@ public class PlayerListTest {
 		mg = new MainGame("maingame");
 		s = mock(SpriteSheet.class);
 		gs = mock(GameState.class);
+	}
+	
+	@Test
+	public void testDrawPlayer1() {
+		MainGame mg = mock(MainGame.class);
+		when(mg.isMultiplayer()).thenReturn(true);
+		GameContainer gc = mock(GameContainer.class);
+		Graphics gr = mock(Graphics.class);
+		AngelCodeFont acf = mock(AngelCodeFont.class);
+		when(mg.getDosFont()).thenReturn(acf);
+		Mockito.doNothing().when(acf).drawString(1, 1, "#PLAYER_1");
+		Player p = new Player(0,0,20,20,i,i,mg);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		SpriteSheet ss = mock(SpriteSheet.class);
+		when(ss.getSprite(any(int.class), any(int.class))).thenReturn(null);
+		Mockito.doNothing().when(gr).drawImage(any(Image.class), any(float.class), any(float.class));
+		p.setSpritesheet(ss);
+		pl.add(p);
+		pl.drawPlayers(gc, gr);
+	}
+	
+	@Test
+	public void testDrawPlayer2() {
+		MainGame mg = mock(MainGame.class);
+		when(mg.isMultiplayer()).thenReturn(true);
+		GameContainer gc = mock(GameContainer.class);
+		Graphics gr = mock(Graphics.class);
+		AngelCodeFont acf = mock(AngelCodeFont.class);
+		when(mg.getDosFont()).thenReturn(acf);
+		Mockito.doNothing().when(acf).drawString(1, 1, "#PLAYER_1");
+		Player p = new Player(0,0,20,20,i,i,mg);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		SpriteSheet ss = mock(SpriteSheet.class);
+		when(ss.getSprite(any(int.class), any(int.class))).thenReturn(null);
+		Mockito.doNothing().when(gr).drawImage(any(Image.class), any(float.class), any(float.class));
+		p.setSpritesheet(ss);
+		pl.add(p);
+		pl.drawPlayers(gc, gr);
+	}
+	
+	@Test
+	public void testDrawPlayer3() {
+		MainGame mg = mock(MainGame.class);
+		when(mg.isMultiplayer()).thenReturn(true);
+		GameContainer gc = mock(GameContainer.class);
+		Graphics gr = mock(Graphics.class);
+		AngelCodeFont acf = mock(AngelCodeFont.class);
+		when(mg.getDosFont()).thenReturn(acf);
+		Mockito.doNothing().when(acf).drawString(1, 1, "#PLAYER_1");
+		Player p = new Player(0,0,20,20,i,i,mg);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		SpriteSheet ss = mock(SpriteSheet.class);
+		when(ss.getSprite(any(int.class), any(int.class))).thenReturn(null);
+		Mockito.doNothing().when(gr).drawImage(any(Image.class), any(float.class), any(float.class));
+		p.setSpritesheet(ss);
+		pl.add(p);
+		pl.drawPlayers(gc, gr);
+	}
+	
+	@Test
+	public void testUpdatePlayers() {
+		Player p = mock(Player.class);
+		Mockito.doNothing().when(p).update(1);
+		mg = mock(MainGame.class);
+		when(mg.isMultiplayer()).thenReturn(true);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.add(p);
+		pl.updatePlayers(1);
+		verify(p, times(2)).update(1);
+	}
+	
+	@Test 
+	public void testIntersectPlayersWithCircle1() {
+		MainGame mg = mock(MainGame.class);
+		Mockito.doNothing().when(mg).enterState(1);
+		when(mg.getLifeCount()).thenReturn(1);
+		when(mg.isMultiplayer()).thenReturn(true);
+		Player p = new Player(0,0,20,20,i,i,mg);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.add(p);
+		
+		BouncingCircle circle = new BouncingCircle(1,1,1,1,10,1);
+		pl.intersectPlayersWithCircle(circle);
+	}
+	
+	@Test 
+	public void testIntersectPlayersWithCircle2() {
+		MainGame mg = mock(MainGame.class);
+		Mockito.doNothing().when(mg).enterState(1);
+		when(mg.getLifeCount()).thenReturn(0);
+		when(mg.isMultiplayer()).thenReturn(true);
+		Player p = new Player(0,0,20,20,i,i,mg);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.add(p);
+		
+		BouncingCircle circle = new BouncingCircle(1,1,1,1,10,1);
+		pl.intersectPlayersWithCircle(circle);
 	}
 	
 	@Test

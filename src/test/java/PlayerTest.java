@@ -1,13 +1,28 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import logic.MyRectangle;
-import logic.Player;
+import static org.mockito.Mockito.when;
 import gui.GameState;
 import gui.MainGame;
 
+import java.util.ArrayList;
+
+import logic.BouncingCircle;
+import logic.Coin;
+import logic.FloatingScore;
+import logic.Gate;
+import logic.MyRectangle;
+import logic.Player;
+import logic.Powerup;
+import logic.Weapon;
+import logic.WeaponList;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
 public class PlayerTest {
@@ -269,9 +284,271 @@ public class PlayerTest {
 		assertEquals(5, p.getMovementCounter_Max());
 	}
 	
-	
-	
-	
+	@Test
+	public void testUpdate1() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(100,100,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		GameContainer gc = mock(GameContainer.class);
+		mg = mock(MainGame.class);
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		
+		
+		when(gc.getWidth()).thenReturn(1600);
+		when(gc.getHeight()).thenReturn(1000);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		Input input = mock(Input.class);
+		when(input.isKeyPressed(Input.KEY_SPACE)).thenReturn(true);
+		when(gs.getSavedInput()).thenReturn(input);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(mg.getContainer()).thenReturn(gc);
+		when(gs.getWeaponList()).thenReturn(wl);
 
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.update(1);
+		assertEquals(1,p.getX(),0);
+		assertEquals(2,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate2() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		GameContainer gc = mock(GameContainer.class);
+		mg = mock(MainGame.class);
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(false);
+		when(gc.getWidth()).thenReturn(1600);
+		when(gc.getHeight()).thenReturn(1000);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		Input input = mock(Input.class);
+		when(input.isKeyPressed(Input.KEY_SPACE)).thenReturn(true);
+		when(input.isKeyDown(Input.KEY_LEFT)).thenReturn(true);
+		when(input.isKeyDown(Input.KEY_RIGHT)).thenReturn(true);
+		when(gs.getSavedInput()).thenReturn(input);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(mg.getContainer()).thenReturn(gc);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
 
+		p = new Player(5,5,1000,1000, i, i2, mg);
+		p.setShieldTimeRemaining(20l);
+		p.addPowerup(Powerup.PowerupType.SPIKY);
+		p.update(1);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate3() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		GameContainer gc = mock(GameContainer.class);
+		mg = mock(MainGame.class);
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(false);
+		when(gc.getWidth()).thenReturn(1600);
+		when(gc.getHeight()).thenReturn(1000);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		Input input = mock(Input.class);
+		when(input.isKeyPressed(Input.KEY_SPACE)).thenReturn(true);
+		when(input.isKeyDown(Input.KEY_LEFT)).thenReturn(true);
+		when(input.isKeyDown(Input.KEY_RIGHT)).thenReturn(true);
+		when(gs.getSavedInput()).thenReturn(input);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(mg.getContainer()).thenReturn(gc);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+
+		p = new Player(5,5,1000,1000, i, i2, mg);
+		p.setShieldTimeRemaining(20l);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+
+	@Test
+	public void testHasShieldFalse() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		assertFalse(p.hasShield());
+	}
+	
+	@Test
+	public void testHasShieldTrue() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.addPowerup(Powerup.PowerupType.SHIELD);
+		assertTrue(p.hasShield());
+	}
+
+	@Test
+	public void testRestPlayerLocation1() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.resetPlayerLocation(0);
+		assertEquals(720,p.getX(),0);
+		assertEquals(705,p.getY(),0);
+	}
+	
+	@Test
+	public void testRestPlayerLocation2() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.resetPlayerLocation(1);
+		assertEquals(420,p.getX(),0);
+		assertEquals(705,p.getY(),0);
+	}
+	
+	@Test
+	public void testGetAndSetGS() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		GameState gs2 = mock(GameState.class);
+		p.setGs(gs2);
+		assertEquals(gs2, p.getGs());
+	}
+	
+	@Test
+	public void testGetMoveLeftKey() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		assertEquals(Input.KEY_LEFT, p.getMoveLeftKey());
+	}
+	
+	@Test
+	public void testSetMoveLeftKey() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.setMoveLeftKey(Input.KEY_0);
+		assertEquals(Input.KEY_0, p.getMoveLeftKey());
+	}
+	
+	@Test
+	public void testGetMoveRightKey() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		assertEquals(203, p.getMoveLeftKey());
+	}
+	
+	@Test
+	public void testSetMoveRightKey() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.setMoveRightKey(Input.KEY_0);
+		assertEquals(Input.KEY_0, p.getMoveRightKey());
+	}
+	
+	@Test
+	public void testGetShootKey() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		assertEquals(Input.KEY_SPACE, p.getShootKey());
+	}
+	
+	@Test
+	public void testSetShootKey() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.setShootKey(Input.KEY_0);
+		assertEquals(Input.KEY_0, p.getShootKey());
+	}
+	
+	@Test
+	public void testRespawn() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.respawn();
+		assertEquals(1,p.getX(),0);
+		assertEquals(2,p.getY(),0);
+	}
+	
+	@Test
+	public void testIsShot() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		assertFalse(p.isShot());
+	}
+	
+	@Test
+	public void testSetShot() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.setShot(true);
+		assertTrue(p.isShot());
+	}
+	
+	@Test
+	public void testSetAndGetPlayerNumber() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.setPlayerNumber(5);
+		assertEquals(5, p.getPlayerNumber());
+	}
+	
+	@Test
+	public void testShieldTimeRemaining1() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		p.addPowerup(Powerup.PowerupType.SHIELD);
+		assertTrue(p.shieldTimeRemaining() > 0);
+	}
+	
+	@Test
+	public void testShieldTimeRemaining2() {
+		p = new Player(1, 2, 3, 4, i, i2, mg);
+		assertEquals(0, p.shieldTimeRemaining(), 0);
+	}
+	
 }

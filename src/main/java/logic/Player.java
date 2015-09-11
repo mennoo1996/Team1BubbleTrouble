@@ -547,4 +547,13 @@ public class Player {
 			return 0;
 		}
 	}
+
+	/**
+	 * @param shieldTimeRemaining the shieldTimeRemaining to set
+	 */
+	public void setShieldTimeRemaining(long shieldTimeRemaining) {
+		this.shieldTimeRemaining = shieldTimeRemaining;
+	}
+	
+	
 }

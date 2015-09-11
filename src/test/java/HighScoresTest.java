@@ -56,37 +56,5 @@ public class HighScoresTest {
 		a.sort();
 		assertEquals(a.getScoreList().get(0),score2);
 	}
-	
-	@Test
-	public void testSortTooMuchEntries() {
-		HighScores a = new HighScores();
-		Score score = new Score(0, "bob");
-		Score score2 = new Score(100,"henk");
-		Score score3 = new Score(200, "bob2");
-		Score score4 = new Score(300,"henk2");
-		Score score5 = new Score(400, "bob3");
-		Score score6 = new Score(500,"henk3");
-		Score score7 = new Score(600, "bob4");
-		Score score8 = new Score(700,"henk4");
-		Score score9 = new Score(800, "bob5");
-		Score score10 = new Score(800,"henk5");
-		Score score11 = new Score(1000, "bob6");
-		Score score12 = new Score(900,"henk6");
-		a.add(score);
-		a.add(score2);
-		a.add(score3);
-		a.add(score4);
-		a.add(score5);
-		a.add(score6);
-		a.add(score7);
-		a.add(score8);
-		a.add(score9);
-		a.add(score10);
-		a.add(score11);
-		a.add(score12);
-		assertEquals(a.getScoreList().get(11),score12);
-		a.sort();
-		assertEquals(a.getScoreList().get(1),score12);
-	}
 
 }

@@ -1,5 +1,6 @@
+import org.newdawn.slick.GameContainer;
+
 import java.util.concurrent.TimeUnit;
-import org.newdawn.slick.geom.Rectangle;
 
 /**
  * Created by alexandergeenen on 09/09/15.
@@ -38,15 +39,15 @@ public class Powerup {
 
     /**
      * Update Powerups graphical thingy.
-     * @param containerHeight	- the height of the container
-     * @param floor				- the floor
+     * @param gs Game State
+     * @param container Game Container
      * @param deltaFloat Delta
      */
-    public void update(float containerHeight, Rectangle floor, float deltaFloat) {
-        if ((this.y + POWERUP_HEIGHT) < containerHeight - floor.getHeight()) {
+    public void update(GameState gs, GameContainer container, float deltaFloat) {
+        if ((this.y + POWERUP_HEIGHT) < container.getHeight() - gs.getFloor().getHeight()) {
             this.y += POWERUP_SPEED * deltaFloat;
         } else {
-            this.y = containerHeight - floor.getHeight() - POWERUP_HEIGHT;
+            this.y = container.getHeight() - gs.getFloor().getHeight() - POWERUP_HEIGHT;
         }
     }
 

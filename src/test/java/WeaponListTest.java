@@ -1,3 +1,4 @@
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -82,9 +83,44 @@ public class WeaponListTest {
 	}
 	
 	@Test
-	public void testDrawWeapons() {
+	public void testDrawWeapons1() {
 		Graphics g = mock(Graphics.class);
 		wl.drawWeapons(g);
 		Mockito.doNothing().when(g).drawImage(img, -19, -12);
+	}
+	
+	@Test
+	public void testDrawWeapons2() {
+		Graphics g = mock(Graphics.class);
+		when(mg.isMultiplayer()).thenReturn(true);
+		wl.drawWeapons(g);
+		Mockito.doNothing().when(g).drawImage(img, -19, -12);
+	}
+	
+	@Test
+	public void testSetWeapon() {
+		Weapon w2 = new Weapon(1, 2, 3, 4);
+		wl.setWeapon(0, w2);
+		assertEquals(w2, wl.getWeaponList().get(0));
+	}
+	
+	@Test
+	public void testSetWeaponList() {
+		Weapon w2 = new Weapon(1, 2, 3, 4);
+		ArrayList<Weapon> wl2 = new ArrayList<Weapon>();
+		wl2.add(w2);
+		
+		wl.setWeaponList(wl2);
+		assertEquals(wl2, wl.getWeaponList());
+	}
+	
+	@Test
+	public void testGetLaserBeamImage() {
+		assertEquals(img, wl.getLaserbeamimage());
+	}
+	
+	@Test
+	public void testGetLaserTipImage() {
+		assertEquals(img, wl.getLasertipimage());
 	}
 }

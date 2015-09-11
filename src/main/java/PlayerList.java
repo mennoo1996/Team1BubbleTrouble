@@ -22,6 +22,8 @@ public class PlayerList {
 	private static final float MOVEMENT_COUNTER_FACTOR = 0.5f;
 	private static final int PLAYER_DRAW_X_DEVIATION = 30;
 	private static final int PLAYER_DRAW_Y_DEVIATION = 23;
+	private static final int PLAYER_NAME_X_DEVIATION = 40;
+	private static final int PLAYER_NAME_Y_DEVIATION = 100;
 	private static final int SHIELD_DRAW_X_DEVIATION = 43;
 	
 	/**
@@ -84,7 +86,11 @@ public class PlayerList {
 	public void drawPlayers(GameContainer container, Graphics graphics) {
 		drawPlayer(playerList.get(0), container, graphics);
 		if (mg.isMultiplayer()) {
+			mg.getDosFont().drawString(playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION, 
+					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_1");
 			drawPlayer(playerList.get(1), container, graphics);
+			mg.getDosFont().drawString(playerList.get(1).getX() - PLAYER_NAME_X_DEVIATION, 
+					playerList.get(1).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_2");
 		}
 	}
 	

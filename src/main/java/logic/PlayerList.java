@@ -4,7 +4,6 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -84,15 +83,14 @@ public class PlayerList {
 	
 	/**
 	 * Draw all players.
-	 * @param container	- the container to draw to
 	 * @param graphics	- the graphics to draw with
 	 */
-	public void drawPlayers(GameContainer container, Graphics graphics) {
-		drawPlayer(playerList.get(0), container, graphics);
+	public void drawPlayers(Graphics graphics) {
+		drawPlayer(playerList.get(0), graphics);
 		if (mg.isMultiplayer()) {
 			mg.getDosFont().drawString(playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION, 
 					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_1");
-			drawPlayer(playerList.get(1), container, graphics);
+			drawPlayer(playerList.get(1), graphics);
 			mg.getDosFont().drawString(playerList.get(1).getX() - PLAYER_NAME_X_DEVIATION, 
 					playerList.get(1).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_2");
 		}
@@ -122,7 +120,7 @@ public class PlayerList {
 		}
 	}
 	
-	private void drawPlayer(Player player, GameContainer container, Graphics graphics) {
+	private void drawPlayer(Player player, Graphics graphics) {
 		if (player.getMovement() == 2) {
 			player.incrementMovementCounter();
 			int sp = SPRITE_SHEET_THREE;

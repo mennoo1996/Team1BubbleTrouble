@@ -50,7 +50,6 @@ public class PlayerListTest {
 	public void testDrawPlayer1() {
 		MainGame mg = mock(MainGame.class);
 		when(mg.isMultiplayer()).thenReturn(true);
-		GameContainer gc = mock(GameContainer.class);
 		Graphics gr = mock(Graphics.class);
 		AngelCodeFont acf = mock(AngelCodeFont.class);
 		when(mg.getDosFont()).thenReturn(acf);
@@ -62,14 +61,13 @@ public class PlayerListTest {
 		Mockito.doNothing().when(gr).drawImage(any(Image.class), any(float.class), any(float.class));
 		p.setSpritesheet(ss);
 		pl.add(p);
-		pl.drawPlayers(gc, gr);
+		pl.drawPlayers(gr);
 	}
 	
 	@Test
 	public void testDrawPlayer2() {
 		MainGame mg = mock(MainGame.class);
 		when(mg.isMultiplayer()).thenReturn(true);
-		GameContainer gc = mock(GameContainer.class);
 		Graphics gr = mock(Graphics.class);
 		AngelCodeFont acf = mock(AngelCodeFont.class);
 		when(mg.getDosFont()).thenReturn(acf);
@@ -82,14 +80,13 @@ public class PlayerListTest {
 		p.setMovement(2);
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.add(p);
-		pl.drawPlayers(gc, gr);
+		pl.drawPlayers(gr);
 	}
 	
 	@Test
 	public void testDrawPlayer3() {
 		MainGame mg = mock(MainGame.class);
 		when(mg.isMultiplayer()).thenReturn(true);
-		GameContainer gc = mock(GameContainer.class);
 		Graphics gr = mock(Graphics.class);
 		AngelCodeFont acf = mock(AngelCodeFont.class);
 		when(mg.getDosFont()).thenReturn(acf);
@@ -103,7 +100,7 @@ public class PlayerListTest {
 		p.setMovement(1);
 		p.addPowerup(Powerup.PowerupType.SHIELD);
 		pl.add(p);
-		pl.drawPlayers(gc, gr);
+		pl.drawPlayers(gr);
 	}
 	
 	@Test

@@ -490,7 +490,7 @@ public class GameState extends BasicGameState {
 		drawGates(container, graphics);
 		weaponList.drawWeapons(graphics);
 		// draw player
-		mg.getPlayerList().drawPlayers(container, graphics);
+		mg.getPlayerList().drawPlayers(graphics);
 		drawItems(graphics);
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);

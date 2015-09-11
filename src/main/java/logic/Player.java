@@ -160,7 +160,7 @@ public class Player {
 
 		// Update laser
 		if (shot) {
-			weapon.update(gs, deltaFloat);
+			weapon.update(gs.getCeiling(), gs.getFloor(), deltaFloat);
 			// Disable laser when it has reached the ceiling
 			if (!weapon.isVisible()) {
 				shot = false;

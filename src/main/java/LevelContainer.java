@@ -181,8 +181,7 @@ public class LevelContainer {
 	}
 	
 	private ArrayList<Level> initializeLevels4() {
-		Level level;
-		ArrayList<Level> res = new ArrayList<Level>();
+		Level level; ArrayList<Level> res = new ArrayList<Level>();
 		ArrayList<BouncingCircle> circles7 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates7 = new ArrayList<Gate>();
 		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_3,
@@ -192,11 +191,13 @@ public class LevelContainer {
 		BouncingCircle ball3 = new BouncingCircle(LEVEL_7_BALL_3_X, DEFAULT_BIGBALL_Y, RADIUS_5,
 				mg.getStartingSpeed(), DEFAULT_YSPEED, mg.getGravity());
 		circles7.add(ball); circles7.add(ball2); circles7.add(ball3);
-		Gate gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, container.getHeight());
-		gate2.addToRequirements(ball); gate2.addToRequirements(ball2);
-		gates7.add(gate2);
-		level = new Level(LEVEL_7_TIME, circles7, gates7);
-		res.add(level);
+		Gate gate2;
+		if (!testing) {
+			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, container.getHeight());
+		} else { 
+			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT); }
+		gate2.addToRequirements(ball); gate2.addToRequirements(ball2); gates7.add(gate2);
+		level = new Level(LEVEL_7_TIME, circles7, gates7); res.add(level);
 		ArrayList<BouncingCircle> circles8 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates8 = new ArrayList<Gate>();
 		circles8.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_2,
@@ -207,8 +208,7 @@ public class LevelContainer {
 				mg.getStartingSpeed(), DEFAULT_YSPEED, mg.getGravity()));
 		circles8.add(new BouncingCircle(LEVEL_8_BALL_4_X, DEFAULT_BALL_Y, RADIUS_5,
 				mg.getStartingSpeed(), DEFAULT_YSPEED, mg.getGravity()));
-		level = new Level(LEVEL_8_TIME, circles8, gates8);
-		res.add(level); return res;
+		level = new Level(LEVEL_8_TIME, circles8, gates8); res.add(level); return res;
 	}
 	
 	private ArrayList<Level> initializeLevels5() {

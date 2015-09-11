@@ -179,7 +179,7 @@ public class GameState extends BasicGameState {
 		// If still shooting stop it
 		random = new Random();
 		mg.getPlayerList().setAllPlayersShot(false);
-		mg.getPlayerList().resetPlayerLocations();
+		mg.getPlayerList().getPlayers().forEach(Player::respawn);
 		score = 0;
 		levels.initialize();
 		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;

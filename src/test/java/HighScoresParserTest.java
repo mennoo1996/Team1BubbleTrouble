@@ -1,8 +1,12 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 
 public class HighScoresParserTest {
@@ -42,6 +46,7 @@ public class HighScoresParserTest {
 		hs.add(new Score(300, "jopie krekel"));
 		hs.add(new Score(0, "freek"));
 		
+
 		HighScoresParser.writeHighScores(writeFileLocation, hs);
 		HighScores hs2 = HighScoresParser.readHighScores(writeFileLocation);
 
@@ -61,4 +66,16 @@ public class HighScoresParserTest {
 		assertTrue(j == hsl.size());
 	}
 	
+	@Test
+	public void testPrivateConstructor() {
+		assertEquals(1,HighScoresParser.checkPrivateConstructor(true));
+		assertEquals(0,HighScoresParser.checkPrivateConstructor(false));
+	}
+	
+	@Test
+	public void testReadHighScoresWrongFilename() {
+		ExpectedException exception = ExpectedException.none();
+		exception.expect(FileNotFoundException.class);
+		HighScoresParser.readHighScores("not a valid filename");
+	}
 }

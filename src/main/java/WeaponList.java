@@ -40,6 +40,7 @@ public class WeaponList {
 		try {
 			initImages();
 		} catch (Exception e) {
+			System.out.println("exception");
 		}
 	}
 	

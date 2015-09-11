@@ -98,10 +98,11 @@ public class Player {
 		if (!gs.isPaused() && shieldTimeRemaining > 0) {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
+		System.out.println(deltaFloat);
 		processGates();
 		processWeapon(deltaFloat, containerHeight, testing);
 		processPlayerMovement(deltaFloat, containerWidth, testing);
-		processPowerups(containerHeight, containerWidth, deltaFloat);
+		processPowerups(deltaFloat, containerHeight, containerWidth);
 		processCoins(deltaFloat, containerHeight);
 	}
 	

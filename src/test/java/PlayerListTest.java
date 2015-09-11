@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
@@ -37,7 +36,7 @@ public class PlayerListTest {
 		ArrayList<Player> playerlist = new ArrayList<Player>();
 		playerlist.add(p);
 		
-		assertEquals(playerlist, a.getPlayerList());
+		assertEquals(playerlist, a.getPlayers());
 	}
 	
 	@Test
@@ -62,8 +61,8 @@ public class PlayerListTest {
 		p2 = new Player(5, 6, 8, 9, i, i, mg);
 		PlayerList a = new PlayerList(p, mg, gs);
 		a.add(p2);
-		assertTrue(a.getPlayerList().contains(p));
-		assertTrue(a.getPlayerList().contains(p2));
+		assertTrue(a.getPlayers().contains(p));
+		assertTrue(a.getPlayers().contains(p2));
 	}
 
 	@Test
@@ -71,7 +70,7 @@ public class PlayerListTest {
 		p = new Player(5, 6, 8, 9, i, i, mg);
 		PlayerList a = new PlayerList(p, mg, gs);
 		a.setAllPlayersShot(true);
-		assertTrue(a.getPlayerList().get(0).isShot());
+		assertTrue(a.getPlayers().get(0).isShot());
 	}
 
 	@Test
@@ -81,7 +80,7 @@ public class PlayerListTest {
 		ArrayList<Player> playerlist = new ArrayList<Player>();
 		playerlist.add(p);
 		
-		assertEquals(playerlist, a.getPlayerList());
+		assertEquals(playerlist, a.getPlayers());
 	}
 
 	@Test
@@ -92,7 +91,7 @@ public class PlayerListTest {
 		PlayerList a = new PlayerList(p, mg, gs);
 		ArrayList<Player> playerlist = new ArrayList<Player>();
 		playerlist.add(p2);
-		a.setPlayerList(playerlist);
+		a.setPlayers(playerlist);
 		
 		assertTrue(playerlist.contains(p2));
 		assertFalse(playerlist.contains(p));

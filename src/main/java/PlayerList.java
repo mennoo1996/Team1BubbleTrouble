@@ -188,14 +188,19 @@ public class PlayerList {
 		this.playerList = playerList;
 	}
 
+	/**
+	 * Get the maingame.
+	 * @return	- the maingame
+	 */
 	public MainGame getMg() {
 		return mg;
 	}
 
+	/**
+	 * get the gamestate.
+	 * @return	- the gamestate
+	 */
 	public GameState getGs() {
 		return gs;
 	}
-	
-	
-
 }

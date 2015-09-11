@@ -1,4 +1,3 @@
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
@@ -534,6 +533,11 @@ public class Player {
 	 * @return shield time remaing (MS)
 	 */
 	public float shieldTimeRemaining() {
-		return shieldCount > 0 ? TimeUnit.SECONDS.toMillis(POWERUP_DURATION) - (System.currentTimeMillis() - shieldSpawnTime) : 0;
+		if (shieldCount > 0) {
+			return TimeUnit.SECONDS.toMillis(POWERUP_DURATION) 
+					- (System.currentTimeMillis() - shieldSpawnTime);
+		} else {
+			return 0;
+		}
 	}
 }

@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
@@ -90,16 +89,18 @@ public class Player {
 	/**
 	 * Update this player.
 	 * @param deltaFloat the time in ms since the last frame.
+	 * @param containerHeight - the height of the container
+	 * @param containerWidth - the width of the container
 	 */
-	public void update(float deltaFloat) {
+	public void update(float deltaFloat, float containerHeight, float containerWidth) {
 		if (!gs.isPaused() && shieldTimeRemaining > 0) {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
 		processGates();
-		processWeapon(mg.getContainer(), deltaFloat);
-		processPlayerMovement(mg.getContainer(), deltaFloat);
-		processPowerups(mg.getContainer(), deltaFloat);
-		processCoins(mg.getContainer(), deltaFloat);
+		processWeapon(deltaFloat, containerHeight);
+		processPlayerMovement(deltaFloat, containerWidth);
+		processPowerups(containerHeight, containerWidth, deltaFloat);
+		processCoins(deltaFloat, containerHeight);
 	}
 	
 	private void processGates() {
@@ -117,10 +118,11 @@ public class Player {
 		}
 	}
 	
-	private void processPowerups(GameContainer container, float deltaFloat) { // MARKED
+	private void processPowerups(float deltaFloat, float containerHeight,
+			float containerWidth) { // MARKED
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		for (Powerup powerup : gs.getDroppedPowerups()) {
-			powerup.update(gs, container.getHeight(), deltaFloat);
+			powerup.update(gs, containerHeight, deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
 				this.addPowerup(powerup.getType());
@@ -133,10 +135,10 @@ public class Player {
 		gs.getDroppedPowerups().removeIf(Powerup::removePowerup);
 	}
 
-	private void processCoins(GameContainer container, float deltaFloat) {
+	private void processCoins(float deltaFloat, float containerHeight) {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		for (Coin coin : gs.getDroppedCoins()) {
-			coin.update(gs.getFloor(), container.getHeight(), deltaFloat);
+			coin.update(gs.getFloor(), containerHeight, deltaFloat);
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
 				gs.addToScore(coin.getPoints());
@@ -148,12 +150,12 @@ public class Player {
 		gs.getDroppedCoins().removeAll(usedCoins);
 	}
 
-	private void processWeapon(GameContainer container, float deltaFloat) {
+	private void processWeapon(float deltaFloat, float containerHeight) {
 		// Shoot laser when spacebar is pressed and no laser is active
 		if (gs.getSavedInput().isKeyPressed(shootKey)
 				&& !shot) {
 			shot = true;
-			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(container));
+			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
 		}
 		
 		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
@@ -168,7 +170,7 @@ public class Player {
 		}
 	}
 	
-	private void processPlayerMovement(GameContainer container, float deltaFloat) {
+	private void processPlayerMovement(float deltaFloat, float containerWidth) {
 		// Walk left when left key pressed and not at left wall OR a gate
 		boolean isKeyLeft = gs.getSavedInput().isKeyDown(moveLeftKey);
 		if (isKeyLeft && this.getX() > gs.getLeftWall().getWidth()) {
@@ -180,7 +182,7 @@ public class Player {
 
 		// Walk right when right key pressed and not at right wall OR a gate
 		if (gs.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
-				< (container.getWidth() - gs.getRightWall().getWidth())) {
+				< (containerWidth - gs.getRightWall().getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mg.getPlayerSpeed() * deltaFloat);
         	   this.movement = 2;
@@ -188,19 +190,19 @@ public class Player {
         }
 	}
 
-	private Weapon getWeapon(GameContainer container) {
+	private Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
-			return new Weapon(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
+			return new Weapon(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
-			return new Spiky(this.getCenterX(), container.getHeight() - gs.getFloor().getHeight(),
+			return new Spiky(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
 			return new InstantLaser(this.getCenterX(),
-					container.getHeight() - gs.getFloor().getHeight(), mg.getLaserWidth());
+					containerHeight - gs.getFloor().getHeight(), mg.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());

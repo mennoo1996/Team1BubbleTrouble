@@ -1,11 +1,11 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 import gui.GameState;
 import gui.MainGame;
 
@@ -20,7 +20,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.newdawn.slick.AngelCodeFont;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -106,13 +105,13 @@ public class PlayerListTest {
 	@Test
 	public void testUpdatePlayers() {
 		Player p = mock(Player.class);
-		Mockito.doNothing().when(p).update(1);
+		Mockito.doNothing().when(p).update(1, 1000, 1600);
 		mg = mock(MainGame.class);
 		when(mg.isMultiplayer()).thenReturn(true);
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.add(p);
-		pl.updatePlayers(1);
-		verify(p, times(2)).update(1);
+		pl.updatePlayers(1, 1000, 1600);
+		verify(p, times(2)).update(1, 1000, 1600);
 	}
 	
 	@Test 

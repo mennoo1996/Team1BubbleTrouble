@@ -46,11 +46,13 @@ public class PlayerList {
 	/**
 	 * Update all players.
 	 * @param deltaFloat	- time since last frame
+	 * @param containerHeight - the height of the container
+	 * @param containerWidth - the width of the container
 	 */
-	public void updatePlayers(float deltaFloat) {
-		playerList.get(0).update(deltaFloat);
+	public void updatePlayers(float deltaFloat, float containerHeight, float containerWidth) {
+		playerList.get(0).update(deltaFloat, containerHeight, containerWidth);
 		if (mg.isMultiplayer()) {
-			playerList.get(1).update(deltaFloat);	
+			playerList.get(1).update(deltaFloat, containerHeight, containerWidth);	
 		}
 	}
 	

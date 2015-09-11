@@ -293,7 +293,7 @@ public class GameState extends BasicGameState {
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 
 		// player-thingy
-		mg.getPlayerList().updatePlayers(deltaFloat);
+		mg.getPlayerList().updatePlayers(deltaFloat, container.getHeight(), container.getWidth());
 		processPause();
 		processCircles(container, sbg, deltaFloat);
 		updateFloatingScores(deltaFloat);

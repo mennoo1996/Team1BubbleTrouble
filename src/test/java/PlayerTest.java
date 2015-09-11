@@ -299,14 +299,10 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
-		GameContainer gc = mock(GameContainer.class);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
 		
-		
-		when(gc.getWidth()).thenReturn(1600);
-		when(gc.getHeight()).thenReturn(1000);
 		when(gs.getGateList()).thenReturn(gl);
 		when(gs.getDroppedPowerups()).thenReturn(pl);
 		when(gs.getFloatingScores()).thenReturn(fsl);
@@ -317,11 +313,10 @@ public class PlayerTest {
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		when(gs.getFloor()).thenReturn(floor);
 		when(gs.getCeiling()).thenReturn(ceiling);
-		when(mg.getContainer()).thenReturn(gc);
 		when(gs.getWeaponList()).thenReturn(wl);
 
 		p = new Player(1, 2, 3, 4, i, i2, mg);
-		p.update(1);
+		p.update(1, 1000, 1600);
 		assertEquals(1,p.getX(),0);
 		assertEquals(2,p.getY(),0);
 	}
@@ -341,7 +336,6 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
-		GameContainer gc = mock(GameContainer.class);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
@@ -350,8 +344,6 @@ public class PlayerTest {
 		cl.add(coin);
 		
 		when(gs.isPaused()).thenReturn(false);
-		when(gc.getWidth()).thenReturn(1600);
-		when(gc.getHeight()).thenReturn(1000);
 		when(gs.getGateList()).thenReturn(gl);
 		when(gs.getDroppedPowerups()).thenReturn(pl);
 		when(gs.getFloatingScores()).thenReturn(fsl);
@@ -368,14 +360,13 @@ public class PlayerTest {
 		when(gs.getCeiling()).thenReturn(ceiling);
 		when(gs.getLeftWall()).thenReturn(leftWall);
 		when(gs.getRightWall()).thenReturn(rightWall);
-		when(mg.getContainer()).thenReturn(gc);
 		when(gs.getWeaponList()).thenReturn(wl);
 		when(gs.getDroppedCoins()).thenReturn(cl);
 
 		p = new Player(5,5,1000,1000, i, i2, mg);
 		p.setShieldTimeRemaining(20l);
 		p.addPowerup(Powerup.PowerupType.SPIKY);
-		p.update(1);
+		p.update(1,1000,1600);
 		assertEquals(5,p.getX(),0);
 		assertEquals(5,p.getY(),0);
 	}
@@ -395,7 +386,6 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
-		GameContainer gc = mock(GameContainer.class);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
@@ -404,8 +394,6 @@ public class PlayerTest {
 		cl.add(coin);
 		
 		when(gs.isPaused()).thenReturn(false);
-		when(gc.getWidth()).thenReturn(1600);
-		when(gc.getHeight()).thenReturn(1000);
 		when(gs.getGateList()).thenReturn(gl);
 		when(gs.getDroppedPowerups()).thenReturn(pl);
 		when(gs.getFloatingScores()).thenReturn(fsl);
@@ -422,14 +410,13 @@ public class PlayerTest {
 		when(gs.getCeiling()).thenReturn(ceiling);
 		when(gs.getLeftWall()).thenReturn(leftWall);
 		when(gs.getRightWall()).thenReturn(rightWall);
-		when(mg.getContainer()).thenReturn(gc);
 		when(gs.getWeaponList()).thenReturn(wl);
 		when(gs.getDroppedCoins()).thenReturn(cl);
 
 		p = new Player(5,5,1000,1000, i, i2, mg);
 		p.setShieldTimeRemaining(20l);
 		p.addPowerup(Powerup.PowerupType.INSTANT);
-		p.update(1);
+		p.update(1,1000,1600);
 		assertEquals(5,p.getX(),0);
 		assertEquals(5,p.getY(),0);
 	}

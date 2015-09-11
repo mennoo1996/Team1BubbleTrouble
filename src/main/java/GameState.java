@@ -1024,5 +1024,11 @@ public class GameState extends BasicGameState {
 	public ArrayList<FloatingScore> getFloatingScores() {
 		return floatingScoreList;
 	}
-	
+
+	/**
+	 * @return whether or not the game is paused
+	 */
+	public boolean isPaused() {
+		return !playingState;
+	}
 }

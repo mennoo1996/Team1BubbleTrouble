@@ -17,9 +17,10 @@ public class Powerup {
     private static final float POWERUP_HEIGHT = 40;
     private static final float POWERUP_SPEED = 200f;
     private static final int POWERUP_TIME = 5;
+    private static final int SECONDS_TO_MS = 1000;
 
     private float x, y, width, height;
-    private long timeCreated;
+    private long timeRemaining;
     private PowerupType type;
 
     /**
@@ -34,7 +35,7 @@ public class Powerup {
         this.width = POWERUP_WIDTH;
         this.height = POWERUP_HEIGHT;
         this.type = power;
-        this.timeCreated = System.currentTimeMillis();
+        this.timeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_TIME);
     }
 
     /**
@@ -44,6 +45,9 @@ public class Powerup {
      * @param deltaFloat Delta
      */
     public void update(GameState gs, GameContainer container, float deltaFloat) {
+        if (!gs.isPaused()) {
+            timeRemaining -= deltaFloat * SECONDS_TO_MS;
+        }
         if ((this.y + POWERUP_HEIGHT) < container.getHeight() - gs.getFloor().getHeight()) {
             this.y += POWERUP_SPEED * deltaFloat;
         } else {
@@ -97,7 +101,6 @@ public class Powerup {
      * @return whether or not to remove item
      */
     public boolean removePowerup() {
-        return (TimeUnit.SECONDS.toMillis(POWERUP_TIME)
-        		- (System.currentTimeMillis() - timeCreated)) <= 0;
+        return timeRemaining <= 0;
     }
 }

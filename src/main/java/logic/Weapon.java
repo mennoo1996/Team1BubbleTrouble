@@ -43,7 +43,8 @@ public class Weapon {
 	
 	/**
 	 * Update the laser.
-	 * @param gs The gamestate that called the update
+	 * @param ceiling The ceiling
+	 * @param floor The floor
 	 * @param deltaFloat the time in ms since the last frame
 	 */
 	public void update(Rectangle ceiling, Rectangle floor, float deltaFloat) {

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import logic.BouncingCircle;
 import logic.Player;
 import logic.PlayerList;
+import logic.Powerup;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -74,11 +75,12 @@ public class PlayerListTest {
 		when(mg.getDosFont()).thenReturn(acf);
 		Mockito.doNothing().when(acf).drawString(1, 1, "#PLAYER_1");
 		Player p = new Player(0,0,20,20,i,i,mg);
-		PlayerList pl = new PlayerList(p, mg, gs);
 		SpriteSheet ss = mock(SpriteSheet.class);
 		when(ss.getSprite(any(int.class), any(int.class))).thenReturn(null);
 		Mockito.doNothing().when(gr).drawImage(any(Image.class), any(float.class), any(float.class));
 		p.setSpritesheet(ss);
+		p.setMovement(2);
+		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.add(p);
 		pl.drawPlayers(gc, gr);
 	}
@@ -98,6 +100,8 @@ public class PlayerListTest {
 		when(ss.getSprite(any(int.class), any(int.class))).thenReturn(null);
 		Mockito.doNothing().when(gr).drawImage(any(Image.class), any(float.class), any(float.class));
 		p.setSpritesheet(ss);
+		p.setMovement(1);
+		p.addPowerup(Powerup.PowerupType.SHIELD);
 		pl.add(p);
 		pl.drawPlayers(gc, gr);
 	}

@@ -126,6 +126,7 @@ public class PlayerList {
 		if (player.getMovement() == 2) {
 			player.incrementMovementCounter();
 			int sp = SPRITE_SHEET_THREE;
+			System.out.println(player.getMovementCounter_Max() * MOVEMENT_COUNTER_FACTOR);
 			if (player.getMovementCounter() > player.getMovementCounter_Max() 
 					* MOVEMENT_COUNTER_FACTOR) {
 				sp = SPRITE_SHEET_FOUR;
@@ -149,8 +150,7 @@ public class PlayerList {
 		if (player.hasShield()) {
 			graphics.drawImage(player.getShieldImage(), player.getX() 
 					- SHIELD_DRAW_X_DEVIATION, player.getY() - SHIELD_DRAW_X_DEVIATION);
-		}
-		player.setMovement(0);
+		} player.setMovement(0);
 	}
 	
 	/**

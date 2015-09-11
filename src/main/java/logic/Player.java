@@ -555,5 +555,4 @@ public class Player {
 		this.shieldTimeRemaining = shieldTimeRemaining;
 	}
 	
-	
 }

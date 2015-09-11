@@ -99,7 +99,7 @@ public class Player {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
 		processGates();
-		processWeapon(deltaFloat, containerHeight);
+		processWeapon(deltaFloat, containerHeight, testing);
 		processPlayerMovement(deltaFloat, containerWidth, testing);
 		processPowerups(containerHeight, containerWidth, deltaFloat);
 		processCoins(deltaFloat, containerHeight);
@@ -152,9 +152,9 @@ public class Player {
 		gs.getDroppedCoins().removeAll(usedCoins);
 	}
 
-	private void processWeapon(float deltaFloat, float containerHeight) {
+	private void processWeapon(float deltaFloat, float containerHeight, boolean testing) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (gs.getSavedInput().isKeyPressed(shootKey)
+		if (!testing && gs.getSavedInput().isKeyPressed(shootKey)
 				&& !shot) {
 			shot = true;
 			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));

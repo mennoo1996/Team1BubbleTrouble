@@ -37,30 +37,30 @@
  T E S T S
 -------------------------------------------------------
 Running BouncingCircleTest
-Tests run: 77, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.343 sec
+Tests run: 77, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.328 sec
 Running ButtonTest
-Tests run: 38, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 sec
+Tests run: 38, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 sec
 Running CoinTest
 Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running floatingScoreTest
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
 Running GameStateTest
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running GateTest
-Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
+Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running HighScoresParserTest
 exception
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running HighScoresTest
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 sec
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running InstantLaserTest
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running LevelContainerTest
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running LevelTest
 Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running MainGameTest
-Tests run: 43, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 sec
+Tests run: 43, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
 Running MyButtonTest
 Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running MyRectangleTest
@@ -71,14 +71,12 @@ Playerdeath
 Playerdeath
 Playerdeath
 Playerdeath
-Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.11 sec
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.093 sec
 Running PlayerTest
-Tests run: 57, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.046 sec <<< FAILURE!
+Tests run: 57, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.047 sec <<< FAILURE!
 testUpdate1(PlayerTest)  Time elapsed: 0.016 sec  <<< ERROR!
-java.lang.NullPointerException
-	at logic.Player.processWeapon(Player.java:155)
-	at logic.Player.update(Player.java:100)
-	at PlayerTest.testUpdate1(PlayerTest.java:316)
+java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
+	at PlayerTest.testUpdate1(PlayerTest.java:302)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -109,12 +107,19 @@ java.lang.NullPointerException
 	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: java.lang.ClassNotFoundException: org.lwjgl.LWJGLException
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:372)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:360)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	... 31 more
 
 testUpdate2(PlayerTest)  Time elapsed: 0 sec  <<< ERROR!
-java.lang.NullPointerException
-	at logic.Player.processWeapon(Player.java:155)
-	at logic.Player.update(Player.java:100)
-	at PlayerTest.testUpdate2(PlayerTest.java:361)
+java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
+	at PlayerTest.testUpdate2(PlayerTest.java:338)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -145,12 +150,19 @@ java.lang.NullPointerException
 	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: java.lang.ClassNotFoundException: org.lwjgl.LWJGLException
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:372)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:360)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	... 31 more
 
 testUpdate3(PlayerTest)  Time elapsed: 0 sec  <<< ERROR!
-java.lang.NullPointerException
-	at logic.Player.processWeapon(Player.java:155)
-	at logic.Player.update(Player.java:100)
-	at PlayerTest.testUpdate3(PlayerTest.java:406)
+java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
+	at PlayerTest.testUpdate3(PlayerTest.java:385)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -181,6 +193,15 @@ java.lang.NullPointerException
 	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:85)
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
+Caused by: java.lang.ClassNotFoundException: org.lwjgl.LWJGLException
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:372)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:361)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:360)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:308)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	... 31 more
 
 Running PowerupTest
 Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
@@ -193,25 +214,25 @@ Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running StartStateTest
 Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running WeaponListTest
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 sec
 Running WeaponTest
-Tests run: 37, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 sec
+Tests run: 37, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 sec
 
 Results :
 
 Tests in error: 
-  testUpdate1(PlayerTest)
-  testUpdate2(PlayerTest)
-  testUpdate3(PlayerTest)
+  testUpdate1(PlayerTest): org/lwjgl/LWJGLException
+  testUpdate2(PlayerTest): org/lwjgl/LWJGLException
+  testUpdate3(PlayerTest): org/lwjgl/LWJGLException
 
 Tests run: 406, Failures: 0, Errors: 3, Skipped: 0
 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 2.500 s
-[INFO] Finished at: 2015-09-11T22:11:09+02:00
-[INFO] Final Memory: 10M/153M
+[INFO] Total time: 2.525 s
+[INFO] Finished at: 2015-09-11T22:18:33+02:00
+[INFO] Final Memory: 9M/156M
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.12.4:test (default-test) on project bubble-trouble: There are test failures.
 [ERROR] 

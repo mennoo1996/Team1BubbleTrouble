@@ -299,8 +299,6 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
-		Input input = new Input(Input.KEY_SPACE);
-		when(gs.getSavedInput()).thenReturn(input);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
@@ -335,8 +333,6 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
-		Input input = new Input(Input.KEY_SPACE);
-		when(gs.getSavedInput()).thenReturn(input);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
@@ -382,8 +378,6 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
-		Input input = new Input(Input.KEY_SPACE);
-		when(gs.getSavedInput()).thenReturn(input);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);

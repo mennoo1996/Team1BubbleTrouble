@@ -1,3 +1,5 @@
+import org.newdawn.slick.geom.Rectangle;
+
 /**
  * Created by alexandergeenen on 09/09/15.
  */
@@ -15,17 +17,17 @@ public class Spiky extends Weapon {
     }
 
     @Override
-    public void update(GameState gs, float deltaFloat) {
+    public void update(float deltaFloat, Rectangle ceiling, Rectangle floor) {
         boolean stayVisible = true;
         final int offsetY = 10;
         final int offsetFloor = 7;
         if (!this.isVisible()) {
             stayVisible = false;
         }
-        super.update(gs, deltaFloat);
-        if (this.getY() <= gs.getCeiling().getHeight() && stayVisible) {
-            this.setY(gs.getCeiling().getHeight() - offsetY);
-            this.setHeight(gs.getFloor().getMinY() - gs.getCeiling().getHeight() + offsetFloor);
+        super.update(deltaFloat, ceiling, floor);
+        if (this.getY() <= ceiling.getHeight() && stayVisible) {
+            this.setY(ceiling.getHeight() - offsetY);
+            this.setHeight(floor.getMinY() - ceiling.getHeight() + offsetFloor);
             this.setVisible(true);
         }
     }

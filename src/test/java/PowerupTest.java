@@ -1,6 +1,9 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.newdawn.slick.geom.Rectangle;
 
 
 public class PowerupTest {
@@ -57,4 +60,23 @@ public class PowerupTest {
 		assertTrue(p.getType() == Powerup.PowerupType.SHIELD);
 	}
 	
+	@Test
+	public void testUpdate() {
+		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
+		p.update(1000, new Rectangle(1,1,1,100), 1);
+		assertEquals(p.getCenterY(), 320, 0);
+	}
+	
+	@Test
+	public void testUpdate2() {
+		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
+		p.update(110, new Rectangle(1,1,1,100), 1);
+		assertEquals(p.getCenterY(), -10, 0);
+	}
+	
+	@Test
+	public void removePowerupTest() {
+		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
+		assertFalse(p.removePowerup());
+	}
 }

@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Rectangle;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BouncingCircleTest {
@@ -28,6 +29,74 @@ public class BouncingCircleTest {
 		
 		mg = mock(MainGame.class);
 		
+	}
+	
+	@Test
+	public void testUpdate1() {
+		gs.setCeiling(new MyRectangle(1,1,1,1));
+		gs.setFloor(new MyRectangle(1,1,1,1));
+		gs.setLeftWall(new MyRectangle(1,1,1,1));
+		gs.setRightWall(new MyRectangle(1,1,1,1));
+		
+		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
+		c.update(1, 1, gs, 1);
+		assertEquals(c.getySpeed(), -360, 0);
+		assertEquals(c.getxSpeed(), 4, 0);
+	}
+	
+	@Test
+	public void testUpdate2() {
+		gs.setCeiling(new MyRectangle(1,1,1,1));
+		gs.setFloor(new MyRectangle(1,1,1,1));
+		gs.setLeftWall(new MyRectangle(1,1,1,1));
+		gs.setRightWall(new MyRectangle(1,1,1,1));
+		
+		c = new BouncingCircle(10000, 2, 10, 4, 5, 6);
+		c.update(1000, 1000, gs, 1);
+//		System.out.println(c.getySpeed());
+//		System.out.println(c.getxSpeed());
+		assertEquals(c.getySpeed(), 11, 0);
+		assertEquals(c.getxSpeed(), -4, 0);
+	}
+	
+	@Test
+	public void testUpdate3() {
+		gs.setCeiling(new MyRectangle(1,1,1,1));
+		gs.setFloor(new MyRectangle(1,1,1,1));
+		gs.setLeftWall(new MyRectangle(1,1,1,1));
+		gs.setRightWall(new MyRectangle(1,1,1,1));
+		
+		Gate gate = new Gate(100, 2, 1, 1);
+		ArrayList<Gate> gateList = new ArrayList<Gate>();
+		gateList.add(gate);
+		gs.setGateList(gateList);
+		
+		c = new BouncingCircle(100, 2, 10, 4, 5, 6);
+		c.update(1000, 1000, gs, 1);
+		assertEquals(c.getySpeed(), 11, 0);
+		assertEquals(c.getxSpeed(), 4, 0);
+	}
+	
+	@Test
+	public void testUpdate4() {
+		gs.setCeiling(new MyRectangle(1,1,1,1));
+		gs.setFloor(new MyRectangle(1,1,1,1));
+		gs.setLeftWall(new MyRectangle(1,1,1,1));
+		gs.setRightWall(new MyRectangle(1,1,1,1));
+		
+		Gate gate = new Gate(100, 2, 1, 1);
+		ArrayList<Gate> gateList = new ArrayList<Gate>();
+		gateList.add(gate);
+		gs.setGateList(gateList);
+		
+		ArrayList<BouncingCircle> required = new ArrayList<BouncingCircle>();
+		gate.setRequired(required);
+		
+		c = new BouncingCircle(100, 2, 10, 4, 5, 6);
+		required.add(c);
+		c.update(1000, 1000, gs, 1);
+		assertEquals(c.getySpeed(), 11, 0);
+		assertEquals(c.getxSpeed(), -4, 0);
 	}
 	
 	@Test

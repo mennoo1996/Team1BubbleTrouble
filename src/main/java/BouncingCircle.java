@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
 
 /**
@@ -72,15 +71,17 @@ public class BouncingCircle extends Circle {
 
 	/**
 	 * Update the circle in the given container.
-	 * @param gs			- the gamestate the circle is in
-	 * @param container		- the container the circle is in
+	 * @param containerHeight	- the height of the container
+	 * @param containerWidth	- the width of the container
+	 * @param gs				- the gamestate
 	 * @param deltaFloat    - the time in ms since last frame
 	 */
-	public void update(GameState gs, GameContainer container, float deltaFloat) {
+	public void update(float containerHeight, float containerWidth, 
+			GameState gs, float deltaFloat) {
 		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed * deltaFloat);
 		// When the ball hit the floor reverse it's speed
-		if (this.getMaxY() > container.getHeight() - gs.getFloor().getHeight()) {
+		if (this.getMaxY() > containerHeight - gs.getFloor().getHeight()) {
 			ySpeed = -getSpeedForRadius();
 		} else {
 			// Else increase the speed
@@ -90,16 +91,16 @@ public class BouncingCircle extends Circle {
 		if (this.getMinY() <= gs.getCeiling().getHeight()) {
 			this.hitCeiling = true;
 		}
-		handleXCalculations(gs, container, deltaFloat);
+		handleXCalculations(containerWidth, gs, deltaFloat);
 	}
 	
-	private void handleXCalculations(GameState gs, GameContainer container, float deltaFloat) {
+	private void handleXCalculations(float containerWidth, GameState gs, float deltaFloat) {
 		// Calculations for X coordinates
 		this.setX(this.getX() + xSpeed * deltaFloat);
 		// If the ball hit a wall reverse it's speed
 		if (this.getX() < gs.getLeftWall().getWidth()) {
 			xSpeed = initSpeed;
-		} else if (this.getMaxX() > container.getWidth() - gs.getRightWall().getWidth()) {
+		} else if (this.getMaxX() > containerWidth - gs.getRightWall().getWidth()) {
 			xSpeed = -initSpeed;
 		} else {
 			for (Gate gate : gs.getGateList()) {

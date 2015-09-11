@@ -1,3 +1,5 @@
+import org.newdawn.slick.geom.Rectangle;
+
 /**
  * Class that represents a weapon.
  * @author Menno
@@ -40,14 +42,15 @@ public class Weapon {
 	
 	/**
 	 * Update the laser.
-	 * @param gs The gamestate that called the update
 	 * @param deltaFloat the time in ms since the last frame
+	 * @param ceiling 	- the ceiling
+	 * @param floor		- the floor
 	 */
-	public void update(GameState gs, float deltaFloat) {
+	public void update(float deltaFloat, Rectangle ceiling, Rectangle floor) {
 		y -= laserSpeed * deltaFloat;
 		height += laserSpeed * deltaFloat;
 		
-		if (y < gs.getCeiling().getHeight()) {
+		if (y < ceiling.getHeight()) {
 			this.visible = false;
 		}
 		

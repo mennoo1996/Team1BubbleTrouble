@@ -37,30 +37,30 @@
  T E S T S
 -------------------------------------------------------
 Running BouncingCircleTest
-Tests run: 77, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.332 sec
+Tests run: 77, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.341 sec
 Running ButtonTest
-Tests run: 38, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 sec
+Tests run: 38, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.03 sec
 Running CoinTest
 Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
 Running floatingScoreTest
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 sec
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 sec
 Running GameStateTest
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 sec
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 sec
 Running GateTest
-Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 sec
+Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 sec
 Running HighScoresParserTest
 exception
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 sec
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 sec
 Running HighScoresTest
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
 Running InstantLaserTest
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
 Running LevelContainerTest
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 sec
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.01 sec
 Running LevelTest
 Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
 Running MainGameTest
-Tests run: 43, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.018 sec
+Tests run: 43, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.017 sec
 Running MyButtonTest
 Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 sec
 Running MyRectangleTest
@@ -71,10 +71,10 @@ Playerdeath
 Playerdeath
 Playerdeath
 Playerdeath
-Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.104 sec
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.103 sec
 Running PlayerTest
-Tests run: 57, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.047 sec <<< FAILURE!
-testUpdate1(PlayerTest)  Time elapsed: 0.007 sec  <<< ERROR!
+Tests run: 57, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.042 sec <<< FAILURE!
+testUpdate1(PlayerTest)  Time elapsed: 0.006 sec  <<< ERROR!
 java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
 	at java.lang.Class.getDeclaredConstructors0(Native Method)
 	at java.lang.Class.privateGetDeclaredConstructors(Class.java:2663)
@@ -87,7 +87,7 @@ java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
 	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:51)
 	at org.mockito.Mockito.mock(Mockito.java:1243)
 	at org.mockito.Mockito.mock(Mockito.java:1120)
-	at PlayerTest.testUpdate1(PlayerTest.java:302)
+	at PlayerTest.testUpdate1(PlayerTest.java:309)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -128,7 +128,7 @@ Caused by: java.lang.ClassNotFoundException: org.lwjgl.LWJGLException
 	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
 	... 42 more
 
-testUpdate2(PlayerTest)  Time elapsed: 0.001 sec  <<< ERROR!
+testUpdate2(PlayerTest)  Time elapsed: 0.002 sec  <<< ERROR!
 java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
 	at java.lang.Class.getDeclaredConstructors0(Native Method)
 	at java.lang.Class.privateGetDeclaredConstructors(Class.java:2663)
@@ -141,7 +141,7 @@ java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
 	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:51)
 	at org.mockito.Mockito.mock(Mockito.java:1243)
 	at org.mockito.Mockito.mock(Mockito.java:1120)
-	at PlayerTest.testUpdate2(PlayerTest.java:344)
+	at PlayerTest.testUpdate2(PlayerTest.java:350)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -182,7 +182,7 @@ Caused by: java.lang.ClassNotFoundException: org.lwjgl.LWJGLException
 	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
 	... 42 more
 
-testUpdate3(PlayerTest)  Time elapsed: 0.003 sec  <<< ERROR!
+testUpdate3(PlayerTest)  Time elapsed: 0.004 sec  <<< ERROR!
 java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
 	at java.lang.Class.getDeclaredConstructors0(Native Method)
 	at java.lang.Class.privateGetDeclaredConstructors(Class.java:2663)
@@ -195,7 +195,7 @@ java.lang.NoClassDefFoundError: org/lwjgl/LWJGLException
 	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:51)
 	at org.mockito.Mockito.mock(Mockito.java:1243)
 	at org.mockito.Mockito.mock(Mockito.java:1120)
-	at PlayerTest.testUpdate3(PlayerTest.java:398)
+	at PlayerTest.testUpdate3(PlayerTest.java:400)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -241,15 +241,15 @@ Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
 Running ScoreTest
 Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running SettingsStateTest
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running SpikyTest
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running StartStateTest
 Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running WeaponListTest
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 sec
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 sec
 Running WeaponTest
-Tests run: 37, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 sec
+Tests run: 37, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 sec
 
 Results :
 
@@ -263,9 +263,9 @@ Tests run: 406, Failures: 0, Errors: 3, Skipped: 0
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 2.558 s
-[INFO] Finished at: 2015-09-11T21:56:09+02:00
-[INFO] Final Memory: 11M/153M
+[INFO] Total time: 2.465 s
+[INFO] Finished at: 2015-09-11T22:07:47+02:00
+[INFO] Final Memory: 10M/153M
 [INFO] ------------------------------------------------------------------------
 [ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.12.4:test (default-test) on project bubble-trouble: There are test failures.
 [ERROR] 

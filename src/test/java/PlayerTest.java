@@ -306,9 +306,6 @@ public class PlayerTest {
 		when(gs.getGateList()).thenReturn(gl);
 		when(gs.getDroppedPowerups()).thenReturn(pl);
 		when(gs.getFloatingScores()).thenReturn(fsl);
-		Input input = mock(Input.class);
-		when(input.isKeyPressed(Input.KEY_SPACE)).thenReturn(true);
-		when(gs.getSavedInput()).thenReturn(input);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		when(gs.getFloor()).thenReturn(floor);
@@ -347,11 +344,6 @@ public class PlayerTest {
 		when(gs.getGateList()).thenReturn(gl);
 		when(gs.getDroppedPowerups()).thenReturn(pl);
 		when(gs.getFloatingScores()).thenReturn(fsl);
-		Input input = mock(Input.class);
-		when(input.isKeyPressed(Input.KEY_SPACE)).thenReturn(true);
-		when(input.isKeyDown(Input.KEY_LEFT)).thenReturn(true);
-		when(input.isKeyDown(Input.KEY_RIGHT)).thenReturn(true);
-		when(gs.getSavedInput()).thenReturn(input);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
@@ -397,11 +389,6 @@ public class PlayerTest {
 		when(gs.getGateList()).thenReturn(gl);
 		when(gs.getDroppedPowerups()).thenReturn(pl);
 		when(gs.getFloatingScores()).thenReturn(fsl);
-		Input input = mock(Input.class);
-		when(input.isKeyPressed(Input.KEY_SPACE)).thenReturn(true);
-		when(input.isKeyDown(Input.KEY_LEFT)).thenReturn(true);
-		when(input.isKeyDown(Input.KEY_RIGHT)).thenReturn(true);
-		when(gs.getSavedInput()).thenReturn(input);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);

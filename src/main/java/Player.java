@@ -43,12 +43,13 @@ public class Player {
 	private static final int PLAYER2_X_DEVIATION = 420;
 	private static final int PLAYER_Y_DEVIATION = 705;
 	private static final float HALF = 0.5f;
+	private static final int SECONDS_TO_MS = 1000;
 	private int moveLeftKey;
 	private int moveRightKey;
 	private int shootKey;
 	
 	private static final int POWERUP_DURATION = 10;
-	private long shieldSpawnTime;
+	private long shieldTimeRemaining;
 
 	/**
 	 * @param x the x coordinate of the player
@@ -78,7 +79,7 @@ public class Player {
 		shootKey = Input.KEY_SPACE;
 		this.weapons = new LinkedList<>();
 		this.shieldCount = 0;
-		this.shieldSpawnTime = 0;
+		this.shieldTimeRemaining = 0;
 		this.shot = false;
 	}
 	
@@ -87,6 +88,9 @@ public class Player {
 	 * @param deltaFloat the time in ms since the last frame.
 	 */
 	public void update(float deltaFloat) {
+		if (!gs.isPaused() && shieldTimeRemaining > 0) {
+			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
+		}
 		processGates();
 		processWeapon(mg.getContainer(), deltaFloat);
 		processPlayerMovement(mg.getContainer(), deltaFloat);
@@ -112,7 +116,7 @@ public class Player {
 	private void processPowerups(GameContainer container, float deltaFloat) { // MARKED
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		for (Powerup powerup : gs.getDroppedPowerups()) {
-			powerup.update(container.getHeight(), gs.getFloor(), deltaFloat);
+			powerup.update(gs, container, deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
 				this.addPowerup(powerup.getType());
@@ -152,7 +156,7 @@ public class Player {
 
 		// Update laser
 		if (shot) {
-			weapon.update(deltaFloat, gs.getCeiling(), gs.getFloor());
+			weapon.update(gs, deltaFloat);
 			// Disable laser when it has reached the ceiling
 			if (!weapon.isVisible()) {
 				shot = false;
@@ -354,7 +358,7 @@ public class Player {
 
 	private void addShield() {
 		shieldCount += 1;
-		shieldSpawnTime = System.currentTimeMillis();
+		shieldTimeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_DURATION);
 		Executors.newScheduledThreadPool(1).schedule(() -> shieldCount -= 1,
 				POWERUP_DURATION, TimeUnit.SECONDS);
 	}
@@ -496,7 +500,7 @@ public class Player {
 	public void respawn() {
 		weapons = new LinkedList<>();
 		shieldCount = 0;
-		shieldSpawnTime = 0;
+		shieldTimeRemaining = 0;
 		this.x = startX;
 		this.y = startY;
 	}
@@ -534,8 +538,7 @@ public class Player {
 	 */
 	public float shieldTimeRemaining() {
 		if (shieldCount > 0) {
-			return TimeUnit.SECONDS.toMillis(POWERUP_DURATION) 
-					- (System.currentTimeMillis() - shieldSpawnTime);
+			return shieldTimeRemaining;
 		} else {
 			return 0;
 		}

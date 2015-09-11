@@ -4,21 +4,18 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.newdawn.slick.geom.Rectangle;
 
 public class WeaponTest {
 	
 	Weapon l;
 	MainGame mg;
-	Rectangle floor;
-	Rectangle ceiling;
+	GameState gs;
 
 	@Before
 	public void setUp() throws Exception {
 		l = new Weapon(1, 2, 3, 4);
 		mg = new MainGame("TestGame");
-		ceiling = new Rectangle(0,0,0,4);
-		floor = new Rectangle(0,0,0,0);
+		gs = new GameState(mg);
 	}
 
 	@Test
@@ -53,8 +50,8 @@ public class WeaponTest {
 
 	@Test
 	public void testGetRectangle() {
-		MyRectangle mr = l.getRectangle();
-		assertEquals(new MyRectangle(-1, 2, 4, 0), mr);
+		MyRectangle r = l.getRectangle();
+		assertEquals(new MyRectangle(-1, 2, 4, 0), r);
 	}
 	
 	@Test
@@ -66,33 +63,37 @@ public class WeaponTest {
 
 	@Test
 	public void testUpdateY() {
-		l.update(0.5f, ceiling, floor);
+		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
+		l.update(gs, 0.5f);
 		assertEquals(0.5f, l.getY(), 0);
 		
 	}
 	
 	@Test
 	public void testUpdateYNoConstantValue() {
-		l.update(1, ceiling, floor);
+		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
+		l.update(gs, 1);
 		assertEquals(-1, l.getY(), 0);
 	}
 	
 	@Test
 	public void testUpdateHeight() {
-		l.update(0.5f, ceiling, floor);
+		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
+		l.update(gs, 0.5f);
 		assertEquals(1.5, l.getHeight(), 0);
 	}
 	
 	@Test
 	public void testUpdateHeightNoConstantValue() {
-		l.update(1, ceiling, floor);
+		gs.setCeiling(new MyRectangle(0, 0, 0 ,4));
+		l.update(gs, 1);
 		assertEquals(3, l.getHeight(), 0);
 	}
 	
 	@Test
 	public void testUpdateVisible(){
-		ceiling.setHeight(1);
-		l.update(0.5f, ceiling, floor);
+		gs.setCeiling(new MyRectangle(0, 0, 0, 1));
+		l.update(gs, 0.5f);
 		assertFalse(l.isVisible());
 	}
 	

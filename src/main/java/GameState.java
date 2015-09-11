@@ -123,6 +123,13 @@ public class GameState extends BasicGameState {
 	private static final int GATE_UP = 9;
 	private static final int GATE_LEFT_LOWER = 9;
 	private static final int GATE_Y_FACTOR_LOWER = 347;
+	private static final int SHIELD_COUNTER_OFFSET_X = 120;
+	private static final int SHIELD_COUNTER_OFFSET_Y = 90;
+	private static final int SHIELD_COUNTER_OFFSET_1_Y = -6;
+	private static final int SHIELD_COUNTER_OFFSET_1_X = 290;
+	private static final int SHIELD_COUNTER_OFFSET_2_X = 305;
+	private static final int SHIELD_COUNTER_INCREMENT_Y = 40;
+	private static final float SHIELD_COUNTER_DIVIDER = 1000f;
 	private static final int CIRCLE_DRAW_OFFSET = 13;
 	private static final int MINIMUM_RADIUS = 10;
 	private static final int RADIUS_2 = 20;
@@ -368,7 +375,7 @@ public class GameState extends BasicGameState {
 			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
 		for (BouncingCircle circle : circleList) {
             //update circles
-            circle.update(container.getHeight(), container.getWidth(), this, deltaFloat);
+            circle.update(this, container, deltaFloat);
 
             mg.getPlayerList().intersectPlayersWithCircle(circle);
             
@@ -494,6 +501,8 @@ public class GameState extends BasicGameState {
 	}
 
 	private void drawMiscellaneous(GameContainer container, Graphics graphics) {
+		// draw shield timers
+		drawShieldTimer(graphics);
 		if (!playingState) {
 			drawPausedScreen(container, graphics);
 		}
@@ -511,6 +520,37 @@ public class GameState extends BasicGameState {
 		drawHealth(graphics);
 	}
 
+	private void drawShieldTimer(Graphics graphics) {
+		int height = SHIELD_COUNTER_OFFSET_Y;
+		if (mg.getPlayerList().getPlayers().get(0).hasShield()) {
+			height += SHIELD_COUNTER_INCREMENT_Y;
+			float rem = mg.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
+			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
+			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
+				graphics.drawImage(counterBarImage, SHIELD_COUNTER_OFFSET_1_X 
+						+ x * COUNTER_BAR_X_FACTOR, height + SHIELD_COUNTER_OFFSET_1_Y);
+			}
+			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_2_X 
+					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
+					* COUNTER_BAR_X_FACTOR, height, 
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s");
+		}
+		
+		if (mg.isMultiplayer() && mg.getPlayerList().getPlayers().get(1).hasShield()) {
+			height += SHIELD_COUNTER_INCREMENT_Y;
+			float rem = mg.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
+			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
+			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
+				graphics.drawImage(counterBarImage, SHIELD_COUNTER_OFFSET_1_X 
+						+ x * COUNTER_BAR_X_FACTOR, height + SHIELD_COUNTER_OFFSET_1_Y);
+			}
+			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_2_X 
+					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
+					* COUNTER_BAR_X_FACTOR, height, 
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s");
+		}
+	}
+	
 	private void drawItems(Graphics graphics) {
 		drawPowerups(graphics);
 		drawCoins(graphics);
@@ -733,8 +773,6 @@ public class GameState extends BasicGameState {
 		
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		// countdown bar images
-		counterBarImage = new Image("resources/counter_bar.png");
 		coinImage = new Image("resources/coin.png");
 	}
 	
@@ -986,5 +1024,11 @@ public class GameState extends BasicGameState {
 	public ArrayList<FloatingScore> getFloatingScores() {
 		return floatingScoreList;
 	}
-	
+
+	/**
+	 * @return whether or not the game is paused
+	 */
+	public boolean isPaused() {
+		return !playingState;
+	}
 }

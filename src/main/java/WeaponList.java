@@ -29,6 +29,7 @@ public class WeaponList {
 	 * @param weapon1 	- the first weapon of the list
 	 * @param mg		- the maingame 
 	 * @param gs		- the gamestate
+	 * @param testing	- testing state or not
 	 */
 	public WeaponList(Weapon weapon1, MainGame mg, GameState gs, boolean testing) {
 		super();
@@ -61,6 +62,7 @@ public class WeaponList {
 	private void intersectWeaponWithCircle(BouncingCircle circle, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
 		Player player = mg.getPlayerList().getPlayers().get(weaponNumber);
+		
 		if (player.isShot() && weapon.getRectangle().intersects(circle)) {
 			gs.getShotList().add(circle);
 			weapon.setVisible(false);
@@ -109,9 +111,6 @@ public class WeaponList {
 	private void drawWeapon(Graphics graphics, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
 		
-		System.out.println("printing shit");
-		System.out.println(weapon.getX() - LASER_X_DEVIATION);
-		System.out.println(weapon.getY() - LASER_TIP_Y_DEVIATION);
 		graphics.drawImage(lasertipimage, weapon.getX() - LASER_X_DEVIATION,
 				weapon.getY() - LASER_TIP_Y_DEVIATION);
 		graphics.drawImage(laserbeamimage, weapon.getX() - LASER_X_DEVIATION,
@@ -161,4 +160,8 @@ public class WeaponList {
 	public void setLasertipimage(Image lasertipimage) {
 		this.lasertipimage = lasertipimage;
 	}
+	
+	
+	
+
 }

@@ -1,10 +1,17 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import gui.GameState;
 import logic.MyRectangle;
 import logic.Powerup;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class PowerupTest {
 	
 	private static final float POWERUP_WIDTH = 40;
@@ -57,6 +64,32 @@ public class PowerupTest {
 	public void getTypeTestSHIELD() {
 		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
 		assertTrue(p.getType() == Powerup.PowerupType.SHIELD);
+	}
+	
+	@Test
+	public void testUpdate1() {
+		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
+		GameState gs = mock(GameState.class);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		when(gs.isPaused()).thenReturn(false);
+		when(gs.getFloor()).thenReturn(floor);
+		p.update(gs, 100, 100);
+	}
+	
+	@Test
+	public void testUpdate2() {
+		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
+		GameState gs = mock(GameState.class);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		when(gs.isPaused()).thenReturn(false);
+		when(gs.getFloor()).thenReturn(floor);
+		p.update(gs, 1000, 100);
+	}
+	
+	@Test
+	public void testRemovePowerup() {
+		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
+		assertFalse(p.removePowerup());
 	}
 	
 }

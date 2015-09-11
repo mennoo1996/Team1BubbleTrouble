@@ -120,7 +120,7 @@ public class Player {
 	private void processPowerups(GameContainer container, float deltaFloat) { // MARKED
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		for (Powerup powerup : gs.getDroppedPowerups()) {
-			powerup.update(gs, container, deltaFloat);
+			powerup.update(gs, container.getHeight(), deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
 				this.addPowerup(powerup.getType());

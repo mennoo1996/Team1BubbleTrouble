@@ -233,7 +233,7 @@ public class GameState extends BasicGameState {
 		
 		Weapon weapon1 = null;
 		Weapon weapon2 = null;
-		weaponList = new WeaponList(weapon1, mg, this);
+		weaponList = new WeaponList(weapon1, mg, this, false);
 		weaponList.add(weapon2);
 	}
 

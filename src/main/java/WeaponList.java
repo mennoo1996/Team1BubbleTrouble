@@ -29,19 +29,22 @@ public class WeaponList {
 	 * @param weapon1 	- the first weapon of the list
 	 * @param mg		- the maingame 
 	 * @param gs		- the gamestate
+	 * @param testing	- testing state or not
 	 */
-	public WeaponList(Weapon weapon1, MainGame mg, GameState gs) {
+	public WeaponList(Weapon weapon1, MainGame mg, GameState gs, boolean testing) {
 		super();
 		this.weaponList = new ArrayList<Weapon>();
 		weaponList.add(weapon1);
 		this.mg = mg;
 		this.gs = gs;
 		
-		try {
-			initImages();
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
+		if (!testing) {
+			try {
+				initImages();
+			} catch (Exception e) {
+				System.out.println("exception");
+			}
+		} 
 	}
 	
 	/**
@@ -128,6 +131,34 @@ public class WeaponList {
 	 */
 	public void setWeaponList(ArrayList<Weapon> weaponList) {
 		this.weaponList = weaponList;
+	}
+
+	/**
+	 * @return the laserbeamimage
+	 */
+	public Image getLaserbeamimage() {
+		return laserbeamimage;
+	}
+
+	/**
+	 * @param laserbeamimage the laserbeamimage to set
+	 */
+	public void setLaserbeamimage(Image laserbeamimage) {
+		this.laserbeamimage = laserbeamimage;
+	}
+
+	/**
+	 * @return the lasertipimage
+	 */
+	public Image getLasertipimage() {
+		return lasertipimage;
+	}
+
+	/**
+	 * @param lasertipimage the lasertipimage to set
+	 */
+	public void setLasertipimage(Image lasertipimage) {
+		this.lasertipimage = lasertipimage;
 	}
 	
 	

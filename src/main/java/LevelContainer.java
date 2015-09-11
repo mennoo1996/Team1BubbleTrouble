@@ -23,7 +23,6 @@ public class LevelContainer {
 	private static final float RADIUS_5 = 65;
 	private static final float RADIUS_6 = 90;
 	private static final int DEFAULT_YSPEED = -50;
-	private static final int LEVEL_1_BALL_2_X = 1200;
 	private static final float LEVEL_1_GATE_X_DEVIATION = 50f;
 	private static final float LEVEL_1_GATE_WIDTH = 45;
 	private static final int LEVEL_1_TIME = 40;

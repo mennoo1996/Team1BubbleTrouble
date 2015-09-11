@@ -105,13 +105,13 @@ public class PlayerListTest {
 	@Test
 	public void testUpdatePlayers() {
 		Player p = mock(Player.class);
-		Mockito.doNothing().when(p).update(1, 1000, 1600);
+		Mockito.doNothing().when(p).update(1, 1000, 1600, false);
 		mg = mock(MainGame.class);
 		when(mg.isMultiplayer()).thenReturn(true);
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.add(p);
 		pl.updatePlayers(1, 1000, 1600);
-		verify(p, times(2)).update(1, 1000, 1600);
+		verify(p, times(2)).update(1, 1000, 1600, false);
 	}
 	
 	@Test 

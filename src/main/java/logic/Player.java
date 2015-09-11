@@ -91,14 +91,16 @@ public class Player {
 	 * @param deltaFloat the time in ms since the last frame.
 	 * @param containerHeight - the height of the container
 	 * @param containerWidth - the width of the container
+	 * @param testing	are we testing or not
 	 */
-	public void update(float deltaFloat, float containerHeight, float containerWidth) {
+	public void update(float deltaFloat, float containerHeight, float containerWidth, 
+			boolean testing) {
 		if (!gs.isPaused() && shieldTimeRemaining > 0) {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
 		processGates();
 		processWeapon(deltaFloat, containerHeight);
-		processPlayerMovement(deltaFloat, containerWidth);
+		processPlayerMovement(deltaFloat, containerWidth, testing);
 		processPowerups(containerHeight, containerWidth, deltaFloat);
 		processCoins(deltaFloat, containerHeight);
 	}
@@ -170,8 +172,11 @@ public class Player {
 		}
 	}
 	
-	private void processPlayerMovement(float deltaFloat, float containerWidth) {
+	private void processPlayerMovement(float deltaFloat, float containerWidth, boolean testing) {
 		// Walk left when left key pressed and not at left wall OR a gate
+		if (testing) {
+			return;
+		}
 		boolean isKeyLeft = gs.getSavedInput().isKeyDown(moveLeftKey);
 		if (isKeyLeft && this.getX() > gs.getLeftWall().getWidth()) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {

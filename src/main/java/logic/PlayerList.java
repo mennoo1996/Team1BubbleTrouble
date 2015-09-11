@@ -50,9 +50,9 @@ public class PlayerList {
 	 * @param containerWidth - the width of the container
 	 */
 	public void updatePlayers(float deltaFloat, float containerHeight, float containerWidth) {
-		playerList.get(0).update(deltaFloat, containerHeight, containerWidth);
+		playerList.get(0).update(deltaFloat, containerHeight, containerWidth, false);
 		if (mg.isMultiplayer()) {
-			playerList.get(1).update(deltaFloat, containerHeight, containerWidth);	
+			playerList.get(1).update(deltaFloat, containerHeight, containerWidth, false);	
 		}
 	}
 	

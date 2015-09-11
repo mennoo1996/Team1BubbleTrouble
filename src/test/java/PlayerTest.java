@@ -299,6 +299,8 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
+		Input input = new Input(Input.KEY_SPACE);
+		when(gs.getSavedInput()).thenReturn(input);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
@@ -313,7 +315,7 @@ public class PlayerTest {
 		when(gs.getWeaponList()).thenReturn(wl);
 
 		p = new Player(1, 2, 3, 4, i, i2, mg);
-		p.update(1, 1000, 1600);
+		p.update(1, 1000, 1600, true);
 		assertEquals(1,p.getX(),0);
 		assertEquals(2,p.getY(),0);
 	}
@@ -333,6 +335,8 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
+		Input input = new Input(Input.KEY_SPACE);
+		when(gs.getSavedInput()).thenReturn(input);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
@@ -358,7 +362,7 @@ public class PlayerTest {
 		p = new Player(5,5,1000,1000, i, i2, mg);
 		p.setShieldTimeRemaining(20l);
 		p.addPowerup(Powerup.PowerupType.SPIKY);
-		p.update(1,1000,1600);
+		p.update(1,1000,1600, true);
 		assertEquals(5,p.getX(),0);
 		assertEquals(5,p.getY(),0);
 	}
@@ -378,6 +382,8 @@ public class PlayerTest {
 		fsl.add(fs);
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
+		Input input = new Input(Input.KEY_SPACE);
+		when(gs.getSavedInput()).thenReturn(input);
 		mg = mock(MainGame.class);
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
@@ -403,7 +409,7 @@ public class PlayerTest {
 		p = new Player(5,5,1000,1000, i, i2, mg);
 		p.setShieldTimeRemaining(20l);
 		p.addPowerup(Powerup.PowerupType.INSTANT);
-		p.update(1,1000,1600);
+		p.update(1,1000,1600, true);
 		assertEquals(5,p.getX(),0);
 		assertEquals(5,p.getY(),0);
 	}

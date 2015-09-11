@@ -1,6 +1,12 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+
+import logic.HighScores;
+import logic.HighScoresParser;
+import logic.Score;
+import logic.ScoresComparator;
 
 import org.junit.Test;
 

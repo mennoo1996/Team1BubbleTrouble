@@ -1,3 +1,6 @@
+package logic;
+import gui.GameState;
+
 /**
  * Class that represents a weapon.
  * @author Menno

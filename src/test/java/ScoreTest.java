@@ -1,4 +1,5 @@
 import static org.junit.Assert.*;
+import logic.Score;
 
 import org.junit.Test;
 

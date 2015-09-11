@@ -1,3 +1,4 @@
+package logic;
 import java.util.ArrayList;
 
 import org.newdawn.slick.geom.Rectangle;

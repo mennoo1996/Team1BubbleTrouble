@@ -2,8 +2,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gui.GameState;
+import gui.MainGame;
 
 import java.util.ArrayList;
+
+import logic.BouncingCircle;
+import logic.Player;
+import logic.PlayerList;
+import logic.Weapon;
+import logic.WeaponList;
 
 import org.junit.Before;
 import org.junit.Test;

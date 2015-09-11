@@ -2,6 +2,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import logic.HighScores;
+import logic.Score;
+
 import org.junit.Test;
 
 

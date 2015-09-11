@@ -1,5 +1,4 @@
 import java.util.concurrent.TimeUnit;
-
 import org.newdawn.slick.geom.Rectangle;
 
 /**

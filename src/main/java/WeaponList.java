@@ -39,8 +39,7 @@ public class WeaponList {
 		
 		try {
 			initImages();
-		} catch (SlickException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
 		}
 	}
 	
@@ -58,6 +57,7 @@ public class WeaponList {
 	
 	private void intersectWeaponWithCircle(BouncingCircle circle, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
+		System.out.println(weaponNumber);
 		Player player = mg.getPlayerList().getPlayerList().get(weaponNumber);
 		
 		if (player.isShot() && weapon.getRectangle().intersects(circle)) {
@@ -108,6 +108,9 @@ public class WeaponList {
 	private void drawWeapon(Graphics graphics, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
 		
+		System.out.println("printing shit");
+		System.out.println(weapon.getX() - LASER_X_DEVIATION);
+		System.out.println(weapon.getY() - LASER_TIP_Y_DEVIATION);
 		graphics.drawImage(lasertipimage, weapon.getX() - LASER_X_DEVIATION,
 				weapon.getY() - LASER_TIP_Y_DEVIATION);
 		graphics.drawImage(laserbeamimage, weapon.getX() - LASER_X_DEVIATION,
@@ -129,8 +132,32 @@ public class WeaponList {
 	public void setWeaponList(ArrayList<Weapon> weaponList) {
 		this.weaponList = weaponList;
 	}
-	
-	
-	
 
+	/**
+	 * @return the laserbeamimage
+	 */
+	public Image getLaserbeamimage() {
+		return laserbeamimage;
+	}
+
+	/**
+	 * @param laserbeamimage the laserbeamimage to set
+	 */
+	public void setLaserbeamimage(Image laserbeamimage) {
+		this.laserbeamimage = laserbeamimage;
+	}
+
+	/**
+	 * @return the lasertipimage
+	 */
+	public Image getLasertipimage() {
+		return lasertipimage;
+	}
+
+	/**
+	 * @param lasertipimage the lasertipimage to set
+	 */
+	public void setLasertipimage(Image lasertipimage) {
+		this.lasertipimage = lasertipimage;
+	}
 }

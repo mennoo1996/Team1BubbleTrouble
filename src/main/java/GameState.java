@@ -522,9 +522,9 @@ public class GameState extends BasicGameState {
 
 	private void drawShieldTimer(Graphics graphics) {
 		int height = SHIELD_COUNTER_OFFSET_Y;
-		if (mg.getPlayerList().getPlayerList().get(0).hasShield()) {
+		if (mg.getPlayerList().getPlayers().get(0).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
-			float rem = mg.getPlayerList().getPlayerList().get(0).shieldTimeRemaining();
+			float rem = mg.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
 			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
 				graphics.drawImage(counterBarImage, SHIELD_COUNTER_OFFSET_1_X 
@@ -535,9 +535,10 @@ public class GameState extends BasicGameState {
 					* COUNTER_BAR_X_FACTOR, height, 
 					"#" + rem / SHIELD_COUNTER_DIVIDER + "s");
 		}
-		if (mg.isMultiplayer() && mg.getPlayerList().getPlayerList().get(1).hasShield()) {
+		
+		if (mg.isMultiplayer() && mg.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
-			float rem = mg.getPlayerList().getPlayerList().get(1).shieldTimeRemaining();
+			float rem = mg.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
 			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
 				graphics.drawImage(counterBarImage, SHIELD_COUNTER_OFFSET_1_X 

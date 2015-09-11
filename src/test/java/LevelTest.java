@@ -2,6 +2,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
+import logic.BouncingCircle;
+import logic.Gate;
+import logic.Level;
+
 import org.junit.Before;
 import org.junit.Test;
 

@@ -3,8 +3,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import gui.GameState;
+import gui.MainGame;
 
 import java.util.ArrayList;
+
+import logic.BouncingCircle;
 
 import org.junit.Before;
 import org.junit.Test;

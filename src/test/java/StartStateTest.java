@@ -1,4 +1,6 @@
 import static org.junit.Assert.*;
+import gui.MainGame;
+import gui.StartState;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -1,3 +1,7 @@
+package logic;
+import gui.GameState;
+import gui.MainGame;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;

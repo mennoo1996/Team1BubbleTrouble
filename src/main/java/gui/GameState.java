@@ -1,8 +1,21 @@
+package gui;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import logic.BouncingCircle;
+import logic.Button;
+import logic.Coin;
+import logic.FloatingScore;
+import logic.Gate;
+import logic.LevelContainer;
+import logic.MyRectangle;
+import logic.Player;
+import logic.Powerup;
+import logic.Weapon;
+import logic.WeaponList;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;

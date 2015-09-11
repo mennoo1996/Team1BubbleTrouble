@@ -1,3 +1,6 @@
+package logic;
+import gui.GameState;
+
 /**
  * Created by alexandergeenen on 09/09/15.
  */

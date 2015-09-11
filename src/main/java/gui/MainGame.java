@@ -1,4 +1,11 @@
+package gui;
 import java.util.Calendar;
+
+import logic.HighScores;
+import logic.HighScoresParser;
+import logic.Player;
+import logic.PlayerList;
+
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;

@@ -1,3 +1,4 @@
+package logic;
 import org.newdawn.slick.Image;
 
 /**

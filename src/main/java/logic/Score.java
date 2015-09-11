@@ -1,3 +1,4 @@
+package logic;
 
 /**
  * This class represents a score that a player has set.

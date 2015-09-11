@@ -1,4 +1,6 @@
 import static org.junit.Assert.*;
+import logic.MyRectangle;
+import logic.Powerup;
 
 import org.junit.Test;
 

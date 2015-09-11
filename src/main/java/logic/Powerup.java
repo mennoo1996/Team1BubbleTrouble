@@ -1,4 +1,7 @@
+package logic;
 import org.newdawn.slick.GameContainer;
+
+import gui.GameState;
 
 import java.util.concurrent.TimeUnit;
 

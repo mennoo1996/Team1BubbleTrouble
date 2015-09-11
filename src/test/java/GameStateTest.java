@@ -1,6 +1,11 @@
 import static org.junit.Assert.*;
+import gui.GameState;
+import gui.MainGame;
 
 import java.util.ArrayList;
+
+import logic.Gate;
+import logic.MyRectangle;
 
 import org.junit.Test;
 

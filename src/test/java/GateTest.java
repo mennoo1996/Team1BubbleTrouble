@@ -4,6 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
+import logic.BouncingCircle;
+import logic.Gate;
+import logic.MyRectangle;
+
 import org.junit.Test;
 
 

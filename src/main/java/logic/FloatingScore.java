@@ -1,3 +1,4 @@
+package logic;
 /**
  * Class that represents a floating score element.
  * @author Mark

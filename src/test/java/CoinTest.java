@@ -1,4 +1,6 @@
 import static org.junit.Assert.*;
+import logic.Coin;
+import logic.MyRectangle;
 
 import org.junit.Test;
 

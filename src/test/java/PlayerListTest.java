@@ -1,7 +1,12 @@
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import gui.GameState;
+import gui.MainGame;
 
 import java.util.ArrayList;
+
+import logic.Player;
+import logic.PlayerList;
 
 import org.junit.Before;
 import org.junit.Test;

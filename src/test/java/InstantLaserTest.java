@@ -1,4 +1,5 @@
 import static org.junit.Assert.*;
+import logic.InstantLaser;
 
 import org.junit.Test;
 

@@ -44,6 +44,7 @@ public class GameState extends BasicGameState {
 	
 	// Images
 	private Image wallsImage;
+	private Image health0Image;
 	private Image health1Image;
 	private Image health2Image;
 	private Image health3Image;
@@ -623,6 +624,9 @@ public class GameState extends BasicGameState {
 	
 	private void drawHealth(Graphics graphics) {
 		switch (mg.getLifeCount()) {
+			case(0) :
+				graphics.drawImage(health0Image, 0, 0);
+			break;
 			case(1) :
 				graphics.drawImage(health1Image, 0, 0);
 			break;
@@ -758,6 +762,7 @@ public class GameState extends BasicGameState {
 	
 	private void loadHealthAndBallImages() throws SlickException {
 		// load health images
+		health0Image = new Image("resources/Terminal/Terminal_Lights_0.png");
 		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
 		health2Image = new Image("resources/Terminal/Terminal_Lights_2.png");
 		health3Image = new Image("resources/Terminal/Terminal_Lights_3.png");

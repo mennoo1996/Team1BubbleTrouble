@@ -3,12 +3,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import gui.GameState;
 import gui.MainGame;
 
 import java.util.ArrayList;
 
 import logic.BouncingCircle;
+import logic.Gate;
+import logic.MyRectangle;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +35,91 @@ public class BouncingCircleTest {
 		
 		mg = mock(MainGame.class);
 		
+	}
+	
+	@Test
+	public void testUpdate1() {
+		c = new BouncingCircle(1, 2, 10, 4, 5, 6);GameState gs = mock(GameState.class);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.isPaused()).thenReturn(false);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		c.update(gs, 1, 1, 1);
+		
+		assertEquals(4.0, c.getxSpeed(), 0);
+		assertEquals(-360.0, c.getySpeed(), 0);
+	}
+	
+	@Test
+	public void testUpdate2() {
+		c = new BouncingCircle(30, 2, 10, 4, 5, 6);GameState gs = mock(GameState.class);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.isPaused()).thenReturn(false);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		c.update(gs, 100, 1, 1);
+		
+		assertEquals(-4.0, c.getxSpeed(), 0);
+		assertEquals(11.0, c.getySpeed(), 0);
+	}
+	
+	@Test
+	public void testUpdate3() {
+		c = new BouncingCircle(30, 2, 10, 4, 5, 6);GameState gs = mock(GameState.class);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.isPaused()).thenReturn(false);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		Gate gate = new Gate(30,2, 1, 1);
+		ArrayList<Gate> gateList = new ArrayList<Gate>();
+		ArrayList<BouncingCircle> circleList = new ArrayList<BouncingCircle>();
+		circleList.add(c);
+		gate.setRequired(circleList);
+		gateList.add(gate);
+		when(gs.getGateList()).thenReturn(gateList);
+		c.update(gs, 100, 100, 1);
+		
+		assertEquals(-4.0, c.getxSpeed(), 0);
+		assertEquals(11.0, c.getySpeed(), 0);
+	}
+	
+	@Test
+	public void testUpdate4() {
+		c = new BouncingCircle(30, 2, 10, 4, 5, 6);GameState gs = mock(GameState.class);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.isPaused()).thenReturn(false);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		Gate gate = new Gate(30,2, 1, 1);
+		ArrayList<Gate> gateList = new ArrayList<Gate>();
+		ArrayList<BouncingCircle> circleList = new ArrayList<BouncingCircle>();
+		gate.setRequired(circleList);
+		gateList.add(gate);
+		when(gs.getGateList()).thenReturn(gateList);
+		c.update(gs, 100, 100, 1);
+		
+		assertEquals(4.0, c.getxSpeed(), 0);
+		assertEquals(11.0, c.getySpeed(), 0);
 	}
 	
 	@Test

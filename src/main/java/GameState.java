@@ -283,7 +283,6 @@ public class GameState extends BasicGameState {
 		if (circleList.isEmpty()) {
 			endLevel(sbg);
 		}
-
 	}
 
 	private void processTime(StateBasedGame sbg, long curTime) {

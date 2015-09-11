@@ -42,6 +42,7 @@ public class BouncingCircle extends Circle {
 	 */
 	private static final long serialVersionUID = 1L;
 	private float xSpeed;
+	private float initSpeed;
 	private float ySpeed;
 	private float gravity;
 	private boolean done;
@@ -61,6 +62,7 @@ public class BouncingCircle extends Circle {
 		super(centerPointX, centerPointY, radius);
 		
 		this.xSpeed = xSpeed;
+		this.initSpeed = Math.abs(xSpeed);
 		this.ySpeed = ySpeed;
 		this.gravity = gravity;
 		this.done = false;
@@ -76,7 +78,6 @@ public class BouncingCircle extends Circle {
 	 */
 	public void update(GameState gs, GameContainer container, float deltaFloat) {
 		// Calculations for Y coordinates
-
 		this.setY(this.getY() + ySpeed * deltaFloat);
 		// When the ball hit the floor reverse it's speed
 		if (this.getMaxY() > container.getHeight() - gs.getFloor().getHeight()) {
@@ -89,20 +90,29 @@ public class BouncingCircle extends Circle {
 		if (this.getMinY() <= gs.getCeiling().getHeight()) {
 			this.hitCeiling = true;
 		}
+		handleXCalculations(gs, container, deltaFloat);
+	}
+	
+	private void handleXCalculations(GameState gs, GameContainer container, float deltaFloat) {
 		// Calculations for X coordinates
 		this.setX(this.getX() + xSpeed * deltaFloat);
 		// If the ball hit a wall reverse it's speed
 		if (this.getX() < gs.getLeftWall().getWidth()) {
-			xSpeed = -xSpeed;
+			xSpeed = initSpeed;
 		} else if (this.getMaxX() > container.getWidth() - gs.getRightWall().getWidth()) {
-			xSpeed = -xSpeed;
+			xSpeed = -initSpeed;
 		} else {
 			for (Gate gate : gs.getGateList()) {
 				if (gate.getRectangle().intersects(this.getCircle())) {
-					xSpeed = -xSpeed;
+					if (gate.getRequired().contains(this)) {
+						xSpeed = -initSpeed;
+					} else {
+						xSpeed = initSpeed;
+					}
 				}
 			}
 		}
+		
 	}
 	
 	/**

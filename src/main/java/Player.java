@@ -112,7 +112,7 @@ public class Player {
 	private void processPowerups(GameContainer container, float deltaFloat) { // MARKED
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		for (Powerup powerup : gs.getDroppedPowerups()) {
-			powerup.update(gs, container, deltaFloat);
+			powerup.update(container.getHeight(), gs.getFloor(), deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
 				this.addPowerup(powerup.getType());
@@ -152,7 +152,7 @@ public class Player {
 
 		// Update laser
 		if (shot) {
-			weapon.update(gs, deltaFloat);
+			weapon.update(deltaFloat, gs.getCeiling(), gs.getFloor());
 			// Disable laser when it has reached the ceiling
 			if (!weapon.isVisible()) {
 				shot = false;

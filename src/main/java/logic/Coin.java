@@ -38,7 +38,7 @@ public class Coin {
      * @param containerHeight - height of gamecontainer.
      * @param deltaFloat Delta
      */
-    public void update(MyRectangle floor, int containerHeight, float deltaFloat) {
+    public void update(MyRectangle floor, float deltaFloat, float containerHeight) {
         if ((this.y + COIN_HEIGHT) < containerHeight - floor.getHeight()) {
             this.y += COIN_SPEED * deltaFloat;
         } else {

@@ -293,7 +293,7 @@ public class GameState extends BasicGameState {
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 
 		// player-thingy
-		mg.getPlayerList().updatePlayers(deltaFloat);
+		mg.getPlayerList().updatePlayers(deltaFloat, container.getHeight(), container.getWidth());
 		processPause();
 		processCircles(container, sbg, deltaFloat);
 		updateFloatingScores(deltaFloat);
@@ -490,7 +490,7 @@ public class GameState extends BasicGameState {
 		drawGates(container, graphics);
 		weaponList.drawWeapons(graphics);
 		// draw player
-		mg.getPlayerList().drawPlayers(container, graphics);
+		mg.getPlayerList().drawPlayers(graphics);
 		drawItems(graphics);
 		// Draw walls, floor and ceiling
 		graphics.drawImage(wallsImage, 0, 0);

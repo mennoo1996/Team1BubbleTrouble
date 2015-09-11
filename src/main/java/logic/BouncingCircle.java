@@ -4,7 +4,6 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
 
 /**
@@ -77,10 +76,12 @@ public class BouncingCircle extends Circle {
 	/**
 	 * Update the circle in the given container.
 	 * @param gs			- the gamestate the circle is in
-	 * @param container		- the container the circle is in
+	 * @param containerHeight		- the height of the ccontainer
+	 * @param containerWidth		- the width of the container
 	 * @param deltaFloat    - the time in ms since last frame
 	 */
-	public void update(GameState gs, float containerHeight, float containerWidth, float deltaFloat) {
+	public void update(GameState gs, float containerHeight, float containerWidth, 
+			float deltaFloat) {
 		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed * deltaFloat);
 		// When the ball hit the floor reverse it's speed

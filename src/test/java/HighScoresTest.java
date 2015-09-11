@@ -59,5 +59,37 @@ public class HighScoresTest {
 		a.sort();
 		assertEquals(a.getScoreList().get(0),score2);
 	}
+	
+	@Test
+	public void tesSortToManyInputs() {
+		HighScores a = new HighScores();
+		Score score = new Score(0, "bob");
+		Score score2 = new Score(500,"henk");
+		Score score3 = new Score(30, "bob");
+		Score score4 = new Score(500,"henk");
+		Score score5 = new Score(30, "bob");
+		Score score6 = new Score(500,"henk");
+		Score score7 = new Score(30, "bob");
+		Score score8 = new Score(500,"henk");
+		Score score9 = new Score(30, "bob");
+		Score score10 = new Score(500,"henk");
+		Score score11 = new Score(30, "bob");
+		a.add(score);
+		a.add(score2);
+		a.add(score3);
+		a.add(score4);
+		a.add(score5);
+		a.add(score6);
+		a.add(score7);
+		a.add(score8);
+		a.add(score9);
+		a.add(score10);
+		a.add(score11);
+		assertEquals(a.getScoreList().get(0),score);
+		a.sort();
+		assertEquals(a.getScoreList().get(0),score2);
+		assertEquals(a.getScoreList().get(9),score11);
+		
+	}
 
 }

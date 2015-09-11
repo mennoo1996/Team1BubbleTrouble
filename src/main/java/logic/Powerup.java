@@ -1,10 +1,8 @@
 package logic;
-import org.newdawn.slick.GameContainer;
 
 import gui.GameState;
 
 import java.util.concurrent.TimeUnit;
-
 /**
  * Created by alexandergeenen on 09/09/15.
  */
@@ -47,14 +45,14 @@ public class Powerup {
      * @param container Game Container
      * @param deltaFloat Delta
      */
-    public void update(GameState gs, GameContainer container, float deltaFloat) {
+    public void update(GameState gs, float containerHeight, float deltaFloat) {
         if (!gs.isPaused()) {
             timeRemaining -= deltaFloat * SECONDS_TO_MS;
         }
-        if ((this.y + POWERUP_HEIGHT) < container.getHeight() - gs.getFloor().getHeight()) {
+        if ((this.y + POWERUP_HEIGHT) < containerHeight - gs.getFloor().getHeight()) {
             this.y += POWERUP_SPEED * deltaFloat;
         } else {
-            this.y = container.getHeight() - gs.getFloor().getHeight() - POWERUP_HEIGHT;
+            this.y = containerHeight - gs.getFloor().getHeight() - POWERUP_HEIGHT;
         }
     }
 

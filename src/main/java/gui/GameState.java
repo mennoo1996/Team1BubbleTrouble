@@ -388,7 +388,7 @@ public class GameState extends BasicGameState {
 			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
 		for (BouncingCircle circle : circleList) {
             //update circles
-            circle.update(this, container, deltaFloat);
+            circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
 
             mg.getPlayerList().intersectPlayersWithCircle(circle);
             

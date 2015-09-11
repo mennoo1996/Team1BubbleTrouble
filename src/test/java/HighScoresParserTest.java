@@ -1,6 +1,7 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import logic.HighScores;
@@ -9,6 +10,7 @@ import logic.Score;
 import logic.ScoresComparator;
 
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 
 public class HighScoresParserTest {
@@ -65,6 +67,13 @@ public class HighScoresParserTest {
 		}
 		
 		assertTrue(j == hsl.size());
+	}
+	
+	@Test
+	public void readWrongFileNameTest() {
+		ExpectedException exception = ExpectedException.none();
+		exception.expect(FileNotFoundException.class);
+		HighScoresParser.readHighScores("no valid filename");
 	}
 	
 }

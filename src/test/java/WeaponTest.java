@@ -68,7 +68,7 @@ public class WeaponTest {
 	@Test
 	public void testUpdateY() {
 		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
-		l.update(gs, 0.5f);
+		l.update(gs.getCeiling(), gs.getFloor(), 0.5f);
 		assertEquals(0.5f, l.getY(), 0);
 		
 	}
@@ -76,28 +76,28 @@ public class WeaponTest {
 	@Test
 	public void testUpdateYNoConstantValue() {
 		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
-		l.update(gs, 1);
+		l.update(gs.getCeiling(), gs.getFloor(), 1);
 		assertEquals(-1, l.getY(), 0);
 	}
 	
 	@Test
 	public void testUpdateHeight() {
 		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
-		l.update(gs, 0.5f);
+		l.update(gs.getCeiling(), gs.getFloor(), 0.5f);
 		assertEquals(1.5, l.getHeight(), 0);
 	}
 	
 	@Test
 	public void testUpdateHeightNoConstantValue() {
 		gs.setCeiling(new MyRectangle(0, 0, 0 ,4));
-		l.update(gs, 1);
+		l.update(gs.getCeiling(), gs.getFloor(), 1);
 		assertEquals(3, l.getHeight(), 0);
 	}
 	
 	@Test
 	public void testUpdateVisible(){
 		gs.setCeiling(new MyRectangle(0, 0, 0, 1));
-		l.update(gs, 0.5f);
+		l.update(gs.getCeiling(), gs.getFloor(), 0.5f);
 		assertFalse(l.isVisible());
 	}
 	

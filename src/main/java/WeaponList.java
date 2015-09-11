@@ -57,9 +57,7 @@ public class WeaponList {
 	
 	private void intersectWeaponWithCircle(BouncingCircle circle, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
-		System.out.println(weaponNumber);
-		Player player = mg.getPlayerList().getPlayerList().get(weaponNumber);
-		
+		Player player = mg.getPlayerList().getPlayers().get(weaponNumber);
 		if (player.isShot() && weapon.getRectangle().intersects(circle)) {
 			gs.getShotList().add(circle);
 			weapon.setVisible(false);
@@ -87,11 +85,11 @@ public class WeaponList {
 	 * @param graphics	- the graphics to draw with
 	 */
 	public void drawWeapons(Graphics graphics) {
-		if (mg.getPlayerList().getPlayerList().get(0).isShot()) {
+		if (mg.getPlayerList().getPlayers().get(0).isShot()) {
 			drawWeapon(graphics, 0);
 		}
 		
-		if (mg.isMultiplayer() && mg.getPlayerList().getPlayerList().get(1).isShot()) {
+		if (mg.isMultiplayer() && mg.getPlayerList().getPlayers().get(1).isShot()) {
 			drawWeapon(graphics, 1);
 		}
 	}

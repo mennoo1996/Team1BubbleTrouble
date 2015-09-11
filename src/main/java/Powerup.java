@@ -38,8 +38,8 @@ public class Powerup {
 
     /**
      * Update Powerups graphical thingy.
-     * @param gs Game State
-     * @param container Game Container
+     * @param containerHeight	- the height of the container
+     * @param floor				- the floor
      * @param deltaFloat Delta
      */
     public void update(float containerHeight, Rectangle floor, float deltaFloat) {

@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Rectangle;
 
 /**
  * Class that represents a bouncing circle (bubble).
@@ -73,11 +71,13 @@ public class BouncingCircle extends Circle {
 
 	/**
 	 * Update the circle in the given container.
-	 * @param gs			- the gamestate the circle is in
-	 * @param container		- the container the circle is in
+	 * @param containerHeight	- the height of the container
+	 * @param containerWidth	- the width of the container
+	 * @param gs				- the gamestate
 	 * @param deltaFloat    - the time in ms since last frame
 	 */
-	public void update(float containerHeight, float containerWidth, GameState gs, float deltaFloat) {
+	public void update(float containerHeight, float containerWidth, 
+			GameState gs, float deltaFloat) {
 		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed * deltaFloat);
 		// When the ball hit the floor reverse it's speed
@@ -105,9 +105,6 @@ public class BouncingCircle extends Circle {
 		} else {
 			for (Gate gate : gs.getGateList()) {
 				if (gate.getRectangle().intersects(this.getCircle())) {
-					for(BouncingCircle circle : gate.getRequired()) {
-					}
-					
 					if (gate.getRequired().contains(this)) {
 						xSpeed = -initSpeed;
 					} else {

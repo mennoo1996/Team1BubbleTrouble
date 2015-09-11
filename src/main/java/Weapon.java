@@ -42,8 +42,9 @@ public class Weapon {
 	
 	/**
 	 * Update the laser.
-	 * @param gs The gamestate that called the update
 	 * @param deltaFloat the time in ms since the last frame
+	 * @param ceiling 	- the ceiling
+	 * @param floor		- the floor
 	 */
 	public void update(float deltaFloat, Rectangle ceiling, Rectangle floor) {
 		y -= laserSpeed * deltaFloat;

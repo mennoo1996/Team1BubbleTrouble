@@ -64,9 +64,14 @@ public final class HighScoresParser {
 		}
 	}
 	
+	/**
+	 * Method for testing the private constructor.
+	 * @param succes	- succes or not
+	 * @return			- succesint
+	 */
 	public static int checkPrivateConstructor(boolean succes) {
 		HighScoresParser hs = new HighScoresParser();
-		if(!(hs ==  null) && succes) {
+		if (!(hs ==  null) && succes) {
 			return 1;
 		}
 		return 0;

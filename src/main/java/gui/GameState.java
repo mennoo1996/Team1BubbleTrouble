@@ -69,6 +69,7 @@ public class GameState extends BasicGameState {
 	private Image nobuttonImage;
 	private Image[] ballsImages;
 	private Image ceilingImage;
+	private Image ceilingImageAdditive;
 	private Image counterBarImage;
 	private Image gateUpper;
 	private Image gateLower;
@@ -480,13 +481,15 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		// draw background layer
-		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
+		Renderer.draw(graphics, mg.getBackgroundImage(), 0, 0);
 		graphics.setColor(Color.white);
 		// draw all active circles
 		drawActiveCircles(graphics);
 		drawFloatingScores();
-		graphics.drawImage(ceilingImage, getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION,
-				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION);
+		Renderer.drawWithColour(graphics, ceilingImage, ceilingImageAdditive, 
+				getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION, 
+				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION,
+				Color.orange);
 		drawGates(container, graphics);
 		weaponList.drawWeapons(graphics);
 		// draw player
@@ -781,7 +784,8 @@ public class GameState extends BasicGameState {
 		// walls image
 		wallsImage = new Image("resources/walls_blue.png");
 		// ceiling image
-		ceilingImage = new Image("resources/ceiling.png");
+		ceilingImage = new Image("resources/images_Level/ceiling_Norm.png");
+		ceilingImageAdditive = new Image("resources/images_Level/ceiling_Add.png");
 		// balls images
 		
 		// button image

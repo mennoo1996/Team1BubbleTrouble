@@ -26,9 +26,12 @@ public class Player {
 	private int movement = 0;
 	private int movementCounter = 0;
 	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
-	private Image image;
-	private Image shieldImage;
-	private SpriteSheet spritesheet;
+	private Image imageN;
+	private Image imageA;
+	private Image shieldImageN;
+	private Image shieldImageA;
+	private SpriteSheet spritesheetN;
+	private SpriteSheet spritesheetA;
 	private boolean freeToRoam;
 	private MainGame mg;
 	private GameState gs;
@@ -63,8 +66,8 @@ public class Player {
 	 * @param shieldImage the image used for the player's shield
 	 * @param mg the maingame used on the player
 	 */
-	public Player(float x, float y, float width, float height, Image image, Image shieldImage, 
-			MainGame mg) {
+	public Player(float x, float y, float width, float height, Image imageN, Image imageA, Image shieldImageN,
+			Image shieldImageA, MainGame mg) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -72,9 +75,12 @@ public class Player {
 		this.startY = y;
 		this.width = width;
 		this.height = height;
-		this.image = image;
-		this.shieldImage = shieldImage;
-		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
+		this.imageN = imageN;
+		this.imageA = imageA;
+		this.shieldImageN = shieldImageN;
+		this.shieldImageA = shieldImageA;
+		this.spritesheetN = new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
+		this.spritesheetA = new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mg = mg;
 		this.gs = (GameState) mg.getState(mg.getGameState());
 		moveLeftKey = Input.KEY_LEFT;
@@ -325,24 +331,41 @@ public class Player {
 
 	
 	/**
-	 * @return the player image
+	 * @return the player image_norm
 	 */
-	public Image getImage() {
-		return image;
-	}
-	/**
-	 * @param image the image to set
-	 */
-	public void setImage(Image image) {
-		this.image = image;
-		this.spritesheet = new SpriteSheet(image, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
+	public Image getImageN() {
+		return imageN;
 	}
 	
 	/**
-	 * @return the shield image
+	 * @return the player image_add
 	 */
-	public Image getShieldImage() {
-		return shieldImage;
+	public Image getImageA() {
+		return imageA;
+	}
+	
+	/**
+	 * @param image the image to set
+	 */
+	public void setImage(Image imageN, Image imageA) {
+		this.imageN = imageN;
+		this.imageA = imageA;
+		this.spritesheetN = new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
+		this.spritesheetA = new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
+	}
+	
+	/**
+	 * @return the shield image_norm
+	 */
+	public Image getShieldImageN() {
+		return shieldImageN;
+	}
+	
+	/**
+	 * @return the shield image_add
+	 */
+	public Image getShieldImageA() {
+		return shieldImageA;
 	}
 
 	/**
@@ -386,16 +409,26 @@ public class Player {
 	}
 	
 	/**
-	 * @return the player spritesheet
+	 * @return the player spritesheet_norm
 	 */
-	public SpriteSheet getSpritesheet() {
-		return spritesheet;
+	public SpriteSheet getSpritesheetN() {
+		return spritesheetN;
 	}
+	
 	/**
-	 * @param spritesheet the spritesheet to set.
+	 * @return the player spritesheet_add
 	 */
-	public void setSpritesheet(SpriteSheet spritesheet) {
-		this.spritesheet = spritesheet;
+	public SpriteSheet getSpritesheetA() {
+		return spritesheetA;
+	}
+	
+	/**
+	 * @param spritesheetN the spritesheet_norm to set.
+	 * @param spritesheetA the spritesheet_add to set.
+	 */
+	public void setSpritesheet(SpriteSheet spritesheetN, SpriteSheet spritesheetA) {
+		this.spritesheetN = spritesheetN;
+		this.spritesheetA = spritesheetA;
 	}
 	
 	/**

@@ -129,7 +129,7 @@ public class GameOverState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
-		tf = new TextField(container, mg.getDosFontN(), TEXT_FIELD_X, TEXT_FIELD_Y,
+		tf = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
 				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 		tf.setBackgroundColor(null);
 		tf.setBorderColor(null);
@@ -198,36 +198,31 @@ public class GameOverState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(),
-				container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
-				"Waiting for user input...", mg.getColor());
+				"Waiting for user input...");
 		if (displayLives < 1) {
-			Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(), TEXT_X, TEXT_1_Y,
-					"# Game Over", mg.getColor());
+			RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game Over");
 		} else {
-			Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(), TEXT_X, TEXT_1_Y,
-					"# You won! You are the champion of soup!", mg.getColor());
+			RND.text(graphics, TEXT_X, TEXT_1_Y, "# You won! You are the champion!");
 		}
 		
-		Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(), TEXT_X, TEXT_2_Y,
-				"# Your score was: " + mg.getScore(), mg.getColor());
-		Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(), TEXT_X, TEXT_3_Y,
-				"# Please enter your name below", mg.getColor());
+		RND.text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
+		RND.text(graphics, TEXT_X, TEXT_3_Y, "# Please enter your name below");
 		
 		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
 				tf.getY() - TF_BACKGROUND_DEVIATION);
 		tf.render(container, graphics);
 		if (inputMessage != null) {
-			mg.getDosFont().drawString(TEXT_X, TEXT_4_Y, inputMessage);
+			RND.text(graphics, TEXT_X, TEXT_4_Y, inputMessage);
 		}
 		renderButtons(container, graphics);
 		mg.drawWaterMark();
 		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
-		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
+		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
 		mg.getHighscores().sort();
 		String highScoresString = mg.getHighscores().toString();
-		mg.getDosFont().drawString(HIGHSCORES_X, SEPARATOR_Y, highScoresString);
+		RND.text(graphics, HIGHSCORES_X, SEPARATOR_Y, highScoresString);
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		renderLives(graphics);

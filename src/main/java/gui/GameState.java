@@ -490,12 +490,12 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		// draw background layer
-		Renderer.draw(graphics, mg.getBackgroundImage(), 0, 0);
+		RND.draw(graphics, mg.getBackgroundImage(), 0, 0);
 		graphics.setColor(Color.white);
 		// draw all active circles
 		drawActiveCircles(graphics);
-		drawFloatingScores();
-		Renderer.drawColor(graphics, ceilingImageN, ceilingImageA, getLeftWall().getWidth() 
+		drawFloatingScores(graphics);
+		RND.drawColor(graphics, ceilingImageN, ceilingImageA, getLeftWall().getWidth() 
 				- CEILING_DRAW_X_DEVIATION, getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION, 
 				mg.getColor());
 		drawGates(container, graphics);
@@ -504,13 +504,13 @@ public class GameState extends BasicGameState {
 		mg.getPlayerList().drawPlayers(graphics);
 		drawItems(graphics);
 		// Draw walls, floor and ceiling
-		Renderer.drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mg.getColor());
+		RND.drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mg.getColor());
 		drawCountdownBar(container, graphics);
 		// Draw level/Score data
-		mg.getDosFont().drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
+		RND.text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mg.getLevelCounter() + 1));
-		mg.getDosFont().drawString((float) container.getWidth() / 2.0f, container.getHeight()
+		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
@@ -549,26 +549,26 @@ public class GameState extends BasicGameState {
 		if (mg.getPlayerList().getPlayers().get(0).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
 			float rem = mg.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
-			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				Renderer.drawColor(graphics, counterBarImageN, counterBarImageA,
+				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
 						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
 						height + SHIELD_COUNTER_OFFSET_1_Y, mg.getColor());
 			}
-			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_2_X 
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, "#" + rem / SHIELD_COUNTER_DIVIDER + "s");
 		}
 		if (mg.isMultiplayer() && mg.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
 			float rem = mg.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
-			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				Renderer.drawColor(graphics, counterBarImageN, counterBarImageA,
+				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
 						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
 						height + SHIELD_COUNTER_OFFSET_1_Y, mg.getColor());
 			}
-			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_2_X 
+			RND.text(SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, 
 					"#" + rem / SHIELD_COUNTER_DIVIDER + "s");
@@ -584,15 +584,15 @@ public class GameState extends BasicGameState {
 
 		for (Powerup pow : droppedPowerups) {
 			if (pow.getType() == Powerup.PowerupType.SHIELD) {
-				Renderer.drawColor(graphics, shieldImageN, shieldImageA, 
+				RND.drawColor(graphics, shieldImageN, shieldImageA, 
 						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
 						mg.getColor());
 			} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
-				Renderer.drawColor(graphics, vineImageN, vineImageA, 
+				RND.drawColor(graphics, vineImageN, vineImageA, 
 						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
 						mg.getColor());
 			} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
-				Renderer.drawColor(graphics, laserImageN, laserImageA, 
+				RND.drawColor(graphics, laserImageN, laserImageA, 
 						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
 						mg.getColor());
 			}
@@ -604,7 +604,7 @@ public class GameState extends BasicGameState {
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		for (Coin coin : droppedCoins) {
-			Renderer.drawColor(graphics, coinImageN, coinImageA, 
+			RND.drawColor(graphics, coinImageN, coinImageA, 
 					coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
 					mg.getColor());
 		}
@@ -613,7 +613,7 @@ public class GameState extends BasicGameState {
 
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
 		for (int x = 0; x < fractionTimeParts; x++) {
-			Renderer.drawColor(graphics, counterBarImageN, counterBarImageA,
+			RND.drawColor(graphics, counterBarImageN, counterBarImageA,
 					container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION - COUNTER_BAR_PARTS_FACTOR
 					* (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR,
 					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mg.getColor());
@@ -632,7 +632,7 @@ public class GameState extends BasicGameState {
 			float srcy = gateUpperN.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
 			float srcx2 = gateUpperN.getWidth();
 			float srcy2 = gateUpperN.getHeight();
-			Renderer.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
+			RND.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
 					srcx, srcy, srcx2, srcy2, mg.getColor());
 			//lower
 			left = GATE_LEFT_LOWER;
@@ -646,7 +646,7 @@ public class GameState extends BasicGameState {
 			srcy = 0;
 			srcx2 = gateLowerN.getWidth();
 			srcy2 = GATE_Y_FACTOR_LOWER * gate.getHeightPercentage();
-			Renderer.drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
+			RND.drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
 					srcx, srcy, srcx2, srcy2, mg.getColor());
 		}
 	}
@@ -656,20 +656,20 @@ public class GameState extends BasicGameState {
 			//graphics.fill(circle.getCircle(), shapeFill);
 			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
 			switch (r) {
-				case(RADIUS_6) : Renderer.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
+				case(RADIUS_6) : RND.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
 							circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); 
 				break;
-				case(RADIUS_5) : Renderer.drawColor(graphics, ballsImagesN[1], ballsImagesA[1],
+				case(RADIUS_5) : RND.drawColor(graphics, ballsImagesN[1], ballsImagesA[1],
 						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
-				case(RADIUS_4) : Renderer.drawColor(graphics, ballsImagesN[2], ballsImagesA[2],
+				case(RADIUS_4) : RND.drawColor(graphics, ballsImagesN[2], ballsImagesA[2],
 						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
-				case(RADIUS_3) : Renderer.drawColor(graphics, 
+				case(RADIUS_3) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_THREE], ballsImagesA[BALL_IMAGE_THREE],
 						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
-				case(RADIUS_2) : Renderer.drawColor(graphics, 
+				case(RADIUS_2) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_FOUR], ballsImagesA[BALL_IMAGE_FOUR],
 						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
-				case(MINIMUM_RADIUS) : Renderer.drawColor(graphics, 
+				case(MINIMUM_RADIUS) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_FIVE], ballsImagesA[BALL_IMAGE_FIVE],
 						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
 				default:
@@ -682,12 +682,11 @@ public class GameState extends BasicGameState {
 		}
 	}
 
-	private void drawFloatingScores() {
+	private void drawFloatingScores(Graphics graphics) {
 		for (FloatingScore score : floatingScoreList) {
-			mg.getDosFont().drawString(score.getX(), score.getY(),
-					score.getScore(),
-					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS,
-							FLOATING_SCORE_BRIGHTNESS, score.getOpacity()));
+			RND.text(graphics, score.getX(), score.getY(), score.getScore(),
+					new Color(mg.getColor().r, mg.getColor().g,
+							mg.getColor().b, score.getOpacity()));
 		}
 	}
 	
@@ -725,8 +724,8 @@ public class GameState extends BasicGameState {
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# Game is paused...");
-		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "========================");
+		RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game is paused...");
+		RND.text(graphics, TEXT_X, TEXT_2_Y, "========================");
 		Input input = container.getInput();
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), 
@@ -759,14 +758,10 @@ public class GameState extends BasicGameState {
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
 
-		Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(),
-				container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
-				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, 
-				"Starting in", mg.getColor());
-		Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(),
-				container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION,
-				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, 
-				Integer.toString(count), mg.getColor());
+		RND.text(graphics, container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
+				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
+		RND.text(graphics, container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION,
+				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
 		
 		for (int i = 0; i < amount; i++) {
             float degree = i * (WHOLE_CIRCLE_DEGREES / COUNT_IN_DEGREES);
@@ -774,7 +769,7 @@ public class GameState extends BasicGameState {
             counterBarImageA.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
             counterBarImageN.rotate(degree);
             counterBarImageA.rotate(degree);
-            Renderer.drawColor(graphics, counterBarImageN, counterBarImageA,
+            RND.drawColor(graphics, counterBarImageN, counterBarImageA,
             		container.getWidth() / 2 - COUNTER_BAR_DRAW_X_DEVIATION, 
             		container.getHeight() / 2 - COUNTER_BAR_DRAW_Y_DEVIATION, 
             		mg.getColor());

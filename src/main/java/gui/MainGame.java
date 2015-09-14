@@ -48,8 +48,10 @@ public class MainGame extends StateBasedGame {
 	private Image laserVerticalImage;
 	private AngelCodeFont dosFontN;
 	private AngelCodeFont dosFontA;
-	private String player1ImageString;
-	private String player2ImageString;
+	private String player1ImageStringN;
+	private String player1ImageStringA;
+	private String player2ImageStringN;
+	private String player2ImageStringA;
 	
 	private PlayerList playerList;
 	private boolean multiplayer;
@@ -98,42 +100,63 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
-		this.player1ImageString = "Playersprite.png";
-		this.player2ImageString = "Player2sprite.png";
+		this.player1ImageStringN = "Playersprite_Norm.png";
+		this.player1ImageStringA = "Playersprite_Add.png";
+		this.player2ImageStringN = "Player2sprite_Norm.png";
+		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
-		this.color = new  Color(0.3f, 1.0f, 0.3f);
+		setColor(new Color(0.3f, 1.0f, 0.3f));
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
 	}
 
 	/**
-	 * Get the playerImage.
+	 * Get the playerImage_norm.
 	 * @return the playerImage
 	 */
-	public String getPlayer1ImageString() {
-		return player1ImageString;
+	public String getPlayer1ImageStringN() {
+		return player1ImageStringN;
+	}
+	
+	/**
+	 * Get the playerImage_add.
+	 * @return the playerImage
+	 */
+	public String getPlayer1ImageStringA() {
+		return player1ImageStringA;
 	}
 
 	/**
 	 * Set the playerImage.
-	 * @param playerImageString the playerImage to set
+	 * @param playerImageStringN the playerImage_norm to set
+	 * @param playerImageStringA the playerImage_add to set
 	 */
-	public void setPlayer1ImageString(String playerImageString) {
-		this.player1ImageString = playerImageString;
+	public void setPlayer1ImageString(String playerImageStringN, String playerImageStringA) {
+		this.player1ImageStringN = playerImageStringN;
+		this.player1ImageStringA = playerImageStringA;
 	}
 
 	/**
-	 * @return the player2ImageString
+	 * @return the player2ImageString_norm
 	 */
-	public String getPlayer2ImageString() {
-		return player2ImageString;
+	public String getPlayer2ImageStringN() {
+		return player2ImageStringN;
+	}
+	
+	/**
+	 * @return the player2ImageString_add
+	 */
+	public String getPlayer2ImageStringA() {
+		return player2ImageStringA;
 	}
 
 	/**
-	 * @param player2ImageString the player2ImageString to set
+	 * @param player2ImageStringN the player2ImageString_Norm to set
+	 * @param player2ImageStringA the player2ImageString_Add to set
 	 */
-	public void setPlayer2ImageString(String player2ImageString) {
-		this.player2ImageString = player2ImageString;
+	public void setPlayer2ImageString(String player2ImageStringN, String player2ImageStringA) {
+		this.player2ImageStringN = player2ImageStringN;
+		this.player2ImageStringA = player2ImageStringA;
 	}
 
 	/**
@@ -148,6 +171,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setColor(Color color) {
 		this.color = color;
+		RND.setColor(color);
 	}
 	
 	/**
@@ -196,10 +220,10 @@ public class MainGame extends StateBasedGame {
 		this.gameLogo = new Image("resources/menus/Menu_Logo.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
-		this.dosFontN = new AngelCodeFont("resources/images_Font/dosfont.fnt",
-				"resources/images_Font/dosfont_Norm.png");
-		this.dosFontA = new AngelCodeFont("resources/images_Font/dosfont.fnt",
-				"resources/images_Font/dosfont_Add.png");
+		RND.setFont_Normal(new AngelCodeFont("resources/images_Font/dosfont.fnt",
+				"resources/images_Font/dosfont_Norm.png"));
+		RND.setFont_Additive(new AngelCodeFont("resources/images_Font/dosfont.fnt",
+				"resources/images_Font/dosfont_Add.png"));
 		initPlayers();
 		Calendar cal = Calendar.getInstance();
 		this.currentDate = cal.get(Calendar.DATE) 
@@ -212,17 +236,21 @@ public class MainGame extends StateBasedGame {
 	
 	private void initPlayers() throws SlickException {
 
-		Image player1Image = new Image("resources/" + player1ImageString);
-		Image player2Image = new Image("resources/" + player2ImageString);
-		Image shieldImage = new Image("resources/powerups/shield_ingame.png");
+		Image player1ImageN = new Image("resources/images_Player/" + player1ImageStringN);
+		Image player1ImageA = new Image("resources/images_Player/" + player1ImageStringA);
+		Image player2ImageN = new Image("resources/images_Player/" + player2ImageStringN);
+		Image player2ImageA = new Image("resources/images_Player/" + player2ImageStringA);
+		Image shieldImageN = new Image("resources/images_Gameplay/shield_Norm.png");
+		Image shieldImageA = new Image("resources/images_Gameplay/shield_Add.png");
+		
 		Player player1 = new Player(container.getWidth() / 2 - PLAYER1_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				player1Image, shieldImage, this);
+				player1ImageN, player1ImageA, shieldImageN, shieldImageA, this);
 		player1.setPlayerNumber(0);
 		
 		Player player2 = new Player(container.getWidth() / 2 - PLAYER2_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				player2Image, shieldImage, this);
+				player2ImageN, player2ImageA, shieldImageN, shieldImageA, this);
 		player2.setPlayerNumber(1);
 		player2.setMoveLeftKey(Input.KEY_A);
 		player2.setMoveRightKey(Input.KEY_D);
@@ -467,34 +495,6 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
-	 * @return the dosFont normal
-	 */
-	public AngelCodeFont getDosFontN() {
-		return dosFontN;
-	}
-	
-	/**
-	 * @return the dosFont additive
-	 */
-	public AngelCodeFont getDosFontA() {
-		return dosFontA;
-	}
-
-	/**
-	 * @param dosFont the dosFont_Normal to set
-	 */
-	public void setDosFontN(AngelCodeFont dosFont) {
-		this.dosFontN = dosFont;
-	}
-	
-	/**
-	 * @param dosFont the dosFont_Additive to set
-	 */
-	public void setDosFontA(AngelCodeFont dosFont) {
-		this.dosFontA = dosFont;
-	}
-
-	/**
 	 * @return the score
 	 */
 	public int getScore() {
@@ -660,12 +660,14 @@ public class MainGame extends StateBasedGame {
 	 * Draws version number, fps, and other info.
 	 */
 	public void drawWaterMark() {
-		dosFontN.drawString(VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION, 
-				"#Version 1.0"  
-				+ " #Date: " + currentDate
-				+ " #fps: " + Integer.toString(getFpsInGame())
-				);
-		
+//		dosFontN.drawString(VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION, 
+//				"#Version 1.0"  
+//				+ " #Date: " + currentDate
+//				+ " #fps: " + Integer.toString(getFpsInGame())
+//				);
+		RND.text(app.getGraphics(), VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION,
+				"#Version 1.0" + " #Date: " + currentDate 
+				+ " #fps: " + Integer.toString(getFpsInGame()));
 		
 	}
 	

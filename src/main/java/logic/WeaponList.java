@@ -1,6 +1,7 @@
 package logic;
 import gui.GameState;
 import gui.MainGame;
+import gui.RND;
 
 import java.util.ArrayList;
 
@@ -25,8 +26,10 @@ public class WeaponList {
 	private static final int LASER_BEAM_X2_DEVIATION = 17;
 	private static final int LASER_BEAM_SRCX2 = 35;
 	private static final int LASER_BEAM_SRCY2 = 300;
-	private Image laserbeamimage;
-	private Image lasertipimage;
+	private Image laserbeamimageN;
+	private Image laserbeamimageA;
+	private Image lasertipimageN;
+	private Image lasertipimageA;
 	
 	/**
 	 * The constructor of weaponlist.
@@ -75,8 +78,10 @@ public class WeaponList {
 	
 	private void initImages() throws SlickException {
 		// laser images
-		laserbeamimage = new Image("resources/laser/laser_beam_blue.png");
-		lasertipimage = new Image("resources/laser/laser_tip_blue.png");
+		laserbeamimageN = new Image("resources/images_Gameplay/laserBeam_Norm.png");
+		laserbeamimageA = new Image("resources/images_Gameplay/laserBeam_Add.png");
+		lasertipimageN = new Image("resources/images_Gameplay/laserTip_Norm.png");
+		lasertipimageA = new Image("resources/images_Gameplay/laserTip_Add.png");
 	}
 	
 	/**
@@ -114,13 +119,15 @@ public class WeaponList {
 	
 	private void drawWeapon(Graphics graphics, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
-		
-		graphics.drawImage(lasertipimage, weapon.getX() - LASER_X_DEVIATION,
-				weapon.getY() - LASER_TIP_Y_DEVIATION);
-		graphics.drawImage(laserbeamimage, weapon.getX() - LASER_X_DEVIATION,
-				weapon.getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, weapon.getX()
-				+ LASER_BEAM_X2_DEVIATION, weapon.getRectangle().getMaxY(), 0, 0,
-				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2);
+		RND.drawColor(graphics, lasertipimageN, lasertipimageA,
+				weapon.getX() - LASER_X_DEVIATION, weapon.getY() - LASER_TIP_Y_DEVIATION, 
+				mg.getColor());
+
+		RND.drawColor(graphics, laserbeamimageN, laserbeamimageA,
+				weapon.getX() - LASER_X_DEVIATION, 
+				weapon.getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION,
+				weapon.getX() + LASER_BEAM_X2_DEVIATION, weapon.getRectangle().getMaxY(), 0, 0,
+				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2, mg.getColor());
 	}
 
 	/**
@@ -138,31 +145,49 @@ public class WeaponList {
 	}
 
 	/**
-	 * @return the laserbeamimage
+	 * @return the laserbeamimageN
 	 */
-	public Image getLaserbeamimage() {
-		return laserbeamimage;
+	public Image getLaserbeamimageN() {
+		return laserbeamimageN;
+	}
+	
+	/**
+	 * @return the laserbeamimageA
+	 */
+	public Image getLaserbeamimageA() {
+		return laserbeamimageA;
 	}
 
 	/**
-	 * @param laserbeamimage the laserbeamimage to set
+	 * @param laserbeamimageN the laserbeamimage to set
+	 * @param laserBeamImageA second image to set
 	 */
-	public void setLaserbeamimage(Image laserbeamimage) {
-		this.laserbeamimage = laserbeamimage;
+	public void setLaserbeamimage(Image laserbeamimageN, Image laserBeamImageA) {
+		this.laserbeamimageN = laserbeamimageN;
+		this.laserbeamimageA = laserbeamimageA;
 	}
 
 	/**
-	 * @return the lasertipimage
+	 * @return the lasertipimageN
 	 */
-	public Image getLasertipimage() {
-		return lasertipimage;
+	public Image getLasertipimageN() {
+		return lasertipimageN;
+	}
+	
+	/**
+	 * @return the lasertipimageA
+	 */
+	public Image getLasertipimageA() {
+		return lasertipimageA;
 	}
 
 	/**
-	 * @param lasertipimage the lasertipimage to set
+	 * @param lasertipimageN the lasertipimageN to set
+	 * @param lasertipimageA the lasertipimageN to set
 	 */
-	public void setLasertipimage(Image lasertipimage) {
-		this.lasertipimage = lasertipimage;
+	public void setLasertipimage(Image lasertipimageN, Image lasertipimageA) {
+		this.lasertipimageN = lasertipimageN;
+		this.lasertipimageA = lasertipimageA;
 	}
 	
 	

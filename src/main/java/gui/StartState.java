@@ -75,6 +75,17 @@ public class StartState extends BasicGameState {
 		
 	}
 	
+//	/**
+//	 * setup all variables when entering this state.
+//	 * @param container the Container this state is part of
+//	 * @param arg1 The statebasedgame this state is part of
+//	 * @throws SlickException sometimes.
+//	 */
+//	@Override
+//	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+//		
+//	}
+	
 	/**
 	 * Update this state.
 	 * @param container The container that contains this state
@@ -119,12 +130,12 @@ public class StartState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) 
 			throws SlickException {
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		renderButtons(container, graphics);
 		mg.drawWaterMark();
 		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
-		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
+		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 	}

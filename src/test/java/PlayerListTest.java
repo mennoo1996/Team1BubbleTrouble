@@ -11,6 +11,8 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
+import javax.swing.Renderer;
+
 import logic.BouncingCircle;
 import logic.Player;
 import logic.PlayerList;
@@ -50,6 +52,7 @@ public class PlayerListTest {
 		MainGame mg = mock(MainGame.class);
 		when(mg.isMultiplayer()).thenReturn(true);
 		Graphics gr = mock(Graphics.class);
+		Renderer rnd = mock(Renderer.class);
 		AngelCodeFont acf = mock(AngelCodeFont.class);
 		when(mg.getDosFont()).thenReturn(acf);
 		Mockito.doNothing().when(acf).drawString(1, 1, "#PLAYER_1");

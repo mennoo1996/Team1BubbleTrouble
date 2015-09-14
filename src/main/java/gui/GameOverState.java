@@ -129,7 +129,7 @@ public class GameOverState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
-		tf = new TextField(container, mg.getDosFont(), TEXT_FIELD_X, TEXT_FIELD_Y,
+		tf = new TextField(container, mg.getDosFontN(), TEXT_FIELD_X, TEXT_FIELD_Y,
 				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 		tf.setBackgroundColor(null);
 		tf.setBorderColor(null);
@@ -198,17 +198,23 @@ public class GameOverState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
-				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
+		Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(),
+				container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
+				"Waiting for user input...", mg.getColor());
 		if (displayLives < 1) {
-			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# Game Over");
+			Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(), TEXT_X, TEXT_1_Y,
+					"# Game Over", mg.getColor());
 		} else {
-			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , 
-					"# You won! You are the champion of soup!");
+			Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(), TEXT_X, TEXT_1_Y,
+					"# You won! You are the champion of soup!", mg.getColor());
 		}
-		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
-		mg.getDosFont().drawString(TEXT_X, TEXT_3_Y, "# Please enter your name below");
-
+		
+		Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(), TEXT_X, TEXT_2_Y,
+				"# Your score was: " + mg.getScore(), mg.getColor());
+		Renderer.textColor(graphics, mg.getDosFontN(), mg.getDosFontA(), TEXT_X, TEXT_3_Y,
+				"# Please enter your name below", mg.getColor());
+		
 		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
 				tf.getY() - TF_BACKGROUND_DEVIATION);
 		tf.render(container, graphics);

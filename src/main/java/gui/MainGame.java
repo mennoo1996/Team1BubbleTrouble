@@ -8,6 +8,7 @@ import logic.PlayerList;
 
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -27,6 +28,8 @@ public class MainGame extends StateBasedGame {
 	private static final int DEFAULT_X_RES = 1600;
 	private static final int DEFAULT_Y_RES = 1000;
 	
+	private Color color;
+	
 	private float gravity = DEFAULT_GRAVITY;
 	private float startingSpeed = DEFAULT_STARTING_SPEED;
 	private float speedStep = DEFAULT_SPEED_STEP;
@@ -43,7 +46,8 @@ public class MainGame extends StateBasedGame {
 	private Image gameLogo;
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
-	private AngelCodeFont dosFont;
+	private AngelCodeFont dosFontN;
+	private AngelCodeFont dosFontA;
 	private String player1ImageString;
 	private String player2ImageString;
 	
@@ -97,6 +101,7 @@ public class MainGame extends StateBasedGame {
 		this.player1ImageString = "Playersprite.png";
 		this.player2ImageString = "Player2sprite.png";
 		this.lifeCount = LIVES;
+		this.color = new  Color(0.3f, 1.0f, 0.3f);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
 	}
@@ -131,6 +136,20 @@ public class MainGame extends StateBasedGame {
 		this.player2ImageString = player2ImageString;
 	}
 
+	/**
+	 * @return the current game color
+	 */
+	public Color getColor() {
+		return color;
+	}
+	
+	/**
+	 * @param color the new game color
+	 */
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
 	/**
 	 * Set the lifeCount.
 	 * @param lifeCount the lifeCount to set
@@ -177,9 +196,10 @@ public class MainGame extends StateBasedGame {
 		this.gameLogo = new Image("resources/menus/Menu_Logo.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
-		this.dosFont = new AngelCodeFont("resources/font/dosfont.fnt",
-				"resources/font/dosfont_0.png");
-
+		this.dosFontN = new AngelCodeFont("resources/images_Font/dosfont.fnt",
+				"resources/images_Font/dosfont_Norm.png");
+		this.dosFontA = new AngelCodeFont("resources/images_Font/dosfont.fnt",
+				"resources/images_Font/dosfont_Add.png");
 		initPlayers();
 		Calendar cal = Calendar.getInstance();
 		this.currentDate = cal.get(Calendar.DATE) 
@@ -447,17 +467,31 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
-	 * @return the dosFont
+	 * @return the dosFont normal
 	 */
-	public AngelCodeFont getDosFont() {
-		return dosFont;
+	public AngelCodeFont getDosFontN() {
+		return dosFontN;
+	}
+	
+	/**
+	 * @return the dosFont additive
+	 */
+	public AngelCodeFont getDosFontA() {
+		return dosFontA;
 	}
 
 	/**
-	 * @param dosFont the dosFont to set
+	 * @param dosFont the dosFont_Normal to set
 	 */
-	public void setDosFont(AngelCodeFont dosFont) {
-		this.dosFont = dosFont;
+	public void setDosFontN(AngelCodeFont dosFont) {
+		this.dosFontN = dosFont;
+	}
+	
+	/**
+	 * @param dosFont the dosFont_Additive to set
+	 */
+	public void setDosFontA(AngelCodeFont dosFont) {
+		this.dosFontA = dosFont;
 	}
 
 	/**
@@ -626,11 +660,13 @@ public class MainGame extends StateBasedGame {
 	 * Draws version number, fps, and other info.
 	 */
 	public void drawWaterMark() {
-		dosFont.drawString(VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION, 
+		dosFontN.drawString(VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION, 
 				"#Version 1.0"  
 				+ " #Date: " + currentDate
 				+ " #fps: " + Integer.toString(getFpsInGame())
 				);
+		
+		
 	}
 	
 	/**

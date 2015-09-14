@@ -1,5 +1,6 @@
 package gui;
 
+import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -29,19 +30,41 @@ public final class Renderer {
 	 * @param y y-location of top-left
 	 * @param color the color to draw with
 	 */
-	public static void drawWithColour(Graphics graphics, Image imageNorm, Image imageAdd,
+	public static void drawColor(Graphics g, Image n, Image a,
 			float x, float y, Color color) {
 		
-		graphics.drawImage(imageNorm, x, y, color);
-		graphics.setDrawMode(Graphics.MODE_ADD);
-		graphics.drawImage(imageAdd, x, y);
-		graphics.setDrawMode(Graphics.MODE_NORMAL);
+		g.drawImage(n, x, y, color);
+		g.setDrawMode(Graphics.MODE_ADD);
+		g.drawImage(a, x, y, color);
+		g.setDrawMode(Graphics.MODE_NORMAL);
+		
+	}
+
+	// STUFF IT WHERE THE SUN DONT SHINE, CHECKSTYLE
+	public static void drawColor(Graphics g, Image n, Image a, 
+			float x, float y, float x2, float y2, 
+			float srcx, float srcy, float srcx2, float srcy2,
+			Color color) {
+		
+		g.drawImage(n, x, y, x2, y2, srcx, srcy, srcx2, srcy2, color); 
+		g.setDrawMode(Graphics.MODE_ADD);
+		g.drawImage(a, x, y, x2, y2, srcx, srcy, srcx2, srcy2, color); 
+		g.setDrawMode(Graphics.MODE_NORMAL);
 		
 	}
 	
-	public static void drawWithColourStretched(Graphics graphics, Image imageNorm, Image imageAdd,
-			int x, int y, int x2, int y2, Color color) {
+	public static void text(AngelCodeFont f, float x, float y, String text) {
+		f.drawString(x, y, text);
+	}
 	
+	public static void textColor(Graphics g, AngelCodeFont n, AngelCodeFont a, 
+			float x, float y, String text, Color color) {
+		
+		n.drawString(x, y, text, color);
+		g.setDrawMode(Graphics.MODE_ADD);
+		n.drawString(x, y, text, color);
+		g.setDrawMode(Graphics.MODE_NORMAL);
+		
 	}
 	
 	public static void draw(Graphics graphics, Image imageNorm,

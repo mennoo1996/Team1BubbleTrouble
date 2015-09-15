@@ -18,9 +18,6 @@ public class Logger {
 	private String[] tagFilters;
 	private boolean filterTagOn;
 	
-	//Prevent non-stop logging
-	private String lastLog = "";
-	
 	
 	/**
 	 * Constructor of the logger.
@@ -68,12 +65,9 @@ public class Logger {
 	 * @param tag			- the tag of the log
 	 */
 	public void log(String logString, int priorityLevel, String tag) {
-		if (!lastLog.equals(logString)) {
-			String timeStamp = getCurrentTimeStamp();
-			String newLogString = timeStamp + " - [" + tag + "|" + priorityLevel + "]: " + logString;
-			System.out.println(newLogString);
-			lastLog = logString;
-		}
+		String timeStamp = getCurrentTimeStamp();
+		String newLogString = timeStamp + " - [" + tag + "|" + priorityLevel + "]: " + logString;
+		System.out.println(newLogString);
 	}
 	
 	private String getCurrentTimeStamp() {

@@ -45,7 +45,7 @@ public class Player {
 	private int playerNumber;
 	private final float startX;
 	private final float startY;
-
+	private String lastLogMove = "";
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final int PLAYER1_X_DEVIATION = 720;
@@ -198,7 +198,10 @@ public class Player {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mg.getPlayerSpeed() * deltaFloat);
             	this.movement = 1;
-            	logger.log("Moving left", PriorityLevels.VERYLOW.getValue(), "Player");
+            	if (!lastLogMove.equals("left")) {
+            		logger.log("Moving left", PriorityLevels.VERYLOW.getValue(), "Player");
+            		lastLogMove = "left";
+            	}
             }
         }
 
@@ -208,7 +211,10 @@ public class Player {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mg.getPlayerSpeed() * deltaFloat);
         	   this.movement = 2;
-        	   logger.log("Moving right", PriorityLevels.VERYLOW.getValue(), "Player");
+        	   if (!lastLogMove.equals("right")) {
+        		   logger.log("Moving right", PriorityLevels.VERYLOW.getValue(), "Player");
+        		   lastLogMove = "right";
+        	   }
            }
         }
 	}

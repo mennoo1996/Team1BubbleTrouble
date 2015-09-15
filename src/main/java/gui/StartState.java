@@ -142,7 +142,8 @@ public class StartState extends BasicGameState {
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		renderButtons(container, graphics);
 		mg.drawWaterMark();
-		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		RND.drawColor(graphics, mg.getGameLogoN(), mg.getGameLogoA(),
+				LOGO_X, LOGO_Y, mg.getColor());
 		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);

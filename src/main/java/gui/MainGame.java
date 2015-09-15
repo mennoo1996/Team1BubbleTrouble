@@ -43,7 +43,8 @@ public class MainGame extends StateBasedGame {
 	private Image backgroundImage;
 	private Image foreGroundImage;
 	private Image terminalImage;
-	private Image gameLogo;
+	private Image gameLogoN;
+	private Image gameLogoA;
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
 	private AngelCodeFont dosFontN;
@@ -59,7 +60,7 @@ public class MainGame extends StateBasedGame {
 	
 	private int score;
 	
-	private static final int LIVES = 5;
+	private static final int LIVES = 1;
 	private int lifeCount;
 	private int levelCounter = 0;
 	private String highscoresFile = "resources/highscores.txt";
@@ -219,7 +220,8 @@ public class MainGame extends StateBasedGame {
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
-		this.gameLogo = new Image("resources/menus/Menu_Logo.png");
+		this.gameLogoN = new Image("resources/images_UI/Menu_Logo_Norm.png");
+		this.gameLogoA = new Image("resources/images_UI/Menu_Logo_Add.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
 		RND.setFont_Normal(new AngelCodeFont("resources/images_Font/dosfont.fnt",
@@ -427,10 +429,17 @@ public class MainGame extends StateBasedGame {
 	}
 	
 	/**
-	 * @return the game logo image
+	 * @return the game logo normal image
 	 */
-	public Image getGameLogo() {
-		return gameLogo;
+	public Image getGameLogoN() {
+		return gameLogoN;
+	}
+	
+	/**
+	 * @return the game logo add image
+	 */
+	public Image getGameLogoA() {
+		return gameLogoA;
 	}
 
 	/**

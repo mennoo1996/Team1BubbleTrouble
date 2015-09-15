@@ -728,25 +728,28 @@ public class GameState extends BasicGameState {
 		RND.text(graphics, TEXT_X, TEXT_2_Y, "========================");
 		Input input = container.getInput();
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), 
-					returnButton.getY());
+			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
+					returnButton.getImageMouseOverA(), returnButton.getX(), returnButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(returnButton.getImage(), 
-					returnButton.getX(), returnButton.getY());
+			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(),
+					returnButton.getX(), returnButton.getY(), mg.getColor());
 		}
 		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(menuButton.getImageMouseOver(), menuButton.getX(), 
-					menuButton.getY());
+			RND.drawColor(graphics, menuButton.getImageMouseOverN(), 
+					menuButton.getImageMouseOverA(), menuButton.getX(), menuButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(menuButton.getImage(), 
-					menuButton.getX(), menuButton.getY());
+			RND.drawColor(graphics, menuButton.getImageN(), menuButton.getImageA(),
+					menuButton.getX(), menuButton.getY(), mg.getColor());
 		}
 		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(exitButton.getImageMouseOver(), exitButton.getX(), 
-					exitButton.getY());
+			RND.drawColor(graphics, exitButton.getImageMouseOverN(), 
+					exitButton.getImageMouseOverA(), exitButton.getX(), exitButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(exitButton.getImage(), 
-					exitButton.getX(), exitButton.getY());
+			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
+					exitButton.getX(), exitButton.getY(), mg.getColor());
 		}
 	}
 
@@ -818,16 +821,22 @@ public class GameState extends BasicGameState {
 	private void loadButtons() throws SlickException {
 		returnButton = new Button(BUTTON_X, RETURN_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_Return.png"),
-				new Image("resources/Menus/Menu_Button_Return2.png"));
+				new Image("resources/images_UI/Menu_Button_Return_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Return_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Return2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Return2_Add.png"));
 		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_MainMenu.png"),
-				new Image("resources/Menus/Menu_Button_MainMenu2.png"));
+				new Image("resources/images_UI/Menu_Button_MainMenu_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu_Add.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu2_Add.png"));
 		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_Quit.png"),
-				new Image("resources/Menus/Menu_Button_Quit2.png"));
+				new Image("resources/images_UI/Menu_Button_Quit_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Quit2_Add.png"));
 	}
 	
 	private void loadPowerupImages() throws SlickException {

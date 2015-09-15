@@ -25,7 +25,8 @@ public class SettingsState extends BasicGameState {
 	private SpriteSheet arieN;
 	private SpriteSheet arieA;
 	
-	private Image highLight;
+	private Image highLightN;
+	private Image highLightA;
 	
 	private MyRectangle mannetje1Rectangle;
 	private MyRectangle arie1Rectangle;
@@ -95,9 +96,13 @@ public class SettingsState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		returnButton = new Button(RETURN_BUTTON_X, RETURN_BUTTON_Y, RETURN_BUTTON_WIDTH,
-				RETURN_BUTTON_HEIGHT, new Image("resources/menus/Menu_Button_Return.png"),
-				new Image("resources/menus/Menu_Button_Return2.png"));
-		highLight = new Image("resources/menus/Menu_Highlight.png");
+				RETURN_BUTTON_HEIGHT, 
+				new Image("resources/images_UI/Menu_Button_Return_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Return_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Return2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Return2_Add.png"));
+		highLightN = new Image("resources/images_UI/Menu_Highlight_Norm.png");
+		highLightA = new Image("resources/images_UI/Menu_Highlight_Add.png");
 		mannetjeN = new SpriteSheet("resources/images_Player/Playersprite_Norm.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
 		mannetjeA = new SpriteSheet("resources/images_Player/Playersprite_Add.png",
@@ -176,7 +181,8 @@ public class SettingsState extends BasicGameState {
 		drawSprites(graphics);
 
 		mg.drawWaterMark();
-		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		RND.drawColor(graphics, mg.getGameLogoN(), mg.getGameLogoA(),
+				LOGO_X, LOGO_Y, mg.getColor());
 		String tempString = "========================================";
 		tempString += "=======================================";
 		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, tempString);
@@ -200,22 +206,25 @@ public class SettingsState extends BasicGameState {
 	
 	private void drawSprites(Graphics graphics) {
 		if (mg.getPlayer1ImageStringN().equals("Playersprite_Norm.png")) {
-			graphics.drawImage(highLight, MANNETJE_1_X, MANNETJE_1_Y);
+			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_1_X, MANNETJE_1_Y, 
+					mg.getColor());
 		} else if (mg.getPlayer1ImageStringN().equals("Player2sprite_Norm.png")) {
-			graphics.drawImage(highLight, ARIE_1_X, ARIE_1_Y);
+			RND.drawColor(graphics, highLightN, highLightA, ARIE_1_X, ARIE_1_Y, mg.getColor());
 		}
 		
 		if (mg.getPlayer2ImageStringN().equals("Playersprite_Norm.png")) {
-			graphics.drawImage(highLight, MANNETJE_2_X, MANNETJE_2_Y);
+			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_2_X, MANNETJE_2_Y, 
+					mg.getColor());
 		} else if (mg.getPlayer2ImageStringN().equals("Player2sprite_Norm.png")) {
-			graphics.drawImage(highLight, ARIE_2_X, ARIE_2_Y);
+			RND.drawColor(graphics, highLightN, highLightA, ARIE_2_X, ARIE_2_Y, mg.getColor());
 		}
 		
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(),
-					returnButton.getY());
+			RND.drawColor(graphics, returnButton.getImageMouseOverN(), returnButton.getImageMouseOverA(), 
+					returnButton.getX(), returnButton.getY(), mg.getColor());
 		} else {
-			graphics.drawImage(returnButton.getImage(), returnButton.getX(), returnButton.getY());
+			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(), 
+					returnButton.getX(), returnButton.getY(), mg.getColor());
 		}
 
 		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),

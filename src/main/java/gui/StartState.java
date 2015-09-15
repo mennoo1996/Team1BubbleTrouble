@@ -61,19 +61,38 @@ public class StartState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		
 		playButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/menus/Menu_Button_1Player.png"),
-				new Image("resources/menus/Menu_Button_1Player2.png"));
+				new Image("resources/images_UI/Menu_Button_1Player_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_1Player_Add.png"),
+				new Image("resources/images_UI/Menu_Button_1Player2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_1Player2_Add.png"));
 		play2Button = new Button(BUTTON_X, PLAYBUTTON2_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/menus/Menu_Button_2Player.png"), 
-				new Image("resources/menus/Menu_Button_2Player2.png"));
+				new Image("resources/images_UI/Menu_Button_2Player_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_2Player_Add.png"),
+				new Image("resources/images_UI/Menu_Button_2Player2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_2Player2_Add.png"));
 		optionsButton = new Button(BUTTON_X, OPTIONSBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/menus/Menu_Button_Options.png"), 
-				new Image("resources/menus/Menu_Button_Options2.png"));
+				new Image("resources/images_UI/Menu_Button_Options_Norm.png"), 
+				new Image("resources/images_UI/Menu_Button_Options_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Options2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Options2_Add.png"));
 		quitButton = new Button(BUTTON_X, QUITBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/menus/Menu_Button_Quit.png"),
-				new Image("resources/menus/Menu_Button_Quit2.png"));
+				new Image("resources/images_UI/Menu_Button_Quit_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Quit2_add.png"));
 		
 	}
+	
+//	/**
+//	 * setup all variables when entering this state.
+//	 * @param container the Container this state is part of
+//	 * @param arg1 The statebasedgame this state is part of
+//	 * @throws SlickException sometimes.
+//	 */
+//	@Override
+//	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+//		
+//	}
 	
 	/**
 	 * Update this state.
@@ -119,12 +138,13 @@ public class StartState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) 
 			throws SlickException {
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		renderButtons(container, graphics);
 		mg.drawWaterMark();
-		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
-		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
+		RND.drawColor(graphics, mg.getGameLogoN(), mg.getGameLogoA(),
+				LOGO_X, LOGO_Y, mg.getColor());
+		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 	}
@@ -137,29 +157,36 @@ public class StartState extends BasicGameState {
 	private void renderButtons(GameContainer container, Graphics graphics) {
 		Input input = container.getInput();
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(playButton.getImageMouseOver(), playButton.getX(), 
-					playButton.getY());
+			RND.drawColor(graphics, playButton.getImageMouseOverN(), 
+					playButton.getImageMouseOverA(), playButton.getX(), playButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(playButton.getImage(), playButton.getX(), playButton.getY());
+			RND.drawColor(graphics, playButton.getImageN(), playButton.getImageA(),
+					playButton.getX(), playButton.getY(), mg.getColor());
 		}
 		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(play2Button.getImageMouseOver(), play2Button.getX(), 
-					play2Button.getY());
+			RND.drawColor(graphics, play2Button.getImageMouseOverN(), 
+					play2Button.getImageMouseOverA(), play2Button.getX(), play2Button.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(play2Button.getImage(), play2Button.getX(), play2Button.getY());
+			RND.drawColor(graphics, play2Button.getImageN(), play2Button.getImageA(),
+					play2Button.getX(), play2Button.getY(), mg.getColor());
 		}
 		if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(optionsButton.getImageMouseOver(), optionsButton.getX(),
-					optionsButton.getY());
+			RND.drawColor(graphics, optionsButton.getImageMouseOverN(), 
+					optionsButton.getImageMouseOverA(), optionsButton.getX(), optionsButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(optionsButton.getImage(), optionsButton.getX(), 
-					optionsButton.getY());
+			RND.drawColor(graphics, optionsButton.getImageN(), optionsButton.getImageA(),
+					optionsButton.getX(), optionsButton.getY(), mg.getColor());
 		}
 		if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(quitButton.getImageMouseOver(), quitButton.getX(), 
-					quitButton.getY());
+			RND.drawColor(graphics, quitButton.getImageMouseOverN(), 
+					quitButton.getImageMouseOverA(), quitButton.getX(), quitButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(quitButton.getImage(), quitButton.getX(), quitButton.getY());
+			RND.drawColor(graphics, quitButton.getImageN(), quitButton.getImageA(),
+					quitButton.getX(), quitButton.getY(), mg.getColor());
 		}
 	}
 

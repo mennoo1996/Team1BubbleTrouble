@@ -56,23 +56,33 @@ public class GameState extends BasicGameState {
 	private boolean waitEsc;
 	
 	// Images
-	private Image wallsImage;
 	private Image health0Image;
 	private Image health1Image;
 	private Image health2Image;
 	private Image health3Image;
 	private Image health4Image;
 	private Image health5Image;
-	private Image laserImage;
-	private Image shieldImage;
-	private Image vineImage;
 	private Image nobuttonImage;
-	private Image[] ballsImages;
-	private Image ceilingImage;
-	private Image counterBarImage;
-	private Image gateUpper;
-	private Image gateLower;
-	private Image coinImage;
+	private Image wallsImageN;
+	private Image wallsImageA;
+	private Image laserImageN;
+	private Image laserImageA;
+	private Image shieldImageN;
+	private Image shieldImageA;
+	private Image vineImageN;
+	private Image vineImageA;
+	private Image[] ballsImagesN;
+	private Image[] ballsImagesA;
+	private Image ceilingImageN;
+	private Image ceilingImageA;
+	private Image counterBarImageN;
+	private Image counterBarImageA;
+	private Image gateUpperN;
+	private Image gateUpperA;
+	private Image gateLowerN;
+	private Image gateLowerA;
+	private Image coinImageN;
+	private Image coinImageA;
 	
 	// pause game buttons
 	private Button returnButton;
@@ -170,9 +180,8 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
-	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
-	private static final int COIN_CHANCE = 30;
+	private static final int COIN_CHANCE = 100;
 	private static final int POWERUP_IMAGE_OFFSET = 12;
 	private static final int COIN_IMAGE_OFFSET = 3;
 	// Level ending, empty bar
@@ -480,26 +489,27 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		// draw background layer
-		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
+		RND.draw(graphics, mg.getBackgroundImage(), 0, 0);
 		graphics.setColor(Color.white);
 		// draw all active circles
 		drawActiveCircles(graphics);
-		drawFloatingScores();
-		graphics.drawImage(ceilingImage, getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION,
-				getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION);
+		drawFloatingScores(graphics);
+		RND.drawColor(graphics, ceilingImageN, ceilingImageA, getLeftWall().getWidth() 
+				- CEILING_DRAW_X_DEVIATION, getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION, 
+				mg.getColor());
 		drawGates(container, graphics);
 		weaponList.drawWeapons(graphics);
 		// draw player
 		mg.getPlayerList().drawPlayers(graphics);
 		drawItems(graphics);
 		// Draw walls, floor and ceiling
-		graphics.drawImage(wallsImage, 0, 0);
+		RND.drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mg.getColor());
 		drawCountdownBar(container, graphics);
 		// Draw level/Score data
-		mg.getDosFont().drawString(container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION,
+		RND.text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mg.getLevelCounter() + 1));
-		mg.getDosFont().drawString((float) container.getWidth() / 2.0f, container.getHeight()
+		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
 		// Pause overlay and counter
 		if (playingState && countIn) {
@@ -538,26 +548,26 @@ public class GameState extends BasicGameState {
 		if (mg.getPlayerList().getPlayers().get(0).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
 			float rem = mg.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
-			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				graphics.drawImage(counterBarImage, SHIELD_COUNTER_OFFSET_1_X 
-						+ x * COUNTER_BAR_X_FACTOR, height + SHIELD_COUNTER_OFFSET_1_Y);
+				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
+						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
+						height + SHIELD_COUNTER_OFFSET_1_Y, mg.getColor());
 			}
-			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_2_X 
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
-					* COUNTER_BAR_X_FACTOR, height, 
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s");
+					* COUNTER_BAR_X_FACTOR, height, "#" + rem / SHIELD_COUNTER_DIVIDER + "s");
 		}
-		
 		if (mg.isMultiplayer() && mg.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
 			float rem = mg.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
-			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				graphics.drawImage(counterBarImage, SHIELD_COUNTER_OFFSET_1_X 
-						+ x * COUNTER_BAR_X_FACTOR, height + SHIELD_COUNTER_OFFSET_1_Y);
+				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
+						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
+						height + SHIELD_COUNTER_OFFSET_1_Y, mg.getColor());
 			}
-			mg.getDosFont().drawString(SHIELD_COUNTER_OFFSET_2_X 
+			RND.text(SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, 
 					"#" + rem / SHIELD_COUNTER_DIVIDER + "s");
@@ -573,14 +583,17 @@ public class GameState extends BasicGameState {
 
 		for (Powerup pow : droppedPowerups) {
 			if (pow.getType() == Powerup.PowerupType.SHIELD) {
-				graphics.drawImage(shieldImage,
-						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+				RND.drawColor(graphics, shieldImageN, shieldImageA, 
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
+						mg.getColor());
 			} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
-				graphics.drawImage(vineImage,
-						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+				RND.drawColor(graphics, vineImageN, vineImageA, 
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
+						mg.getColor());
 			} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
-				graphics.drawImage(laserImage,
-						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET);
+				RND.drawColor(graphics, laserImageN, laserImageA, 
+						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
+						mg.getColor());
 			}
 //			graphics.fillRect(pow.getX(), pow.getY(),
 //					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
@@ -590,72 +603,74 @@ public class GameState extends BasicGameState {
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		for (Coin coin : droppedCoins) {
-			graphics.drawImage(coinImage, coin.getX() 
-					- COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET);
+			RND.drawColor(graphics, coinImageN, coinImageA, 
+					coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
+					mg.getColor());
 		}
 		graphics.setColor(Color.white);
 	}
 
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
 		for (int x = 0; x < fractionTimeParts; x++) {
-			//counterBarImage.rotate(0.5f*x); // EPIC
-			graphics.drawImage(counterBarImage, container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION 
-					- COUNTER_BAR_PARTS_FACTOR * (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR, 
-					container.getHeight() - COUNTER_BAR_Y_DEVIATION);
-			//counterBarImage.rotate(-10*x); // EPIC
+			RND.drawColor(graphics, counterBarImageN, counterBarImageA,
+					container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION - COUNTER_BAR_PARTS_FACTOR
+					* (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR,
+					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mg.getColor());
 		}
 	}
 
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
 		for (Gate gate : gateList) {
 			//upper
-			int left = GATE_LEFT;
-			int down = GATE_DOWN;
-			float x = gate.getMinX() - left;
-			float y = getCeiling().getHeight() - GATE_Y_DEVIATION;
-			float x2 = x + gateUpper.getWidth();
+			int left = GATE_LEFT, down = GATE_DOWN;
+			float x = gate.getMinX() - left, y = getCeiling().getHeight() - GATE_Y_DEVIATION;
+			float x2 = x + gateUpperN.getWidth();
 			float y2 = getCeiling().getHeight() + GATE_Y_FACTOR * gate.getHeightPercentage() 
 				+ down - GATE_Y_DEVIATION;
 			float srcx = 0;
-			float srcy = gateUpper.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
-			float srcx2 = gateUpper.getWidth();
-			float srcy2 = gateUpper.getHeight();
-			graphics.drawImage(gateUpper, x, y, x2, y2, srcx, srcy, srcx2, srcy2); 
+			float srcy = gateUpperN.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
+			float srcx2 = gateUpperN.getWidth();
+			float srcy2 = gateUpperN.getHeight();
+			RND.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
+					srcx, srcy, srcx2, srcy2, mg.getColor());
 			//lower
 			left = GATE_LEFT_LOWER;
 			float up = GATE_UP;
 			x = gate.getMinX() - left - 1;
 			y = container.getHeight() - getFloor().getHeight()
 					- GATE_Y_FACTOR_LOWER * gate.getHeightPercentage() - up;
-			x2 = x + gateLower.getWidth() - 1;
+			x2 = x + gateLowerN.getWidth() - 1;
 			y2 = container.getHeight() - getFloor().getHeight();
 			srcx = 0;
 			srcy = 0;
-			srcx2 = gateLower.getWidth();
+			srcx2 = gateLowerN.getWidth();
 			srcy2 = GATE_Y_FACTOR_LOWER * gate.getHeightPercentage();
-			graphics.drawImage(gateLower, x, y, x2, y2, srcx, srcy, srcx2, srcy2);
+			RND.drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
+					srcx, srcy, srcx2, srcy2, mg.getColor());
 		}
 	}
 
 	private void drawActiveCircles(Graphics graphics) {
 		for (BouncingCircle circle : circleList) {
 			//graphics.fill(circle.getCircle(), shapeFill);
-			int r = (int) circle.getRadius();
-			int offset = CIRCLE_DRAW_OFFSET;
+			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
 			switch (r) {
-				case(RADIUS_6) : graphics.drawImage(ballsImages[0],
-						circle.getMinX() - offset, circle.getMinY() - offset); break;
-				case(RADIUS_5) : graphics.drawImage(ballsImages[1],
-						circle.getMinX() - offset, circle.getMinY() - offset); break;
-				case(RADIUS_4) : graphics.drawImage(ballsImages[2],
-						circle.getMinX() - offset, circle.getMinY() - offset); break;
-				case(RADIUS_3) : 
-					graphics.drawImage(ballsImages[BALL_IMAGE_THREE],
-						circle.getMinX() - offset, circle.getMinY() - offset); break;
-				case(RADIUS_2) : graphics.drawImage(ballsImages[BALL_IMAGE_FOUR],
-						circle.getMinX() - offset, circle.getMinY() - offset); break;
-				case(MINIMUM_RADIUS) : graphics.drawImage(ballsImages[BALL_IMAGE_FIVE],
-						circle.getMinX() - offset, circle.getMinY() - offset); break;
+				case(RADIUS_6) : RND.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
+							circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); 
+				break;
+				case(RADIUS_5) : RND.drawColor(graphics, ballsImagesN[1], ballsImagesA[1],
+						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+				case(RADIUS_4) : RND.drawColor(graphics, ballsImagesN[2], ballsImagesA[2],
+						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+				case(RADIUS_3) : RND.drawColor(graphics, 
+						ballsImagesN[BALL_IMAGE_THREE], ballsImagesA[BALL_IMAGE_THREE],
+						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+				case(RADIUS_2) : RND.drawColor(graphics, 
+						ballsImagesN[BALL_IMAGE_FOUR], ballsImagesA[BALL_IMAGE_FOUR],
+						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+				case(MINIMUM_RADIUS) : RND.drawColor(graphics, 
+						ballsImagesN[BALL_IMAGE_FIVE], ballsImagesA[BALL_IMAGE_FIVE],
+						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
 				default:
 					try {
 						throw new SlickException("Radius was not one of the supported");
@@ -666,12 +681,11 @@ public class GameState extends BasicGameState {
 		}
 	}
 
-	private void drawFloatingScores() {
+	private void drawFloatingScores(Graphics graphics) {
 		for (FloatingScore score : floatingScoreList) {
-			mg.getDosFont().drawString(score.getX(), score.getY(),
-					score.getScore(),
-					new Color(FLOATING_SCORE_BRIGHTNESS, FLOATING_SCORE_BRIGHTNESS,
-							FLOATING_SCORE_BRIGHTNESS, score.getOpacity()));
+			RND.text(graphics, score.getX(), score.getY(), score.getScore(),
+					new Color(mg.getColor().r, mg.getColor().g,
+							mg.getColor().b, score.getOpacity()));
 		}
 	}
 	
@@ -709,29 +723,32 @@ public class GameState extends BasicGameState {
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# Game is paused...");
-		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "========================");
+		RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game is paused...");
+		RND.text(graphics, TEXT_X, TEXT_2_Y, "========================");
 		Input input = container.getInput();
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(), 
-					returnButton.getY());
+			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
+					returnButton.getImageMouseOverA(), returnButton.getX(), returnButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(returnButton.getImage(), 
-					returnButton.getX(), returnButton.getY());
+			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(),
+					returnButton.getX(), returnButton.getY(), mg.getColor());
 		}
 		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(menuButton.getImageMouseOver(), menuButton.getX(), 
-					menuButton.getY());
+			RND.drawColor(graphics, menuButton.getImageMouseOverN(), 
+					menuButton.getImageMouseOverA(), menuButton.getX(), menuButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(menuButton.getImage(), 
-					menuButton.getX(), menuButton.getY());
+			RND.drawColor(graphics, menuButton.getImageN(), menuButton.getImageA(),
+					menuButton.getX(), menuButton.getY(), mg.getColor());
 		}
 		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(exitButton.getImageMouseOver(), exitButton.getX(), 
-					exitButton.getY());
+			RND.drawColor(graphics, exitButton.getImageMouseOverN(), 
+					exitButton.getImageMouseOverA(), exitButton.getX(), exitButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(exitButton.getImage(), 
-					exitButton.getX(), exitButton.getY());
+			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
+					exitButton.getX(), exitButton.getY(), mg.getColor());
 		}
 	}
 
@@ -742,19 +759,24 @@ public class GameState extends BasicGameState {
 		graphics.setColor(new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR));
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
 				- PAUSED_RECT_Y_DEVIATION);
-		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
-				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
-		mg.getDosFont().drawString(container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION, 
-				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
 
+		RND.text(graphics, container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
+				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
+		RND.text(graphics, container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION,
+				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
+		
 		for (int i = 0; i < amount; i++) {
             float degree = i * (WHOLE_CIRCLE_DEGREES / COUNT_IN_DEGREES);
-            counterBarImage.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
-            counterBarImage.rotate(degree);
-            graphics.drawImage(counterBarImage, container.getWidth() / 2 
-            		- COUNTER_BAR_DRAW_X_DEVIATION, container.getHeight() / 2 
-            		- COUNTER_BAR_DRAW_Y_DEVIATION);
-            counterBarImage.rotate(-degree);
+            counterBarImageN.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
+            counterBarImageA.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
+            counterBarImageN.rotate(degree);
+            counterBarImageA.rotate(degree);
+            RND.drawColor(graphics, counterBarImageN, counterBarImageA,
+            		container.getWidth() / 2 - COUNTER_BAR_DRAW_X_DEVIATION, 
+            		container.getHeight() / 2 - COUNTER_BAR_DRAW_Y_DEVIATION, 
+            		mg.getColor());
+            counterBarImageN.rotate(-degree);
+            counterBarImageA.rotate(-degree);
         }
 	}
 
@@ -774,41 +796,56 @@ public class GameState extends BasicGameState {
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 		// countdown bar images
-		counterBarImage = new Image("resources/counter_bar.png");
+		counterBarImageN = new Image("resources/images_UI/counter_Norm.png");
+		counterBarImageA = new Image("resources/images_UI/counter_Add.png");
 		// gate images
-		gateUpper = new Image("resources/gate_upper.png");
-		gateLower = new Image("resources/gate_lower.png");
+		gateUpperN = new Image("resources//images_Level/gate_upper_Norm.png");
+		gateUpperA = new Image("resources/images_Level/gate_upper_Add.png");
+		gateLowerN = new Image("resources/images_Level/gate_lower_Norm.png");
+		gateLowerA = new Image("resources/images_Level/gate_lower_Add.png");
 		// walls image
-		wallsImage = new Image("resources/walls_blue.png");
+		wallsImageN = new Image("resources/images_Level/walls_Norm.png");
+		wallsImageA = new Image("resources/images_Level/walls_Add.png");
 		// ceiling image
-		ceilingImage = new Image("resources/ceiling.png");
+		ceilingImageN = new Image("resources/images_Level/ceiling_Norm.png");
+		ceilingImageA = new Image("resources/images_Level/ceiling_Add.png");
 		// balls images
 		
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		coinImage = new Image("resources/coin.png");
+		coinImageN = new Image("resources/images_Gameplay/coin_Norm.png");
+		coinImageA = new Image("resources/images_Gameplay/coin_Add.png");
 	}
 	
 	private void loadButtons() throws SlickException {
 		returnButton = new Button(BUTTON_X, RETURN_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_Return.png"),
-				new Image("resources/Menus/Menu_Button_Return2.png"));
+				new Image("resources/images_UI/Menu_Button_Return_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Return_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Return2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Return2_Add.png"));
 		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_MainMenu.png"),
-				new Image("resources/Menus/Menu_Button_MainMenu2.png"));
+				new Image("resources/images_UI/Menu_Button_MainMenu_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu_Add.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu2_Add.png"));
 		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_Quit.png"),
-				new Image("resources/Menus/Menu_Button_Quit2.png"));
+				new Image("resources/images_UI/Menu_Button_Quit_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Quit2_Add.png"));
 	}
 	
 	private void loadPowerupImages() throws SlickException {
 		// load powerup images
-		laserImage = new Image("resources/Powerups/Laser.png");
-		shieldImage = new Image("resources/Powerups/Shield.png");
-		vineImage = new Image("resources/Powerups/Vine.png");
+		laserImageN = new Image("resources/images_Gameplay/laserPowerup_Norm.png");
+		laserImageA = new Image("resources/images_Gameplay/laserPowerup_Add.png");
+		shieldImageN = new Image("resources/images_Gameplay/shieldPowerup_Norm.png");
+		shieldImageA = new Image("resources/images_Gameplay/shieldPowerup_Add.png");
+		vineImageN = new Image("resources/images_Gameplay/vinePowerup_Norm.png");
+		vineImageA = new Image("resources/images_Gameplay/vinePowerup_Add.png");
 	}
 	
 	private void loadHealthAndBallImages() throws SlickException {
@@ -820,13 +857,20 @@ public class GameState extends BasicGameState {
 		health4Image = new Image("resources/Terminal/Terminal_Lights_4.png");
 		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 		
-		ballsImages = new Image[AMOUNT_OF_BALLS];
-		ballsImages[0] = new Image("resources/Balls/Ball_90.png");
-		ballsImages[1] = new Image("resources/Balls/Ball_65.png");
-		ballsImages[2] = new Image("resources/Balls/Ball_45.png");
-		ballsImages[BALL_IMAGE_THREE] = new Image("resources/Balls/Ball_30.png");
-		ballsImages[BALL_IMAGE_FOUR] = new Image("resources/Balls/Ball_20.png");
-		ballsImages[BALL_IMAGE_FIVE] = new Image("resources/Balls/Ball_10.png");
+		ballsImagesN = new Image[AMOUNT_OF_BALLS];
+		ballsImagesN[0] = new Image("resources/images_Balls/Ball_90_Norm.png");
+		ballsImagesN[1] = new Image("resources/images_Balls/Ball_65_Norm.png");
+		ballsImagesN[2] = new Image("resources/images_Balls/Ball_45_Norm.png");
+		ballsImagesN[BALL_IMAGE_THREE] = new Image("resources/images_Balls/Ball_30_Norm.png");
+		ballsImagesN[BALL_IMAGE_FOUR] = new Image("resources/images_Balls/Ball_20_Norm.png");
+		ballsImagesN[BALL_IMAGE_FIVE] = new Image("resources/images_Balls/Ball_10_Norm.png");
+		ballsImagesA = new Image[AMOUNT_OF_BALLS];
+		ballsImagesA[0] = new Image("resources/images_Balls/Ball_90_Add.png");
+		ballsImagesA[1] = new Image("resources/images_Balls/Ball_65_Add.png");
+		ballsImagesA[2] = new Image("resources/images_Balls/Ball_45_Add.png");
+		ballsImagesA[BALL_IMAGE_THREE] = new Image("resources/images_Balls/Ball_30_Add.png");
+		ballsImagesA[BALL_IMAGE_FOUR] = new Image("resources/images_Balls/Ball_20_Add.png");
+		ballsImagesA[BALL_IMAGE_FIVE] = new Image("resources/images_Balls/Ball_10_Add.png");
 	}
 	
 	/**

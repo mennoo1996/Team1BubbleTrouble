@@ -1,6 +1,7 @@
 package logic;
 import gui.GameState;
 import gui.MainGame;
+import gui.RND;
 
 import java.util.ArrayList;
 
@@ -90,10 +91,10 @@ public class PlayerList {
 	public void drawPlayers(Graphics graphics) {
 		drawPlayer(playerList.get(0), graphics);
 		if (mg.isMultiplayer()) {
-			mg.getDosFont().drawString(playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION, 
+			RND.text(graphics, playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION,
 					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_1");
 			drawPlayer(playerList.get(1), graphics);
-			mg.getDosFont().drawString(playerList.get(1).getX() - PLAYER_NAME_X_DEVIATION, 
+			RND.text(graphics, playerList.get(1).getX() - PLAYER_NAME_X_DEVIATION,
 					playerList.get(1).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_2");
 		}
 	}
@@ -109,19 +110,42 @@ public class PlayerList {
 	}
 	
 	/**
-	 * Set the image of the given player.
-	 * @param playerNumber	- the number of the player
-	 * @param imageString	- the string of the image to set
+	 * set images of given player.
+	 * @param playerNumber given player
+	 * @param imageStringN normal image
+	 * @param imageStringA additive image
 	 */
-	public void setPlayerImage(int playerNumber, String imageString) {
+	public void setPlayerImage(int playerNumber, String imageStringN, String imageStringA) {
 		try {
-			Image image = new Image("resources/" + imageString);
-			playerList.get(playerNumber).setImage(image);
+			Image imageN = new Image("resources/images_Player/" + imageStringN);
+			Image imageA = new Image("resources/images_Player/" + imageStringA);
+			playerList.get(playerNumber).setImage(imageN, imageA);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * set images of players.
+	 * @param playerNumber number of player.
+	 * @param imageStringN string of normal image
+	 * @param imageStringA string of additive image
+	 */
+	public void setPlayerImages(int playerNumber, String imageStringN, String imageStringA) {
+		try {
+			Image imageN = new Image("resources/images_Player/" + imageStringN);
+			Image imageA = new Image("resources/images_Player/" + imageStringA);
+			playerList.get(playerNumber).setImage(imageN, imageA);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Draws player.
+	 * @param player to draw
+	 * @param graphics context
+	 */
 	private void drawPlayer(Player player, Graphics graphics) {
 		if (player.getMovement() == 2) {
 			player.incrementMovementCounter();
@@ -131,8 +155,10 @@ public class PlayerList {
 					* MOVEMENT_COUNTER_FACTOR) {
 				sp = SPRITE_SHEET_FOUR;
 			}
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX() 
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
+			RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0),
+					player.getSpritesheetA().getSprite(sp, 0),
+					player.getX() - PLAYER_DRAW_X_DEVIATION, 
+					player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
 		} else if (player.getMovement() == 1) {
 			player.incrementMovementCounter();
 			int sp = 1;
@@ -140,16 +166,21 @@ public class PlayerList {
 					* MOVEMENT_COUNTER_FACTOR) {
 				sp = 0;
 			}
-			graphics.drawImage(player.getSpritesheet().getSprite(sp, 0), player.getX()
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
+			RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0), 
+					player.getSpritesheetA().getSprite(sp, 0),
+					player.getX() - PLAYER_DRAW_X_DEVIATION, 
+					player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
 		} else {
 			player.resetMovementCounter();
-			graphics.drawImage(player.getSpritesheet().getSprite(2, 0), player.getX()
-					- PLAYER_DRAW_X_DEVIATION, player.getY() - PLAYER_DRAW_Y_DEVIATION);
+			RND.drawColor(graphics, player.getSpritesheetN().getSprite(2, 0),
+					player.getSpritesheetA().getSprite(2, 0),
+					player.getX() - PLAYER_DRAW_X_DEVIATION, 
+					player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
 		}
 		if (player.hasShield()) {
-			graphics.drawImage(player.getShieldImage(), player.getX() 
-					- SHIELD_DRAW_X_DEVIATION, player.getY() - SHIELD_DRAW_X_DEVIATION);
+			RND.drawColor(graphics, player.getShieldImageN(), player.getShieldImageA(), 
+					player.getX() - SHIELD_DRAW_X_DEVIATION, 
+					player.getY() - SHIELD_DRAW_X_DEVIATION, mg.getColor());
 		} player.setMovement(0);
 	}
 	

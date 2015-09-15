@@ -32,6 +32,7 @@ public class WeaponListTest {
 	Weapon w;
 	WeaponList wl;
 	Image img;
+	Image imgA;
 
 	@Before
 	public void setUp() throws Exception {
@@ -51,8 +52,9 @@ public class WeaponListTest {
 		when(player.isShot()).thenReturn(true);
 		
 		img = mock(Image.class);
-		wl.setLaserbeamimage(img);
-		wl.setLasertipimage(img);
+		imgA = mock(Image.class);
+		wl.setLaserbeamimage(img, imgA);
+		wl.setLasertipimage(img, imgA);
 	}
 	
 	@Test
@@ -116,11 +118,11 @@ public class WeaponListTest {
 	
 	@Test
 	public void testGetLaserBeamImage() {
-		assertEquals(img, wl.getLaserbeamimage());
+		assertEquals(img, wl.getLaserbeamimageN());
 	}
 	
 	@Test
 	public void testGetLaserTipImage() {
-		assertEquals(img, wl.getLasertipimage());
+		assertEquals(img, wl.getLasertipimageN());
 	}
 }

@@ -9,6 +9,7 @@ import logic.PlayerList;
 
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -28,6 +29,11 @@ public class MainGame extends StateBasedGame {
 	private static final int DEFAULT_X_RES = 1600;
 	private static final int DEFAULT_Y_RES = 1000;
 	
+	private Color color;
+	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
+	private static final Color COLOR_GREEN = new Color(0.3f, 1.0f, 0.3f);
+	private static final Color COLOR_BLUE = new Color(0.4f, 0.9f, 1.0f);
+	
 	private float gravity = DEFAULT_GRAVITY;
 	private float startingSpeed = DEFAULT_STARTING_SPEED;
 	private float speedStep = DEFAULT_SPEED_STEP;
@@ -41,12 +47,14 @@ public class MainGame extends StateBasedGame {
 	private Image backgroundImage;
 	private Image foreGroundImage;
 	private Image terminalImage;
-	private Image gameLogo;
+	private Image gameLogoN;
+	private Image gameLogoA;
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
-	private AngelCodeFont dosFont;
-	private String player1ImageString;
-	private String player2ImageString;
+	private String player1ImageStringN;
+	private String player1ImageStringA;
+	private String player2ImageStringN;
+	private String player2ImageStringA;
 	
 	private PlayerList playerList;
 	private boolean multiplayer;
@@ -96,44 +104,81 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
-		this.player1ImageString = "Playersprite.png";
-		this.player2ImageString = "Player2sprite.png";
+		this.player1ImageStringN = "Playersprite_Norm.png";
+		this.player1ImageStringA = "Playersprite_Add.png";
+		this.player2ImageStringN = "Player2sprite_Norm.png";
+		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
+		this.setColor(COLOR_ORANGE);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
 		this.logger = new Logger("blabla", true);
 	}
 
 	/**
-	 * Get the playerImage.
+	 * Get the playerImage_norm.
 	 * @return the playerImage
 	 */
-	public String getPlayer1ImageString() {
-		return player1ImageString;
+	public String getPlayer1ImageStringN() {
+		return player1ImageStringN;
+	}
+	
+	/**
+	 * Get the playerImage_add.
+	 * @return the playerImage
+	 */
+	public String getPlayer1ImageStringA() {
+		return player1ImageStringA;
 	}
 
 	/**
 	 * Set the playerImage.
-	 * @param playerImageString the playerImage to set
+	 * @param playerImageStringN the playerImage_norm to set
+	 * @param playerImageStringA the playerImage_add to set
 	 */
-	public void setPlayer1ImageString(String playerImageString) {
-		this.player1ImageString = playerImageString;
+	public void setPlayer1ImageString(String playerImageStringN, String playerImageStringA) {
+		this.player1ImageStringN = playerImageStringN;
+		this.player1ImageStringA = playerImageStringA;
 	}
 
 	/**
-	 * @return the player2ImageString
+	 * @return the player2ImageString_norm
 	 */
-	public String getPlayer2ImageString() {
-		return player2ImageString;
+	public String getPlayer2ImageStringN() {
+		return player2ImageStringN;
+	}
+	
+	/**
+	 * @return the player2ImageString_add
+	 */
+	public String getPlayer2ImageStringA() {
+		return player2ImageStringA;
 	}
 
 	/**
-	 * @param player2ImageString the player2ImageString to set
+	 * @param player2ImageStringN the player2ImageString_Norm to set
+	 * @param player2ImageStringA the player2ImageString_Add to set
 	 */
-	public void setPlayer2ImageString(String player2ImageString) {
-		this.player2ImageString = player2ImageString;
+	public void setPlayer2ImageString(String player2ImageStringN, String player2ImageStringA) {
+		this.player2ImageStringN = player2ImageStringN;
+		this.player2ImageStringA = player2ImageStringA;
 	}
 
+	/**
+	 * @return the current game color
+	 */
+	public Color getColor() {
+		return color;
+	}
+	
+	/**
+	 * @param color the new game color
+	 */
+	public void setColor(Color color) {
+		this.color = color;
+		RND.setColor(color);
+	}
+	
 	/**
 	 * Set the lifeCount.
 	 * @param lifeCount the lifeCount to set
@@ -185,12 +230,14 @@ public class MainGame extends StateBasedGame {
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
-		this.gameLogo = new Image("resources/menus/Menu_Logo.png");
+		this.gameLogoN = new Image("resources/images_UI/Menu_Logo_Norm.png");
+		this.gameLogoA = new Image("resources/images_UI/Menu_Logo_Add.png");
 		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
 		this.laserVerticalImage = new Image("resources/laser_vertical.png");
-		this.dosFont = new AngelCodeFont("resources/font/dosfont.fnt",
-				"resources/font/dosfont_0.png");
-
+		RND.setFont_Normal(new AngelCodeFont("resources/images_Font/dosfont.fnt",
+				"resources/images_Font/dosfont_Norm.png"));
+		RND.setFont_Additive(new AngelCodeFont("resources/images_Font/dosfont.fnt",
+				"resources/images_Font/dosfont_Add.png"));
 		initPlayers();
 		Calendar cal = Calendar.getInstance();
 		this.currentDate = cal.get(Calendar.DATE) 
@@ -203,17 +250,21 @@ public class MainGame extends StateBasedGame {
 	
 	private void initPlayers() throws SlickException {
 
-		Image player1Image = new Image("resources/" + player1ImageString);
-		Image player2Image = new Image("resources/" + player2ImageString);
-		Image shieldImage = new Image("resources/powerups/shield_ingame.png");
+		Image player1ImageN = new Image("resources/images_Player/" + player1ImageStringN);
+		Image player1ImageA = new Image("resources/images_Player/" + player1ImageStringA);
+		Image player2ImageN = new Image("resources/images_Player/" + player2ImageStringN);
+		Image player2ImageA = new Image("resources/images_Player/" + player2ImageStringA);
+		Image shieldImageN = new Image("resources/images_Gameplay/shield_Norm.png");
+		Image shieldImageA = new Image("resources/images_Gameplay/shield_Add.png");
+		
 		Player player1 = new Player(container.getWidth() / 2 - PLAYER1_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				player1Image, shieldImage, this);
+				player1ImageN, player1ImageA, shieldImageN, shieldImageA, this);
 		player1.setPlayerNumber(0);
 		
 		Player player2 = new Player(container.getWidth() / 2 - PLAYER2_X_DEVIATION,
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
-				player2Image, shieldImage, this);
+				player2ImageN, player2ImageA, shieldImageN, shieldImageA, this);
 		player2.setPlayerNumber(1);
 		player2.setMoveLeftKey(Input.KEY_A);
 		player2.setMoveRightKey(Input.KEY_D);
@@ -388,10 +439,17 @@ public class MainGame extends StateBasedGame {
 	}
 	
 	/**
-	 * @return the game logo image
+	 * @return the game logo normal image
 	 */
-	public Image getGameLogo() {
-		return gameLogo;
+	public Image getGameLogoN() {
+		return gameLogoN;
+	}
+	
+	/**
+	 * @return the game logo add image
+	 */
+	public Image getGameLogoA() {
+		return gameLogoA;
 	}
 
 	/**
@@ -455,20 +513,6 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setLaserVerticalImage(Image laserVerticalImage) {
 		this.laserVerticalImage = laserVerticalImage;
-	}
-
-	/**
-	 * @return the dosFont
-	 */
-	public AngelCodeFont getDosFont() {
-		return dosFont;
-	}
-
-	/**
-	 * @param dosFont the dosFont to set
-	 */
-	public void setDosFont(AngelCodeFont dosFont) {
-		this.dosFont = dosFont;
 	}
 
 	/**
@@ -637,11 +681,15 @@ public class MainGame extends StateBasedGame {
 	 * Draws version number, fps, and other info.
 	 */
 	public void drawWaterMark() {
-		dosFont.drawString(VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION, 
-				"#Version 1.0"  
-				+ " #Date: " + currentDate
-				+ " #fps: " + Integer.toString(getFpsInGame())
-				);
+//		dosFontN.drawString(VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION, 
+//				"#Version 1.0"  
+//				+ " #Date: " + currentDate
+//				+ " #fps: " + Integer.toString(getFpsInGame())
+//				);
+		RND.text(app.getGraphics(), VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION,
+				"#Version 1.0" + " #Date: " + currentDate 
+				+ " #fps: " + Integer.toString(getFpsInGame()));
+		
 	}
 	
 	/**

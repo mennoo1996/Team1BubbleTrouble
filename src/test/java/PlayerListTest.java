@@ -52,16 +52,17 @@ public class PlayerListTest {
 		MainGame mg = mock(MainGame.class);
 		when(mg.isMultiplayer()).thenReturn(true);
 		Graphics gr = mock(Graphics.class);
-		Renderer rnd = mock(Renderer.class);
-		AngelCodeFont acf = mock(AngelCodeFont.class);
-		when(mg.getDosFont()).thenReturn(acf);
-		Mockito.doNothing().when(acf).drawString(1, 1, "#PLAYER_1");
-		Player p = new Player(0,0,20,20,i,i,mg);
+		//RND rnd = mock(RND.class);
+		//AngelCodeFont acf = mock(AngelCodeFont.class);
+		//when(mg.getDosFont()).thenReturn(acf);
+		//Mockito.doNothing().when(acf).drawString(1, 1, "#PLAYER_1");
+		//Mockito.doNothing().when(rnd).text();
+		Player p = new Player(0,0,20,20,i,i,i,i,mg);
 		PlayerList pl = new PlayerList(p, mg, gs);
 		SpriteSheet ss = mock(SpriteSheet.class);
 		when(ss.getSprite(any(int.class), any(int.class))).thenReturn(null);
 		Mockito.doNothing().when(gr).drawImage(any(Image.class), any(float.class), any(float.class));
-		p.setSpritesheet(ss);
+		p.setSpritesheet(ss, ss);
 		pl.add(p);
 		pl.drawPlayers(gr);
 	}

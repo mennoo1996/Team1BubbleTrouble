@@ -3,6 +3,7 @@ import java.util.Calendar;
 
 import logic.HighScores;
 import logic.HighScoresParser;
+import logic.Logger;
 import logic.Player;
 import logic.PlayerList;
 
@@ -74,6 +75,7 @@ public class MainGame extends StateBasedGame {
 	private static final int SETTINGS_STATE = 3;
 	
 	private GameState gameStateState;
+	private Logger logger;
 	
 	
 	private static AppGameContainer app;
@@ -110,6 +112,7 @@ public class MainGame extends StateBasedGame {
 		this.setColor(COLOR_ORANGE);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
+		this.logger = new Logger("blabla", true);
 	}
 
 	/**
@@ -210,11 +213,19 @@ public class MainGame extends StateBasedGame {
 		this.container = container;
 		
 		this.gameStateState = new GameState(this);
+		logger.log("GameState initialized", 1, "States");
 		
 		this.addState(new StartState(this));
+		logger.log("Startstate initialized and added", 1, "States");
+		
 		this.addState(gameStateState);
+		logger.log("GameState added", 1, "States");
+		
 		this.addState(new GameOverState(this));
+		logger.log("GameOverState initialized and added", 1, "States");
+		
 		this.addState(new SettingsState(this));
+		logger.log("Settingsstate initialized and added", 1, "States");
 		
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
@@ -722,6 +733,19 @@ public class MainGame extends StateBasedGame {
 	public void setPlayerList(PlayerList playerList) {
 		this.playerList = playerList;
 	}
-	
+
+	/**
+	 * @return the logger
+	 */
+	public Logger getLogger() {
+		return logger;
+	}
+
+	/**
+	 * @param logger the logger to set
+	 */
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
 	
 }

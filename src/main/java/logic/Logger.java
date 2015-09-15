@@ -32,6 +32,33 @@ public class Logger {
 	}
 	
 	/**
+	 * Enum of priority levels.
+	 * @author Stefan
+	 *
+	 */
+	public enum PriorityLevels {
+		VERYHIGH(5),
+		HIGH(4),
+		MEDIUM(3),
+		LOW(2),
+		VERYLOW(1);
+		
+		private final int value;
+		
+		private PriorityLevels(final int x) {
+			value = x;
+		}
+		
+		/**
+		 * 
+		 * @return the value of a prioritylevel
+		 */
+		public int getValue() {
+			return value;
+		}
+	}
+	
+	/**
 	 * Log a given string with a given priority level and a given tag.
 	 * @param logString		- the string to log
 	 * @param priorityLevel	- the priority level of the log

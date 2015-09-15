@@ -12,6 +12,7 @@ env:
 
 script:
   - mvn test
+  - mvn site
 matrix:
   allow_failures:
     - env:

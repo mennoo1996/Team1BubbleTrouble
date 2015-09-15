@@ -19,11 +19,13 @@ public class Button {
 	private static final float HALF = 0.5f;
 	
 	/**
-	 * @param x the x coordinate of this button
-	 * @param y the y coordinate of this button
-	 * @param width the width of the button
-	 * @param height the height of the button
-	 * @param image the image of the button
+	 * Button constructor class.
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @param width of the button
+	 * @param height of the button
+	 * @param imageN normal image
+	 * @param imageA additive image
 	 */
 	public Button(float x, float y, float width, float height, Image imageN, Image imageA) {
 		super();
@@ -36,14 +38,18 @@ public class Button {
 	}
 	
 	/**
-	 * @param x the x coordinate of this button
-	 * @param y the y coordinate of this button
-	 * @param width the width of the button
-	 * @param height the height of the button
-	 * @param image the image of the button
-	 * @param imageMouseover the image of the button when your mouse hovers over the button
+	 * Button constructor class.
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @param width of button
+	 * @param height of button
+	 * @param imageN normal image
+	 * @param imageA additive image
+	 * @param imageMouseoverN normal image
+	 * @param imageMouseroverA additive image
 	 */
-	public Button(float x, float y, float width, float height, Image imageN, Image imageA, Image imageMouseoverN, Image imageMouseroverA) {
+	public Button(float x, float y, float width, float height, Image imageN, Image imageA,
+			Image imageMouseoverN, Image imageMouseroverA) {
 		super();
 		this.x = x;
 		this.y = y;

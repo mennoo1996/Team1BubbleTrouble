@@ -180,7 +180,6 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
-	private static final int FLOATING_SCORE_BRIGHTNESS = 1;
 	private static final int POWERUP_CHANCE = 20;
 	private static final int COIN_CHANCE = 100;
 	private static final int POWERUP_IMAGE_OFFSET = 12;

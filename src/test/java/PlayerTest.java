@@ -20,7 +20,6 @@ import logic.WeaponList;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;

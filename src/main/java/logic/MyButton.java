@@ -14,12 +14,13 @@ public class MyButton extends Button {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Construct a MyButton.
-	 * @param x the x coordinate of the button
-	 * @param y the y coordinate of the button
-	 * @param z the width of the button
-	 * @param a the height of the button
-	 * @param image the image on the button.
+	 * MyButton constructor.
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @param z coordinate
+	 * @param a coordinate
+	 * @param image normal image
+	 * @param imageA additive image
 	 */
 	public MyButton(float x, float y, float z, float a, Image image, Image imageA) {
 		super(x, y, z, a, image, imageA);

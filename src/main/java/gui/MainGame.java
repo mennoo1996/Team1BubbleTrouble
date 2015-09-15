@@ -29,6 +29,9 @@ public class MainGame extends StateBasedGame {
 	private static final int DEFAULT_Y_RES = 1000;
 	
 	private Color color;
+	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
+	private static final Color COLOR_GREEN = new Color(0.3f, 1.0f, 0.3f);
+	private static final Color COLOR_BLUE = new Color(0.4f, 0.9f, 1.0f);
 	
 	private float gravity = DEFAULT_GRAVITY;
 	private float startingSpeed = DEFAULT_STARTING_SPEED;
@@ -47,8 +50,6 @@ public class MainGame extends StateBasedGame {
 	private Image gameLogoA;
 	private Image laserHorizontalImage;
 	private Image laserVerticalImage;
-	private AngelCodeFont dosFontN;
-	private AngelCodeFont dosFontA;
 	private String player1ImageStringN;
 	private String player1ImageStringA;
 	private String player2ImageStringN;
@@ -106,9 +107,7 @@ public class MainGame extends StateBasedGame {
 		this.player2ImageStringN = "Player2sprite_Norm.png";
 		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
-		//setColor(new Color(0.3f, 1.0f, 0.3f)); // greenish
-		setColor(new Color(1.0f, 0.4f, 0.1f)); // orange-ish?
-		//setColor(new Color(0.4f, 0.95f, 1.0f)); // blueish
+		this.setColor(COLOR_ORANGE);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
 	}

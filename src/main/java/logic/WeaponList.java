@@ -164,7 +164,7 @@ public class WeaponList {
 	 */
 	public void setLaserbeamimage(Image laserbeamimageN, Image laserBeamImageA) {
 		this.laserbeamimageN = laserbeamimageN;
-		this.laserbeamimageA = laserbeamimageA;
+		this.laserbeamimageA = laserBeamImageA;
 	}
 
 	/**

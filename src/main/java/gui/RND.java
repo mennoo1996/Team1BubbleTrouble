@@ -5,8 +5,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import edu.umd.cs.findbugs.graph.Graph;
-
 /**
  * Final class that holds simple draw functions.
  * @author Mark
@@ -26,36 +24,54 @@ public final class RND {
 	private static AngelCodeFont dosFontA;
 	private static Color color;
 	
+	/**
+	 * set font to new font, normal.
+	 * @param dosFont to set.
+	 */
 	public static void setFont_Normal(AngelCodeFont dosFont) {
 		dosFontN = dosFont;
 	}
 	
+	/**
+	 * set font to new font, additive.
+	 * @param dosFont to set.
+	 */
 	public static void setFont_Additive(AngelCodeFont dosFont) {
 		dosFontA = dosFont;
 	}
 	
+	/**
+	 * @return returns normal font.
+	 */
 	public static AngelCodeFont getFont_Normal() {
 		return dosFontN;
 	}
 	
+	/**
+	 * @return returns additive font.
+	 */
 	public static AngelCodeFont getFont_Additive() {
 		return dosFontA;
 	}
 	
-	public static void setColor(Color newColor){
+	/**
+	 * set screen color to new color.
+	 * @param newColor to set
+	 */
+	public static void setColor(Color newColor) {
 		color = newColor;
 	}
 	
 	/**
-	 * Example draw function that just renders an object to the screen.
-	 * @param graphics the graphics context used
-	 * @param imageNorm normal grayscale transparent image
-	 * @param imageAdd additive grayscale non-transparent image
-	 * @param x x-location of top-left
-	 * @param y y-location of top-left
-	 * @param color the color to draw with
+	 * Draw function rendering objects to screen with color filter.
+	 * @param g graphics context
+	 * @param n normal image
+	 * @param a additive image
+	 * @param x x-location
+	 * @param y y-location
+	 * @param color color filter
 	 */
-	public static void drawColor (Graphics g, Image n, Image a,
+	public static void drawColor(Graphics g, Image n, Image a,
 			float x, float y, Color color) {
 		g.drawImage(n, x, y, color);
 		g.setDrawMode(Graphics.MODE_ADD);
@@ -64,7 +80,22 @@ public final class RND {
 		
 	}
 
-	public static void drawColor (Graphics g, Image n, Image a, 
+	/**
+	 * Draw stretched function, with color settings.
+	 * @param g graphics context
+	 * @param n normal image
+	 * @param a additive image
+	 * @param x x-left
+	 * @param y y-top
+	 * @param x2 x-right
+	 * @param y2 y-bottom
+	 * @param srcx resx
+	 * @param srcy resy
+	 * @param srcx2 stretchx
+	 * @param srcy2 stretchy
+	 * @param color color filter
+	 */
+	public static void drawColor(Graphics g, Image n, Image a, 
 			float x, float y, float x2, float y2, 
 			float srcx, float srcy, float srcx2, float srcy2,
 			Color color) {
@@ -77,20 +108,23 @@ public final class RND {
 		
 	}
 	
+	/**
+	 * draws simple text to screen.
+	 * @param x location
+	 * @param y location
+	 * @param text to draw
+	 */
 	public static void text(float x, float y, String text) {
 		dosFontN.drawString(x, y, text);
 	}
 	
-//	public static void textColor(Graphics g, 
-//			float x, float y, String text, Color color) {
-//		
-//		dosFontN.drawString(x, y, text, color);
-//		g.setDrawMode(Graphics.MODE_ADD);
-//		dosFontA.drawString(x, y, text, color);
-//		g.setDrawMode(Graphics.MODE_NORMAL);
-//		
-//	}
-	
+	/**
+	 * draws simple colored text to screen.
+	 * @param g graphics context
+	 * @param x location
+	 * @param y location
+	 * @param text to draw
+	 */
 	public static void text(Graphics g, 
 			float x, float y, String text) {
 		
@@ -101,6 +135,14 @@ public final class RND {
 		
 	}
 	
+	/**
+	 * draws set-colored text to screen.
+	 * @param g graphics context
+	 * @param x location
+	 * @param y location
+	 * @param text to draw
+	 * @param newColor color to set
+	 */
 	public static void text(Graphics g, 
 			float x, float y, String text, Color newColor) {
 		
@@ -113,6 +155,13 @@ public final class RND {
 		
 	}
 	
+	/**
+	 * draws simple image to screen.
+	 * @param graphics context
+	 * @param imageNorm to draw
+	 * @param x location
+	 * @param y location
+	 */
 	public static void draw(Graphics graphics, Image imageNorm,
 			int x, int y) {
 		
@@ -120,11 +169,20 @@ public final class RND {
 		
 	}
 	
-	public static void drawStretched(Graphics graphics, Image imageNorm,
-			int x, int y, int x2, int y2) {
-		
-		graphics.drawImage(imageNorm, x, y);
-		
-	}
+//	/**
+//	 * draws simple stretched image to screen.
+//	 * @param graphics
+//	 * @param imageNorm
+//	 * @param x
+//	 * @param y
+//	 * @param x2
+//	 * @param y2
+//	 */
+//	public static void drawStretched(Graphics graphics, Image imageNorm,
+//			int x, int y, int x2, int y2) {
+//		
+//		graphics.drawImage(imageNorm, x, y);
+//		
+//	}
 	
 }

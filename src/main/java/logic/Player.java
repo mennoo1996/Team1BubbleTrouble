@@ -58,15 +58,19 @@ public class Player {
 	private long shieldTimeRemaining;
 
 	/**
-	 * @param x the x coordinate of the player
-	 * @param y the y coordinate of the player
-	 * @param width the width of the player
-	 * @param height the height of the player
-	 * @param image the image used on the player
-	 * @param shieldImage the image used for the player's shield
-	 * @param mg the maingame used on the player
+	 * Constructor class.
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @param width of player
+	 * @param height of palyer
+	 * @param imageN normal image
+	 * @param imageA additive image
+	 * @param shieldImageN normal shield image
+	 * @param shieldImageA additive shield image
+	 * @param mg maingame app object
 	 */
-	public Player(float x, float y, float width, float height, Image imageN, Image imageA, Image shieldImageN,
+	public Player(float x, float y, float width, float height, 
+			Image imageN, Image imageA, Image shieldImageN,
 			Image shieldImageA, MainGame mg) {
 		super();
 		this.x = x;
@@ -345,7 +349,9 @@ public class Player {
 	}
 	
 	/**
-	 * @param image the image to set
+	 * sets player images.
+	 * @param imageN normal image
+	 * @param imageA additive image
 	 */
 	public void setImage(Image imageN, Image imageA) {
 		this.imageN = imageN;

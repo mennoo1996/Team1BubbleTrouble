@@ -110,9 +110,10 @@ public class PlayerList {
 	}
 	
 	/**
-	 * Set the image of the given player.
-	 * @param playerNumber	- the number of the player
-	 * @param imageString	- the string of the image to set
+	 * set images of given player.
+	 * @param playerNumber given player
+	 * @param imageStringN normal image
+	 * @param imageStringA additive image
 	 */
 	public void setPlayerImage(int playerNumber, String imageStringN, String imageStringA) {
 		try {
@@ -124,16 +125,27 @@ public class PlayerList {
 		}
 	}
 	
-	public void setPlayerImages(int playerNumber, String imageString_N, String imageString_A) {
+	/**
+	 * set images of players.
+	 * @param playerNumber number of player.
+	 * @param imageStringN string of normal image
+	 * @param imageStringA string of additive image
+	 */
+	public void setPlayerImages(int playerNumber, String imageStringN, String imageStringA) {
 		try {
-			Image imageN = new Image("resources/images_Player/" + imageString_N);
-			Image imageA = new Image("resources/images_Player/" + imageString_A);
+			Image imageN = new Image("resources/images_Player/" + imageStringN);
+			Image imageA = new Image("resources/images_Player/" + imageStringA);
 			playerList.get(playerNumber).setImage(imageN, imageA);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Draws player.
+	 * @param player to draw
+	 * @param graphics context
+	 */
 	private void drawPlayer(Player player, Graphics graphics) {
 		if (player.getMovement() == 2) {
 			player.incrementMovementCounter();

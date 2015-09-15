@@ -220,7 +220,8 @@ public class SettingsState extends BasicGameState {
 		}
 		
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, returnButton.getImageMouseOverN(), returnButton.getImageMouseOverA(), 
+			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
+					returnButton.getImageMouseOverA(), 
 					returnButton.getX(), returnButton.getY(), mg.getColor());
 		} else {
 			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(), 

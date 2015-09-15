@@ -26,7 +26,8 @@ public class GameOverState extends BasicGameState {
 	
 	private MainGame mg;
 	private TextField tf;
-	private Image tfBackground;
+	private Image tfBackgroundN;
+	private Image tfBackgroundA;
 	private Image health0Image;
 	private Image health1Image;
 	private Image health2Image;
@@ -95,27 +96,36 @@ public class GameOverState extends BasicGameState {
 		
 		saveButton = new Button(BUTTON_X, SAVE_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_SaveHighscore.png"),
-				new Image("resources/Menus/Menu_Button_SaveHighscore2.png"));
+				new Image("resources/images_UI/Menu_Button_SaveHighscore_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_SaveHighscore_Add.png"),
+				new Image("resources/images_UI/Menu_Button_SaveHighscore2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_SaveHighscore2_Add.png"));
 		
 		playButton = new Button(BUTTON_X, PLAY_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_PlayAgain.png"),
-				new Image("resources/Menus/Menu_Button_PlayAgain2.png"));
+				new Image("resources/images_UI/Menu_Button_PlayAgain_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_PlayAgain_Add.png"),
+				new Image("resources/images_UI/Menu_Button_PlayAgain2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_PlayAgain2_Add.png"));
 		
 		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_MainMenu.png"),
-				new Image("resources/Menus/Menu_Button_MainMenu2.png"));
+				new Image("resources/images_UI/Menu_Button_MainMenu_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu_Add.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_MainMenu2_Add.png"));
 		
 		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/Menus/Menu_Button_Quit.png"),
-				new Image("resources/Menus/Menu_Button_Quit2.png"));
+				new Image("resources/images_UI/Menu_Button_Quit_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Quit2_Add.png"));
 
 		initHealthImages();
 		
-		tfBackground = new Image("resources/textfield.png");
+		tfBackgroundN = new Image("resources/images_UI/textfield_Norm.png");
+		tfBackgroundA = new Image("resources/images_UI/textfield_Add.png");
 	}
 	
 	private void initHealthImages() throws SlickException {
@@ -129,7 +139,7 @@ public class GameOverState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
-		tf = new TextField(container, mg.getDosFont(), TEXT_FIELD_X, TEXT_FIELD_Y,
+		tf = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
 				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 		tf.setBackgroundColor(null);
 		tf.setBorderColor(null);
@@ -198,30 +208,33 @@ public class GameOverState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
-				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
+		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
+				"Waiting for user input...");
 		if (displayLives < 1) {
-			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , "# Game Over");
+			RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game Over");
 		} else {
-			mg.getDosFont().drawString(TEXT_X, TEXT_1_Y , 
-					"# You won! You are the champion of soup!");
+			RND.text(graphics, TEXT_X, TEXT_1_Y, "# You won! You are the champion!");
 		}
-		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
-		mg.getDosFont().drawString(TEXT_X, TEXT_3_Y, "# Please enter your name below");
+		
+		RND.text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
+		RND.text(graphics, TEXT_X, TEXT_3_Y, "# Please enter your name below");
 
-		graphics.drawImage(tfBackground, tf.getX() - TF_BACKGROUND_DEVIATION, 
-				tf.getY() - TF_BACKGROUND_DEVIATION);
-		tf.render(container, graphics);
+		RND.drawColor(graphics, tfBackgroundN, tfBackgroundA,
+				tf.getX() - TF_BACKGROUND_DEVIATION, tf.getY() - TF_BACKGROUND_DEVIATION, 
+				mg.getColor());
+		RND.text(graphics, tf.getX(), tf.getY(), tf.getText(), mg.getColor());
 		if (inputMessage != null) {
-			mg.getDosFont().drawString(TEXT_X, TEXT_4_Y, inputMessage);
+			RND.text(graphics, TEXT_X, TEXT_4_Y, inputMessage);
 		}
 		renderButtons(container, graphics);
 		mg.drawWaterMark();
-		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
-		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, "========================");
+		RND.drawColor(graphics, mg.getGameLogoN(), mg.getGameLogoA(),
+				LOGO_X, LOGO_Y, mg.getColor());
+		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
 		mg.getHighscores().sort();
 		String highScoresString = mg.getHighscores().toString();
-		mg.getDosFont().drawString(HIGHSCORES_X, SEPARATOR_Y, highScoresString);
+		RND.text(graphics, HIGHSCORES_X, SEPARATOR_Y, highScoresString);
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		renderLives(graphics);
@@ -268,32 +281,38 @@ public class GameOverState extends BasicGameState {
 	private void renderButtons(GameContainer container, Graphics graphics) {
 		Input input = container.getInput();
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(playButton.getImageMouseOver(), playButton.getX(), 
-					playButton.getY());
+			RND.drawColor(graphics, playButton.getImageMouseOverN(), 
+					playButton.getImageMouseOverA(), playButton.getX(), playButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(playButton.getImage(), 
-					playButton.getX(), playButton.getY());
+			RND.drawColor(graphics, playButton.getImageN(), playButton.getImageA(),
+					playButton.getX(), playButton.getY(), mg.getColor());
 		}
 		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(menuButton.getImageMouseOver(), menuButton.getX(), 
-					menuButton.getY());
+			RND.drawColor(graphics, menuButton.getImageMouseOverN(), 
+					menuButton.getImageMouseOverA(), menuButton.getX(), menuButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(menuButton.getImage(), 
-					menuButton.getX(), menuButton.getY());
+			RND.drawColor(graphics, menuButton.getImageN(), menuButton.getImageA(),
+					menuButton.getX(), menuButton.getY(), mg.getColor());
 		}
 		if (inputMessage == null) {
 			if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				graphics.drawImage(saveButton.getImageMouseOver(), saveButton.getX(), 
-						saveButton.getY());
+				RND.drawColor(graphics, saveButton.getImageMouseOverN(), 
+						saveButton.getImageMouseOverA(), saveButton.getX(), saveButton.getY(), 
+						mg.getColor());
 			} else {
-				graphics.drawImage(saveButton.getImage(), 
-						saveButton.getX(), saveButton.getY());
+				RND.drawColor(graphics, saveButton.getImageN(), saveButton.getImageA(),
+						saveButton.getX(), saveButton.getY(), mg.getColor());
 			} }
 		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(exitButton.getImageMouseOver(), exitButton.getX(), 
-					exitButton.getY());
+			RND.drawColor(graphics, exitButton.getImageMouseOverN(), 
+					exitButton.getImageMouseOverA(), exitButton.getX(), exitButton.getY(), 
+					mg.getColor());
 		} else {
-			graphics.drawImage(exitButton.getImage(), exitButton.getX(), exitButton.getY()); }
+			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
+					exitButton.getX(), exitButton.getY(), mg.getColor());
+		}
 	}
 
 	/**

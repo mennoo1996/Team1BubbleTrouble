@@ -20,10 +20,13 @@ public class SettingsState extends BasicGameState {
 
 	private Button returnButton;
 	
-	private SpriteSheet mannetje;
-	private SpriteSheet arie;
+	private SpriteSheet mannetjeN;
+	private SpriteSheet mannetjeA;
+	private SpriteSheet arieN;
+	private SpriteSheet arieA;
 	
-	private Image highLight;
+	private Image highLightN;
+	private Image highLightA;
 	
 	private MyRectangle mannetje1Rectangle;
 	private MyRectangle arie1Rectangle;
@@ -93,12 +96,20 @@ public class SettingsState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		returnButton = new Button(RETURN_BUTTON_X, RETURN_BUTTON_Y, RETURN_BUTTON_WIDTH,
-				RETURN_BUTTON_HEIGHT, new Image("resources/menus/Menu_Button_Return.png"),
-				new Image("resources/menus/Menu_Button_Return2.png"));
-		highLight = new Image("resources/menus/Menu_Highlight.png");
-		mannetje = new SpriteSheet("resources/Playersprite.png",
+				RETURN_BUTTON_HEIGHT, 
+				new Image("resources/images_UI/Menu_Button_Return_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Return_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Return2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Return2_Add.png"));
+		highLightN = new Image("resources/images_UI/Menu_Highlight_Norm.png");
+		highLightA = new Image("resources/images_UI/Menu_Highlight_Add.png");
+		mannetjeN = new SpriteSheet("resources/images_Player/Playersprite_Norm.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-		arie = new SpriteSheet("resources/Player2sprite.png",
+		mannetjeA = new SpriteSheet("resources/images_Player/Playersprite_Add.png",
+				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
+		arieN = new SpriteSheet("resources/images_Player/Player2sprite_Norm.png",
+				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
+		arieA = new SpriteSheet("resources/images_Player/Player2sprite_Add.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
 		mannetje1Rectangle = new MyRectangle(MANNETJE_1_X, MANNETJE_1_Y, PLAYER_SPRITE_WIDTH,
 				PLAYER_SPRITE_HEIGHT);
@@ -123,17 +134,21 @@ public class SettingsState extends BasicGameState {
 		
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 			if (mannetje1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayer1ImageString("Playersprite.png");
-				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
+				mg.setPlayer1ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
+				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageStringN(), 
+						mg.getPlayer1ImageStringA());
 			} else if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayer1ImageString("Player2sprite.png");
-				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageString());
+				mg.setPlayer1ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
+				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageStringN(), 
+						mg.getPlayer1ImageStringA());
 			} else if (mannetje2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayer2ImageString("Playersprite.png");
-				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageString());
+				mg.setPlayer2ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
+				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageStringN(), 
+						mg.getPlayer2ImageStringA());
 			} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-				mg.setPlayer2ImageString("Player2sprite.png");
-				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageString());
+				mg.setPlayer2ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
+				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageStringN(), 
+						mg.getPlayer2ImageStringA());
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 				sbg.enterState(0);
 			}
@@ -153,69 +168,76 @@ public class SettingsState extends BasicGameState {
 		this.input = container.getInput();
 		
 		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
-		mg.getDosFont().drawString(TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
-		mg.getDosFont().drawString(TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
-		mg.getDosFont().drawString(TEXT_X, TEXT_3_Y, "# we advice different sprites for");
-		mg.getDosFont().drawString(TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
+		RND.text(graphics, TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
+		RND.text(graphics, TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
+		RND.text(graphics, TEXT_X, TEXT_3_Y, "# we advice different sprites for");
+		RND.text(graphics, TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
 	
-		mg.getDosFont().drawString(TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
-		mg.getDosFont().drawString(TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
+		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
+		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
 	
-		mg.getDosFont().drawString(container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
-		
 		drawSprites(graphics);
 
 		mg.drawWaterMark();
-		graphics.drawImage(mg.getGameLogo(), LOGO_X, LOGO_Y);
+		RND.drawColor(graphics, mg.getGameLogoN(), mg.getGameLogoA(),
+				LOGO_X, LOGO_Y, mg.getColor());
 		String tempString = "========================================";
 		tempString += "=======================================";
-		mg.getDosFont().drawString(SEPARATOR_X, SEPARATOR_Y, tempString);
+		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, tempString);
 		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mg.getTerminalImage(), 0, 0);
 		
-		drawControls();
+		drawControls(graphics);
 	}
 	
-	private void drawControls() {
+	private void drawControls(Graphics graphics) {
 		String controlsPlayer1 = "Move left = left arrow\nMove right = right arrow\n";
 		controlsPlayer1 += "Shoot weapon = spacebar";
 		String controlsPlayer2 = "Move left = a\nMove right = d\nShoot weapon = w";
 		
-		mg.getDosFont().drawString(CONTROL_X1, P1_CONTROL_Y, "Player 1:");
-		mg.getDosFont().drawString(CONTROL_X2, P1_CONTROL_Y, controlsPlayer1);
-		mg.getDosFont().drawString(CONTROL_X1, P2_CONTROL_Y, "Player 2:");
-		mg.getDosFont().drawString(CONTROL_X2, P2_CONTROL_Y, controlsPlayer2);
+		RND.text(graphics, CONTROL_X1, P1_CONTROL_Y, "Player 1:");
+		RND.text(graphics, CONTROL_X2, P1_CONTROL_Y, controlsPlayer1);
+		RND.text(graphics, CONTROL_X1, P2_CONTROL_Y, "Player 2:");
+		RND.text(graphics, CONTROL_X2, P2_CONTROL_Y, controlsPlayer2);
 		
 	}
 	
 	private void drawSprites(Graphics graphics) {
-		if (mg.getPlayer1ImageString().equals("Playersprite.png")) {
-			graphics.drawImage(highLight, MANNETJE_1_X, MANNETJE_1_Y);
-		} else if (mg.getPlayer1ImageString().equals("Player2sprite.png")) {
-			graphics.drawImage(highLight, ARIE_1_X, ARIE_1_Y);
+		if (mg.getPlayer1ImageStringN().equals("Playersprite_Norm.png")) {
+			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_1_X, MANNETJE_1_Y, 
+					mg.getColor());
+		} else if (mg.getPlayer1ImageStringN().equals("Player2sprite_Norm.png")) {
+			RND.drawColor(graphics, highLightN, highLightA, ARIE_1_X, ARIE_1_Y, mg.getColor());
 		}
 		
-		if (mg.getPlayer2ImageString().equals("Playersprite.png")) {
-			graphics.drawImage(highLight, MANNETJE_2_X, MANNETJE_2_Y);
-		} else if (mg.getPlayer2ImageString().equals("Player2sprite.png")) {
-			graphics.drawImage(highLight, ARIE_2_X, ARIE_2_Y);
+		if (mg.getPlayer2ImageStringN().equals("Playersprite_Norm.png")) {
+			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_2_X, MANNETJE_2_Y, 
+					mg.getColor());
+		} else if (mg.getPlayer2ImageStringN().equals("Player2sprite_Norm.png")) {
+			RND.drawColor(graphics, highLightN, highLightA, ARIE_2_X, ARIE_2_Y, mg.getColor());
 		}
 		
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			graphics.drawImage(returnButton.getImageMouseOver(), returnButton.getX(),
-					returnButton.getY());
+			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
+					returnButton.getImageMouseOverA(), 
+					returnButton.getX(), returnButton.getY(), mg.getColor());
 		} else {
-			graphics.drawImage(returnButton.getImage(), returnButton.getX(), returnButton.getY());
+			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(), 
+					returnButton.getX(), returnButton.getY(), mg.getColor());
 		}
+
+		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
+				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mg.getColor());
+		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
+				arie1Rectangle.getX(), arie1Rectangle.getY(), mg.getColor());
 		
-		graphics.drawImage(mannetje.getSprite(2, 0), mannetje1Rectangle.getX(),
-				mannetje1Rectangle.getY());
-		graphics.drawImage(arie.getSprite(2, 0), arie1Rectangle.getX(), arie1Rectangle.getY());
-		
-		graphics.drawImage(mannetje.getSprite(2, 0), mannetje2Rectangle.getX(),
-				mannetje2Rectangle.getY());
-		graphics.drawImage(arie.getSprite(2, 0), arie2Rectangle.getX(), arie2Rectangle.getY());
+		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
+				mannetje2Rectangle.getX(), mannetje2Rectangle.getY(), mg.getColor());
+		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
+				arie2Rectangle.getX(), arie2Rectangle.getY(), mg.getColor());
+
 	}
 
 

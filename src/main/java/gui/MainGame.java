@@ -105,7 +105,9 @@ public class MainGame extends StateBasedGame {
 		this.player2ImageStringN = "Player2sprite_Norm.png";
 		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
-		setColor(new Color(0.3f, 1.0f, 0.3f));
+		//setColor(new Color(0.3f, 1.0f, 0.3f)); // greenish
+		setColor(new Color(1.0f, 0.4f, 0.1f)); // orange-ish?
+		//setColor(new Color(0.4f, 0.95f, 1.0f)); // blueish
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
 	}

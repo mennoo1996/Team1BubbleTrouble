@@ -11,8 +11,10 @@ public class Button {
 	private float y;
 	private float width;
 	private float height;
-	private Image image;
-	private Image imageMouseover;
+	private Image imageN;
+	private Image imageA;
+	private Image imageMouseoverN;
+	private Image imageMouseoverA;
 	
 	private static final float HALF = 0.5f;
 	
@@ -23,13 +25,14 @@ public class Button {
 	 * @param height the height of the button
 	 * @param image the image of the button
 	 */
-	public Button(float x, float y, float width, float height, Image image) {
+	public Button(float x, float y, float width, float height, Image imageN, Image imageA) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.image = image;
+		this.imageN = imageN;
+		this.imageA = imageA;
 	}
 	
 	/**
@@ -40,14 +43,16 @@ public class Button {
 	 * @param image the image of the button
 	 * @param imageMouseover the image of the button when your mouse hovers over the button
 	 */
-	public Button(float x, float y, float width, float height, Image image, Image imageMouseover) {
+	public Button(float x, float y, float width, float height, Image imageN, Image imageA, Image imageMouseoverN, Image imageMouseroverA) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.image = image;
-		this.imageMouseover = imageMouseover;
+		this.imageN = imageN;
+		this.imageA = imageA;
+		this.imageMouseoverN = imageMouseoverN;
+		this.imageMouseoverA = imageMouseroverA;
 	}
 
 	/**
@@ -145,31 +150,49 @@ public class Button {
 	}
 
 	/**
-	 * @return image for this button
+	 * @return image_norm for this button
 	 */
-	public Image getImage() {
-		return image;
+	public Image getImageN() {
+		return imageN;
 	}
 	
 	/**
-	 * @return image for this button
+	 * @return image_add for this button
 	 */
-	public Image getImageMouseOver() {
-		return imageMouseover;
+	public Image getImageA() {
+		return imageA;
 	}
 	
 	/**
-	 * @param image the image to set
+	 * @return image_norm for this button
 	 */
-	public void setImage(Image image) {
-		this.image = image;
+	public Image getImageMouseOverN() {
+		return imageMouseoverN;
 	}
 	
 	/**
-	 * @param image the image to set
+	 * @return image_add for this button
 	 */
-	public void setImageMouseOver(Image image) {
-		this.imageMouseover = image;
+	public Image getImageMouseOverA() {
+		return imageMouseoverA;
+	}
+	
+	/**
+	 * @param imageN the image_norm to set
+	 * @param imageA the image_add to set
+	 */
+	public void setImage(Image imageN, Image imageA) {
+		this.imageN = imageN;
+		this.imageA = imageA;
+	}
+	
+	/**
+	 * @param imageN the image_norm to set
+	 * @param imageA the image_add to set
+	 */
+	public void setImageMouseOver(Image imageN, Image imageA) {
+		this.imageMouseoverN = imageN;
+		this.imageMouseoverA = imageA;
 	}
 	
 }

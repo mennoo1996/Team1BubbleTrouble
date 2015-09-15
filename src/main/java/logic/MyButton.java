@@ -21,8 +21,8 @@ public class MyButton extends Button {
 	 * @param a the height of the button
 	 * @param image the image on the button.
 	 */
-	public MyButton(float x, float y, float z, float a, Image image) {
-		super(x, y, z, a, image);
+	public MyButton(float x, float y, float z, float a, Image image, Image imageA) {
+		super(x, y, z, a, image, imageA);
 	}
 	
 	
@@ -34,7 +34,8 @@ public class MyButton extends Button {
 					&& this.getY() == that.getY()
 					&& this.getWidth() == that.getWidth() 
 					&& this.getHeight() == that.getHeight() 
-					&& this.getImage() == that.getImage()) {
+					&& this.getImageN() == that.getImageN() 
+					&& this.getImageA() == that.getImageA()) {
 				return true;
 			}
 		}

@@ -64,7 +64,6 @@ public final class RND {
 		
 	}
 
-	// STUFF IT WHERE THE SUN DONT SHINE, CHECKSTYLE. I DONT GIVE HALF A SHILLING ABOUT THE PARAMETERS OR THE LENGTH OF THIS SENTENCE
 	public static void drawColor (Graphics g, Image n, Image a, 
 			float x, float y, float x2, float y2, 
 			float srcx, float srcy, float srcx2, float srcy2,

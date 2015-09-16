@@ -41,7 +41,6 @@ public class StartState extends BasicGameState {
 	private static final int QUITBUTTON_Y = 375;
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
-
 	
 	/**
 	 * constructor.
@@ -83,16 +82,37 @@ public class StartState extends BasicGameState {
 		
 	}
 	
-//	/**
-//	 * setup all variables when entering this state.
-//	 * @param container the Container this state is part of
-//	 * @param arg1 The statebasedgame this state is part of
-//	 * @throws SlickException sometimes.
-//	 */
-//	@Override
-//	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-//		
-//	}
+	/**
+	 * setup all variables when entering this state.
+	 * @param container the Container this state is part of
+	 * @param arg1 The statebasedgame this state is part of
+	 * @throws SlickException sometimes.
+	 */
+	@Override
+	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		RND.setOpacity(0.0f);
+		mg.stopSwitchState();
+	}
+	
+	/**
+	 * Exit function for state. Fades out and everything.
+	 * @param container the GameContainer we are running in
+	 * @param sbg the gamestate cont.
+	 * @param delta the deltatime in ms
+	 */
+	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
+		if (mg.getShouldSwitchState()) {
+			if (RND.getOpacity() > 0.0f) {
+				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
+			} else {
+				if (mg.getSwitchState() == -1) {
+					container.exit();
+				} else {
+					sbg.enterState(mg.getSwitchState());
+				}
+			}	
+		}
+	}
 	
 	/**
 	 * Update this state.
@@ -104,28 +124,31 @@ public class StartState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 		Input input = container.getInput();
+		if (RND.getOpacity() < 1.0f && !mg.getShouldSwitchState()) {
+			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
+		}
 
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mg.getShouldSwitchState()) {
 			if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Go to gamestate in singleplayer
 				mg.setMultiplayer(false);
-				sbg.enterState(mg.getGameState());
+				mg.setSwitchState(mg.getGameState());
 			} 
 			if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Go to gamestate in multiplayer
 				mg.setMultiplayer(true);
-				sbg.enterState(mg.getGameState());
+				mg.setSwitchState(mg.getGameState());
 			} 
 			else if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Go to settingsState
-				sbg.enterState(mg.getSettingsState());
+				mg.setSwitchState(mg.getSettingsState());
 			}
 			else if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Quit game
-				container.exit();
+				mg.setSwitchState(-1);
 			}
 		}
-
+		exit(container, sbg, delta);
 	}
 
 	/**

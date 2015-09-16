@@ -137,8 +137,11 @@ public class GameOverState extends BasicGameState {
 		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 	}
 	
+	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
+		RND.setOpacity(0.0f);
+		mg.stopSwitchState();
 		tf = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
 				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 		tf.setBackgroundColor(null);
@@ -151,6 +154,26 @@ public class GameOverState extends BasicGameState {
 	}
 	
 	/**
+	 * Exit function for state. Fades out and everything.
+	 * @param container the GameContainer we are running in
+	 * @param sbg the gamestate cont.
+	 * @param delta the deltatime in ms
+	 */
+	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
+		if (mg.getShouldSwitchState()) {
+			if (RND.getOpacity() > 0.0f) {
+				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
+			} else {
+				if (mg.getSwitchState() == -1) {
+					container.exit();
+				} else {
+					sbg.enterState(mg.getSwitchState());
+				}
+			}	
+		}
+	}
+	
+	/**
 	 * update method - called every frame.
 	 * @param container The container this state is in.
 	 * @param sbg the StateBasedGame this state is in
@@ -159,14 +182,17 @@ public class GameOverState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
+		if (RND.getOpacity() < 1.0f && !mg.getShouldSwitchState()) {
+			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
+		}
 			Input input = container.getInput();
-			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mg.getShouldSwitchState()) {
 				if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 					// Start over
 					mg.resetLifeCount();
 					mg.resetLevelCount();
 					mg.setScore(0);
-					sbg.enterState(1);
+					mg.setSwitchState(mg.getGameState());
 				} 
 				else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 					// Save score
@@ -176,13 +202,14 @@ public class GameOverState extends BasicGameState {
 					// Go to startState
 					mg.setScore(0);
 					mg.setLevelCounter(0);
-					sbg.enterState(0);
+					mg.setSwitchState(mg.getStartState());
 				}
 				else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					container.exit();
+					mg.setSwitchState(-1);
 				}
 			}
 			handleTF(input);
+			exit(container, sbg, delta);
 		}
 	
 	private void handleTF(Input input) {

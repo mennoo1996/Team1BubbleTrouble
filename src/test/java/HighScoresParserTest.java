@@ -4,13 +4,14 @@ import static org.junit.Assert.assertTrue;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import logic.HighScores;
-import logic.HighScoresParser;
-import logic.Score;
-import logic.ScoresComparator;
-
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import logic.HighScores;
+import logic.HighScoresParser;
+import logic.Logger;
+import logic.Score;
+import logic.ScoresComparator;
 
 
 public class HighScoresParserTest {
@@ -21,6 +22,7 @@ public class HighScoresParserTest {
 	@Test
 	public void readHighScoresTest() {
 		HighScores hs = new HighScores();
+		hs.setLogger(new Logger("a", true));
 		hs.add(new Score(300, "jopie krekel"));
 		hs.add(new Score(0, "freek"));
 		
@@ -47,6 +49,7 @@ public class HighScoresParserTest {
 	public void writeHighScoresTest() {
 		
 		HighScores hs = new HighScores();
+		hs.setLogger(new Logger("a", true));
 		hs.add(new Score(300, "jopie krekel"));
 		hs.add(new Score(0, "freek"));
 		

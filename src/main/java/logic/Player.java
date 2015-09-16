@@ -39,6 +39,7 @@ public class Player {
 	private Logger logger;
 	private GameState gs;
 	private Gate intersectingGate;
+	private boolean stoodStillOnLastUpdate = false;
 	// weapon management
 	private LinkedList<Powerup.PowerupType> weapons;
 	private boolean shot;
@@ -191,15 +192,17 @@ public class Player {
 		if (testing) {
 			return;
 		}
-		
+		boolean didWalk = false;
 		// Walk left when left key pressed and not at left wall OR a gate
 		boolean isKeyLeft = gs.getSavedInput().isKeyDown(moveLeftKey);
 		if (isKeyLeft && this.getX() > gs.getLeftWall().getWidth()) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mg.getPlayerSpeed() * deltaFloat);
             	this.movement = 1;
+            	didWalk = true;
+            	stoodStillOnLastUpdate = false;
             	if (!lastLogMove.equals("left")) {
-            		logger.log("Moving left", PriorityLevels.VERYLOW.getValue(), "Player");
+            		logger.log("Moving left from position " + this.getCenterX(), PriorityLevels.VERYLOW.getValue(), "Player");
             		lastLogMove = "left";
             	}
             }
@@ -210,28 +213,36 @@ public class Player {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mg.getPlayerSpeed() * deltaFloat);
         	   this.movement = 2;
+        	   didWalk = true;
+        	   stoodStillOnLastUpdate = false;
         	   if (!lastLogMove.equals("right")) {
-        		   logger.log("Moving right", PriorityLevels.VERYLOW.getValue(), "Player");
+        		   logger.log("Moving right from position " + this.getCenterX(), PriorityLevels.VERYLOW.getValue(), "Player");
+
         		   lastLogMove = "right";
         	   }
            }
         }
+		
+		if (!didWalk && !stoodStillOnLastUpdate) {
+			stoodStillOnLastUpdate = true;
+			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW.getValue(), "Player");
+		}
 	}
 
 	private Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
-			logger.log("Empty weapon oh noes", PriorityLevels.MEDIUM.getValue(), "Player");
+			logger.log("Shot regular laser from position " + this.getCenterX(), PriorityLevels.MEDIUM.getValue(), "Player");
 			return new Weapon(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
-			logger.log("Spiky weapon", PriorityLevels.HIGH.getValue(), "Player");
+			logger.log("Shot spiky laser from position " + this.getCenterX(), PriorityLevels.HIGH.getValue(), "Player");
 			return new Spiky(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			logger.log("Instant laser", PriorityLevels.HIGH.getValue(), "Player");
+			logger.log("Shot instant laser from position " + this.getCenterX(), PriorityLevels.HIGH.getValue(), "Player");
 			return new InstantLaser(this.getCenterX(),
 					containerHeight - gs.getFloor().getHeight(), mg.getLaserWidth());
 		}

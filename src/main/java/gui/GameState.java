@@ -543,8 +543,14 @@ public class GameState extends BasicGameState {
 		RND.text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mg.getLevelCounter() + 1));
+		String renderedScore;
+		if (mg.getShouldSwitchState()) {
+			renderedScore = Integer.toString(mg.getScore());
+		} else {
+			renderedScore = Integer.toString(mg.getScore() + score);
+		}
 		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
-				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
+				- SCORE_STRING_Y_DEVIATION, "Score: " + renderedScore);
 		// Pause overlay and counter
 		if (playingState && countIn) {
 			drawCountIn(container, graphics);

@@ -77,10 +77,13 @@ public class MainGame extends StateBasedGame {
 	private GameState gameStateState;
 	private Logger logger;
 	
+	private boolean shouldSwitchState = false;
+	private int switchState = 0;
 	
 	private static AppGameContainer app;
 	private GameContainer container;
 	
+	private static final int OPACITY_FADE_TIMER = 150;
 	private static final int TARGET_FRAMERATE = 60;
 	private static final float DEFAULT_GRAVITY = 500f;
 	private static final float DEFAULT_STARTING_SPEED = 200f;
@@ -746,6 +749,43 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setLogger(Logger logger) {
 		this.logger = logger;
+	}
+	
+	/**
+	 * @return the opacity fade timer, which should be used for scene transitions.
+	 */
+	public int getOpacityFadeTimer() {
+		return OPACITY_FADE_TIMER;
+	}
+	
+	/**
+	 * Force game to switch state.
+	 * @param state to switch to
+	 */
+	public void setSwitchState(int state) {
+		shouldSwitchState = true;
+		switchState = state;
+	}
+	
+	/**
+	 * Force game to stop switching state.
+	 */
+	public void stopSwitchState() {
+		shouldSwitchState = false;
+	}
+	
+	/**
+	 * @return whether game should switch state.
+	 */
+	public boolean getShouldSwitchState() {
+		return shouldSwitchState;
+	}
+	
+	/**
+	 * @return the state the game is switching to.
+	 */
+	public int getSwitchState() {
+		return switchState;
 	}
 	
 }

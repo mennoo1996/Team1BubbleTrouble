@@ -33,8 +33,6 @@ import org.newdawn.slick.state.StateBasedGame;
  *
  */
 public class GameState extends BasicGameState {
-
-	
 	
 	private  int totaltime;
 	
@@ -205,6 +203,8 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		RND.setOpacity(0.0f);
+		mg.stopSwitchState();
 		// If still shooting stop it
 		random = new Random();
 		mg.getPlayerList().setAllPlayersShot(false);
@@ -233,6 +233,27 @@ public class GameState extends BasicGameState {
 		droppedCoins = new ArrayList<>();
 	}
 	
+	/**
+	 * Exit function for state. Fades out and everything.
+	 * @param container the GameContainer we are running in
+	 * @param sbg the gamestate cont.
+	 * @param delta the deltatime in ms
+	 */
+	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
+		if (mg.getShouldSwitchState()) {
+			if (RND.getOpacity() > 0.0f) {
+				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
+			} else {
+				if (mg.getSwitchState() == -1) {
+					container.exit();
+				} else {
+					mg.getPlayerList().getPlayers().forEach(Player::respawn);
+					mg.getPlayerList().setProcessCollisions(true);
+					sbg.enterState(mg.getSwitchState());
+				}
+			}	
+		}
+	}
 	
 	/**
 	 * load resources when state is initialised.
@@ -271,6 +292,9 @@ public class GameState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 
+		if (RND.getOpacity() < 1.0f && !mg.getShouldSwitchState()) {
+			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
+		}
 		setSavedInput(container.getInput());
 		if (playingState) {
 			// Timer logic
@@ -294,6 +318,7 @@ public class GameState extends BasicGameState {
 			}
 			processPauseButtons(container, sbg);
 		}
+		exit(container, sbg, delta);
 	}
 
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
@@ -335,7 +360,7 @@ public class GameState extends BasicGameState {
 
 	private void processPauseButtons(GameContainer container, StateBasedGame sbg) {
 		Input input = container.getInput();
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mg.getShouldSwitchState()) {
 			if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY()) 
 					&& !waitEsc) {
 				prevTime = System.currentTimeMillis();
@@ -344,8 +369,10 @@ public class GameState extends BasicGameState {
 			} else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				mg.setScore(0);
 				mg.setLevelCounter(0);
-				sbg.enterState(0);
+				//sbg.enterState(0);
+				mg.setSwitchState(mg.getStartState());
 			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+				mg.setSwitchState(-1);
 				container.exit();
 			}
 		}

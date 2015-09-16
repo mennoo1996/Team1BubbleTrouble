@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import logic.BouncingCircle;
 import logic.Gate;
 import logic.MyRectangle;
-import logic.Logger.PriorityLevels;
 
 import org.junit.Before;
 import org.junit.Test;

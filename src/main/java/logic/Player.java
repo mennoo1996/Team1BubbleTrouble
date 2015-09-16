@@ -204,7 +204,6 @@ public class Player {
             	}
             }
         }
-
 		// Walk right when right key pressed and not at right wall OR a gate
 		if (gs.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
 				< (containerWidth - gs.getRightWall().getWidth())) {

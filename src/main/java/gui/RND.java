@@ -23,6 +23,22 @@ public final class RND {
 	private static AngelCodeFont dosFontN;
 	private static AngelCodeFont dosFontA;
 	private static Color color;
+	private static float opacity = 1.0f;
+	
+	/**
+	 * Set opacity of all on-screen elements to a certain value.
+	 * @param newOpacity the new opacity of on-screen elements.
+	 */
+	public static void setOpacity(float newOpacity) {
+		opacity = newOpacity;
+	}
+	
+	/**
+	 * @return the opacity of on-screen elements.
+	 */
+	public static float getOpacity() {
+		return opacity;
+	}
 	
 	/**
 	 * set font to new font, normal.
@@ -73,9 +89,9 @@ public final class RND {
 	 */
 	public static void drawColor(Graphics g, Image n, Image a,
 			float x, float y, Color color) {
-		g.drawImage(n, x, y, color);
+		g.drawImage(n, x, y, new Color(color.r, color.g, color.b, opacity));
 		g.setDrawMode(Graphics.MODE_ADD);
-		g.drawImage(a, x, y, color);
+		g.drawImage(a, x, y, new Color(color.r * opacity, color.g * opacity, color.b * opacity));
 		g.setDrawMode(Graphics.MODE_NORMAL);
 		
 	}
@@ -100,10 +116,12 @@ public final class RND {
 			float srcx, float srcy, float srcx2, float srcy2,
 			Color color) {
 		
-		g.drawImage(n, x, y, x2, y2, srcx, srcy, srcx2, srcy2, color); 
+		g.drawImage(n, x, y, x2, y2, srcx, srcy, srcx2, srcy2,
+				new Color(color.r, color.g, color.b, opacity)); 
 		g.setDrawMode(Graphics.MODE_ADD);
 		
-		g.drawImage(a, x, y, x2, y2, srcx, srcy, srcx2, srcy2, color); 
+		g.drawImage(a, x, y, x2, y2, srcx, srcy, srcx2, srcy2, 
+				new Color(color.r * opacity, color.g * opacity, color.b * opacity)); 
 		g.setDrawMode(Graphics.MODE_NORMAL);
 		
 	}
@@ -128,9 +146,10 @@ public final class RND {
 	public static void text(Graphics g, 
 			float x, float y, String text) {
 		
-		dosFontN.drawString(x, y, text, color);
+		dosFontN.drawString(x, y, text, new Color(color.r, color.g, color.b, opacity));
 		g.setDrawMode(Graphics.MODE_ADD);
-		dosFontA.drawString(x, y, text, color);
+		dosFontA.drawString(x, y, text, 
+				new Color(color.r * opacity, color.g * opacity, color.b * opacity));
 		g.setDrawMode(Graphics.MODE_NORMAL);
 		
 	}
@@ -146,10 +165,11 @@ public final class RND {
 	public static void text(Graphics g, 
 			float x, float y, String text, Color newColor) {
 		
-		dosFontN.drawString(x, y, text, newColor);
+		dosFontN.drawString(x, y, text, new Color(newColor.r, newColor.g, newColor.b, opacity));
 		if (newColor.a == 1.0f) {
 			g.setDrawMode(Graphics.MODE_ADD);
-			dosFontA.drawString(x, y, text, newColor);
+			dosFontA.drawString(x, y, text, 
+					new Color(newColor.r * opacity, newColor.g * opacity, newColor.b * opacity));
 			g.setDrawMode(Graphics.MODE_NORMAL);
 		}
 		

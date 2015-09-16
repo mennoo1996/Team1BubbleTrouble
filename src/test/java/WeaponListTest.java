@@ -20,6 +20,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -33,6 +34,7 @@ public class WeaponListTest {
 	WeaponList wl;
 	Image img;
 	Image imgA;
+	Color col;
 
 	@Before
 	public void setUp() throws Exception {
@@ -45,10 +47,12 @@ public class WeaponListTest {
 		wl = new WeaponList(w,mg,gs, true);
 		wl.add(w);
 
+		col = new Color(0.5f, 0.5f, 0.5f);
 		Player player = mock(Player.class);
 		PlayerList pl = new PlayerList(player, mg, gs);
 		pl.add(player);
 		when(mg.getPlayerList()).thenReturn(pl);
+		when(mg.getColor()).thenReturn(col);
 		when(player.isShot()).thenReturn(true);
 		
 		img = mock(Image.class);
@@ -88,7 +92,8 @@ public class WeaponListTest {
 	public void testDrawWeapons1() {
 		Graphics g = mock(Graphics.class);
 		wl.drawWeapons(g);
-		Mockito.doNothing().when(g).drawImage(img, -19, -12);
+		Mockito.doNothing().when(g).drawImage(img, -19, -12, col);
+		Mockito.doNothing().when(g).drawImage(imgA, -19, -12, col);
 	}
 	
 	@Test

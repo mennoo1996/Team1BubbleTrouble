@@ -45,7 +45,11 @@ public class Logger {
 		
 		private final int value;
 		
-		private PriorityLevels(final int x) {
+		/**
+		 * PriorityLevel constructor.
+		 * @param x level of priority
+		 */
+		PriorityLevels(final int x) {
 			value = x;
 		}
 		

@@ -21,6 +21,8 @@ public class PlayerList {
 	private MainGame mg;
 	private GameState gs;
 	
+	private boolean processCollisions = true;
+	
 	private static final int SPRITE_SHEET_THREE = 3;
 	private static final int SPRITE_SHEET_FOUR = 4;
 	private static final float MOVEMENT_COUNTER_FACTOR = 0.5f;
@@ -72,15 +74,18 @@ public class PlayerList {
 	 * @param circle	- the circle to intersect with
 	 */
 	public void intersectPlayersWithCircle(BouncingCircle circle) {
-		if (playerList.get(0).getRectangle().intersects(circle) && !playerList.get(0).hasShield()) {
-			//LIVES FUNCTIONALITY
-			playerDeath(mg);
-		}
-		
-		if (mg.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)
-				&& !playerList.get(1).hasShield()) {
-			//LIVES FUNCTIONALITY
-			playerDeath(mg);
+		if (processCollisions) {
+			if (playerList.get(0).getRectangle().intersects(circle) 
+					&& !playerList.get(0).hasShield()) {
+				//LIVES FUNCTIONALITY
+				playerDeath(mg);
+			}
+			
+			if (mg.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)
+					&& !playerList.get(1).hasShield()) {
+				//LIVES FUNCTIONALITY
+				playerDeath(mg);
+			}
 		}
 	}
 	
@@ -191,12 +196,14 @@ public class PlayerList {
 	public void playerDeath(StateBasedGame sbg) {
 		System.out.println("Playerdeath");
 		mg.decreaselifeCount();
-		playerList.forEach(Player::respawn);
 		if (mg.getLifeCount() <= 0) {
 			mg.setScore(mg.getScore() + gs.getScore());
-			sbg.enterState(mg.getGameOverState());
+			mg.setSwitchState(mg.getGameOverState());
+			//sbg.enterState(mg.getGameOverState());
 		} else {
-			sbg.enterState(mg.getGameState());
+			//sbg.enterState(mg.getGameState());
+			processCollisions = false;
+			mg.setSwitchState(mg.getGameState());
 			//mg.getPlayerList().
 		}
 	}
@@ -231,4 +238,20 @@ public class PlayerList {
 	public GameState getGs() {
 		return gs;
 	}
+	
+	/**
+	 * Set whether the game should process collisions between players and spheres.
+	 * @param set the boolean to set.
+	 */
+	public void setProcessCollisions(boolean set) {
+		processCollisions = set;
+	}
+	
+	/**
+	 * @return returns whether collision for players and spheres is processed.
+	 */
+	public boolean getProcessCollisions() {
+		return processCollisions;
+	}
+
 }

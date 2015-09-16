@@ -155,7 +155,6 @@ public class Player {
 	private void processCoins(float deltaFloat, float containerHeight) {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		for (Coin coin : gs.getDroppedCoins()) {
-			coin.update(gs.getFloor(), containerHeight, deltaFloat);
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
 				gs.addToScore(coin.getPoints());

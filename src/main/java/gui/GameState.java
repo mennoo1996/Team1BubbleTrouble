@@ -242,7 +242,11 @@ public class GameState extends BasicGameState {
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
 		if (mg.getShouldSwitchState()) {
 			if (RND.getOpacity() > 0.0f) {
-				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
+				int fadeTimer = mg.getOpacityFadeTimer();
+				if (mg.getSwitchState() == -1) {
+					fadeTimer = 2 * 2 * 2 * fadeTimer;
+				}
+				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
 				if (mg.getSwitchState() == -1) {
 					container.exit();
@@ -372,7 +376,6 @@ public class GameState extends BasicGameState {
 				mg.setSwitchState(mg.getStartState());
 			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				mg.setSwitchState(-1);
-				container.exit();
 			}
 		}
 	}

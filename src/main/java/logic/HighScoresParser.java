@@ -15,6 +15,10 @@ import logic.Logger.PriorityLevels;
 public final class HighScoresParser {
 	private static Logger logger;
 	
+	/**
+	 * Set a new Logger.
+	 * @param loggerIn logger to set
+	 */
 	public static void setLogger(Logger loggerIn) {
 		logger = loggerIn;
 	}
@@ -29,7 +33,8 @@ public final class HighScoresParser {
 	 * @return the highscores
 	 */
 	public static HighScores readHighScores(String fileName) {
-		logger.log("Highscores read from file, filename=" + fileName, PriorityLevels.LOW.getValue(), "Highscores");
+		logger.log("Highscores read from file, filename=" 
+	+ fileName, PriorityLevels.LOW.getValue(), "Highscores");
 		BufferedReader reader;
 		HighScores hs = null;
 		try {
@@ -59,7 +64,8 @@ public final class HighScoresParser {
 	 * @param hs the highscores
 	 */
 	public static void writeHighScores(String fileName, HighScores hs) {
-		logger.log("Higscores written to file, filename=" + fileName, PriorityLevels.LOW.getValue(), "Highscores");
+		logger.log("Higscores written to file, filename=" 
+	+ fileName, PriorityLevels.LOW.getValue(), "Highscores");
 		PrintWriter writer;
 		try {
 			File file = new File(fileName);

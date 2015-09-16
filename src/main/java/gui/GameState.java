@@ -383,7 +383,7 @@ public class GameState extends BasicGameState {
 	
 	private void processCoins(GameContainer container, float deltafloat) {
 		for (Coin coin : droppedCoins) {
-			coin.update(getFloor(), deltafloat, container.getHeight() );
+			coin.update(getFloor(), deltafloat, container.getHeight());
 		}
 	}
 	
@@ -396,25 +396,22 @@ public class GameState extends BasicGameState {
 
 	private void updateShotCircles() {
 		for (BouncingCircle circle : shotList) {
-            // if the circle hasn't been handled
             if (!circle.isDone()) {
             	floatingScoreList.add(new FloatingScore(circle));
-                // remove circle from active list
                 if (circleList.contains(circle)) {
                     circleList.remove(circle);
                     circle.setDone(true);
                     score += circle.getScore();
                 }
-                // if the ball has a radius of 20, split it u
                 ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
                 if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
                 	splits = circle.getSplittedCircles(mg);
                     circleList.addAll(splits);
 					checkBonus(circle);
                 } else {
-                	mg.getLogger().log("Circle with radius 10 shot, no new balls entered the game", PriorityLevels.MEDIUM.getValue(), "BouncingCircles");
+                	mg.getLogger().log("Circle with radius 10 shot, no new balls entered the game", 
+                			PriorityLevels.MEDIUM.getValue(), "BouncingCircles");
                 }
-				// if it was part of the gate reqs, add to new gate reqs
                 for (Gate gate : gateList) {
                 	if (gate.getRequired().contains(circle)) {
                 		gate.getRequired().remove(circle);

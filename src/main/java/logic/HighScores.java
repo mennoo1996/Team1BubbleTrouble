@@ -60,7 +60,8 @@ public class HighScores {
 	 * @param score the score to add
 	 */
 	public void add(Score score) {
-		logger.log("Highscore added, name=" + score.getName() + ", score=" + score.getScore(), PriorityLevels.MEDIUM.getValue(), "Highscores");
+		logger.log("Highscore added, name=" + score.getName() 
+				+ ", score=" + score.getScore(), PriorityLevels.MEDIUM.getValue(), "Highscores");
 		scoreList.add(score);
 	}
 	

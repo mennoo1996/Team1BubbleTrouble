@@ -5,12 +5,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import logic.Logger.PriorityLevels;
+
 /**
  * Class to parse the highscores from/to file.
  * @author Menno
  *
  */
 public final class HighScoresParser {
+	private static Logger logger;
+	
+	public static void setLogger(Logger loggerIn) {
+		logger = loggerIn;
+	}
 	
 	private HighScoresParser() {
 		// do not even call this
@@ -22,11 +29,13 @@ public final class HighScoresParser {
 	 * @return the highscores
 	 */
 	public static HighScores readHighScores(String fileName) {
+		logger.log("Highscores read from file, filename=" + fileName, PriorityLevels.LOW.getValue(), "Highscores");
 		BufferedReader reader;
 		HighScores hs = null;
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
 			hs = new HighScores();
+			hs.setLogger(logger);
 			String line = reader.readLine();
 			while (line != null) {
 				String[] splitted = line.split(",");
@@ -50,6 +59,7 @@ public final class HighScoresParser {
 	 * @param hs the highscores
 	 */
 	public static void writeHighScores(String fileName, HighScores hs) {
+		logger.log("Higscores written to file, filename=" + fileName, PriorityLevels.LOW.getValue(), "Highscores");
 		PrintWriter writer;
 		try {
 			File file = new File(fileName);

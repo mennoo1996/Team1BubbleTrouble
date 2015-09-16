@@ -5,18 +5,6 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import logic.BouncingCircle;
-import logic.Button;
-import logic.Coin;
-import logic.FloatingScore;
-import logic.Gate;
-import logic.LevelContainer;
-import logic.MyRectangle;
-import logic.Player;
-import logic.Powerup;
-import logic.Weapon;
-import logic.WeaponList;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -25,6 +13,19 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import logic.BouncingCircle;
+import logic.Button;
+import logic.Coin;
+import logic.FloatingScore;
+import logic.Gate;
+import logic.LevelContainer;
+import logic.Logger.PriorityLevels;
+import logic.MyRectangle;
+import logic.Player;
+import logic.Powerup;
+import logic.Weapon;
+import logic.WeaponList;
 
 /**
  * This class is the state that we are in during gameplay.
@@ -410,6 +411,8 @@ public class GameState extends BasicGameState {
                 	splits = circle.getSplittedCircles(mg);
                     circleList.addAll(splits);
 					checkBonus(circle);
+                } else {
+                	mg.getLogger().log("Circle with radius 10 shot, no new balls entered the game", PriorityLevels.MEDIUM.getValue(), "BouncingCircles");
                 }
 				// if it was part of the gate reqs, add to new gate reqs
                 for (Gate gate : gateList) {

@@ -107,6 +107,8 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
+		this.logger = new Logger("blabla", true);
+		HighScoresParser.setLogger(logger);
 		this.player1ImageStringN = "Playersprite_Norm.png";
 		this.player1ImageStringA = "Playersprite_Add.png";
 		this.player2ImageStringN = "Player2sprite_Norm.png";
@@ -114,8 +116,11 @@ public class MainGame extends StateBasedGame {
 		this.lifeCount = LIVES;
 		this.setColor(COLOR_ORANGE);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
+		highscores.setLogger(logger);
 		this.multiplayer = false;
-		this.logger = new Logger("blabla", true);
+		
+		
+		
 	}
 
 	/**

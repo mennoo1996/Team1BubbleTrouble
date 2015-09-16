@@ -8,5 +8,3 @@
 5535,Menno
 2000,Mark die won
 1129,Menno
-1050,Mark die verloor
-100,test

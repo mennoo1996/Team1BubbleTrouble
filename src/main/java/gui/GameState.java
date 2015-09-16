@@ -180,7 +180,7 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int POWERUP_CHANCE = 20;
-	private static final int COIN_CHANCE = 100;
+	private static final int COIN_CHANCE = 30;
 	private static final int POWERUP_IMAGE_OFFSET = 12;
 	private static final int COIN_IMAGE_OFFSET = 3;
 	// Level ending, empty bar
@@ -243,7 +243,11 @@ public class GameState extends BasicGameState {
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
 		if (mg.getShouldSwitchState()) {
 			if (RND.getOpacity() > 0.0f) {
-				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
+				int fadeTimer = mg.getOpacityFadeTimer();
+				if (mg.getSwitchState() == -1) {
+					fadeTimer = 2 * 2 * 2 * fadeTimer;
+				}
+				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
 				if (mg.getSwitchState() == -1) {
 					container.exit();
@@ -297,7 +301,7 @@ public class GameState extends BasicGameState {
 			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
 		}
 		setSavedInput(container.getInput());
-		if (playingState) {
+		if (playingState && !mg.getShouldSwitchState()) {
 			// Timer logic
 			long curTime = System.currentTimeMillis();
 			timeDelta = curTime - prevTime;
@@ -335,7 +339,7 @@ public class GameState extends BasicGameState {
 		// if there are no circles required to be shot by a gate, remove said gate
 		updateGateExistence(deltaFloat);
 		// if there are no active circles, process to gameover screen
-
+		processCoins(container, deltaFloat);
 		if (circleList.isEmpty()) {
 			endLevel(sbg);
 		}
@@ -370,12 +374,16 @@ public class GameState extends BasicGameState {
 			} else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				mg.setScore(0);
 				mg.setLevelCounter(0);
-				//sbg.enterState(0);
 				mg.setSwitchState(mg.getStartState());
 			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				mg.setSwitchState(-1);
-				container.exit();
 			}
+		}
+	}
+	
+	private void processCoins(GameContainer container, float deltafloat) {
+		for (Coin coin : droppedCoins) {
+			coin.update(getFloor(), deltafloat, container.getHeight() );
 		}
 	}
 	
@@ -480,10 +488,12 @@ public class GameState extends BasicGameState {
 			if (levelCounter < levels.size() - 1) {
                 waitForLevelEnd = false;
                 mg.setLevelCounter(mg.getLevelCounter() + 1);
-                sbg.enterState(mg.getGameState()); // next level
+                //sbg.enterState(mg.getGameState()); // next level
+                mg.setSwitchState(mg.getGameState());
             } else {
                 waitForLevelEnd = false;
-                sbg.enterState(mg.getGameOverState()); // game completed
+               // sbg.enterState(mg.getGameOverState()); // game completed
+                mg.setSwitchState(mg.getGameOverState());
             }
         }
 	}
@@ -537,8 +547,14 @@ public class GameState extends BasicGameState {
 		RND.text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mg.getLevelCounter() + 1));
+		String renderedScore;
+		if (mg.getShouldSwitchState()) {
+			renderedScore = Integer.toString(mg.getScore());
+		} else {
+			renderedScore = Integer.toString(mg.getScore() + score);
+		}
 		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
-				- SCORE_STRING_Y_DEVIATION, "Score: " + Integer.toString(mg.getScore() + score));
+				- SCORE_STRING_Y_DEVIATION, "Score: " + renderedScore);
 		// Pause overlay and counter
 		if (playingState && countIn) {
 			drawCountIn(container, graphics);
@@ -631,6 +647,7 @@ public class GameState extends BasicGameState {
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		for (Coin coin : droppedCoins) {
+			System.out.println(coin.getX() + " " + coin.getY());
 			RND.drawColor(graphics, coinImageN, coinImageA, 
 					coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
 					mg.getColor());

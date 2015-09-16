@@ -40,17 +40,48 @@ public class Logger {
 	}
 	
 	/**
+	 * Enum of priority levels.
+	 * @author Stefan
+	 *
+	 */
+	public enum PriorityLevels {
+		VERYHIGH(5),
+		HIGH(4),
+		MEDIUM(3),
+		LOW(2),
+		VERYLOW(1);
+		
+		private final int value;
+		
+		/**
+		 * PriorityLevel constructor.
+		 * @param x level of priority
+		 */
+		PriorityLevels(final int x) {
+			value = x;
+		}
+		
+		/**
+		 * 
+		 * @return the value of a prioritylevel
+		 */
+		public int getValue() {
+			return value;
+		}
+	}
+	
+	/**
 	 * Log a given string with a given priority level and a given tag.
 	 * @param logString		- the string to log
 	 * @param priorityLevel	- the priority level of the log
 	 * @param tag			- the tag of the log
 	 */
-	public void log(String logString, int priorityLevel, String tag) {
+	public void log(String logString, Logger.PriorityLevels priorityLevel, String tag) {
 		String timeStamp = getCurrentTimeStamp();
 		String newLogString = timeStamp + " - [" + tag + "|" 
-			+ priorityLevel + "]: " + logString;
+			+ priorityLevel.value + "]: " + logString;
 		
-		if (priorityLevel >= minimumPriorityLevel || (!filterTagOn || tagFilters.contains(tag))) {
+		if (priorityLevel.value >= minimumPriorityLevel || (!filterTagOn || tagFilters.contains(tag))) {
 			if (consoleLoggingOn) {
 				System.out.println(newLogString);
 			}
@@ -84,18 +115,12 @@ public class Logger {
 				FileWriter fileWriter = new FileWriter(file);
 				fileWriter.write(logBuffer);
 				fileWriter.close();
-				this.log("Succesfully wrote log to file", 3, "log I/O");
+				this.log("Succesfully wrote log to file", Logger.PriorityLevels.MEDIUM, "log I/O");
 			} catch (IOException e) {
-				this.log("Could not write logfile", 5, "Error");
+				this.log("Could not write logfile", Logger.PriorityLevels.VERYHIGH, "Error");
 			}
 		}
 		logBuffer = "";
-	}
-	
-	private String getFileName() {
-		if (testing) {
-			return
-		}
 	}
 	
 	private String getCurrentTimeStamp() {

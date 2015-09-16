@@ -5,18 +5,6 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import logic.BouncingCircle;
-import logic.Button;
-import logic.Coin;
-import logic.FloatingScore;
-import logic.Gate;
-import logic.LevelContainer;
-import logic.MyRectangle;
-import logic.Player;
-import logic.Powerup;
-import logic.Weapon;
-import logic.WeaponList;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -26,6 +14,19 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import logic.BouncingCircle;
+import logic.Button;
+import logic.Coin;
+import logic.FloatingScore;
+import logic.Gate;
+import logic.LevelContainer;
+import logic.Logger.PriorityLevels;
+import logic.MyRectangle;
+import logic.Player;
+import logic.Powerup;
+import logic.Weapon;
+import logic.WeaponList;
+
 /**
  * This class is the state that we are in during gameplay.
  * It contains basically all the game logic.
@@ -33,8 +34,6 @@ import org.newdawn.slick.state.StateBasedGame;
  *
  */
 public class GameState extends BasicGameState {
-
-	
 	
 	private  int totaltime;
 	
@@ -205,6 +204,8 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		RND.setOpacity(0.0f);
+		mg.stopSwitchState();
 		// If still shooting stop it
 		random = new Random();
 		mg.getPlayerList().setAllPlayersShot(false);
@@ -233,6 +234,27 @@ public class GameState extends BasicGameState {
 		droppedCoins = new ArrayList<>();
 	}
 	
+	/**
+	 * Exit function for state. Fades out and everything.
+	 * @param container the GameContainer we are running in
+	 * @param sbg the gamestate cont.
+	 * @param delta the deltatime in ms
+	 */
+	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
+		if (mg.getShouldSwitchState()) {
+			if (RND.getOpacity() > 0.0f) {
+				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
+			} else {
+				if (mg.getSwitchState() == -1) {
+					container.exit();
+				} else {
+					mg.getPlayerList().getPlayers().forEach(Player::respawn);
+					mg.getPlayerList().setProcessCollisions(true);
+					sbg.enterState(mg.getSwitchState());
+				}
+			}	
+		}
+	}
 	
 	/**
 	 * load resources when state is initialised.
@@ -271,6 +293,9 @@ public class GameState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 
+		if (RND.getOpacity() < 1.0f && !mg.getShouldSwitchState()) {
+			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
+		}
 		setSavedInput(container.getInput());
 		if (playingState) {
 			// Timer logic
@@ -294,6 +319,7 @@ public class GameState extends BasicGameState {
 			}
 			processPauseButtons(container, sbg);
 		}
+		exit(container, sbg, delta);
 	}
 
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
@@ -335,7 +361,7 @@ public class GameState extends BasicGameState {
 
 	private void processPauseButtons(GameContainer container, StateBasedGame sbg) {
 		Input input = container.getInput();
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mg.getShouldSwitchState()) {
 			if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY()) 
 					&& !waitEsc) {
 				prevTime = System.currentTimeMillis();
@@ -344,8 +370,10 @@ public class GameState extends BasicGameState {
 			} else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				mg.setScore(0);
 				mg.setLevelCounter(0);
-				sbg.enterState(0);
+				//sbg.enterState(0);
+				mg.setSwitchState(mg.getStartState());
 			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+				mg.setSwitchState(-1);
 				container.exit();
 			}
 		}
@@ -360,23 +388,23 @@ public class GameState extends BasicGameState {
 
 	private void updateShotCircles() {
 		for (BouncingCircle circle : shotList) {
-            // if the circle hasn't been handled
-            if (!circle.isDone()) {
+            if (!circle.isDone()) { // if the circle hasn't been handled
             	floatingScoreList.add(new FloatingScore(circle));
                 // remove circle from active list
                 if (circleList.contains(circle)) {
                     circleList.remove(circle);
                     circle.setDone(true);
                     score += circle.getScore();
-                }
-                // if the ball has a radius of 20, split it u
+                } // if the ball has a radius of 20, split it u
                 ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
                 if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
                 	splits = circle.getSplittedCircles(mg);
                     circleList.addAll(splits);
 					checkBonus(circle);
-                }
-				// if it was part of the gate reqs, add to new gate reqs
+                } else {
+                	mg.getLogger().log("Circle with radius 10 shot, no new balls entered the game", 
+                			PriorityLevels.MEDIUM, "BouncingCircles");
+                } // if it was part of the gate reqs, add to new gate reqs
                 for (Gate gate : gateList) {
                 	if (gate.getRequired().contains(circle)) {
                 		gate.getRequired().remove(circle);
@@ -726,6 +754,10 @@ public class GameState extends BasicGameState {
 		RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game is paused...");
 		RND.text(graphics, TEXT_X, TEXT_2_Y, "========================");
 		Input input = container.getInput();
+		drawMouseOvers(input, graphics);
+	}
+	
+	private void drawMouseOvers(Input input, Graphics graphics) {
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
 					returnButton.getImageMouseOverA(), returnButton.getX(), returnButton.getY(), 
@@ -749,7 +781,7 @@ public class GameState extends BasicGameState {
 		} else {
 			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
 					exitButton.getX(), exitButton.getY(), mg.getColor());
-		}
+		}		
 	}
 
 	private void drawCountIn(GameContainer container, Graphics graphics) {

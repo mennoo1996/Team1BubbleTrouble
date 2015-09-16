@@ -84,8 +84,36 @@ public class SettingsState extends BasicGameState {
 		this.mg = mg;
 	}
 	
+	/**
+	 * setup all variables when entering this state.
+	 * @param container the Container this state is part of
+	 * @param arg1 The statebasedgame this state is part of
+	 * @throws SlickException sometimes.
+	 */
 	@Override
-	public void enter(GameContainer container, StateBasedGame arg1) {
+	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		RND.setOpacity(0.0f);
+		mg.stopSwitchState();
+	}
+	
+	/**
+	 * Exit function for state. Fades out and everything.
+	 * @param container the GameContainer we are running in
+	 * @param sbg the gamestate cont.
+	 * @param delta the deltatime in ms
+	 */
+	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
+		if (mg.getShouldSwitchState()) {
+			if (RND.getOpacity() > 0.0f) {
+				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
+			} else {
+				if (mg.getSwitchState() == -1) {
+					container.exit();
+				} else {
+					sbg.enterState(mg.getSwitchState());
+				}
+			}	
+		}
 	}
 	
 	/**
@@ -131,8 +159,11 @@ public class SettingsState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta) 
 			throws SlickException {
 		input = container.getInput();
+		if (RND.getOpacity() < 1.0f && !mg.getShouldSwitchState()) {
+			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
+		}
 		
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mg.getShouldSwitchState()) {
 			if (mannetje1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 				mg.setPlayer1ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
 				mg.getPlayerList().setPlayerImage(0, mg.getPlayer1ImageStringN(), 
@@ -150,10 +181,10 @@ public class SettingsState extends BasicGameState {
 				mg.getPlayerList().setPlayerImage(1, mg.getPlayer2ImageStringN(), 
 						mg.getPlayer2ImageStringA());
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-				sbg.enterState(0);
+				mg.setSwitchState(mg.getStartState());
 			}
 		}
-		
+		exit(container, sbg, delta);
 	}
 
 	/**
@@ -228,6 +259,10 @@ public class SettingsState extends BasicGameState {
 					returnButton.getX(), returnButton.getY(), mg.getColor());
 		}
 
+		drawSprites2(graphics);
+	}
+	
+	private void drawSprites2(Graphics graphics) {
 		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
 				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mg.getColor());
 		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
@@ -237,7 +272,6 @@ public class SettingsState extends BasicGameState {
 				mannetje2Rectangle.getX(), mannetje2Rectangle.getY(), mg.getColor());
 		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
 				arie2Rectangle.getX(), arie2Rectangle.getY(), mg.getColor());
-
 	}
 
 

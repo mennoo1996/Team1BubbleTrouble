@@ -2,6 +2,8 @@ package logic;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import logic.Logger.PriorityLevels;
+
 /**
  * Class for the highscores in the game.
  * @author Menno
@@ -11,6 +13,7 @@ public class HighScores {
 	
 	private ArrayList<Score> scoreList;
 	private static final int MAX_HIGHSCORES = 10;
+	private Logger logger;
 	
 	/**
 	 * Construct a new HighScores object. 
@@ -18,6 +21,8 @@ public class HighScores {
 	public HighScores() {
 		scoreList = new ArrayList<Score>();
 	}
+	
+	
 	
 	/**
 	 * Print the current highscores.
@@ -55,6 +60,8 @@ public class HighScores {
 	 * @param score the score to add
 	 */
 	public void add(Score score) {
+		logger.log("Highscore added, name=" + score.getName() + ", score=" + score.getScore(), 
+				PriorityLevels.MEDIUM, "Highscores");
 		scoreList.add(score);
 	}
 	
@@ -69,6 +76,24 @@ public class HighScores {
 				scoreList.remove(i);
 			}
 		}
+	}
+
+
+
+	/**
+	 * @return the logger
+	 */
+	public Logger getLogger() {
+		return logger;
+	}
+
+
+
+	/**
+	 * @param logger the logger to set
+	 */
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 	
 }

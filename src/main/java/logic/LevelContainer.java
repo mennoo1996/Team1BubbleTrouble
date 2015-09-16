@@ -3,6 +3,8 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
+import logic.Logger.PriorityLevels;
+
 import org.newdawn.slick.GameContainer;
 
 /**
@@ -58,6 +60,9 @@ public class LevelContainer {
 	
 	private static boolean testing = false;
 	
+	//Logger
+	private Logger logger;
+	
 	/**
 	 * Initialize the container.
 	 * @param mg the MainGame that uses this LevelContainer.
@@ -66,6 +71,7 @@ public class LevelContainer {
 		this.mg = mg;
 		this.container = mg.getContainer();
 		this.levels = new ArrayList<Level>();
+		this.logger = mg.getLogger();
 	}
 	
 	/**
@@ -91,6 +97,7 @@ public class LevelContainer {
 		res.addAll(initializeLevels3());
 		res.addAll(initializeLevels4());
 		res.addAll(initializeLevels5());
+		logger.log("Levels are initialized", PriorityLevels.HIGH, "LevelContainer");
 		return res;
 	}
 	

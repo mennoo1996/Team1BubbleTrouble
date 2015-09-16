@@ -77,10 +77,13 @@ public class MainGame extends StateBasedGame {
 	private GameState gameStateState;
 	private Logger logger;
 	
+	private boolean shouldSwitchState = false;
+	private int switchState = 0;
 	
 	private static AppGameContainer app;
 	private GameContainer container;
 	
+	private static final int OPACITY_FADE_TIMER = 150;
 	private static final int TARGET_FRAMERATE = 60;
 	private static final float DEFAULT_GRAVITY = 500f;
 	private static final float DEFAULT_STARTING_SPEED = 200f;
@@ -104,6 +107,8 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
+		this.logger = new Logger(true);
+		HighScoresParser.setLogger(logger);
 		this.player1ImageStringN = "Playersprite_Norm.png";
 		this.player1ImageStringA = "Playersprite_Add.png";
 		this.player2ImageStringN = "Player2sprite_Norm.png";
@@ -111,8 +116,8 @@ public class MainGame extends StateBasedGame {
 		this.lifeCount = LIVES;
 		this.setColor(COLOR_ORANGE);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
+		highscores.setLogger(logger);
 		this.multiplayer = false;
-		this.logger = new Logger(true);
 	}
 
 	/**
@@ -213,22 +218,34 @@ public class MainGame extends StateBasedGame {
 		this.container = container;
 		
 		this.gameStateState = new GameState(this);
-		logger.log("GameState initialized", 1, "States");
+		logger.log("GameState initialized", Logger.PriorityLevels.LOW, "States");
 		
 		this.addState(new StartState(this));
-		logger.log("Startstate initialized and added", 1, "States");
+		logger.log("Startstate initialized and added", Logger.PriorityLevels.LOW, "States");
 		
 		this.addState(gameStateState);
-		logger.log("GameState added", 1, "States");
+		logger.log("GameState added", Logger.PriorityLevels.LOW, "States");
 		
 		this.addState(new GameOverState(this));
-		logger.log("GameOverState initialized and added", 1, "States");
+		logger.log("GameOverState initialized and added", Logger.PriorityLevels.LOW, "States");
 		
 		this.addState(new SettingsState(this));
-		logger.log("Settingsstate initialized and added", 1, "States");
+		logger.log("Settingsstate initialized and added", Logger.PriorityLevels.LOW, "States");
 		
 		logger.writeToFile();
 		
+		initImages();
+		initPlayers();
+		Calendar cal = Calendar.getInstance();
+		this.currentDate = cal.get(Calendar.DATE) 
+				+ "/" + cal.get(Calendar.MONTH) 
+				+ "/" + cal.get(Calendar.YEAR);
+		
+		this.enterState(START_STATE);
+	
+	}
+	
+	private void initImages() throws SlickException {
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
@@ -240,14 +257,6 @@ public class MainGame extends StateBasedGame {
 				"resources/images_Font/dosfont_Norm.png"));
 		RND.setFont_Additive(new AngelCodeFont("resources/images_Font/dosfont.fnt",
 				"resources/images_Font/dosfont_Add.png"));
-		initPlayers();
-		Calendar cal = Calendar.getInstance();
-		this.currentDate = cal.get(Calendar.DATE) 
-				+ "/" + cal.get(Calendar.MONTH) 
-				+ "/" + cal.get(Calendar.YEAR);
-		
-		this.enterState(START_STATE);
-	
 	}
 	
 	private void initPlayers() throws SlickException {
@@ -748,6 +757,43 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setLogger(Logger logger) {
 		this.logger = logger;
+	}
+	
+	/**
+	 * @return the opacity fade timer, which should be used for scene transitions.
+	 */
+	public int getOpacityFadeTimer() {
+		return OPACITY_FADE_TIMER;
+	}
+	
+	/**
+	 * Force game to switch state.
+	 * @param state to switch to
+	 */
+	public void setSwitchState(int state) {
+		shouldSwitchState = true;
+		switchState = state;
+	}
+	
+	/**
+	 * Force game to stop switching state.
+	 */
+	public void stopSwitchState() {
+		shouldSwitchState = false;
+	}
+	
+	/**
+	 * @return whether game should switch state.
+	 */
+	public boolean getShouldSwitchState() {
+		return shouldSwitchState;
+	}
+	
+	/**
+	 * @return the state the game is switching to.
+	 */
+	public int getSwitchState() {
+		return switchState;
 	}
 	
 }

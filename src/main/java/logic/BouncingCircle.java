@@ -4,6 +4,8 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
+import logic.Logger.PriorityLevels;
+
 import org.newdawn.slick.geom.Circle;
 
 /**
@@ -50,6 +52,7 @@ public class BouncingCircle extends Circle {
 	private float gravity;
 	private boolean done;
 	private boolean hitCeiling;
+	private Logger logger;
 
 	/**
 	 * 
@@ -126,10 +129,13 @@ public class BouncingCircle extends Circle {
 	 * @return an arraylist with the splitted circles
 	 */
 	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mg) {
+		logger = mg.getLogger();
+		logger.log("Circle with radius " + radius + " shot, two circles with radius " 
+				+ getNewRadius() + " entered the game", PriorityLevels.MEDIUM,
+				"BouncingCircles");
 		if (radius == MINIMUM_RADIUS) {
 			return null;
 		}
-		
 		ArrayList<BouncingCircle> res = new ArrayList<BouncingCircle>();
 		
 		float newYSpeed = ySpeed;
@@ -140,9 +146,10 @@ public class BouncingCircle extends Circle {
 		
 		// bonus speed when hit at the right moment
 		if (newYSpeed < BONUS_SPEED_FACTOR * radius) {
+			logger.log("New balls aquired bonus speed",
+					PriorityLevels.VERYLOW, "BouncingCircles");
 			newYSpeed -= BONUS_SPEED;
 		}
-		
 		// add new balls to the active list
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed,
 				newYSpeed, mg.getGravity()));

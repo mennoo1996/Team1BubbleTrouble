@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import logic.Logger.PriorityLevels;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
@@ -34,15 +36,17 @@ public class Player {
 	private SpriteSheet spritesheetA;
 	private boolean freeToRoam;
 	private MainGame mg;
+	private Logger logger;
 	private GameState gs;
 	private Gate intersectingGate;
+	private boolean stoodStillOnLastUpdate = false;
 	// weapon management
 	private LinkedList<Powerup.PowerupType> weapons;
 	private boolean shot;
 	private int playerNumber;
 	private final float startX;
 	private final float startY;
-
+	private String lastLogMove = "";
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final int PLAYER1_X_DEVIATION = 720;
@@ -86,6 +90,7 @@ public class Player {
 		this.spritesheetN = new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.spritesheetA = new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mg = mg;
+		this.logger = mg.getLogger();
 		this.gs = (GameState) mg.getState(mg.getGameState());
 		moveLeftKey = Input.KEY_LEFT;
 		moveRightKey = Input.KEY_RIGHT;
@@ -108,7 +113,7 @@ public class Player {
 		if (!gs.isPaused() && shieldTimeRemaining > 0) {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
-		System.out.println(deltaFloat);
+		//System.out.println(deltaFloat);
 		processGates();
 		processWeapon(deltaFloat, containerHeight, testing);
 		processPlayerMovement(deltaFloat, containerWidth, testing);
@@ -184,39 +189,65 @@ public class Player {
 	}
 	
 	private void processPlayerMovement(float deltaFloat, float containerWidth, boolean testing) {
-		// Walk left when left key pressed and not at left wall OR a gate
 		if (testing) {
 			return;
 		}
+		boolean didWalk = false;
+		// Walk left when left key pressed and not at left wall OR a gate
 		boolean isKeyLeft = gs.getSavedInput().isKeyDown(moveLeftKey);
 		if (isKeyLeft && this.getX() > gs.getLeftWall().getWidth()) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mg.getPlayerSpeed() * deltaFloat);
             	this.movement = 1;
+            	didWalk = true;
+            	stoodStillOnLastUpdate = false;
+            	if (!lastLogMove.equals("left")) {
+            		logger.log("Moving left from position " + this.getCenterX(), 
+            				PriorityLevels.VERYLOW, "Player");
+            		lastLogMove = "left";
+            	}
             }
         }
-
 		// Walk right when right key pressed and not at right wall OR a gate
 		if (gs.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
 				< (containerWidth - gs.getRightWall().getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mg.getPlayerSpeed() * deltaFloat);
         	   this.movement = 2;
+        	   didWalk = true;
+        	   stoodStillOnLastUpdate = false;
+        	   if (!lastLogMove.equals("right")) {
+        		   logger.log("Moving right from position " + this.getCenterX(), 
+        				   PriorityLevels.VERYLOW, "Player");
+
+        		   lastLogMove = "right";
+        	   }
            }
         }
+		
+		if (!didWalk && !stoodStillOnLastUpdate) {
+			stoodStillOnLastUpdate = true;
+			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
+		}
 	}
 
 	private Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
+			logger.log("Shot regular laser from position " + this.getCenterX(), 
+					PriorityLevels.MEDIUM, "Player");
 			return new Weapon(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
+			logger.log("Shot spiky laser from position " + this.getCenterX(), 
+					PriorityLevels.HIGH, "Player");
 			return new Spiky(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
+			logger.log("Shot instant laser from position " + this.getCenterX(), 
+					PriorityLevels.HIGH, "Player");
 			return new InstantLaser(this.getCenterX(),
 					containerHeight - gs.getFloor().getHeight(), mg.getLaserWidth());
 		}

@@ -1,5 +1,8 @@
 package logic;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -10,25 +13,24 @@ import java.util.Date;
  */
 public class Logger {
 
-	private String outputFileName;
 	private boolean loggingOn;
 	private boolean consoleLoggingOn;
 	private boolean fileLoggingOn;
 	private int minimumPriorityLevel;
 	private String[] tagFilters;
 	private boolean filterTagOn;
+	private String logBuffer;
 	
 	
 	/**
 	 * Constructor of the logger.
-	 * @param outputFileName	- the filename to log to
 	 * @param loggingOn			- logging on or of
 	 */
-	public Logger(String outputFileName, boolean loggingOn) {
+	public Logger(boolean loggingOn) {
 		super();
 		System.out.println("\n\nLOGGER INITIALIZED\nLogging On: " + loggingOn + "\n\n");
-		this.outputFileName = outputFileName;
 		this.loggingOn = loggingOn;
+		logBuffer = "";
 	}
 	
 	/**
@@ -41,6 +43,30 @@ public class Logger {
 		String timeStamp = getCurrentTimeStamp();
 		String newLogString = timeStamp + " - [" + tag + "|" + priorityLevel + "]: " + logString;
 		System.out.println(newLogString);
+
+		if (logBuffer.length() != 0) {
+			logBuffer += "\n";
+		}
+		logBuffer += newLogString;	
+	}
+	
+	/**
+	 * Write the logBuffer to a file.
+	 */
+	public void writeToFile() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+	    Date now = new Date();
+	    String strDate = "logs/" + sdf.format(now);
+		File file = new File(strDate);
+		try {
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write(logBuffer);
+			fileWriter.close();
+			this.log("Succesfully wrote log to file", 3, "log I/O");
+		} catch (IOException e) {
+			this.log("Could not write logfile", 5, "Error");
+		}
+		logBuffer = "";
 	}
 	
 	private String getCurrentTimeStamp() {
@@ -50,19 +76,6 @@ public class Logger {
 	    return strDate;
 	}
 	
-	
-	/**
-	 * @return the outputFileName
-	 */
-	public String getOutputFileName() {
-		return outputFileName;
-	}
-	/**
-	 * @param outputFileName the outputFileName to set
-	 */
-	public void setOutputFileName(String outputFileName) {
-		this.outputFileName = outputFileName;
-	}
 	/**
 	 * @return the loggingOn
 	 */
@@ -134,6 +147,20 @@ public class Logger {
 	 */
 	public void setFilterTagOn(boolean filterTagOn) {
 		this.filterTagOn = filterTagOn;
+	}
+
+	/**
+	 * @return the logBuffer
+	 */
+	public String getLogBuffer() {
+		return logBuffer;
+	}
+
+	/**
+	 * @param logBuffer the logBuffer to set
+	 */
+	public void setLogBuffer(String logBuffer) {
+		this.logBuffer = logBuffer;
 	}
 	
 	

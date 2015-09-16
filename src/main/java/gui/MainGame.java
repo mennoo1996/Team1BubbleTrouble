@@ -112,7 +112,7 @@ public class MainGame extends StateBasedGame {
 		this.setColor(COLOR_ORANGE);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
-		this.logger = new Logger("blabla", true);
+		this.logger = new Logger(true);
 	}
 
 	/**
@@ -226,6 +226,8 @@ public class MainGame extends StateBasedGame {
 		
 		this.addState(new SettingsState(this));
 		logger.log("Settingsstate initialized and added", 1, "States");
+		
+		logger.writeToFile();
 		
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");

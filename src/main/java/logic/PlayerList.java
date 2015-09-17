@@ -57,6 +57,7 @@ public class PlayerList {
 		if (mg.isMultiplayer()) {
 			playerList.get(1).update(deltaFloat, containerHeight, containerWidth, false);	
 		}
+		
 	}
 	
 	/**

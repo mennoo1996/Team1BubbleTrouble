@@ -160,16 +160,23 @@ public final class RND {
 	 * @param x location
 	 * @param y location
 	 * @param text to draw
-	 * @param newColor color to set
+	 * @param color color to set
 	 */
 	public static void text(Graphics g, 
-			float x, float y, String text, Color newColor) {
+			float x, float y, String text, Color color) {
+		Color newColor;
 		
-		dosFontN.drawString(x, y, text, new Color(newColor.r, newColor.g, newColor.b, opacity));
-		if (newColor.a == 1.0f) {
+		if (color.a < 1.0f) {
+			newColor = new Color(color.r, color.g, color.b, color.a);
+		} else {
+			newColor = new Color(color.r, color.g, color.b, opacity);
+		}
+		
+		dosFontN.drawString(x, y, text, newColor);
+		if (color.a == 1.0f) {
 			g.setDrawMode(Graphics.MODE_ADD);
 			dosFontA.drawString(x, y, text, 
-					new Color(newColor.r * opacity, newColor.g * opacity, newColor.b * opacity));
+					new Color(color.r * opacity, color.g * opacity, color.b * opacity));
 			g.setDrawMode(Graphics.MODE_NORMAL);
 		}
 		

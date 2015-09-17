@@ -83,7 +83,7 @@ public class MainGame extends StateBasedGame {
 	private static AppGameContainer app;
 	private GameContainer container;
 	
-	private static final int OPACITY_FADE_TIMER = 150;
+	private static final int OPACITY_FADE_TIMER = 200;
 	private static final int TARGET_FRAMERATE = 60;
 	private static final float DEFAULT_GRAVITY = 500f;
 	private static final float DEFAULT_STARTING_SPEED = 200f;

@@ -139,7 +139,6 @@ public class BouncingCircle extends Circle {
 		ArrayList<BouncingCircle> res = new ArrayList<BouncingCircle>();
 		
 		float newYSpeed = ySpeed;
-		// minimum speed = -2
 		if (newYSpeed > MINIMUM_SPEED) {
 			newYSpeed = MINIMUM_SPEED;
 		}
@@ -156,7 +155,6 @@ public class BouncingCircle extends Circle {
 				newYSpeed, mg.getGravity()));
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed,
 				newYSpeed, mg.getGravity()));
-		
 		
 		return res;
 	}

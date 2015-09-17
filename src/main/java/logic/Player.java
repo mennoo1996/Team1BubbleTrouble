@@ -156,7 +156,6 @@ public class Player {
 	private void processCoins(float deltaFloat, float containerHeight) {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		for (Coin coin : gs.getDroppedCoins()) {
-			coin.update(gs.getFloor(), containerHeight, deltaFloat);
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
 				gs.addToScore(coin.getPoints());
@@ -202,7 +201,8 @@ public class Player {
             	didWalk = true;
             	stoodStillOnLastUpdate = false;
             	if (!lastLogMove.equals("left")) {
-            		logger.log("Moving left from position " + this.getCenterX(), PriorityLevels.VERYLOW.getValue(), "Player");
+            		logger.log("Moving left from position " 
+            	+ this.getCenterX(), PriorityLevels.VERYLOW.getValue(), "Player");
             		lastLogMove = "left";
             	}
             }
@@ -216,7 +216,8 @@ public class Player {
         	   didWalk = true;
         	   stoodStillOnLastUpdate = false;
         	   if (!lastLogMove.equals("right")) {
-        		   logger.log("Moving right from position " + this.getCenterX(), PriorityLevels.VERYLOW.getValue(), "Player");
+        		   logger.log("Moving right from position " 
+        	   + this.getCenterX(), PriorityLevels.VERYLOW.getValue(), "Player");
 
         		   lastLogMove = "right";
         	   }
@@ -225,24 +226,28 @@ public class Player {
 		
 		if (!didWalk && !stoodStillOnLastUpdate) {
 			stoodStillOnLastUpdate = true;
-			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW.getValue(), "Player");
+			logger.log("Moved to position " 
+			+ this.getCenterX(), PriorityLevels.LOW.getValue(), "Player");
 		}
 	}
 
 	private Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
-			logger.log("Shot regular laser from position " + this.getCenterX(), PriorityLevels.MEDIUM.getValue(), "Player");
+			logger.log("Shot regular laser from position " 
+		+ this.getCenterX(), PriorityLevels.MEDIUM.getValue(), "Player");
 			return new Weapon(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
-			logger.log("Shot spiky laser from position " + this.getCenterX(), PriorityLevels.HIGH.getValue(), "Player");
+			logger.log("Shot spiky laser from position " 
+		+ this.getCenterX(), PriorityLevels.HIGH.getValue(), "Player");
 			return new Spiky(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
 					mg.getLaserSpeed(), mg.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			logger.log("Shot instant laser from position " + this.getCenterX(), PriorityLevels.HIGH.getValue(), "Player");
+			logger.log("Shot instant laser from position " 
+		+ this.getCenterX(), PriorityLevels.HIGH.getValue(), "Player");
 			return new InstantLaser(this.getCenterX(),
 					containerHeight - gs.getFloor().getHeight(), mg.getLaserWidth());
 		}

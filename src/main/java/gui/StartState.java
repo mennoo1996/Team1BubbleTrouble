@@ -103,7 +103,11 @@ public class StartState extends BasicGameState {
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
 		if (mg.getShouldSwitchState()) {
 			if (RND.getOpacity() > 0.0f) {
-				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
+				int fadeTimer = mg.getOpacityFadeTimer();
+				if (mg.getSwitchState() == -1) {
+					fadeTimer = 2 * 2 * 2 * fadeTimer;
+				}
+				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
 				if (mg.getSwitchState() == -1) {
 					container.exit();

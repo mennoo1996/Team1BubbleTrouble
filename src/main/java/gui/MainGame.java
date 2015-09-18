@@ -6,6 +6,7 @@ import logic.HighScoresParser;
 import logic.Logger;
 import logic.Player;
 import logic.PlayerList;
+import logic.ShutDownHook;
 
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
@@ -75,6 +76,9 @@ public class MainGame extends StateBasedGame {
 	private static final int SETTINGS_STATE = 3;
 	
 	private GameState gameStateState;
+	private SettingsState settingsState;
+	private StartState startState;
+	private GameOverState gameOverState;
 	private Logger logger;
 	
 	private boolean shouldSwitchState = false;
@@ -118,15 +122,18 @@ public class MainGame extends StateBasedGame {
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		highscores.setLogger(logger);
 		this.multiplayer = false;
+		
+		ShutDownHook shutDownHook = new ShutDownHook(this);
+		shutDownHook.attachShutDownHook();
 	}
 	
-	@Override
-	public boolean closeRequested() {
-		logger.log("Exit Requested", Logger.PriorityLevels.VERYHIGH, "System");
-		logger.writeToFile();
-		System.exit(0);
-		return false;
-	}
+//	@Override
+//	public boolean closeRequested() {
+//		logger.log("Exit Requested", Logger.PriorityLevels.VERYHIGH, "System");
+//		logger.writeToFile();
+//		System.exit(0);
+//		return false;
+//	}
 
 	/**
 	 * Get the playerImage_norm.
@@ -823,3 +830,4 @@ public class MainGame extends StateBasedGame {
 	}
 	
 }
+

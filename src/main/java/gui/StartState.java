@@ -18,7 +18,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class StartState extends BasicGameState {
 
 	
-	private MainGame mg;
+	private MainGame mainGame;
 	private Button playButton;
 	private Button play2Button;
 
@@ -46,10 +46,10 @@ public class StartState extends BasicGameState {
 	/**
 	 * constructor.
 	 * 
-	 * @param mg	- the maingame this state belongs to
+	 * @param mainGame	- the maingame this state belongs to
 	 */
-	public StartState(MainGame mg) {
-		this.mg = mg;
+	public StartState(MainGame mainGame) {
+		this.mainGame = mainGame;
 	}
 	
 	/**
@@ -91,9 +91,9 @@ public class StartState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		mg.getLogger().log("Entering StartState", Logger.PriorityLevels.LOW, "States");
+		mainGame.getLogger().log("Entering StartState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
-		mg.stopSwitchState();
+		mainGame.stopSwitchState();
 	}
 	
 	/**
@@ -103,19 +103,19 @@ public class StartState extends BasicGameState {
 	 * @param delta the deltatime in ms
 	 */
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
-		if (mg.getShouldSwitchState()) {
+		if (mainGame.getShouldSwitchState()) {
 			if (RND.getOpacity() > 0.0f) {
-				int fadeTimer = mg.getOpacityFadeTimer();
-				if (mg.getSwitchState() == -1) {
+				int fadeTimer = mainGame.getOpacityFadeTimer();
+				if (mainGame.getSwitchState() == -1) {
 					fadeTimer = 2 * 2 * 2 * fadeTimer;
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
-				mg.getLogger().log("Exiting StartState", Logger.PriorityLevels.LOW, "States");
-				if (mg.getSwitchState() == -1) {
-					mg.closeRequested();
+				mainGame.getLogger().log("Exiting StartState", Logger.PriorityLevels.LOW, "States");
+				if (mainGame.getSwitchState() == -1) {
+					mainGame.closeRequested();
 				} else {
-					sbg.enterState(mg.getSwitchState());
+					sbg.enterState(mainGame.getSwitchState());
 				}
 			}	
 		}
@@ -131,28 +131,28 @@ public class StartState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 		Input input = container.getInput();
-		if (RND.getOpacity() < 1.0f && !mg.getShouldSwitchState()) {
-			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
+		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
 
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mg.getShouldSwitchState()) {
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Go to gamestate in singleplayer
-				mg.setMultiplayer(false);
-				mg.setSwitchState(mg.getGameState());
+				mainGame.setMultiplayer(false);
+				mainGame.setSwitchState(mainGame.getGameState());
 			} 
 			if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Go to gamestate in multiplayer
-				mg.setMultiplayer(true);
-				mg.setSwitchState(mg.getGameState());
+				mainGame.setMultiplayer(true);
+				mainGame.setSwitchState(mainGame.getGameState());
 			} 
 			else if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Go to settingsState
-				mg.setSwitchState(mg.getSettingsState());
+				mainGame.setSwitchState(mainGame.getSettingsState());
 			}
 			else if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				// Quit game
-				mg.setSwitchState(-1);
+				mainGame.setSwitchState(-1);
 			}
 		}
 		exit(container, sbg, delta);
@@ -167,16 +167,16 @@ public class StartState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) 
 			throws SlickException {
-		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		renderButtons(container, graphics);
-		mg.drawWaterMark();
-		RND.drawColor(graphics, mg.getGameLogoN(), mg.getGameLogoA(),
-				LOGO_X, LOGO_Y, mg.getColor());
+		mainGame.drawWaterMark();
+		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
+				LOGO_X, LOGO_Y, mainGame.getColor());
 		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
-		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 	}
 
 	/**
@@ -189,34 +189,34 @@ public class StartState extends BasicGameState {
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, playButton.getImageMouseOverN(), 
 					playButton.getImageMouseOverA(), playButton.getX(), playButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, playButton.getImageN(), playButton.getImageA(),
-					playButton.getX(), playButton.getY(), mg.getColor());
+					playButton.getX(), playButton.getY(), mainGame.getColor());
 		}
 		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, play2Button.getImageMouseOverN(), 
 					play2Button.getImageMouseOverA(), play2Button.getX(), play2Button.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, play2Button.getImageN(), play2Button.getImageA(),
-					play2Button.getX(), play2Button.getY(), mg.getColor());
+					play2Button.getX(), play2Button.getY(), mainGame.getColor());
 		}
 		if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, optionsButton.getImageMouseOverN(), 
 					optionsButton.getImageMouseOverA(), optionsButton.getX(), optionsButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, optionsButton.getImageN(), optionsButton.getImageA(),
-					optionsButton.getX(), optionsButton.getY(), mg.getColor());
+					optionsButton.getX(), optionsButton.getY(), mainGame.getColor());
 		}
 		if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, quitButton.getImageMouseOverN(), 
 					quitButton.getImageMouseOverA(), quitButton.getX(), quitButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, quitButton.getImageN(), quitButton.getImageA(),
-					quitButton.getX(), quitButton.getY(), mg.getColor());
+					quitButton.getX(), quitButton.getY(), mainGame.getColor());
 		}
 	}
 
@@ -230,6 +230,6 @@ public class StartState extends BasicGameState {
 	 * @return the maingame
 	 */
 	public MainGame getMainGame() {
-		return mg;
+		return mainGame;
 	}
 }

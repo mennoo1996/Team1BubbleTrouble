@@ -31,9 +31,22 @@ public class MainGame extends StateBasedGame {
 	private static final int DEFAULT_Y_RES = 1000;
 	
 	private Color color;
+	private Color nextColor;
+	
+	// Game Colors
+	private boolean shuffleColors = false;
+	private static final int COLOR_COUNT = 6;
+	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
-	private static final Color COLOR_GREEN = new Color(0.3f, 1.0f, 0.3f);
-	private static final Color COLOR_BLUE = new Color(0.4f, 0.9f, 1.0f);
+	private static final Color COLOR_GREEN = new Color(0.25f, 0.6f, 0.1f);
+	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
+	private static final Color COLOR_PINK = new Color(0.85f, 0.0f, 0.4f);
+	private static final Color COLOR_WHITE = new Color(0.5f, 0.5f, 0.5f);
+
+	private static final int NUM_3 = 3;
+	private static final int NUM_4 = 4;
+	private static final int NUM_5 = 5;
+	private static final int NUM_6 = 6;
 	
 	private float gravity = DEFAULT_GRAVITY;
 	private float startingSpeed = DEFAULT_STARTING_SPEED;
@@ -50,8 +63,6 @@ public class MainGame extends StateBasedGame {
 	private Image terminalImage;
 	private Image gameLogoN;
 	private Image gameLogoA;
-	private Image laserHorizontalImage;
-	private Image laserVerticalImage;
 	private String player1ImageStringN;
 	private String player1ImageStringA;
 	private String player2ImageStringN;
@@ -119,6 +130,7 @@ public class MainGame extends StateBasedGame {
 		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
 		this.setColor(COLOR_ORANGE);
+		this.setNextColor(COLOR_ORANGE);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		highscores.setLogger(logger);
 		this.multiplayer = false;
@@ -200,6 +212,52 @@ public class MainGame extends StateBasedGame {
 	}
 	
 	/**
+	 * @param shuffle whether to shuffle colors.
+	 */
+	public void shuffleColor(boolean shuffle) {
+		this.shuffleColors = shuffle;
+	}
+	
+	/**
+	 * @param color the next color for the game to use
+	 */
+	public void setNextColor(Color color) {
+		
+		this.nextColor = color;
+	}
+	
+	/**
+	 * Tell the game to update to new color.
+	 */
+	public void switchColor() {
+		this.color = nextColor;
+		if (shuffleColors) { // shuffle
+			switch ((int) Math.round(Math.random() * COLOR_COUNT)) {
+			case 1: if (this.color == COLOR_BLUE) {
+				this.color = COLOR_ORANGE; } else {
+				this.color = COLOR_BLUE; } break;
+			case 2: if (this.color == COLOR_ORANGE) {
+				this.color = COLOR_GREEN; } else {
+				this.color = COLOR_ORANGE; } break;
+			case NUM_3: if (this.color == COLOR_RED) {
+					this.color = COLOR_BLUE; } else {
+					this.color = COLOR_RED; } break;
+			case NUM_4: if (this.color == COLOR_GREEN) {
+					this.color = COLOR_PINK; } else {
+					this.color = COLOR_GREEN; } break;
+			case NUM_5: if (this.color == COLOR_WHITE) {
+					this.color = COLOR_RED; } else {
+					this.color = COLOR_WHITE; } break;
+			case NUM_6: if (this.color == COLOR_PINK) {
+					this.color = COLOR_WHITE; } else {
+					this.color = COLOR_PINK; } break;
+			default: break;
+			}
+		}
+		RND.setColor(color);
+	}
+	
+	/**
 	 * Set the lifeCount.
 	 * @param lifeCount the lifeCount to set
 	 */
@@ -253,8 +311,6 @@ public class MainGame extends StateBasedGame {
 		this.currentDate = cal.get(Calendar.DATE) 
 				+ "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
-		
-		this.enterState(START_STATE);
 	
 	}
 	
@@ -264,8 +320,6 @@ public class MainGame extends StateBasedGame {
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
 		this.gameLogoN = new Image("resources/images_UI/Menu_Logo_Norm.png");
 		this.gameLogoA = new Image("resources/images_UI/Menu_Logo_Add.png");
-		this.laserHorizontalImage = new Image("resources/laser_horizontal.png");
-		this.laserVerticalImage = new Image("resources/laser_vertical.png");
 		RND.setFont_Normal(new AngelCodeFont("resources/images_Font/dosfont.fnt",
 				"resources/images_Font/dosfont_Norm.png"));
 		RND.setFont_Additive(new AngelCodeFont("resources/images_Font/dosfont.fnt",
@@ -509,34 +563,6 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setTerminalImage(Image terminalImage) {
 		this.terminalImage = terminalImage;
-	}
-
-	/**
-	 * @return the laserHorizontalImage
-	 */
-	public Image getLaserHorizontalImage() {
-		return laserHorizontalImage;
-	}
-
-	/**
-	 * @param laserHorizontalImage the laserHorizontalImage to set
-	 */
-	public void setLaserHorizontalImage(Image laserHorizontalImage) {
-		this.laserHorizontalImage = laserHorizontalImage;
-	}
-
-	/**
-	 * @return the laserVerticalImage
-	 */
-	public Image getLaserVerticalImage() {
-		return laserVerticalImage;
-	}
-
-	/**
-	 * @param laserVerticalImage the laserVerticalImage to set
-	 */
-	public void setLaserVerticalImage(Image laserVerticalImage) {
-		this.laserVerticalImage = laserVerticalImage;
 	}
 
 	/**
@@ -784,9 +810,33 @@ public class MainGame extends StateBasedGame {
 	 * @param state to switch to
 	 */
 	public void setSwitchState(int state) {
+		String stateString = "Showing UI-transition to ";
+		switch (state) {
+		case (-1):
+			stateString = "Showing UI-transition to exit application.";
+			break;
+		case (0):
+			stateString += "StartState";
+			break;
+		case (1):
+			stateString += "GameState";
+			break;
+		case (2):
+			stateString += "GameOverState";
+			break;
+		case (2 + 1):
+			stateString += "SettingsState";	
+			break;
+		default:
+			break;
+		}
+		
+		logger.log(stateString, Logger.PriorityLevels.VERYLOW, "GUI");
 		shouldSwitchState = true;
 		switchState = state;
 	}
+	
+	
 	
 	/**
 	 * Force game to stop switching state.

@@ -175,22 +175,6 @@ public class MainGameTest {
 	}
 	
 	@Test
-	public void testLaserHorizontalImage() {
-		Image i = mock(Image.class);
-		MainGame game = new MainGame("hello");
-		game.setLaserHorizontalImage(i);
-		assertEquals(i, game.getLaserHorizontalImage());
-	}
-	
-	@Test
-	public void testLaserVerticalImage() {
-		Image i = mock(Image.class);
-		MainGame game = new MainGame("hello");
-		game.setLaserVerticalImage(i);
-		assertEquals(i, game.getLaserVerticalImage());
-	}
-	
-	@Test
 	public void testScore() {
 		MainGame game = new MainGame("hello");
 		game.setScore(90);

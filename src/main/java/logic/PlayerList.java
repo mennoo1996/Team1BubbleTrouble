@@ -21,7 +21,7 @@ public class PlayerList {
 	private MainGame mainGame;
 	private GameState gameState;
 	
-	private boolean processCollisions = true;
+	private boolean processCollisions;
 	
 	private static final int SPRITE_SHEET_THREE = 3;
 	private static final int SPRITE_SHEET_FOUR = 4;
@@ -44,6 +44,7 @@ public class PlayerList {
 		playerList.add(player1);
 		this.mainGame = mainGame;
 		this.gameState = gameState;
+		processCollisions = true;
 	}
 	
 	/**

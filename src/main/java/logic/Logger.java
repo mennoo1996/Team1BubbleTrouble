@@ -22,6 +22,8 @@ public class Logger {
 	private boolean filterTagOn;
 	private String logBuffer;
 	private boolean filterFile;
+	private boolean testing;
+	private String testingFileName;
 	
 	/**
 	 * Constructor of the logger.
@@ -29,7 +31,7 @@ public class Logger {
 	 */
 	public Logger(boolean loggingOn) {
 		super();
-		System.out.println("\n\nLOGGER INITIALIZED\nLogging On: " + loggingOn + "\n\n");
+		System.out.println("\nLOGGER INITIALIZED\nLogging On: " + loggingOn + "\n");
 		this.loggingOn = loggingOn;
 		logBuffer = "";
 		tagFilters = new ArrayList<String>();
@@ -38,6 +40,8 @@ public class Logger {
 		filterTagOn = false;
 		filterFile = false;
 		consoleLoggingOn = true;
+		testing = false;
+		testingFileName = "logs/testing.txt";
 	}
 	
 	/**
@@ -78,16 +82,21 @@ public class Logger {
 	 * @param tag			- the tag of the log
 	 */
 	public void log(String logString, Logger.PriorityLevels priorityLevel, String tag) {
-		String timeStamp = getCurrentTimeStamp();
-		String newLogString = timeStamp + " - [" + tag + "|" 
-			+ priorityLevel.value + "]: " + logString;
+		String newLogString;
+		if (!testing) {
+			String timeStamp = getCurrentTimeStamp();
+			newLogString = timeStamp + " - [" + tag + "|" 
+					+ priorityLevel.value + "]: " + logString;	
+		} else {
+			newLogString = "[" + tag + "|" 
+					+ priorityLevel.value + "]: " + logString;	
+		}
 		
-		if (priorityLevel.value >= minimumPriorityLevel 
-				|| (!filterTagOn || tagFilters.contains(tag))) {
-			if (consoleLoggingOn) {
+		boolean tagFilter = !filterTagOn || tagFilters.contains(tag);
+		if (priorityLevel.value >= minimumPriorityLevel || tagFilter) {
+			if (consoleLoggingOn && !testing) {
 				System.out.println(newLogString);
 			}
-
 			if (filterFile) {
 				if (logBuffer.length() != 0) {
 					logBuffer += "\n";
@@ -95,7 +104,6 @@ public class Logger {
 				logBuffer += newLogString;	
 			}
 		}
-		
 		if (!filterFile) {
 			if (logBuffer.length() != 0) {
 				logBuffer += "\n";
@@ -109,29 +117,38 @@ public class Logger {
 	 */
 	public void writeToFile() {
 		if (fileLoggingOn) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
-			Date now = new Date();
-			String strDate = "logs/" + sdf.format(now);
-			new File("logs").mkdir();
-			File file = new File(strDate);
+			File file = new File(getFileName());
 			try {
 				FileWriter fileWriter = new FileWriter(file);
 				fileWriter.write(logBuffer);
 				fileWriter.close();
 				this.log("Succesfully wrote log to file", Logger.PriorityLevels.MEDIUM, "log I/O");
 			} catch (IOException e) {
-				e.printStackTrace();
 				this.log("Could not write logfile", Logger.PriorityLevels.VERYHIGH, "Error");
 			}
 		}
 		logBuffer = "";
 	}
 	
-	private String getCurrentTimeStamp() {
+	/**
+	 * Get the current time stamp en a nice format.
+	 * @return	the formatted timestamp
+	 */
+	public String getCurrentTimeStamp() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	    Date now = new Date();
 	    String strDate = sdf.format(now);
 	    return strDate;
+	}
+	
+	private String getFileName() {
+		new File("logs").mkdir();
+		if (testing) {
+			return testingFileName;
+		} else {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+			return "logs/" + sdf.format(new Date()) + ".txt";
+		}
 	}
 	
 	/**
@@ -236,6 +253,34 @@ public class Logger {
 	 */
 	public void setLogBuffer(String logBuffer) {
 		this.logBuffer = logBuffer;
+	}
+
+	/**
+	 * @return the testing
+	 */
+	public boolean isTesting() {
+		return testing;
+	}
+
+	/**
+	 * @param testing the testing to set
+	 */
+	public void setTesting(boolean testing) {
+		this.testing = testing;
+	}
+
+	/**
+	 * @return the testingFileName
+	 */
+	public String getTestingFileName() {
+		return testingFileName;
+	}
+
+	/**
+	 * @param testingFileName the testingFileName to set
+	 */
+	public void setTestingFileName(String testingFileName) {
+		this.testingFileName = testingFileName;
 	}
 	
 	

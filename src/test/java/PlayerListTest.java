@@ -221,4 +221,13 @@ public class PlayerListTest {
 		assertEquals(gs, a.getGameState());
 	}
 	
+	@Test
+	public void testSetAndGetProcessCollisions() {
+		p = new Player(5, 6, 8, 9, i, i, i, i, mg);
+		PlayerList a = new PlayerList(p, mg, gs);
+		assertTrue(a.getProcessCollisions());
+		a.setProcessCollisions(false);
+		assertFalse(a.getProcessCollisions());
+	}
+	
 }

@@ -37,6 +37,7 @@ public class Logger {
 		minimumPriorityLevel = 0;
 		filterTagOn = false;
 		filterFile = false;
+		consoleLoggingOn = true;
 	}
 	
 	/**
@@ -81,7 +82,8 @@ public class Logger {
 		String newLogString = timeStamp + " - [" + tag + "|" 
 			+ priorityLevel.value + "]: " + logString;
 		
-		if (priorityLevel.value >= minimumPriorityLevel || (!filterTagOn || tagFilters.contains(tag))) {
+		if (priorityLevel.value >= minimumPriorityLevel 
+				|| (!filterTagOn || tagFilters.contains(tag))) {
 			if (consoleLoggingOn) {
 				System.out.println(newLogString);
 			}

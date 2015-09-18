@@ -203,7 +203,7 @@ public class GameState extends BasicGameState {
 	 * @throws SlickException sometimes.
 	 */
 	@Override
-	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {		
 		RND.setOpacity(0.0f);
 		mg.stopSwitchState();
 		// If still shooting stop it
@@ -250,7 +250,7 @@ public class GameState extends BasicGameState {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
 				if (mg.getSwitchState() == -1) {
-					container.exit();
+					mg.closeRequested();
 				} else {
 					mg.getPlayerList().getPlayers().forEach(Player::respawn);
 					mg.getPlayerList().setProcessCollisions(true);

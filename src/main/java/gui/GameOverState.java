@@ -169,7 +169,7 @@ public class GameOverState extends BasicGameState {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
 				if (mg.getSwitchState() == -1) {
-					container.exit();
+					mg.closeRequested();
 				} else {
 					sbg.enterState(mg.getSwitchState());
 				}

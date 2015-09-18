@@ -1,4 +1,5 @@
 package gui;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import logic.HighScores;
@@ -119,6 +120,14 @@ public class MainGame extends StateBasedGame {
 		highscores.setLogger(logger);
 		this.multiplayer = false;
 	}
+	
+	@Override
+	public boolean closeRequested() {
+		logger.log("Exit Requested", Logger.PriorityLevels.VERYHIGH, "System");
+		logger.writeToFile();
+		System.exit(0);
+		return false;
+	}
 
 	/**
 	 * Get the playerImage_norm.
@@ -231,8 +240,6 @@ public class MainGame extends StateBasedGame {
 		
 		this.addState(new SettingsState(this));
 		logger.log("Settingsstate initialized and added", Logger.PriorityLevels.LOW, "States");
-		
-		logger.writeToFile();
 		
 		initImages();
 		initPlayers();

@@ -383,7 +383,7 @@ public class GameState extends BasicGameState {
 	
 	private void processCoins(GameContainer container, float deltafloat) {
 		for (Coin coin : droppedCoins) {
-			coin.update(getFloor(), deltafloat, container.getHeight() );
+			coin.update(getFloor(), deltafloat, container.getHeight());
 		}
 	}
 	
@@ -398,7 +398,6 @@ public class GameState extends BasicGameState {
 		for (BouncingCircle circle : shotList) {
             if (!circle.isDone()) { // if the circle hasn't been handled
             	floatingScoreList.add(new FloatingScore(circle));
-                // remove circle from active list
                 if (circleList.contains(circle)) {
                     circleList.remove(circle);
                     circle.setDone(true);

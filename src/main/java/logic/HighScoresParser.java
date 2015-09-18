@@ -16,8 +16,13 @@ public final class HighScoresParser {
 	private static Logger logger;
 	
 	/**
+<<<<<<< HEAD
 	 * Set the logger of this class.
 	 * @param loggerIn	- the logger to set
+=======
+	 * Set a new Logger.
+	 * @param loggerIn logger to set
+>>>>>>> 777ac031ddb3ef462a42be76ea28450614f9aeba
 	 */
 	public static void setLogger(Logger loggerIn) {
 		logger = loggerIn;

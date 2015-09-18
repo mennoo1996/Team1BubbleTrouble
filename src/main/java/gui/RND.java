@@ -160,13 +160,13 @@ public final class RND {
 	 * @param x location
 	 * @param y location
 	 * @param text to draw
-	 * @param newColor color to set
+	 * @param color color to set
 	 */
 	public static void text(Graphics g, 
 			float x, float y, String text, Color color) {
 		Color newColor;
 		
-		if(color.a < 1.0f) {
+		if (color.a < 1.0f) {
 			newColor = new Color(color.r, color.g, color.b, color.a);
 		} else {
 			newColor = new Color(color.r, color.g, color.b, opacity);

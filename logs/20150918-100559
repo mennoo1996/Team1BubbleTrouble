@@ -1,0 +1,30 @@
+2015-09-18 10:05:43.824 - [Highscores|2]: Highscores read from file, filename=resources/highscores.txt
+2015-09-18 10:05:43.827 - [Highscores|3]: Highscore added, name=Bart, score=57781
+2015-09-18 10:05:43.828 - [Highscores|3]: Highscore added, name= Bart, score=48652
+2015-09-18 10:05:43.828 - [Highscores|3]: Highscore added, name=Menno, score=19467
+2015-09-18 10:05:43.828 - [Highscores|3]: Highscore added, name=Die gozer die beter dan jij was. Bart., score=14774
+2015-09-18 10:05:43.828 - [Highscores|3]: Highscore added, name=Mark, score=11745
+2015-09-18 10:05:43.828 - [Highscores|3]: Highscore added, name=dusss, score=9313
+2015-09-18 10:05:43.829 - [Highscores|3]: Highscore added, name=Menno, score=7702
+2015-09-18 10:05:43.829 - [Highscores|3]: Highscore added, name=Menno, score=5535
+2015-09-18 10:05:43.829 - [Highscores|3]: Highscore added, name=Mark die won, score=2000
+2015-09-18 10:05:43.829 - [Highscores|3]: Highscore added, name=Menno, score=1129
+2015-09-18 10:05:44.333 - [States|2]: GameState initialized
+2015-09-18 10:05:44.334 - [States|2]: Startstate initialized and added
+2015-09-18 10:05:44.334 - [States|2]: GameState added
+2015-09-18 10:05:44.335 - [States|2]: GameOverState initialized and added
+2015-09-18 10:05:44.335 - [States|2]: Settingsstate initialized and added
+2015-09-18 10:05:48.956 - [LevelContainer|4]: Levels are initialized
+2015-09-18 10:05:51.989 - [Player|1]: Moving left from position 743.6
+2015-09-18 10:05:52.768 - [Player|3]: Shot regular laser from position 436.40012
+2015-09-18 10:05:52.785 - [Player|2]: Moved to position 429.60013
+2015-09-18 10:05:53.087 - [BouncingCircles|3]: Circle with radius 30.0 shot, two circles with radius 20.0 entered the game
+2015-09-18 10:05:53.087 - [BouncingCircles|1]: New balls aquired bonus speed
+2015-09-18 10:05:53.235 - [Player|1]: Moving right from position 436.40012
+2015-09-18 10:05:53.653 - [Player|2]: Moved to position 596.7999
+2015-09-18 10:05:54.989 - [Player|1]: Moving left from position 589.99994
+2015-09-18 10:05:55.289 - [Player|2]: Moved to position 476.79996
+2015-09-18 10:05:55.873 - [Player|1]: Moving right from position 483.59995
+2015-09-18 10:05:56.041 - [Player|2]: Moved to position 543.9999
+2015-09-18 10:05:56.782 - [LevelContainer|4]: Levels are initialized
+2015-09-18 10:05:59.239 - [System|5]: Exit Requested

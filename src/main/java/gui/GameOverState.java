@@ -1,6 +1,7 @@
 package gui;
 import logic.Button;
 import logic.HighScoresParser;
+import logic.Logger;
 import logic.Score;
 
 import org.newdawn.slick.GameContainer;
@@ -140,6 +141,7 @@ public class GameOverState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
+		mg.getLogger().log("Entering GameOverState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mg.stopSwitchState();
 		tf = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
@@ -168,6 +170,7 @@ public class GameOverState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
+				mg.getLogger().log("Exiting GameOverState", Logger.PriorityLevels.LOW, "States");
 				if (mg.getSwitchState() == -1) {
 					mg.closeRequested();
 				} else {

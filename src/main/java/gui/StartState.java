@@ -1,5 +1,6 @@
 package gui;
 import logic.Button;
+import logic.Logger;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -90,6 +91,7 @@ public class StartState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		mg.getLogger().log("Entering StartState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mg.stopSwitchState();
 	}
@@ -109,6 +111,7 @@ public class StartState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
+				mg.getLogger().log("Exiting StartState", Logger.PriorityLevels.LOW, "States");
 				if (mg.getSwitchState() == -1) {
 					mg.closeRequested();
 				} else {

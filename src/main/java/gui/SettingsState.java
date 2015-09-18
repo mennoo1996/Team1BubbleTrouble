@@ -1,5 +1,6 @@
 package gui;
 import logic.Button;
+import logic.Logger;
 import logic.MyRectangle;
 
 import org.newdawn.slick.GameContainer;
@@ -92,6 +93,8 @@ public class SettingsState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+		mg.getLogger().log("Entering SettingsState", 
+				Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mg.stopSwitchState();
 	}
@@ -107,6 +110,7 @@ public class SettingsState extends BasicGameState {
 			if (RND.getOpacity() > 0.0f) {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / mg.getOpacityFadeTimer());
 			} else {
+				mg.getLogger().log("Exiting SettingsState", Logger.PriorityLevels.LOW, "States");
 				if (mg.getSwitchState() == -1) {
 					container.exit();
 				} else {

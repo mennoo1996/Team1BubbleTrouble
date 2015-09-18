@@ -20,6 +20,7 @@ import logic.Coin;
 import logic.FloatingScore;
 import logic.Gate;
 import logic.LevelContainer;
+import logic.Logger;
 import logic.Logger.PriorityLevels;
 import logic.MyRectangle;
 import logic.Player;
@@ -204,6 +205,7 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {		
+		mg.getLogger().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mg.stopSwitchState();
 		// If still shooting stop it
@@ -249,6 +251,7 @@ public class GameState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
+				mg.getLogger().log("Exiting GameState", Logger.PriorityLevels.LOW, "States");
 				if (mg.getSwitchState() == -1) {
 					mg.closeRequested();
 				} else {
@@ -646,7 +649,6 @@ public class GameState extends BasicGameState {
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		for (Coin coin : droppedCoins) {
-			System.out.println(coin.getX() + " " + coin.getY());
 			RND.drawColor(graphics, coinImageN, coinImageA, 
 					coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
 					mg.getColor());

@@ -1,5 +1,4 @@
 package gui;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import logic.HighScores;
@@ -247,8 +246,6 @@ public class MainGame extends StateBasedGame {
 		this.currentDate = cal.get(Calendar.DATE) 
 				+ "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
-		
-		this.enterState(START_STATE);
 	
 	}
 	
@@ -778,6 +775,28 @@ public class MainGame extends StateBasedGame {
 	 * @param state to switch to
 	 */
 	public void setSwitchState(int state) {
+		String stateString = "Showing UI-transition to ";
+		switch (state) {
+		case (-1):
+			stateString = "Showing UI-transition to exit application.";
+			break;
+		case (0):
+			stateString += "StartState";
+			break;
+		case (1):
+			stateString += "GameState";
+			break;
+		case (2):
+			stateString += "GameOverState";
+			break;
+		case (2 + 1):
+			stateString += "SettingsState";	
+			break;
+		default:
+			break;
+		}
+		
+		logger.log(stateString, Logger.PriorityLevels.VERYLOW, "GUI");
 		shouldSwitchState = true;
 		switchState = state;
 	}

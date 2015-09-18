@@ -40,6 +40,9 @@ public class StartState extends BasicGameState {
 	private static final int PLAYBUTTON2_Y = 275;
 	private static final int OPTIONSBUTTON_Y = 325;
 	private static final int QUITBUTTON_Y = 375;
+	private static final int HIGHSCORES_X = 800;
+	private static final int HIGHSCORES_Y = 240;
+	
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 	
@@ -175,9 +178,13 @@ public class StartState extends BasicGameState {
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
+		String equalsString = "===================================================================";
+		equalsString += "============";
+		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, equalsString);
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		String highScoresString = mainGame.getHighscores().toString();
+		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 	}
 
 	/**

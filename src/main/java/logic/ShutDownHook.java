@@ -24,10 +24,12 @@ public class ShutDownHook {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				mainGame.getLogger().log("Shutdown requested", Logger.PriorityLevels.HIGH, "shutdown");
+				mainGame.getLogger().log("Shutdown requested", 
+						Logger.PriorityLevels.HIGH, "shutdown");
 				mainGame.getLogger().writeToFile();
 			}
 		});
-		mainGame.getLogger().log("Shutdown hook attacked", Logger.PriorityLevels.MEDIUM, "shutdown");
+		mainGame.getLogger().log("Shutdown hook attacked", 
+				Logger.PriorityLevels.MEDIUM, "shutdown");
 	}
 }

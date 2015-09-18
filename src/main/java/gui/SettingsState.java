@@ -33,7 +33,7 @@ public class SettingsState extends BasicGameState {
 	// Game Colors
 	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
-	private static final Color COLOR_GREEN = new Color(0.2f, 0.7f, 0.1f);
+	private static final Color COLOR_GREEN = new Color(0.25f, 0.6f, 0.1f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
 	private static final Color COLOR_PINK = new Color(0.85f, 0.0f, 0.4f);
 	private static final Color COLOR_WHITE = new Color(0.5f, 0.5f, 0.5f);

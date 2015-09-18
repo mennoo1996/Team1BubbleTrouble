@@ -38,7 +38,7 @@ public class MainGame extends StateBasedGame {
 	private static final int COLOR_COUNT = 6;
 	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
-	private static final Color COLOR_GREEN = new Color(0.2f, 0.7f, 0.1f);
+	private static final Color COLOR_GREEN = new Color(0.25f, 0.6f, 0.1f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
 	private static final Color COLOR_PINK = new Color(0.85f, 0.0f, 0.4f);
 	private static final Color COLOR_WHITE = new Color(0.5f, 0.5f, 0.5f);
@@ -47,7 +47,6 @@ public class MainGame extends StateBasedGame {
 	private static final int NUM_4 = 4;
 	private static final int NUM_5 = 5;
 	private static final int NUM_6 = 6;
-	private static final int NUM_7 = 7;
 	
 	private float gravity = DEFAULT_GRAVITY;
 	private float startingSpeed = DEFAULT_STARTING_SPEED;

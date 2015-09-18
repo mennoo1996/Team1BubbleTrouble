@@ -26,7 +26,7 @@ public class LoggerTest {
 	@Test
 	public void testPriorityLevelsHigh() {
 		assertEquals(4, Logger.PriorityLevels.HIGH.getValue());
-		assertEquals(4, Logger.PriorityLevels.VERYHIGH.getValue());
+		assertEquals(5, Logger.PriorityLevels.VERYHIGH.getValue());
 	}
 	
 	@Test

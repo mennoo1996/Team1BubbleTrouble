@@ -356,6 +356,13 @@ public class BouncingCircle extends Circle {
 	public void setHitCeiling(boolean hitCeiling) {
 		this.hitCeiling = hitCeiling;
 	}
+
+	/**
+	 * @param logger the logger to set
+	 */
+	public void setLogger(Logger logger) {
+		this.logger = logger;
+	}
 	
 	
 	

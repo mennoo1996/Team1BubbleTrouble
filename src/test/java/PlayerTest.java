@@ -12,6 +12,7 @@ import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Gate;
+import logic.Logger;
 import logic.MyRectangle;
 import logic.Player;
 import logic.Powerup;
@@ -360,6 +361,7 @@ public class PlayerTest {
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
 		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
 		Coin coin = new Coin(100,100,true);
@@ -405,6 +407,7 @@ public class PlayerTest {
 		Weapon w = new Weapon(1,1,1,1);
 		WeaponList wl = new WeaponList(w, mg, gs, true);
 		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
 		Coin coin = new Coin(100,100,true);

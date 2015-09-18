@@ -9,6 +9,7 @@ import gui.MainGame;
 import java.util.ArrayList;
 
 import logic.BouncingCircle;
+import logic.Logger;
 import logic.Player;
 import logic.PlayerList;
 import logic.Weapon;
@@ -43,6 +44,7 @@ public class WeaponListTest {
 		gs = new GameState(mg);
 		
 		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
 
 		w = new Weapon(1, 2, 3, 4);
 		wl = new WeaponList(w,mg,gs, true);

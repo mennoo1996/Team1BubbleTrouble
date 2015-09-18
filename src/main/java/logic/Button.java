@@ -15,7 +15,7 @@ public class Button {
 	private Image imageA;
 	private Image imageMouseoverN;
 	private Image imageMouseoverA;
-	
+
 	private static final float HALF = 0.5f;
 	
 	/**
@@ -200,5 +200,25 @@ public class Button {
 		this.imageMouseoverN = imageN;
 		this.imageMouseoverA = imageA;
 	}
-	
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Button) {
+			Button that = (Button) other;
+			if (this.getX() == that.getX()
+					&& this.getY() == that.getY()
+					&& this.getWidth() == that.getWidth()
+					&& this.getHeight() == that.getHeight()
+					&& this.getImageN() == that.getImageN()
+					&& this.getImageA() == that.getImageA()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return 0;
+	}
 }

@@ -97,6 +97,7 @@ public class BouncingCircle extends Circle {
 		// When ball hits ceiling
 		if (this.getMinY() <= gameState.getCeiling().getHeight()) {
 			this.hitCeiling = true;
+			logger.log("circles hitted ceiling", Logger.PriorityLevels.LOW, "circles");
 		}
 		handleXCalculations(gameState, containerWidth, deltaFloat);
 	}
@@ -354,6 +355,13 @@ public class BouncingCircle extends Circle {
 	 */
 	public void setHitCeiling(boolean hitCeiling) {
 		this.hitCeiling = hitCeiling;
+	}
+
+	/**
+	 * @param logger the logger to set
+	 */
+	public void setLogger(Logger logger) {
+		this.logger = logger;
 	}
 	
 	

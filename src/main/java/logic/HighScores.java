@@ -84,6 +84,8 @@ public class HighScores {
 				scoreList.remove(i);
 			}
 		}
+		
+		logger.log("Highscore list sorted", Logger.PriorityLevels.VERYLOW, "Highscores");
 	}
 
 

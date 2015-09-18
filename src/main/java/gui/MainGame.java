@@ -138,14 +138,6 @@ public class MainGame extends StateBasedGame {
 		ShutDownHook shutDownHook = new ShutDownHook(this);
 		shutDownHook.attachShutDownHook();
 	}
-	
-//	@Override
-//	public boolean closeRequested() {
-//		logger.log("Exit Requested", Logger.PriorityLevels.VERYHIGH, "System");
-//		logger.writeToFile();
-//		System.exit(0);
-//		return false;
-//	}
 
 	/**
 	 * Get the playerImage_norm.
@@ -254,6 +246,8 @@ public class MainGame extends StateBasedGame {
 			default: break;
 			}
 		}
+		String logString = "Color changed to " + color.toString();
+		logger.log(logString, Logger.PriorityLevels.MEDIUM, "color");
 		RND.setColor(color);
 	}
 	
@@ -735,11 +729,6 @@ public class MainGame extends StateBasedGame {
 	 * Draws version number, fps, and other info.
 	 */
 	public void drawWaterMark() {
-//		dosFontN.drawString(VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION, 
-//				"#Version 1.0"  
-//				+ " #Date: " + currentDate
-//				+ " #fps: " + Integer.toString(getFpsInGame())
-//				);
 		RND.text(app.getGraphics(), VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION,
 				"#Version 1.0" + " #Date: " + currentDate 
 				+ " #fps: " + Integer.toString(getFpsInGame()));

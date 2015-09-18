@@ -168,6 +168,8 @@ public class Player {
 				gameState.addToScore(coin.getPoints());
 				gameState.getFloatingScores().add(new FloatingScore(coin));
 				usedCoins.add(coin);
+				mainGame.getLogger().log("Picked up coin", 
+						Logger.PriorityLevels.MEDIUM, "powerups");
 			}
 		}
 
@@ -435,12 +437,18 @@ public class Player {
 	public void addPowerup(Powerup.PowerupType type) {
 		if (type == Powerup.PowerupType.INSTANT) {
 			addWeapon(type);
+			mainGame.getLogger().log("Added powerup instant", 
+					Logger.PriorityLevels.MEDIUM, "powerups");
 		}
 		if (type == Powerup.PowerupType.SHIELD) {
 			addShield();
+			mainGame.getLogger().log("Added powerup shield", 
+					Logger.PriorityLevels.MEDIUM, "powerups");
 		}
 		if (type == Powerup.PowerupType.SPIKY) {
 			addWeapon(type);
+			mainGame.getLogger().log("Added powerup spiky", 
+					Logger.PriorityLevels.MEDIUM, "powerups");
 		}
 	}
 

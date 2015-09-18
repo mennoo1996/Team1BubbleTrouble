@@ -196,32 +196,44 @@ public class GameOverState extends BasicGameState {
 		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
 			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
-			Input input = container.getInput();
-			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
-				if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					// Start over
-					mainGame.resetLifeCount();
-					mainGame.resetLevelCount();
-					mainGame.setScore(0);
-					mainGame.setSwitchState(mainGame.getGameState());
-				} 
-				else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					// Save score
-					saveScore();
-				}
-				else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					// Go to startState
-					mainGame.setScore(0);
-					mainGame.setLevelCounter(0);
-					mainGame.setSwitchState(mainGame.getStartState());
-				}
-				else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					mainGame.setSwitchState(-1);
-				}
-			}
-			handleTextField(input);
-			exit(container, sbg, delta);
+		Input input = container.getInput();
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
+			processButtons(input);
 		}
+		handleTextField(input);
+		exit(container, sbg, delta);
+	}
+	
+	private void processButtons(Input input) {
+		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Start over
+			mainGame.resetLifeCount();
+			mainGame.resetLevelCount();
+			mainGame.setScore(0);
+			mainGame.setSwitchState(mainGame.getGameState());
+			mainGame.getLogger().log("play button clicked", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		} 
+		else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Save score
+			saveScore();
+			mainGame.getLogger().log("save button clicked", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		}
+		else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Go to startState
+			mainGame.setScore(0);
+			mainGame.setLevelCounter(0);
+			mainGame.setSwitchState(mainGame.getStartState());
+			mainGame.getLogger().log("Menu Button clicked", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		}
+		else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			mainGame.setSwitchState(-1);
+			mainGame.getLogger().log("exit button clicked", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		}
+	}
 	
 	private void handleTextField(Input input) {
 		if (textField.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
@@ -373,6 +385,7 @@ public class GameOverState extends BasicGameState {
 		HighScoresParser.writeHighScores(mainGame.getHighscoresFile(), mainGame.getHighscores());
 		inputMessage = "# " + textField.getText() + ", your score of " + mainGame.getScore();
 		inputMessage += " points is saved!";
+		mainGame.getLogger().log("Score saved", Logger.PriorityLevels.MEDIUM, "highscores");
 	}
 	
 	

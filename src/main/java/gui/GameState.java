@@ -298,7 +298,6 @@ public class GameState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
-
 		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
 			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
@@ -307,9 +306,10 @@ public class GameState extends BasicGameState {
 			// Timer logic
 			long curTime = System.currentTimeMillis();
 			timeDelta = curTime - prevTime;
-
 			if (countIn) {
 				if (timeDelta >= COUNT_IN_TIME) {
+					mainGame.getLogger().log("Starting level", 
+							Logger.PriorityLevels.MEDIUM, "levels");
 					countIn = false;
 					prevTime = curTime;
 				}

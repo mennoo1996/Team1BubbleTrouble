@@ -44,7 +44,9 @@ public class BouncingCircleTest {
 	
 	@Test
 	public void testUpdate1() {
-		c = new BouncingCircle(1, 2, 10, 4, 5, 6);GameState gs = mock(GameState.class);
+		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
+		c.setLogger(new Logger(true));
+		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
@@ -62,7 +64,9 @@ public class BouncingCircleTest {
 	
 	@Test
 	public void testUpdate2() {
-		c = new BouncingCircle(30, 2, 10, 4, 5, 6);GameState gs = mock(GameState.class);
+		c = new BouncingCircle(30, 2, 10, 4, 5, 6);
+		GameState gs = mock(GameState.class);
+		c.setLogger(new Logger(true));
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
@@ -80,7 +84,9 @@ public class BouncingCircleTest {
 	
 	@Test
 	public void testUpdate3() {
-		c = new BouncingCircle(30, 2, 10, 4, 5, 6);GameState gs = mock(GameState.class);
+		c = new BouncingCircle(30, 2, 10, 4, 5, 6);
+		c.setLogger(new Logger(true));
+		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
@@ -105,7 +111,9 @@ public class BouncingCircleTest {
 	
 	@Test
 	public void testUpdate4() {
-		c = new BouncingCircle(30, 2, 10, 4, 5, 6);GameState gs = mock(GameState.class);
+		c = new BouncingCircle(30, 2, 10, 4, 5, 6);
+		c.setLogger(new Logger(true));
+		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);

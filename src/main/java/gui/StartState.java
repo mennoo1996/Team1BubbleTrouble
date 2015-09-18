@@ -142,26 +142,38 @@ public class StartState extends BasicGameState {
 		}
 
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
-			if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				// Go to gamestate in singleplayer
-				mainGame.setMultiplayer(false);
-				mainGame.setSwitchState(mainGame.getGameState());
-			} 
-			if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				// Go to gamestate in multiplayer
-				mainGame.setMultiplayer(true);
-				mainGame.setSwitchState(mainGame.getGameState());
-			} 
-			else if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				// Go to settingsState
-				mainGame.setSwitchState(mainGame.getSettingsState());
-			}
-			else if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				// Quit game
-				mainGame.setSwitchState(-1);
-			}
+			processButtons(input);
 		}
 		exit(container, sbg, delta);
+	}
+	
+	private void processButtons(Input input) {
+		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Go to gamestate in singleplayer
+			mainGame.setMultiplayer(false);
+			mainGame.setSwitchState(mainGame.getGameState());
+			mainGame.getLogger().log("Play button pressed", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		} 
+		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Go to gamestate in multiplayer
+			mainGame.setMultiplayer(true);
+			mainGame.setSwitchState(mainGame.getGameState());
+			mainGame.getLogger().log("Play multiplayer button pressed", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		} 
+		else if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Go to settingsState
+			mainGame.setSwitchState(mainGame.getSettingsState());
+			mainGame.getLogger().log("options button pressed", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		}
+		else if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Quit game
+			mainGame.setSwitchState(-1);
+			mainGame.getLogger().log("quit button pressed", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		}
 	}
 
 	/**

@@ -69,6 +69,7 @@ public class PlayerList {
 		if (playerList.size() < 2) {
 			playerList.add(player);
 		}
+		mainGame.getLogger().log("player added", Logger.PriorityLevels.MEDIUM, "players");
 	}
 	
 	/**
@@ -209,11 +210,14 @@ public class PlayerList {
 	 * @param sbg The stateBasedGame that uses this state.
 	 */
 	public void playerDeath(StateBasedGame sbg) {
-		System.out.println("Playerdeath");
+		mainGame.getLogger().log("Player died, reducing lives", 
+				Logger.PriorityLevels.MEDIUM, "players");
 		mainGame.decreaselifeCount();
 		if (mainGame.getLifeCount() <= 0) {
 			mainGame.setScore(mainGame.getScore() + gameState.getScore());
 			mainGame.setSwitchState(mainGame.getGameOverState());
+			mainGame.getLogger().log("Player lives reached 0, game over", 
+					Logger.PriorityLevels.HIGH, "players");
 			//sbg.enterState(mainGame.getGameOverState());
 		} else {
 			//sbg.enterState(mainGame.getGameState());

@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +11,7 @@ import logic.Logger;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 
 public class LoggerTest {
@@ -58,11 +61,24 @@ public class LoggerTest {
 	public void testWriteToFile() {
 		logger.log("testLog", Logger.PriorityLevels.MEDIUM, "testing");
 		logger.writeToFile();
-		Scanner sc = new Scanner("logs/test.txt");
-		String line = sc.nextLine();
-		sc.close();
-		
-		assertEquals(li)
+		try {
+			Scanner sc  = new Scanner(new File("logs/testing.txt"));
+			String line = sc.nextLine();
+			System.out.println(line);
+			assertEquals("[testing|3]: testLog", line);
+			assertEquals(0, logger.getLogBuffer().length());
+			sc.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testWriteToFileException() {
+		ExpectedException exception = ExpectedException.none();
+		exception.expect(FileNotFoundException.class);
+		logger.setTestingFileName("/een/folder/haha/geenfilename");
+		logger.writeToFile();
 	}
 
 	@Test
@@ -140,5 +156,12 @@ public class LoggerTest {
 		assertTrue(logger.isTesting());
 		logger.setTesting(false);
 		assertFalse(logger.isTesting());
+	}
+
+	@Test
+	public void testSetAndGetTestingFileName() {
+		assertEquals("logs/testing.txt", logger.getTestingFileName());
+		logger.setTestingFileName("lalala");
+		assertEquals("lalala", logger.getTestingFileName());
 	}
 }

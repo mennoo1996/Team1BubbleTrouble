@@ -23,6 +23,7 @@ public class Logger {
 	private String logBuffer;
 	private boolean filterFile;
 	private boolean testing;
+	private String testingFileName;
 	
 	/**
 	 * Constructor of the logger.
@@ -40,6 +41,7 @@ public class Logger {
 		filterFile = false;
 		consoleLoggingOn = true;
 		testing = false;
+		testingFileName = "logs/testing.txt";
 	}
 	
 	/**
@@ -124,7 +126,6 @@ public class Logger {
 				fileWriter.close();
 				this.log("Succesfully wrote log to file", Logger.PriorityLevels.MEDIUM, "log I/O");
 			} catch (IOException e) {
-				e.printStackTrace();
 				this.log("Could not write logfile", Logger.PriorityLevels.VERYHIGH, "Error");
 			}
 		}
@@ -143,11 +144,11 @@ public class Logger {
 	}
 	
 	private String getFileName() {
+		new File("logs").mkdir();
 		if (testing) {
-			return "logs/testing.txt";
+			return testingFileName;
 		} else {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
-			new File("logs").mkdir();
 			return "logs/" + sdf.format(new Date()) + ".txt";
 		}
 	}
@@ -268,6 +269,20 @@ public class Logger {
 	 */
 	public void setTesting(boolean testing) {
 		this.testing = testing;
+	}
+
+	/**
+	 * @return the testingFileName
+	 */
+	public String getTestingFileName() {
+		return testingFileName;
+	}
+
+	/**
+	 * @param testingFileName the testingFileName to set
+	 */
+	public void setTestingFileName(String testingFileName) {
+		this.testingFileName = testingFileName;
 	}
 	
 	

@@ -17,8 +17,8 @@ import org.newdawn.slick.SlickException;
 public class WeaponList {
 	
 	private ArrayList<Weapon> weaponList;
-	private MainGame mg;
-	private GameState gs;
+	private MainGame mainGame;
+	private GameState gameState;
 	
 	private static final int LASER_X_DEVIATION = 18;
 	private static final int LASER_TIP_Y_DEVIATION = 14;
@@ -34,16 +34,16 @@ public class WeaponList {
 	/**
 	 * The constructor of weaponlist.
 	 * @param weapon1 	- the first weapon of the list
-	 * @param mg		- the maingame 
-	 * @param gs		- the gamestate
+	 * @param mainGame		- the maingame
+	 * @param gameState		- the gamestate
 	 * @param testing	- testing state or not
 	 */
-	public WeaponList(Weapon weapon1, MainGame mg, GameState gs, boolean testing) {
+	public WeaponList(Weapon weapon1, MainGame mainGame, GameState gameState, boolean testing) {
 		super();
 		this.weaponList = new ArrayList<Weapon>();
 		weaponList.add(weapon1);
-		this.mg = mg;
-		this.gs = gs;
+		this.mainGame = mainGame;
+		this.gameState = gameState;
 		
 		if (!testing) {
 			try {
@@ -61,17 +61,17 @@ public class WeaponList {
 	public void intersectWeaponsWithCircle(BouncingCircle circle) {
 		intersectWeaponWithCircle(circle, 0);
 		
-		if (mg.isMultiplayer()) {
+		if (mainGame.isMultiplayer()) {
 			intersectWeaponWithCircle(circle, 1);
 		}
 	}
 	
 	private void intersectWeaponWithCircle(BouncingCircle circle, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
-		Player player = mg.getPlayerList().getPlayers().get(weaponNumber);
+		Player player = mainGame.getPlayerList().getPlayers().get(weaponNumber);
 		
 		if (player.isShot() && weapon.getRectangle().intersects(circle)) {
-			gs.getShotList().add(circle);
+			gameState.getShotList().add(circle);
 			weapon.setVisible(false);
 		}
 	}
@@ -99,11 +99,11 @@ public class WeaponList {
 	 * @param graphics	- the graphics to draw with
 	 */
 	public void drawWeapons(Graphics graphics) {
-		if (mg.getPlayerList().getPlayers().get(0).isShot()) {
+		if (mainGame.getPlayerList().getPlayers().get(0).isShot()) {
 			drawWeapon(graphics, 0);
 		}
 		
-		if (mg.isMultiplayer() && mg.getPlayerList().getPlayers().get(1).isShot()) {
+		if (mainGame.isMultiplayer() && mainGame.getPlayerList().getPlayers().get(1).isShot()) {
 			drawWeapon(graphics, 1);
 		}
 	}
@@ -120,14 +120,14 @@ public class WeaponList {
 	private void drawWeapon(Graphics graphics, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
 		RND.drawColor(graphics, lasertipimageN, lasertipimageA,
-				weapon.getX() - LASER_X_DEVIATION, weapon.getY() - LASER_TIP_Y_DEVIATION, 
-				mg.getColor());
+				weapon.getX() - LASER_X_DEVIATION, weapon.getY() - LASER_TIP_Y_DEVIATION,
+				mainGame.getColor());
 
 		RND.drawColor(graphics, laserbeamimageN, laserbeamimageA,
-				weapon.getX() - LASER_X_DEVIATION, 
+				weapon.getX() - LASER_X_DEVIATION,
 				weapon.getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION,
 				weapon.getX() + LASER_BEAM_X2_DEVIATION, weapon.getRectangle().getMaxY(), 0, 0,
-				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2, mg.getColor());
+				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2, mainGame.getColor());
 	}
 
 	/**

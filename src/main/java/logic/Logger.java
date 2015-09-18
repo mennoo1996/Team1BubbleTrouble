@@ -112,6 +112,7 @@ public class Logger {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
 			Date now = new Date();
 			String strDate = "logs/" + sdf.format(now);
+			new File("logs").mkdir();
 			File file = new File(strDate);
 			try {
 				FileWriter fileWriter = new FileWriter(file);

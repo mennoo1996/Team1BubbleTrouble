@@ -93,41 +93,43 @@ public class GameOverState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
-		
+		initButtons();
+		initHealthImages();
+		initTextFieldBackgroundImgs();
+	}
+
+	private void initTextFieldBackgroundImgs() throws SlickException {
+		tfBackgroundN = new Image("resources/images_UI/textfield_Norm.png");
+		tfBackgroundA = new Image("resources/images_UI/textfield_Add.png");
+	}
+
+	private void initButtons() throws SlickException {
 		saveButton = new Button(BUTTON_X, SAVE_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/images_UI/Menu_Button_SaveHighscore_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_SaveHighscore_Add.png"),
 				new Image("resources/images_UI/Menu_Button_SaveHighscore2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_SaveHighscore2_Add.png"));
-		
 		playButton = new Button(BUTTON_X, PLAY_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/images_UI/Menu_Button_PlayAgain_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_PlayAgain_Add.png"),
 				new Image("resources/images_UI/Menu_Button_PlayAgain2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_PlayAgain2_Add.png"));
-		
 		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/images_UI/Menu_Button_MainMenu_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_MainMenu_Add.png"),
 				new Image("resources/images_UI/Menu_Button_MainMenu2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_MainMenu2_Add.png"));
-		
 		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/images_UI/Menu_Button_Quit_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
 				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_Quit2_Add.png"));
-
-		initHealthImages();
-		
-		tfBackgroundN = new Image("resources/images_UI/textfield_Norm.png");
-		tfBackgroundA = new Image("resources/images_UI/textfield_Add.png");
 	}
-	
+
 	private void initHealthImages() throws SlickException {
 		health0Image = new Image("resources/Terminal/Terminal_Lights_0.png");
 		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
@@ -239,22 +241,14 @@ public class GameOverState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
-		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
-				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
-				"Waiting for user input...");
-		if (displayLives < 1) {
-			RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game Over");
-		} else {
-			RND.text(graphics, TEXT_X, TEXT_1_Y, "# You won! You are the champion!");
-		}
-		
-		RND.text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " + mainGame.getScore());
-		RND.text(graphics, TEXT_X, TEXT_3_Y, "# Please enter your name below");
+		renderEndText(container, graphics);
 
 		RND.drawColor(graphics, tfBackgroundN, tfBackgroundA,
-				textField.getX() - TF_BACKGROUND_DEVIATION, textField.getY() - TF_BACKGROUND_DEVIATION, 
+				textField.getX() - TF_BACKGROUND_DEVIATION,
+				textField.getY() - TF_BACKGROUND_DEVIATION,
 				mainGame.getColor());
-		RND.text(graphics, textField.getX(), textField.getY(), textField.getText(), mainGame.getColor());
+		RND.text(graphics, textField.getX(), textField.getY(),
+				textField.getText(), mainGame.getColor());
 		if (inputMessage != null) {
 			RND.text(graphics, TEXT_X, TEXT_4_Y, inputMessage);
 		}
@@ -270,7 +264,21 @@ public class GameOverState extends BasicGameState {
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 		renderLives(graphics);
 	}
-	
+
+	private void renderEndText(GameContainer container, Graphics graphics) {
+		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
+				"Waiting for user input...");
+		if (displayLives < 1) {
+			RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game Over");
+		} else {
+			RND.text(graphics, TEXT_X, TEXT_1_Y, "# You won! You are the champion!");
+		}
+
+		RND.text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " + mainGame.getScore());
+		RND.text(graphics, TEXT_X, TEXT_3_Y, "# Please enter your name below");
+	}
+
 	/**
 	 * Renders the life-lights in the bottom left corner.
 	 * @param graphics the graphics to render to

@@ -240,14 +240,16 @@ public class SettingsState extends BasicGameState {
 			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_1_X, MANNETJE_1_Y, 
 					mainGame.getColor());
 		} else if (mainGame.getPlayer1ImageStringN().equals("Player2sprite_Norm.png")) {
-			RND.drawColor(graphics, highLightN, highLightA, ARIE_1_X, ARIE_1_Y, mainGame.getColor());
+			RND.drawColor(graphics, highLightN, highLightA,
+					ARIE_1_X, ARIE_1_Y, mainGame.getColor());
 		}
 		
 		if (mainGame.getPlayer2ImageStringN().equals("Playersprite_Norm.png")) {
 			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_2_X, MANNETJE_2_Y, 
 					mainGame.getColor());
 		} else if (mainGame.getPlayer2ImageStringN().equals("Player2sprite_Norm.png")) {
-			RND.drawColor(graphics, highLightN, highLightA, ARIE_2_X, ARIE_2_Y, mainGame.getColor());
+			RND.drawColor(graphics, highLightN, highLightA,
+					ARIE_2_X, ARIE_2_Y, mainGame.getColor());
 		}
 		
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {

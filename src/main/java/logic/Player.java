@@ -20,12 +20,19 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Player {
 
+	/**
+	 * Represents a Player movement.
+	 */
+	public enum Movement {
+		NO_MOVEMENT, LEFT, RIGHT
+	}
+
 	private int shieldCount;
 	private float x;
 	private float y;
 	private float width;
 	private float height;
-	private int movement = 0;
+	private Movement movement = Movement.NO_MOVEMENT;
 	private int movementCounter = 0;
 	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
 	private Image imageN;
@@ -193,41 +200,51 @@ public class Player {
 		}
 		boolean didWalk = false;
 		// Walk left when left key pressed and not at left wall OR a gate
-		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
-		if (isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) {
-            if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
-            	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
-            	this.movement = 1;
-            	didWalk = true;
-            	stoodStillOnLastUpdate = false;
-            	if (!lastLogMove.equals("left")) {
-            		logger.log("Moving left from position " + this.getCenterX(), 
-            				PriorityLevels.VERYLOW, "Player");
-            		lastLogMove = "left";
-            	}
-            }
-        }
+		didWalk = processMoveLeft(deltaFloat, didWalk);
 		// Walk right when right key pressed and not at right wall OR a gate
+		didWalk = processMoveRight(deltaFloat, containerWidth, didWalk);
+
+		if (!didWalk && !stoodStillOnLastUpdate) {
+			stoodStillOnLastUpdate = true;
+			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
+		}
+	}
+
+	private boolean processMoveRight(float deltaFloat, float containerWidth, boolean didWalk) {
 		if (gameState.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
 				< (containerWidth - gameState.getRightWall().getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
-        	   this.movement = 2;
+        	   this.movement = Movement.RIGHT;
         	   didWalk = true;
         	   stoodStillOnLastUpdate = false;
         	   if (!lastLogMove.equals("right")) {
-        		   logger.log("Moving right from position " + this.getCenterX(), 
+        		   logger.log("Moving right from position " + this.getCenterX(),
         				   PriorityLevels.VERYLOW, "Player");
 
         		   lastLogMove = "right";
         	   }
            }
         }
-		
-		if (!didWalk && !stoodStillOnLastUpdate) {
-			stoodStillOnLastUpdate = true;
-			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
-		}
+		return didWalk;
+	}
+
+	private boolean processMoveLeft(float deltaFloat, boolean didWalk) {
+		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
+		if (isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) {
+            if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
+            	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
+            	this.movement = Movement.LEFT;
+            	didWalk = true;
+            	stoodStillOnLastUpdate = false;
+            	if (!lastLogMove.equals("left")) {
+            		logger.log("Moving left from position " + this.getCenterX(),
+            				PriorityLevels.VERYLOW, "Player");
+            		lastLogMove = "left";
+            	}
+            }
+        }
+		return didWalk;
 	}
 
 	private Weapon getWeapon(float containerHeight) {
@@ -470,14 +487,14 @@ public class Player {
 	/**
 	 * @param movement the movement integer used to determine movement state. 
 	 */
-	public void setMovement(int movement) {
+	public void setMovement(Movement movement) {
 		this.movement = movement;
 	}
 	
 	/**
-	 * @return the current movement integer used to determine movement 
+	 * @return the current movement used to determine movement
 	 */
-	public int getMovement() {
+	public Movement getMovement() {
 		return movement;
 	}
 	

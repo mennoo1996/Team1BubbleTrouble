@@ -707,7 +707,6 @@ public class GameState extends BasicGameState {
 
 	private void drawActiveCircles(Graphics graphics) {
 		for (BouncingCircle circle : circleList) {
-			//graphics.fill(circle.getCircle(), shapeFill);
 			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
 			final float xPosition = circle.getMinX() - offset;
 			final float yPosition = circle.getMinY() - offset;

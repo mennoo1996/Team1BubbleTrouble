@@ -20,12 +20,19 @@ import org.newdawn.slick.SpriteSheet;
  */
 public class Player {
 
+	/**
+	 * Represents a Player movement.
+	 */
+	public enum Movement {
+		NO_MOVEMENT, LEFT, RIGHT
+	}
+
 	private int shieldCount;
 	private float x;
 	private float y;
 	private float width;
 	private float height;
-	private int movement = 0;
+	private Movement movement = Movement.NO_MOVEMENT;
 	private int movementCounter = 0;
 	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
 	private Image imageN;
@@ -208,7 +215,7 @@ public class Player {
 				< (containerWidth - gameState.getRightWall().getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
-        	   this.movement = 2;
+        	   this.movement = Movement.RIGHT;
         	   didWalk = true;
         	   stoodStillOnLastUpdate = false;
         	   if (!lastLogMove.equals("right")) {
@@ -227,7 +234,7 @@ public class Player {
 		if (isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
-            	this.movement = 1;
+            	this.movement = Movement.LEFT;
             	didWalk = true;
             	stoodStillOnLastUpdate = false;
             	if (!lastLogMove.equals("left")) {
@@ -480,14 +487,14 @@ public class Player {
 	/**
 	 * @param movement the movement integer used to determine movement state. 
 	 */
-	public void setMovement(int movement) {
+	public void setMovement(Movement movement) {
 		this.movement = movement;
 	}
 	
 	/**
-	 * @return the current movement integer used to determine movement 
+	 * @return the current movement used to determine movement
 	 */
-	public int getMovement() {
+	public Movement getMovement() {
 		return movement;
 	}
 	

@@ -153,43 +153,56 @@ public class PlayerList {
 	 * @param graphics context
 	 */
 	private void drawPlayer(Player player, Graphics graphics) {
-		if (player.getMovement() == 2) {
-			player.incrementMovementCounter();
-			int sp = SPRITE_SHEET_THREE;
-			//System.out.println(player.getMovementCounter_Max() * MOVEMENT_COUNTER_FACTOR);
-			if (player.getMovementCounter() > player.getMovementCounter_Max() 
-					* MOVEMENT_COUNTER_FACTOR) {
-				sp = SPRITE_SHEET_FOUR;
-			}
-			RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0),
-					player.getSpritesheetA().getSprite(sp, 0),
-					player.getX() - PLAYER_DRAW_X_DEVIATION, 
-					player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
-		} else if (player.getMovement() == 1) {
-			player.incrementMovementCounter();
-			int sp = 1;
-			if (player.getMovementCounter() > player.getMovementCounter_Max()
-					* MOVEMENT_COUNTER_FACTOR) {
-				sp = 0;
-			}
-			RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0), 
-					player.getSpritesheetA().getSprite(sp, 0),
-					player.getX() - PLAYER_DRAW_X_DEVIATION, 
-					player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
+		if (player.getMovement() == Player.Movement.RIGHT) {
+			drawPlayerMoveRight(player, graphics);
+		} else if (player.getMovement() == Player.Movement.LEFT) {
+			drawPlayerMoveLeft(player, graphics);
 		} else {
-			player.resetMovementCounter();
-			RND.drawColor(graphics, player.getSpritesheetN().getSprite(2, 0),
-					player.getSpritesheetA().getSprite(2, 0),
-					player.getX() - PLAYER_DRAW_X_DEVIATION, 
-					player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
+			drawPlayerNoMovement(player, graphics);
 		}
 		if (player.hasShield()) {
 			RND.drawColor(graphics, player.getShieldImageN(), player.getShieldImageA(), 
 					player.getX() - SHIELD_DRAW_X_DEVIATION, 
 					player.getY() - SHIELD_DRAW_X_DEVIATION, mg.getColor());
-		} player.setMovement(0);
+		}
+		player.setMovement(Player.Movement.NO_MOVEMENT);
 	}
-	
+
+	private void drawPlayerNoMovement(Player player, Graphics graphics) {
+		player.resetMovementCounter();
+		RND.drawColor(graphics, player.getSpritesheetN().getSprite(2, 0),
+				player.getSpritesheetA().getSprite(2, 0),
+				player.getX() - PLAYER_DRAW_X_DEVIATION,
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
+	}
+
+	private void drawPlayerMoveLeft(Player player, Graphics graphics) {
+		player.incrementMovementCounter();
+		int sp = 1;
+		if (player.getMovementCounter() > player.getMovementCounter_Max()
+                * MOVEMENT_COUNTER_FACTOR) {
+            sp = 0;
+        }
+		RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0),
+				player.getSpritesheetA().getSprite(sp, 0),
+				player.getX() - PLAYER_DRAW_X_DEVIATION,
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
+	}
+
+	private void drawPlayerMoveRight(Player player, Graphics graphics) {
+		player.incrementMovementCounter();
+		int sp = SPRITE_SHEET_THREE;
+		//System.out.println(player.getMovementCounter_Max() * MOVEMENT_COUNTER_FACTOR);
+		if (player.getMovementCounter() > player.getMovementCounter_Max()
+                * MOVEMENT_COUNTER_FACTOR) {
+            sp = SPRITE_SHEET_FOUR;
+        }
+		RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0),
+				player.getSpritesheetA().getSprite(sp, 0),
+				player.getX() - PLAYER_DRAW_X_DEVIATION,
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
+	}
+
 	/**
 	 * Player death.
 	 * @param sbg The stateBasedGame that uses this state.

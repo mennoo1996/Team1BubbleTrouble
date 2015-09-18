@@ -173,7 +173,7 @@ public class GameOverState extends BasicGameState {
 				mainGame.getLogger().log("Exiting GameOverState", 
 						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
-					mainGame.closeRequested();
+					System.exit(0);
 				} else {
 					mainGame.switchColor();
 					sbg.enterState(mainGame.getSwitchState());

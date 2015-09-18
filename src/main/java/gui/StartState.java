@@ -113,7 +113,7 @@ public class StartState extends BasicGameState {
 			} else {
 				mainGame.getLogger().log("Exiting StartState", Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
-					mainGame.closeRequested();
+					System.exit(0);
 				} else {
 					mainGame.switchColor();
 					sbg.enterState(mainGame.getSwitchState());

@@ -119,6 +119,7 @@ public class Logger {
 				fileWriter.close();
 				this.log("Succesfully wrote log to file", Logger.PriorityLevels.MEDIUM, "log I/O");
 			} catch (IOException e) {
+				e.printStackTrace();
 				this.log("Could not write logfile", Logger.PriorityLevels.VERYHIGH, "Error");
 			}
 		}

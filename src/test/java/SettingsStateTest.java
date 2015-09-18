@@ -22,8 +22,8 @@ public class SettingsStateTest {
 	public void testSettingsState() {
 		MainGame mg = new MainGame("Test");
 		SettingsState s = new SettingsState(mg);
-		s.setMg(mg);
-		assertEquals(mg, s.getMg());
+		s.setmainGame(mg);
+		assertEquals(mg, s.getmainGame());
 	}
 
 	

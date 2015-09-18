@@ -203,10 +203,7 @@ public class GameState extends BasicGameState {
 	 * @throws SlickException sometimes.
 	 */
 	@Override
-	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {		
-		ArrayList<String> al = new ArrayList<String>();
-		al.get(0);
-		
+	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {	
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 		// If still shooting stop it
@@ -253,7 +250,7 @@ public class GameState extends BasicGameState {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
 				if (mainGame.getSwitchState() == -1) {
-					mainGame.closeRequested();
+					System.exit(0);
 				} else {
 					mainGame.getPlayerList().getPlayers().forEach(Player::respawn);
 					mainGame.getPlayerList().setProcessCollisions(true);
@@ -335,7 +332,9 @@ public class GameState extends BasicGameState {
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 
 		// player-thingy
-		mainGame.getPlayerList().updatePlayers(deltaFloat, container.getHeight(), container.getWidth());
+		mainGame.getPlayerList().updatePlayers(deltaFloat,
+				container.getHeight(),
+				container.getWidth());
 		processPause();
 		processCircles(container, sbg, deltaFloat);
 		updateFloatingScores(deltaFloat);
@@ -412,17 +411,24 @@ public class GameState extends BasicGameState {
                     circleList.addAll(splits);
 					checkBonus(circle);
                 } else {
-                	mainGame.getLogger().log("Circle with radius 10 shot, no new balls entered the game", 
-                			PriorityLevels.MEDIUM, "BouncingCircles");
+                	mainGame.getLogger().log(
+							"Circle with radius 10 shot, no new balls entered the game",
+                			PriorityLevels.MEDIUM,
+							"BouncingCircles");
                 } // if it was part of the gate reqs, add to new gate reqs
-                for (Gate gate : gateList) {
-                	if (gate.getRequired().contains(circle)) {
-                		gate.getRequired().remove(circle);
-                	}
-                	if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
-                		gate.addToRequirements(splits);
-                	}
-                }
+				processUnlockCirclesGates(circle, splits);
+			}
+        }
+	}
+
+	private void processUnlockCirclesGates(BouncingCircle circle,
+										   ArrayList<BouncingCircle> splits) {
+		for (Gate gate : gateList) {
+            if (gate.getUnlockCircles().contains(circle)) {
+                gate.getUnlockCircles().remove(circle);
+            }
+            if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
+                gate.addToRequirements(splits);
             }
         }
 	}
@@ -463,7 +469,7 @@ public class GameState extends BasicGameState {
 	private void updateGateExistence(float deltaFloat) {
 		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
 		for (Gate gate : gateList) {
-			if (gate.getRequired().isEmpty()) {
+			if (gate.getUnlockCircles().isEmpty()) {
 				tempGateList.add(gate);
 				gate.setFading(true);
 			}
@@ -531,7 +537,6 @@ public class GameState extends BasicGameState {
 		// draw background layer
 		RND.draw(graphics, mainGame.getBackgroundImage(), 0, 0);
 		graphics.setColor(Color.white);
-		// draw all active circles
 		drawActiveCircles(graphics);
 		drawFloatingScores(graphics);
 		RND.drawColor(graphics, ceilingImageN, ceilingImageA, getLeftWall().getWidth() 
@@ -539,7 +544,6 @@ public class GameState extends BasicGameState {
 				mainGame.getColor());
 		drawGates(container, graphics);
 		weaponList.drawWeapons(graphics);
-		// draw player
 		mainGame.getPlayerList().drawPlayers(graphics);
 		drawItems(graphics);
 		// Draw walls, floor and ceiling
@@ -549,6 +553,15 @@ public class GameState extends BasicGameState {
 		RND.text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mainGame.getLevelCounter() + 1));
+		drawScore(container, graphics);
+		// Pause overlay and counter
+		if (playingState && countIn) {
+			drawCountIn(container, graphics);
+		}
+		drawMiscellaneous(container, graphics);
+	}
+
+	private void drawScore(GameContainer container, Graphics graphics) {
 		String renderedScore;
 		if (mainGame.getShouldSwitchState()) {
 			renderedScore = Integer.toString(mainGame.getScore());
@@ -557,13 +570,8 @@ public class GameState extends BasicGameState {
 		}
 		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + renderedScore);
-		// Pause overlay and counter
-		if (playingState && countIn) {
-			drawCountIn(container, graphics);
-		}
-		drawMiscellaneous(container, graphics);
 	}
-	
+
 	private void drawGates(GameContainer container, Graphics graphics) {
 		// draw all active gates
 		drawActiveGates(container, graphics);
@@ -600,8 +608,8 @@ public class GameState extends BasicGameState {
 						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
 						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
 			}
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
-					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X
+					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
 					* COUNTER_BAR_X_FACTOR, height, "#" + rem / SHIELD_COUNTER_DIVIDER + "s");
 		}
 		if (mainGame.isMultiplayer() && mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
@@ -699,25 +707,25 @@ public class GameState extends BasicGameState {
 
 	private void drawActiveCircles(Graphics graphics) {
 		for (BouncingCircle circle : circleList) {
-			//graphics.fill(circle.getCircle(), shapeFill);
 			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
+			final float xPosition = circle.getMinX() - offset;
+			final float yPosition = circle.getMinY() - offset;
 			switch (r) {
 				case(RADIUS_6) : RND.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
-							circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); 
-				break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(RADIUS_5) : RND.drawColor(graphics, ballsImagesN[1], ballsImagesA[1],
-						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(RADIUS_4) : RND.drawColor(graphics, ballsImagesN[2], ballsImagesA[2],
-						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(RADIUS_3) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_THREE], ballsImagesA[BALL_IMAGE_THREE],
-						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(RADIUS_2) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_FOUR], ballsImagesA[BALL_IMAGE_FOUR],
-						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(MINIMUM_RADIUS) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_FIVE], ballsImagesA[BALL_IMAGE_FIVE],
-						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				default:
 					try {
 						throw new SlickException("Radius was not one of the supported");

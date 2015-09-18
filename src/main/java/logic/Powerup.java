@@ -41,18 +41,18 @@ public class Powerup {
 
     /**
      * Update Powerups graphical thingy.
-     * @param gs Game State
+     * @param gameState Game State
      * @param containerHeight Game Container
      * @param deltaFloat Delta
      */
-    public void update(GameState gs, float containerHeight, float deltaFloat) {
-        if (!gs.isPaused()) {
+    public void update(GameState gameState, float containerHeight, float deltaFloat) {
+        if (!gameState.isPaused()) {
             timeRemaining -= deltaFloat * SECONDS_TO_MS;
         }
-        if ((this.y + POWERUP_HEIGHT) < containerHeight - gs.getFloor().getHeight()) {
+        if ((this.y + POWERUP_HEIGHT) < containerHeight - gameState.getFloor().getHeight()) {
             this.y += POWERUP_SPEED * deltaFloat;
         } else {
-            this.y = containerHeight - gs.getFloor().getHeight() - POWERUP_HEIGHT;
+            this.y = containerHeight - gameState.getFloor().getHeight() - POWERUP_HEIGHT;
         }
     }
 

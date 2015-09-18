@@ -135,7 +135,7 @@ public MyRectangle getRectangle() {
 	 * Return the required list.
 	 * @return the required list.
 	 */
-	public ArrayList<BouncingCircle> getRequired() {
+	public ArrayList<BouncingCircle> getUnlockCircles() {
 		return required;
 	}
 

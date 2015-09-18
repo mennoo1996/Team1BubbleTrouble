@@ -124,6 +124,7 @@ public class Logger {
 				fileWriter.close();
 				this.log("Succesfully wrote log to file", Logger.PriorityLevels.MEDIUM, "log I/O");
 			} catch (IOException e) {
+				e.printStackTrace();
 				this.log("Could not write logfile", Logger.PriorityLevels.VERYHIGH, "Error");
 			}
 		}
@@ -146,6 +147,7 @@ public class Logger {
 			return "logs/testing.txt";
 		} else {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+			new File("logs").mkdir();
 			return "logs/" + sdf.format(new Date()) + ".txt";
 		}
 	}

@@ -169,7 +169,7 @@ public class GameOverState extends BasicGameState {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
 				if (mg.getSwitchState() == -1) {
-					container.exit();
+					mg.closeRequested();
 				} else {
 					sbg.enterState(mg.getSwitchState());
 				}
@@ -327,6 +327,10 @@ public class GameOverState extends BasicGameState {
 			RND.drawColor(graphics, menuButton.getImageN(), menuButton.getImageA(),
 					menuButton.getX(), menuButton.getY(), mg.getColor());
 		}
+		drawButtonMouseOvers(input, graphics);
+	}
+	
+	private void drawButtonMouseOvers(Input input, Graphics graphics) {
 		if (inputMessage == null) {
 			if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				RND.drawColor(graphics, saveButton.getImageMouseOverN(), 

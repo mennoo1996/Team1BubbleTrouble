@@ -97,7 +97,7 @@ public class LevelContainer {
 		res.addAll(initializeLevels3());
 		res.addAll(initializeLevels4());
 		res.addAll(initializeLevels5());
-		logger.log("Levels are initialized", PriorityLevels.HIGH.getValue(), "LevelContainer");
+		logger.log("Levels are initialized", PriorityLevels.HIGH, "LevelContainer");
 		return res;
 	}
 	

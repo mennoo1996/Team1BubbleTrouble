@@ -22,7 +22,7 @@ public class HighScoresParserTest {
 	@Test
 	public void readHighScoresTest() {
 		HighScores hs = new HighScores();
-		hs.setLogger(new Logger("a", true));
+		hs.setLogger(new Logger(true));
 		hs.add(new Score(300, "jopie krekel"));
 		hs.add(new Score(0, "freek"));
 		
@@ -49,7 +49,7 @@ public class HighScoresParserTest {
 	public void writeHighScoresTest() {
 		
 		HighScores hs = new HighScores();
-		hs.setLogger(new Logger("a", true));
+		hs.setLogger(new Logger(true));
 		hs.add(new Score(300, "jopie krekel"));
 		hs.add(new Score(0, "freek"));
 		

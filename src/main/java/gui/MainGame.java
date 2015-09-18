@@ -1,4 +1,5 @@
 package gui;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import logic.HighScores;
@@ -107,7 +108,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
-		this.logger = new Logger("blabla", true);
+		this.logger = new Logger(true);
 		HighScoresParser.setLogger(logger);
 		this.player1ImageStringN = "Playersprite_Norm.png";
 		this.player1ImageStringA = "Playersprite_Add.png";
@@ -118,9 +119,14 @@ public class MainGame extends StateBasedGame {
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		highscores.setLogger(logger);
 		this.multiplayer = false;
-		
-		
-		
+	}
+	
+	@Override
+	public boolean closeRequested() {
+		logger.log("Exit Requested", Logger.PriorityLevels.VERYHIGH, "System");
+		logger.writeToFile();
+		System.exit(0);
+		return false;
 	}
 
 	/**
@@ -221,20 +227,32 @@ public class MainGame extends StateBasedGame {
 		this.container = container;
 		
 		this.gameStateState = new GameState(this);
-		logger.log("GameState initialized", 1, "States");
+		logger.log("GameState initialized", Logger.PriorityLevels.LOW, "States");
 		
 		this.addState(new StartState(this));
-		logger.log("Startstate initialized and added", 1, "States");
+		logger.log("Startstate initialized and added", Logger.PriorityLevels.LOW, "States");
 		
 		this.addState(gameStateState);
-		logger.log("GameState added", 1, "States");
+		logger.log("GameState added", Logger.PriorityLevels.LOW, "States");
 		
 		this.addState(new GameOverState(this));
-		logger.log("GameOverState initialized and added", 1, "States");
+		logger.log("GameOverState initialized and added", Logger.PriorityLevels.LOW, "States");
 		
 		this.addState(new SettingsState(this));
-		logger.log("Settingsstate initialized and added", 1, "States");
+		logger.log("Settingsstate initialized and added", Logger.PriorityLevels.LOW, "States");
 		
+		initImages();
+		initPlayers();
+		Calendar cal = Calendar.getInstance();
+		this.currentDate = cal.get(Calendar.DATE) 
+				+ "/" + cal.get(Calendar.MONTH) 
+				+ "/" + cal.get(Calendar.YEAR);
+		
+		this.enterState(START_STATE);
+	
+	}
+	
+	private void initImages() throws SlickException {
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
 		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
@@ -246,14 +264,6 @@ public class MainGame extends StateBasedGame {
 				"resources/images_Font/dosfont_Norm.png"));
 		RND.setFont_Additive(new AngelCodeFont("resources/images_Font/dosfont.fnt",
 				"resources/images_Font/dosfont_Add.png"));
-		initPlayers();
-		Calendar cal = Calendar.getInstance();
-		this.currentDate = cal.get(Calendar.DATE) 
-				+ "/" + cal.get(Calendar.MONTH) 
-				+ "/" + cal.get(Calendar.YEAR);
-		
-		this.enterState(START_STATE);
-	
 	}
 	
 	private void initPlayers() throws SlickException {

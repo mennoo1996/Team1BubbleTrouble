@@ -203,7 +203,7 @@ public class GameState extends BasicGameState {
 	 * @throws SlickException sometimes.
 	 */
 	@Override
-	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
+	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {		
 		RND.setOpacity(0.0f);
 		mg.stopSwitchState();
 		// If still shooting stop it
@@ -250,7 +250,7 @@ public class GameState extends BasicGameState {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
 				if (mg.getSwitchState() == -1) {
-					container.exit();
+					mg.closeRequested();
 				} else {
 					mg.getPlayerList().getPlayers().forEach(Player::respawn);
 					mg.getPlayerList().setProcessCollisions(true);
@@ -396,13 +396,13 @@ public class GameState extends BasicGameState {
 
 	private void updateShotCircles() {
 		for (BouncingCircle circle : shotList) {
-            if (!circle.isDone()) {
+            if (!circle.isDone()) { // if the circle hasn't been handled
             	floatingScoreList.add(new FloatingScore(circle));
                 if (circleList.contains(circle)) {
                     circleList.remove(circle);
                     circle.setDone(true);
                     score += circle.getScore();
-                }
+                } // if the ball has a radius of 20, split it u
                 ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
                 if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
                 	splits = circle.getSplittedCircles(mg);
@@ -410,8 +410,8 @@ public class GameState extends BasicGameState {
 					checkBonus(circle);
                 } else {
                 	mg.getLogger().log("Circle with radius 10 shot, no new balls entered the game", 
-                			PriorityLevels.MEDIUM.getValue(), "BouncingCircles");
-                }
+                			PriorityLevels.MEDIUM, "BouncingCircles");
+                } // if it was part of the gate reqs, add to new gate reqs
                 for (Gate gate : gateList) {
                 	if (gate.getRequired().contains(circle)) {
                 		gate.getRequired().remove(circle);
@@ -770,6 +770,10 @@ public class GameState extends BasicGameState {
 		RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game is paused...");
 		RND.text(graphics, TEXT_X, TEXT_2_Y, "========================");
 		Input input = container.getInput();
+		drawMouseOvers(input, graphics);
+	}
+	
+	private void drawMouseOvers(Input input, Graphics graphics) {
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
 					returnButton.getImageMouseOverA(), returnButton.getX(), returnButton.getY(), 
@@ -793,7 +797,7 @@ public class GameState extends BasicGameState {
 		} else {
 			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
 					exitButton.getX(), exitButton.getY(), mg.getColor());
-		}
+		}		
 	}
 
 	private void drawCountIn(GameContainer container, Graphics graphics) {

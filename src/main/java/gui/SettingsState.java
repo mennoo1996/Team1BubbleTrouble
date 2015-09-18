@@ -259,6 +259,10 @@ public class SettingsState extends BasicGameState {
 					returnButton.getX(), returnButton.getY(), mg.getColor());
 		}
 
+		drawSprites2(graphics);
+	}
+	
+	private void drawSprites2(Graphics graphics) {
 		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
 				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mg.getColor());
 		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
@@ -268,7 +272,6 @@ public class SettingsState extends BasicGameState {
 				mannetje2Rectangle.getX(), mannetje2Rectangle.getY(), mg.getColor());
 		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
 				arie2Rectangle.getX(), arie2Rectangle.getY(), mg.getColor());
-
 	}
 
 

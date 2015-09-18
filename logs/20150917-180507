@@ -1,0 +1,93 @@
+2015-09-17 18:04:22.944 - [Highscores|2]: Highscores read from file, filename=resources/highscores.txt
+2015-09-17 18:04:22.947 - [Highscores|3]: Highscore added, name=Bart, score=57781
+2015-09-17 18:04:22.947 - [Highscores|3]: Highscore added, name= Bart, score=48652
+2015-09-17 18:04:22.947 - [Highscores|3]: Highscore added, name=Menno, score=19467
+2015-09-17 18:04:22.948 - [Highscores|3]: Highscore added, name=Die gozer die beter dan jij was. Bart., score=14774
+2015-09-17 18:04:22.948 - [Highscores|3]: Highscore added, name=Mark, score=11745
+2015-09-17 18:04:22.948 - [Highscores|3]: Highscore added, name=dusss, score=9313
+2015-09-17 18:04:22.948 - [Highscores|3]: Highscore added, name=Menno, score=7702
+2015-09-17 18:04:22.949 - [Highscores|3]: Highscore added, name=Menno, score=5535
+2015-09-17 18:04:22.949 - [Highscores|3]: Highscore added, name=Mark die won, score=2000
+2015-09-17 18:04:22.949 - [Highscores|3]: Highscore added, name=Menno, score=1129
+2015-09-17 18:04:23.372 - [States|2]: GameState initialized
+2015-09-17 18:04:23.373 - [States|2]: Startstate initialized and added
+2015-09-17 18:04:23.373 - [States|2]: GameState added
+2015-09-17 18:04:23.374 - [States|2]: GameOverState initialized and added
+2015-09-17 18:04:23.375 - [States|2]: Settingsstate initialized and added
+2015-09-17 18:04:28.772 - [LevelContainer|4]: Levels are initialized
+2015-09-17 18:04:31.798 - [Player|2]: Moved to position 750.0
+2015-09-17 18:04:33.324 - [Player|1]: Moving right from position 757.2
+2015-09-17 18:04:33.493 - [Player|2]: Moved to position 817.99994
+2015-09-17 18:04:34.070 - [Player|2]: Moved to position 974.3997
+2015-09-17 18:04:34.257 - [Player|1]: Moving left from position 967.59973
+2015-09-17 18:04:35.258 - [Player|2]: Moved to position 574.40015
+2015-09-17 18:04:36.513 - [Player|2]: Moved to position 384.00037
+2015-09-17 18:04:37.141 - [Player|1]: Moving right from position 390.80035
+2015-09-17 18:04:37.481 - [Player|2]: Moved to position 519.6002
+2015-09-17 18:04:37.838 - [Player|1]: Moving left from position 512.4002
+2015-09-17 18:04:38.109 - [Player|2]: Moved to position 411.20038
+2015-09-17 18:04:38.364 - [Player|1]: Moving right from position 418.4004
+2015-09-17 18:04:38.499 - [Player|2]: Moved to position 465.6003
+2015-09-17 18:04:40.145 - [Player|2]: Moved to position 818.39984
+2015-09-17 18:04:40.688 - [Player|1]: Moving left from position 811.59985
+2015-09-17 18:04:40.824 - [Player|2]: Moved to position 763.99994
+2015-09-17 18:04:41.316 - [Player|2]: Moved to position 723.6
+2015-09-17 18:04:41.998 - [LevelContainer|4]: Levels are initialized
+2015-09-17 18:04:45.913 - [Player|2]: Moved to position 478.80026
+2015-09-17 18:04:45.930 - [Player|3]: Shot regular laser from position 478.80026
+2015-09-17 18:04:46.033 - [Player|1]: Moving right from position 485.20026
+2015-09-17 18:04:46.256 - [BouncingCircles|3]: Circle with radius 30.0 shot, two circles with radius 20.0 entered the game
+2015-09-17 18:04:46.256 - [BouncingCircles|1]: New balls aquired bonus speed
+2015-09-17 18:04:46.338 - [Player|2]: Moved to position 600.8001
+2015-09-17 18:04:46.491 - [Player|3]: Shot regular laser from position 600.8001
+2015-09-17 18:04:46.915 - [BouncingCircles|3]: Circle with radius 20.0 shot, two circles with radius 10.0 entered the game
+2015-09-17 18:04:46.915 - [BouncingCircles|1]: New balls aquired bonus speed
+2015-09-17 18:04:47.221 - [Player|2]: Moved to position 743.59985
+2015-09-17 18:04:47.238 - [Player|3]: Shot regular laser from position 743.59985
+2015-09-17 18:04:47.577 - [Player|1]: Moving left from position 736.79987
+2015-09-17 18:04:47.679 - [BouncingCircles|3]: Circle with radius 10 shot, no new balls entered the game
+2015-09-17 18:04:48.510 - [Player|2]: Moved to position 370.0004
+2015-09-17 18:04:48.714 - [Player|3]: Shot regular laser from position 370.0004
+2015-09-17 18:04:48.884 - [Player|1]: Moving right from position 376.80038
+2015-09-17 18:04:49.019 - [BouncingCircles|3]: Circle with radius 20.0 shot, two circles with radius 10.0 entered the game
+2015-09-17 18:04:49.020 - [BouncingCircles|1]: New balls aquired bonus speed
+2015-09-17 18:04:49.172 - [Player|2]: Moved to position 485.6002
+2015-09-17 18:04:49.256 - [Player|3]: Shot regular laser from position 485.6002
+2015-09-17 18:04:49.647 - [BouncingCircles|3]: Circle with radius 10 shot, no new balls entered the game
+2015-09-17 18:04:49.834 - [Player|1]: Moving left from position 478.8002
+2015-09-17 18:04:50.089 - [Player|1]: Moving right from position 391.20035
+2015-09-17 18:04:50.326 - [Player|2]: Moved to position 479.2002
+2015-09-17 18:04:50.531 - [Player|1]: Moving left from position 472.00018
+2015-09-17 18:04:50.632 - [Player|3]: Shot regular laser from position 438.40024
+2015-09-17 18:04:50.632 - [Player|2]: Moved to position 438.40024
+2015-09-17 18:04:50.716 - [Player|1]: Moving right from position 444.80023
+2015-09-17 18:04:50.835 - [BouncingCircles|3]: Circle with radius 10 shot, no new balls entered the game
+2015-09-17 18:04:50.937 - [Player|2]: Moved to position 526.4001
+2015-09-17 18:04:50.954 - [Player|1]: Moving left from position 519.6001
+2015-09-17 18:04:51.277 - [Player|3]: Shot regular laser from position 397.2003
+2015-09-17 18:04:51.278 - [Player|1]: Moving right from position 404.4003
+2015-09-17 18:04:51.582 - [BouncingCircles|3]: Circle with radius 10 shot, no new balls entered the game
+2015-09-17 18:04:51.768 - [Player|2]: Moved to position 593.6
+2015-09-17 18:04:52.311 - [Player|2]: Moved to position 715.5998
+2015-09-17 18:04:52.736 - [Player|2]: Moved to position 776.7997
+2015-09-17 18:04:53.180 - [LevelContainer|4]: Levels are initialized
+2015-09-17 18:04:56.199 - [Player|1]: Moving left from position 743.2
+2015-09-17 18:04:56.979 - [Player|2]: Moved to position 437.6005
+2015-09-17 18:04:56.997 - [Player|3]: Shot regular laser from position 437.6005
+2015-09-17 18:04:57.064 - [Player|1]: Moving right from position 444.0005
+2015-09-17 18:04:57.285 - [BouncingCircles|3]: Circle with radius 45.0 shot, two circles with radius 30.0 entered the game
+2015-09-17 18:04:57.285 - [BouncingCircles|1]: New balls aquired bonus speed
+2015-09-17 18:04:57.404 - [Player|2]: Moved to position 572.8003
+2015-09-17 18:04:57.506 - [Player|3]: Shot regular laser from position 572.8003
+2015-09-17 18:04:57.896 - [BouncingCircles|3]: Circle with radius 30.0 shot, two circles with radius 20.0 entered the game
+2015-09-17 18:04:57.896 - [BouncingCircles|1]: New balls aquired bonus speed
+2015-09-17 18:04:58.220 - [Player|2]: Moved to position 715.6001
+2015-09-17 18:04:58.287 - [Player|3]: Shot regular laser from position 715.6001
+2015-09-17 18:04:58.713 - [BouncingCircles|3]: Circle with radius 20.0 shot, two circles with radius 10.0 entered the game
+2015-09-17 18:04:58.713 - [BouncingCircles|1]: New balls aquired bonus speed
+2015-09-17 18:04:59.035 - [Player|2]: Moved to position 851.5999
+2015-09-17 18:04:59.052 - [Player|3]: Shot regular laser from position 851.5999
+2015-09-17 18:05:03.566 - [Player|2]: Moved to position 959.99976
+2015-09-17 18:05:04.296 - [Player|1]: Moving left from position 953.19977
+2015-09-17 18:05:05.009 - [LevelContainer|4]: Levels are initialized
+2015-09-17 18:05:07.522 - [System|5]: Exit Requested

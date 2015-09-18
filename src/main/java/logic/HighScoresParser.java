@@ -16,8 +16,13 @@ public final class HighScoresParser {
 	private static Logger logger;
 	
 	/**
+<<<<<<< HEAD
+	 * Set the logger of this class.
+	 * @param loggerIn	- the logger to set
+=======
 	 * Set a new Logger.
 	 * @param loggerIn logger to set
+>>>>>>> 777ac031ddb3ef462a42be76ea28450614f9aeba
 	 */
 	public static void setLogger(Logger loggerIn) {
 		logger = loggerIn;
@@ -33,8 +38,8 @@ public final class HighScoresParser {
 	 * @return the highscores
 	 */
 	public static HighScores readHighScores(String fileName) {
-		logger.log("Highscores read from file, filename=" 
-	+ fileName, PriorityLevels.LOW.getValue(), "Highscores");
+		logger.log("Highscores read from file, filename=" + fileName, 
+				PriorityLevels.LOW, "Highscores");
 		BufferedReader reader;
 		HighScores hs = null;
 		try {
@@ -64,8 +69,8 @@ public final class HighScoresParser {
 	 * @param hs the highscores
 	 */
 	public static void writeHighScores(String fileName, HighScores hs) {
-		logger.log("Higscores written to file, filename=" 
-	+ fileName, PriorityLevels.LOW.getValue(), "Highscores");
+		logger.log("Higscores written to file, filename=" + fileName, 
+				PriorityLevels.LOW, "Highscores");
 		PrintWriter writer;
 		try {
 			File file = new File(fileName);

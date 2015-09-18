@@ -131,7 +131,7 @@ public class BouncingCircle extends Circle {
 	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mg) {
 		logger = mg.getLogger();
 		logger.log("Circle with radius " + radius + " shot, two circles with radius " 
-				+ getNewRadius() + " entered the game", PriorityLevels.MEDIUM.getValue(),
+				+ getNewRadius() + " entered the game", PriorityLevels.MEDIUM,
 				"BouncingCircles");
 		if (radius == MINIMUM_RADIUS) {
 			return null;
@@ -146,10 +146,9 @@ public class BouncingCircle extends Circle {
 		// bonus speed when hit at the right moment
 		if (newYSpeed < BONUS_SPEED_FACTOR * radius) {
 			logger.log("New balls aquired bonus speed",
-					PriorityLevels.VERYLOW.getValue(), "BouncingCircles");
+					PriorityLevels.VERYLOW, "BouncingCircles");
 			newYSpeed -= BONUS_SPEED;
 		}
-		
 		// add new balls to the active list
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed,
 				newYSpeed, mg.getGravity()));

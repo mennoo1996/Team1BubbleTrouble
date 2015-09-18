@@ -1,5 +1,6 @@
 57781,Bart
 48652, Bart
+32187,Not bad...
 19467,Menno
 14774,Die gozer die beter dan jij was. Bart.
 11745,Mark
@@ -7,4 +8,3 @@
 9313,dusss
 7702,Menno
 5535,Menno
-2000,Mark die won

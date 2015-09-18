@@ -140,7 +140,7 @@ public class GateTest {
 		Gate gate1 = new Gate(500,550,50,200);
 		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f);
 		gate1.addToRequirements(circle1);
-		assertTrue(gate1.getRequired().contains(circle1));
+		assertTrue(gate1.getUnlockCircles().contains(circle1));
 	}
 
 	@Test
@@ -155,7 +155,7 @@ public class GateTest {
 	@Test
 	public void testGetRequired() {
 		Gate gate1 = new Gate(500,550,50,200);
-		assertEquals(gate1.getRequired(),new ArrayList<BouncingCircle>());
+		assertEquals(gate1.getUnlockCircles(),new ArrayList<BouncingCircle>());
 	}
 
 	@Test
@@ -165,7 +165,7 @@ public class GateTest {
 		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f);
 		thing.add(circle1);
 		gate1.setRequired(thing);
-		assertEquals(gate1.getRequired(), thing);
+		assertEquals(gate1.getUnlockCircles(), thing);
 	}
 
 	@Test
@@ -184,7 +184,7 @@ public class GateTest {
 		
 		gate1.setRequired(thing);
 		gate1.addToRequirements(thing2);
-		assertEquals(gate1.getRequired(), thing3);
+		assertEquals(gate1.getUnlockCircles(), thing3);
 	}
 
 	//Add tests for get and set fading speed

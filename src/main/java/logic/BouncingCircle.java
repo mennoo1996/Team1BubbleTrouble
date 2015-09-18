@@ -78,41 +78,41 @@ public class BouncingCircle extends Circle {
 
 	/**
 	 * Update the circle in the given container.
-	 * @param gs			- the gamestate the circle is in
+	 * @param gameState			- the gamestate the circle is in
 	 * @param containerHeight		- the height of the ccontainer
 	 * @param containerWidth		- the width of the container
 	 * @param deltaFloat    - the time in ms since last frame
 	 */
-	public void update(GameState gs, float containerHeight, float containerWidth, 
+	public void update(GameState gameState, float containerHeight, float containerWidth,
 			float deltaFloat) {
 		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed * deltaFloat);
 		// When the ball hit the floor reverse it's speed
-		if (this.getMaxY() > containerHeight - gs.getFloor().getHeight()) {
+		if (this.getMaxY() > containerHeight - gameState.getFloor().getHeight()) {
 			ySpeed = -getSpeedForRadius();
 		} else {
 			// Else increase the speed
 			ySpeed += gravity * deltaFloat;
 		}
 		// When ball hits ceiling
-		if (this.getMinY() <= gs.getCeiling().getHeight()) {
+		if (this.getMinY() <= gameState.getCeiling().getHeight()) {
 			this.hitCeiling = true;
 		}
-		handleXCalculations(gs, containerWidth, deltaFloat);
+		handleXCalculations(gameState, containerWidth, deltaFloat);
 	}
 	
-	private void handleXCalculations(GameState gs, float containerWidth, float deltaFloat) {
+	private void handleXCalculations(GameState gameState, float containerWidth, float deltaFloat) {
 		// Calculations for X coordinates
 		this.setX(this.getX() + xSpeed * deltaFloat);
 		// If the ball hit a wall reverse it's speed
-		if (this.getX() < gs.getLeftWall().getWidth()) {
+		if (this.getX() < gameState.getLeftWall().getWidth()) {
 			xSpeed = initSpeed;
-		} else if (this.getMaxX() > containerWidth - gs.getRightWall().getWidth()) {
+		} else if (this.getMaxX() > containerWidth - gameState.getRightWall().getWidth()) {
 			xSpeed = -initSpeed;
 		} else {
-			for (Gate gate : gs.getGateList()) {
+			for (Gate gate : gameState.getGateList()) {
 				if (gate.getRectangle().intersects(this.getCircle())) {
-					if (gate.getRequired().contains(this)) {
+					if (gate.getUnlockCircles().contains(this)) {
 						xSpeed = -initSpeed;
 					} else {
 						xSpeed = initSpeed;
@@ -125,11 +125,11 @@ public class BouncingCircle extends Circle {
 	
 	/**
 	 * Return splitted balls.
-	 * @param mg the maingame this bouncing circle is in.
+	 * @param mainGame the maingame this bouncing circle is in.
 	 * @return an arraylist with the splitted circles
 	 */
-	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mg) {
-		logger = mg.getLogger();
+	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mainGame) {
+		logger = mainGame.getLogger();
 		logger.log("Circle with radius " + radius + " shot, two circles with radius " 
 				+ getNewRadius() + " entered the game", PriorityLevels.MEDIUM,
 				"BouncingCircles");
@@ -151,9 +151,9 @@ public class BouncingCircle extends Circle {
 		}
 		// add new balls to the active list
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed,
-				newYSpeed, mg.getGravity()));
+				newYSpeed, mainGame.getGravity()));
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed,
-				newYSpeed, mg.getGravity()));
+				newYSpeed, mainGame.getGravity()));
 		
 		return res;
 	}

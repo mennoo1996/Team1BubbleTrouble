@@ -187,37 +187,53 @@ public class StartState extends BasicGameState {
 	 */
 	private void renderButtons(GameContainer container, Graphics graphics) {
 		Input input = container.getInput();
-		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, playButton.getImageMouseOverN(), 
-					playButton.getImageMouseOverA(), playButton.getX(), playButton.getY(), 
+		drawSinglePlayButton(graphics, input);
+		drawMultiplayerButton(graphics, input);
+		drawOptionsButton(graphics, input);
+		drawQuitButton(graphics, input);
+	}
+
+	private void drawQuitButton(Graphics graphics, Input input) {
+		if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			RND.drawColor(graphics, quitButton.getImageMouseOverN(),
+					quitButton.getImageMouseOverA(), quitButton.getX(), quitButton.getY(),
 					mainGame.getColor());
 		} else {
-			RND.drawColor(graphics, playButton.getImageN(), playButton.getImageA(),
-					playButton.getX(), playButton.getY(), mainGame.getColor());
+			RND.drawColor(graphics, quitButton.getImageN(), quitButton.getImageA(),
+					quitButton.getX(), quitButton.getY(), mainGame.getColor());
 		}
-		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, play2Button.getImageMouseOverN(), 
-					play2Button.getImageMouseOverA(), play2Button.getX(), play2Button.getY(), 
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, play2Button.getImageN(), play2Button.getImageA(),
-					play2Button.getX(), play2Button.getY(), mainGame.getColor());
-		}
+	}
+
+	private void drawOptionsButton(Graphics graphics, Input input) {
 		if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, optionsButton.getImageMouseOverN(), 
-					optionsButton.getImageMouseOverA(), optionsButton.getX(), optionsButton.getY(), 
+			RND.drawColor(graphics, optionsButton.getImageMouseOverN(),
+					optionsButton.getImageMouseOverA(), optionsButton.getX(), optionsButton.getY(),
 					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, optionsButton.getImageN(), optionsButton.getImageA(),
 					optionsButton.getX(), optionsButton.getY(), mainGame.getColor());
 		}
-		if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, quitButton.getImageMouseOverN(), 
-					quitButton.getImageMouseOverA(), quitButton.getX(), quitButton.getY(), 
+	}
+
+	private void drawMultiplayerButton(Graphics graphics, Input input) {
+		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			RND.drawColor(graphics, play2Button.getImageMouseOverN(),
+					play2Button.getImageMouseOverA(), play2Button.getX(), play2Button.getY(),
 					mainGame.getColor());
 		} else {
-			RND.drawColor(graphics, quitButton.getImageN(), quitButton.getImageA(),
-					quitButton.getX(), quitButton.getY(), mainGame.getColor());
+			RND.drawColor(graphics, play2Button.getImageN(), play2Button.getImageA(),
+					play2Button.getX(), play2Button.getY(), mainGame.getColor());
+		}
+	}
+
+	private void drawSinglePlayButton(Graphics graphics, Input input) {
+		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			RND.drawColor(graphics, playButton.getImageMouseOverN(),
+					playButton.getImageMouseOverA(), playButton.getX(), playButton.getY(),
+					mainGame.getColor());
+		} else {
+			RND.drawColor(graphics, playButton.getImageN(), playButton.getImageA(),
+					playButton.getX(), playButton.getY(), mainGame.getColor());
 		}
 	}
 

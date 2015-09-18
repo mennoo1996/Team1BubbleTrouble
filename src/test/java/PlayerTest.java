@@ -282,8 +282,8 @@ public class PlayerTest {
 	@Test
 	public void testMovement() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovement(8);
-		assertEquals(8, p.getMovement());
+		p.setMovement(Player.Movement.NO_MOVEMENT);
+		assertEquals(Player.Movement.NO_MOVEMENT, p.getMovement());
 	}
 	
 	@Test

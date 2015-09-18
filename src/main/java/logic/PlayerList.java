@@ -18,8 +18,8 @@ import org.newdawn.slick.state.StateBasedGame;
 public class PlayerList {
 	
 	private ArrayList<Player> playerList;
-	private MainGame mg;
-	private GameState gs;
+	private MainGame mainGame;
+	private GameState gameState;
 	
 	private boolean processCollisions = true;
 	
@@ -35,15 +35,15 @@ public class PlayerList {
 	/**
 	 * The constructor of playerlist.
 	 * @param player1	- the first player of the list
-	 * @param mg		- the maingame
-	 * @param gs		- the gamestate
+	 * @param mainGame		- the maingame
+	 * @param gameState		- the gamestate
 	 */
-	public PlayerList(Player player1, MainGame mg, GameState gs) {
+	public PlayerList(Player player1, MainGame mainGame, GameState gameState) {
 		super();
 		playerList = new ArrayList<Player>();
 		playerList.add(player1);
-		this.mg = mg;
-		this.gs = gs;
+		this.mainGame = mainGame;
+		this.gameState = gameState;
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class PlayerList {
 	 */
 	public void updatePlayers(float deltaFloat, float containerHeight, float containerWidth) {
 		playerList.get(0).update(deltaFloat, containerHeight, containerWidth, false);
-		if (mg.isMultiplayer()) {
+		if (mainGame.isMultiplayer()) {
 			playerList.get(1).update(deltaFloat, containerHeight, containerWidth, false);	
 		}
 		
@@ -79,13 +79,13 @@ public class PlayerList {
 			if (playerList.get(0).getRectangle().intersects(circle) 
 					&& !playerList.get(0).hasShield()) {
 				//LIVES FUNCTIONALITY
-				playerDeath(mg);
+				playerDeath(mainGame);
 			}
 			
-			if (mg.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)
+			if (mainGame.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)
 					&& !playerList.get(1).hasShield()) {
 				//LIVES FUNCTIONALITY
-				playerDeath(mg);
+				playerDeath(mainGame);
 			}
 		}
 	}
@@ -96,7 +96,7 @@ public class PlayerList {
 	 */
 	public void drawPlayers(Graphics graphics) {
 		drawPlayer(playerList.get(0), graphics);
-		if (mg.isMultiplayer()) {
+		if (mainGame.isMultiplayer()) {
 			RND.text(graphics, playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION,
 					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_1");
 			drawPlayer(playerList.get(1), graphics);
@@ -161,9 +161,9 @@ public class PlayerList {
 			drawPlayerNoMovement(player, graphics);
 		}
 		if (player.hasShield()) {
-			RND.drawColor(graphics, player.getShieldImageN(), player.getShieldImageA(), 
-					player.getX() - SHIELD_DRAW_X_DEVIATION, 
-					player.getY() - SHIELD_DRAW_X_DEVIATION, mg.getColor());
+			RND.drawColor(graphics, player.getShieldImageN(), player.getShieldImageA(),
+					player.getX() - SHIELD_DRAW_X_DEVIATION,
+					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor());
 		}
 		player.setMovement(Player.Movement.NO_MOVEMENT);
 	}
@@ -173,7 +173,7 @@ public class PlayerList {
 		RND.drawColor(graphics, player.getSpritesheetN().getSprite(2, 0),
 				player.getSpritesheetA().getSprite(2, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
 	}
 
 	private void drawPlayerMoveLeft(Player player, Graphics graphics) {
@@ -186,7 +186,7 @@ public class PlayerList {
 		RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0),
 				player.getSpritesheetA().getSprite(sp, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
 	}
 
 	private void drawPlayerMoveRight(Player player, Graphics graphics) {
@@ -200,7 +200,7 @@ public class PlayerList {
 		RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0),
 				player.getSpritesheetA().getSprite(sp, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mg.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
 	}
 
 	/**
@@ -209,16 +209,16 @@ public class PlayerList {
 	 */
 	public void playerDeath(StateBasedGame sbg) {
 		System.out.println("Playerdeath");
-		mg.decreaselifeCount();
-		if (mg.getLifeCount() <= 0) {
-			mg.setScore(mg.getScore() + gs.getScore());
-			mg.setSwitchState(mg.getGameOverState());
-			//sbg.enterState(mg.getGameOverState());
+		mainGame.decreaselifeCount();
+		if (mainGame.getLifeCount() <= 0) {
+			mainGame.setScore(mainGame.getScore() + gameState.getScore());
+			mainGame.setSwitchState(mainGame.getGameOverState());
+			//sbg.enterState(mainGame.getGameOverState());
 		} else {
-			//sbg.enterState(mg.getGameState());
+			//sbg.enterState(mainGame.getGameState());
 			processCollisions = false;
-			mg.setSwitchState(mg.getGameState());
-			//mg.getPlayerList().
+			mainGame.setSwitchState(mainGame.getGameState());
+			//mainGame.getPlayerList().
 		}
 	}
 	
@@ -241,16 +241,16 @@ public class PlayerList {
 	 * Get the maingame.
 	 * @return	- the maingame
 	 */
-	public MainGame getMg() {
-		return mg;
+	public MainGame getMainGame() {
+		return mainGame;
 	}
 
 	/**
 	 * get the gamestate.
 	 * @return	- the gamestate
 	 */
-	public GameState getGs() {
-		return gs;
+	public GameState getGameState() {
+		return gameState;
 	}
 	
 	/**

@@ -154,7 +154,7 @@ public class PlayerListTest {
 		p = new Player(5, 6, 8, 9, i, i, i, i, mg);
 		PlayerList a = new PlayerList(p, mg, gs);
 		
-		assertEquals(mg, a.getMg());
+		assertEquals(mg, a.getMainGame());
 	}
 	
 	@Test
@@ -162,7 +162,7 @@ public class PlayerListTest {
 		p = new Player(5, 6, 8, 9, i, i, i, i, mg);
 		PlayerList a = new PlayerList(p, mg, gs);
 		
-		assertEquals(gs, a.getGs());
+		assertEquals(gs, a.getGameState());
 	}
 
 	@Test
@@ -211,14 +211,14 @@ public class PlayerListTest {
 	public void testGetMg() {
 		p = new Player(5, 6, 8, 9, i, i, i, i, mg);
 		PlayerList a = new PlayerList(p, mg, gs);
-		assertEquals(mg, a.getMg());
+		assertEquals(mg, a.getMainGame());
 	}
 	
 	@Test
 	public void testGetSg() {
 		p = new Player(5, 6, 8, 9, i, i, i, i, mg);
 		PlayerList a = new PlayerList(p, mg, gs);
-		assertEquals(gs, a.getGs());
+		assertEquals(gs, a.getGameState());
 	}
 	
 }

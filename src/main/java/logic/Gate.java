@@ -111,10 +111,10 @@ public class Gate extends Rectangle {
 	 * 
 	 * @return the rectangle identical to the gate's
 	 */
-public MyRectangle getRectangle() {
-	return new MyRectangle(x, y, width, height);
+	public MyRectangle getRectangle() {
+		return new MyRectangle(x, y, width, height);
 	}
-	
+
 	/**
 	 * Add a BouncingCircle to the list that needs to be shot before the gate opens.
 	 * @param circle the circle to add

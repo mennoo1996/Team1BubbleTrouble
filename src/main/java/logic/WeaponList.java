@@ -72,6 +72,7 @@ public class WeaponList {
 		
 		if (player.isShot() && weapon.getRectangle().intersects(circle)) {
 			gameState.getShotList().add(circle);
+			mainGame.getLogger().log("Circle shot", Logger.PriorityLevels.LOW, "weapon");
 			weapon.setVisible(false);
 		}
 	}

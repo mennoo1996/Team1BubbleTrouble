@@ -198,37 +198,41 @@ public class GameOverState extends BasicGameState {
 		}
 		Input input = container.getInput();
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
-			if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				// Start over
-				mainGame.resetLifeCount();
-				mainGame.resetLevelCount();
-				mainGame.setScore(0);
-				mainGame.setSwitchState(mainGame.getGameState());
-				mainGame.getLogger().log("play button clicked", 
-						Logger.PriorityLevels.MEDIUM, "user-input");
-			} 
-			else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				// Save score
-				saveScore();
-				mainGame.getLogger().log("save button clicked", 
-						Logger.PriorityLevels.MEDIUM, "user-input");
-			}
-			else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				// Go to startState
-				mainGame.setScore(0);
-				mainGame.setLevelCounter(0);
-				mainGame.setSwitchState(mainGame.getStartState());
-				mainGame.getLogger().log("Menu Button clicked", 
-						Logger.PriorityLevels.MEDIUM, "user-input");
-			}
-			else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				mainGame.setSwitchState(-1);
-				mainGame.getLogger().log("exit button clicked", 
-						Logger.PriorityLevels.MEDIUM, "user-input");
-			}
+			processButtons(input);
 		}
 		handleTextField(input);
 		exit(container, sbg, delta);
+	}
+	
+	private void processButtons(Input input) {
+		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Start over
+			mainGame.resetLifeCount();
+			mainGame.resetLevelCount();
+			mainGame.setScore(0);
+			mainGame.setSwitchState(mainGame.getGameState());
+			mainGame.getLogger().log("play button clicked", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		} 
+		else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Save score
+			saveScore();
+			mainGame.getLogger().log("save button clicked", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		}
+		else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			// Go to startState
+			mainGame.setScore(0);
+			mainGame.setLevelCounter(0);
+			mainGame.setSwitchState(mainGame.getStartState());
+			mainGame.getLogger().log("Menu Button clicked", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		}
+		else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			mainGame.setSwitchState(-1);
+			mainGame.getLogger().log("exit button clicked", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		}
 	}
 	
 	private void handleTextField(Input input) {

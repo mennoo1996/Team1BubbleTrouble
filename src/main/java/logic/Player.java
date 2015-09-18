@@ -445,12 +445,15 @@ public class Player {
 	}
 
 	private void addShield() {
-		shieldCount += 1;
-		shieldTimeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_DURATION);
-		Executors.newScheduledThreadPool(1).schedule(() -> shieldCount -= 1,
-				POWERUP_DURATION, TimeUnit.SECONDS);
-	}
-
+        shieldCount += 1;
+        shieldTimeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_DURATION);
+        Executors.newScheduledThreadPool(1).schedule(() -> {
+                    if (shieldCount > 0) {
+                        shieldCount -= 1;
+                    }
+                },
+                POWERUP_DURATION, TimeUnit.SECONDS);
+    }
 	private void addWeapon(Powerup.PowerupType type) {
 		weapons.add(type);
 		Executors.newScheduledThreadPool(1).schedule(() -> {

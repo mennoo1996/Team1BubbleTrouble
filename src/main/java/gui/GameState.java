@@ -257,6 +257,7 @@ public class GameState extends BasicGameState {
 				} else {
 					mainGame.getPlayerList().getPlayers().forEach(Player::respawn);
 					mainGame.getPlayerList().setProcessCollisions(true);
+					mainGame.switchColor();
 					sbg.enterState(mainGame.getSwitchState());
 				}
 			}	

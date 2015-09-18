@@ -175,6 +175,7 @@ public class GameOverState extends BasicGameState {
 				if (mainGame.getSwitchState() == -1) {
 					mainGame.closeRequested();
 				} else {
+					mainGame.switchColor();
 					sbg.enterState(mainGame.getSwitchState());
 				}
 			}	

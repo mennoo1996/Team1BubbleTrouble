@@ -20,6 +20,7 @@ import logic.Coin;
 import logic.FloatingScore;
 import logic.Gate;
 import logic.LevelContainer;
+import logic.Logger;
 import logic.Logger.PriorityLevels;
 import logic.MyRectangle;
 import logic.Player;
@@ -203,10 +204,10 @@ public class GameState extends BasicGameState {
 	 * @throws SlickException sometimes.
 	 */
 	@Override
-	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {	
+	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {		
+		mainGame.getLogger().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
-		// If still shooting stop it
 		random = new Random();
 		mainGame.getPlayerList().setAllPlayersShot(false);
 		mainGame.getPlayerList().getPlayers().forEach(Player::respawn);
@@ -225,7 +226,6 @@ public class GameState extends BasicGameState {
 		setRightWall(new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
-		// Add arraylists of circles
 		floatingScoreList = new ArrayList<FloatingScore>();
 		circleList = levels.getLevel(mainGame.getLevelCounter()).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
@@ -249,11 +249,13 @@ public class GameState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
+				mainGame.getLogger().log("Exiting GameState", Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					System.exit(0);
 				} else {
 					mainGame.getPlayerList().getPlayers().forEach(Player::respawn);
 					mainGame.getPlayerList().setProcessCollisions(true);
+					mainGame.switchColor();
 					sbg.enterState(mainGame.getSwitchState());
 				}
 			}	
@@ -657,7 +659,6 @@ public class GameState extends BasicGameState {
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		for (Coin coin : droppedCoins) {
-			System.out.println(coin.getX() + " " + coin.getY());
 			RND.drawColor(graphics, coinImageN, coinImageA, 
 					coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
 					mainGame.getColor());

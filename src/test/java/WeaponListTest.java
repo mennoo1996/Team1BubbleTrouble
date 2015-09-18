@@ -23,6 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.opengl.Texture;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -57,6 +58,9 @@ public class WeaponListTest {
 		
 		img = mock(Image.class);
 		imgA = mock(Image.class);
+		Texture texture = mock(Texture.class);
+		when(img.getTexture()).thenReturn(texture);
+		when(imgA.getTexture()).thenReturn(texture);
 		wl.setLaserbeamimage(img, imgA);
 		wl.setLasertipimage(img, imgA);
 	}

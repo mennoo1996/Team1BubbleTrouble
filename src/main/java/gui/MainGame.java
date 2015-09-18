@@ -1,5 +1,4 @@
 package gui;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import logic.HighScores;
@@ -7,6 +6,7 @@ import logic.HighScoresParser;
 import logic.Logger;
 import logic.Player;
 import logic.PlayerList;
+import logic.ShutDownHook;
 
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
@@ -119,6 +119,9 @@ public class MainGame extends StateBasedGame {
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		highscores.setLogger(logger);
 		this.multiplayer = false;
+		
+		ShutDownHook shutDownHook = new ShutDownHook(this);
+		shutDownHook.attachShutDownHook();
 	}
 	
 	@Override
@@ -804,3 +807,4 @@ public class MainGame extends StateBasedGame {
 	}
 	
 }
+

@@ -292,18 +292,22 @@ public class MainGame extends StateBasedGame {
 		
 		this.gameStateState = new GameState(this);
 		logger.log("GameState initialized", Logger.PriorityLevels.LOW, "States");
+		this.settingsState = new SettingsState(this);
+		logger.log("SettingsState initialized", Logger.PriorityLevels.LOW, "States");
+		this.startState = new StartState(this);
+		logger.log("StartState initialized", Logger.PriorityLevels.LOW, "States");
+		this.gameOverState = new GameOverState(this);
+		logger.log("GameOverState initialized", Logger.PriorityLevels.LOW, "States");
 		
-		this.addState(new StartState(this));
-		logger.log("Startstate initialized and added", Logger.PriorityLevels.LOW, "States");
 		
+		this.addState(startState);
+		logger.log("Startstate added", Logger.PriorityLevels.LOW, "States");
 		this.addState(gameStateState);
 		logger.log("GameState added", Logger.PriorityLevels.LOW, "States");
-		
-		this.addState(new GameOverState(this));
-		logger.log("GameOverState initialized and added", Logger.PriorityLevels.LOW, "States");
-		
-		this.addState(new SettingsState(this));
-		logger.log("Settingsstate initialized and added", Logger.PriorityLevels.LOW, "States");
+		this.addState(gameOverState);
+		logger.log("GameOverState added", Logger.PriorityLevels.LOW, "States");
+		this.addState(settingsState);
+		logger.log("Settingsstate added", Logger.PriorityLevels.LOW, "States");
 		
 		initImages();
 		initPlayers();

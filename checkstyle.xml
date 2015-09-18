@@ -124,4 +124,10 @@
   <module name="SuppressionCommentFilter"/>
   <module name="SuppressWithNearbyCommentFilter"/>
   <module name="SuppressWarningsFilter" />
+  <module name="SupressionCommentFilter" />
+  <module name="ParameterNumber">
+  	<property name="id" value="maxParamaterNumber"/>
+  	<property name="max" value="20"/>
+  	<property name="tokens" value="METHOD_DEF"/>
+  </module>
 </module>

@@ -99,6 +99,7 @@ public final class RND {
 		}
 	}
 
+	
 	/**
 	 * Draw stretched function, with color settings.
 	 * @param g graphics context
@@ -118,7 +119,6 @@ public final class RND {
 			float x, float y, float x2, float y2, 
 			float srcx, float srcy, float srcx2, float srcy2,
 			Color color) {
-		
 		g.drawImage(n, x, y, x2, y2, srcx, srcy, srcx2, srcy2,
 				new Color(color.r, color.g, color.b, opacity)); 
 		
@@ -199,21 +199,5 @@ public final class RND {
 		graphics.drawImage(imageNorm, x, y);
 		
 	}
-	
-//	/**
-//	 * draws simple stretched image to screen.
-//	 * @param graphics
-//	 * @param imageNorm
-//	 * @param x
-//	 * @param y
-//	 * @param x2
-//	 * @param y2
-//	 */
-//	public static void drawStretched(Graphics graphics, Image imageNorm,
-//			int x, int y, int x2, int y2) {
-//		
-//		graphics.drawImage(imageNorm, x, y);
-//		
-//	}
 	
 }

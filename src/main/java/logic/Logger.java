@@ -97,7 +97,6 @@ public class Logger {
 			if (consoleLoggingOn && !testing) {
 				System.out.println(newLogString);
 			}
-
 			if (filterFile) {
 				if (logBuffer.length() != 0) {
 					logBuffer += "\n";
@@ -105,7 +104,6 @@ public class Logger {
 				logBuffer += newLogString;	
 			}
 		}
-		
 		if (!filterFile) {
 			if (logBuffer.length() != 0) {
 				logBuffer += "\n";

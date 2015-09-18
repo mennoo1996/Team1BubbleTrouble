@@ -112,7 +112,7 @@ public class BouncingCircle extends Circle {
 		} else {
 			for (Gate gate : gs.getGateList()) {
 				if (gate.getRectangle().intersects(this.getCircle())) {
-					if (gate.getRequired().contains(this)) {
+					if (gate.getUnlockCircles().contains(this)) {
 						xSpeed = -initSpeed;
 					} else {
 						xSpeed = initSpeed;

@@ -416,14 +416,19 @@ public class GameState extends BasicGameState {
                 			PriorityLevels.MEDIUM,
 							"BouncingCircles");
                 } // if it was part of the gate reqs, add to new gate reqs
-                for (Gate gate : gateList) {
-                	if (gate.getRequired().contains(circle)) {
-                		gate.getRequired().remove(circle);
-                	}
-                	if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
-                		gate.addToRequirements(splits);
-                	}
-                }
+				processUnlockCirclesGates(circle, splits);
+			}
+        }
+	}
+
+	private void processUnlockCirclesGates(BouncingCircle circle,
+										   ArrayList<BouncingCircle> splits) {
+		for (Gate gate : gateList) {
+            if (gate.getUnlockCircles().contains(circle)) {
+                gate.getUnlockCircles().remove(circle);
+            }
+            if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
+                gate.addToRequirements(splits);
             }
         }
 	}
@@ -464,7 +469,7 @@ public class GameState extends BasicGameState {
 	private void updateGateExistence(float deltaFloat) {
 		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
 		for (Gate gate : gateList) {
-			if (gate.getRequired().isEmpty()) {
+			if (gate.getUnlockCircles().isEmpty()) {
 				tempGateList.add(gate);
 				gate.setFading(true);
 			}
@@ -704,28 +709,24 @@ public class GameState extends BasicGameState {
 		for (BouncingCircle circle : circleList) {
 			//graphics.fill(circle.getCircle(), shapeFill);
 			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
+			final float xPosition = circle.getMinX() - offset;
+			final float yPosition = circle.getMinY() - offset;
 			switch (r) {
 				case(RADIUS_6) : RND.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
-						circle.getMinX() - offset,
-						circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(RADIUS_5) : RND.drawColor(graphics, ballsImagesN[1], ballsImagesA[1],
-						circle.getMinX() - offset,
-						circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(RADIUS_4) : RND.drawColor(graphics, ballsImagesN[2], ballsImagesA[2],
-						circle.getMinX() - offset,
-						circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(RADIUS_3) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_THREE], ballsImagesA[BALL_IMAGE_THREE],
-						circle.getMinX() - offset,
-						circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(RADIUS_2) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_FOUR], ballsImagesA[BALL_IMAGE_FOUR],
-						circle.getMinX() - offset,
-						circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				case(MINIMUM_RADIUS) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_FIVE], ballsImagesA[BALL_IMAGE_FIVE],
-						circle.getMinX() - offset,
-						circle.getMinY() - offset, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor()); break;
 				default:
 					try {
 						throw new SlickException("Radius was not one of the supported");

@@ -37,7 +37,7 @@ public class GameState extends BasicGameState {
 	
 	private  int totaltime;
 	
-	private MainGame mg;
+	private MainGame mainGame;
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
 	private ArrayList<Powerup> droppedPowerups;
@@ -190,10 +190,10 @@ public class GameState extends BasicGameState {
 	/**
 	 * constructor.
 	 * 
-	 * @param mg	- the maingame this state belongs to
+	 * @param mainGame	- the maingame this state belongs to
 	 */
-	public GameState(MainGame mg) {
-		this.mg = mg;
+	public GameState(MainGame mainGame) {
+		this.mainGame = mainGame;
 	}
 	
 	/**
@@ -204,15 +204,18 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {		
+		ArrayList<String> al = new ArrayList<String>();
+		al.get(0);
+		
 		RND.setOpacity(0.0f);
-		mg.stopSwitchState();
+		mainGame.stopSwitchState();
 		// If still shooting stop it
 		random = new Random();
-		mg.getPlayerList().setAllPlayersShot(false);
-		mg.getPlayerList().getPlayers().forEach(Player::respawn);
+		mainGame.getPlayerList().setAllPlayersShot(false);
+		mainGame.getPlayerList().getPlayers().forEach(Player::respawn);
 		score = 0;
 		levels.initialize();
-		totaltime = levels.getLevel(mg.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
+		totaltime = levels.getLevel(mainGame.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
 		startTime = System.currentTimeMillis();
 		timeRemaining = totaltime;
 		prevTime = startTime;
@@ -227,9 +230,9 @@ public class GameState extends BasicGameState {
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		// Add arraylists of circles
 		floatingScoreList = new ArrayList<FloatingScore>();
-		circleList = levels.getLevel(mg.getLevelCounter()).getCircles();
+		circleList = levels.getLevel(mainGame.getLevelCounter()).getCircles();
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
-		gateList = levels.getLevel(mg.getLevelCounter()).getGates();
+		gateList = levels.getLevel(mainGame.getLevelCounter()).getGates();
 		droppedPowerups = new ArrayList<>();
 		droppedCoins = new ArrayList<>();
 	}
@@ -241,20 +244,20 @@ public class GameState extends BasicGameState {
 	 * @param delta the deltatime in ms
 	 */
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
-		if (mg.getShouldSwitchState()) {
+		if (mainGame.getShouldSwitchState()) {
 			if (RND.getOpacity() > 0.0f) {
-				int fadeTimer = mg.getOpacityFadeTimer();
-				if (mg.getSwitchState() == -1) {
+				int fadeTimer = mainGame.getOpacityFadeTimer();
+				if (mainGame.getSwitchState() == -1) {
 					fadeTimer = 2 * 2 * 2 * fadeTimer;
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
-				if (mg.getSwitchState() == -1) {
-					mg.closeRequested();
+				if (mainGame.getSwitchState() == -1) {
+					mainGame.closeRequested();
 				} else {
-					mg.getPlayerList().getPlayers().forEach(Player::respawn);
-					mg.getPlayerList().setProcessCollisions(true);
-					sbg.enterState(mg.getSwitchState());
+					mainGame.getPlayerList().getPlayers().forEach(Player::respawn);
+					mainGame.getPlayerList().setProcessCollisions(true);
+					sbg.enterState(mainGame.getSwitchState());
 				}
 			}	
 		}
@@ -277,11 +280,11 @@ public class GameState extends BasicGameState {
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		
-		levels = new LevelContainer(mg);
+		levels = new LevelContainer(mainGame);
 		
 		Weapon weapon1 = null;
 		Weapon weapon2 = null;
-		weaponList = new WeaponList(weapon1, mg, this, false);
+		weaponList = new WeaponList(weapon1, mainGame, this, false);
 		weaponList.add(weapon2);
 	}
 
@@ -297,11 +300,11 @@ public class GameState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 
-		if (RND.getOpacity() < 1.0f && !mg.getShouldSwitchState()) {
-			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
+		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
 		setSavedInput(container.getInput());
-		if (playingState && !mg.getShouldSwitchState()) {
+		if (playingState && !mainGame.getShouldSwitchState()) {
 			// Timer logic
 			long curTime = System.currentTimeMillis();
 			timeDelta = curTime - prevTime;
@@ -332,7 +335,7 @@ public class GameState extends BasicGameState {
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 
 		// player-thingy
-		mg.getPlayerList().updatePlayers(deltaFloat, container.getHeight(), container.getWidth());
+		mainGame.getPlayerList().updatePlayers(deltaFloat, container.getHeight(), container.getWidth());
 		processPause();
 		processCircles(container, sbg, deltaFloat);
 		updateFloatingScores(deltaFloat);
@@ -358,25 +361,25 @@ public class GameState extends BasicGameState {
 		}
 
 		if (timeRemaining <= 0) {
-            mg.getPlayerList().playerDeath(sbg);
+            mainGame.getPlayerList().playerDeath(sbg);
         }
 		prevTime = curTime;
 	}
 
 	private void processPauseButtons(GameContainer container, StateBasedGame sbg) {
 		Input input = container.getInput();
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mg.getShouldSwitchState()) {
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY()) 
 					&& !waitEsc) {
 				prevTime = System.currentTimeMillis();
 				countIn = true;
 				playingState = true;
 			} else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				mg.setScore(0);
-				mg.setLevelCounter(0);
-				mg.setSwitchState(mg.getStartState());
+				mainGame.setScore(0);
+				mainGame.setLevelCounter(0);
+				mainGame.setSwitchState(mainGame.getStartState());
 			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				mg.setSwitchState(-1);
+				mainGame.setSwitchState(-1);
 			}
 		}
 	}
@@ -405,11 +408,11 @@ public class GameState extends BasicGameState {
                 } // if the ball has a radius of 20, split it u
                 ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
                 if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
-                	splits = circle.getSplittedCircles(mg);
+                	splits = circle.getSplittedCircles(mainGame);
                     circleList.addAll(splits);
 					checkBonus(circle);
                 } else {
-                	mg.getLogger().log("Circle with radius 10 shot, no new balls entered the game", 
+                	mainGame.getLogger().log("Circle with radius 10 shot, no new balls entered the game", 
                 			PriorityLevels.MEDIUM, "BouncingCircles");
                 } // if it was part of the gate reqs, add to new gate reqs
                 for (Gate gate : gateList) {
@@ -434,7 +437,7 @@ public class GameState extends BasicGameState {
             //update circles
             circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
 
-            mg.getPlayerList().intersectPlayersWithCircle(circle);
+            mainGame.getPlayerList().intersectPlayersWithCircle(circle);
             
             weaponList.intersectWeaponsWithCircle(circle);
 
@@ -482,17 +485,17 @@ public class GameState extends BasicGameState {
 		
 		if (waitForLevelEnd && timeRemaining == 1) {
             
-            mg.setScore(mg.getScore() + score); // update total score
-            int levelCounter = mg.getLevelCounter();
+            mainGame.setScore(mainGame.getScore() + score); // update total score
+            int levelCounter = mainGame.getLevelCounter();
 			if (levelCounter < levels.size() - 1) {
                 waitForLevelEnd = false;
-                mg.setLevelCounter(mg.getLevelCounter() + 1);
-                //sbg.enterState(mg.getGameState()); // next level
-                mg.setSwitchState(mg.getGameState());
+                mainGame.setLevelCounter(mainGame.getLevelCounter() + 1);
+                //sbg.enterState(mainGame.getGameState()); // next level
+                mainGame.setSwitchState(mainGame.getGameState());
             } else {
                 waitForLevelEnd = false;
-               // sbg.enterState(mg.getGameOverState()); // game completed
-                mg.setSwitchState(mg.getGameOverState());
+               // sbg.enterState(mainGame.getGameOverState()); // game completed
+                mainGame.setSwitchState(mainGame.getGameOverState());
             }
         }
 	}
@@ -526,31 +529,31 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		// draw background layer
-		RND.draw(graphics, mg.getBackgroundImage(), 0, 0);
+		RND.draw(graphics, mainGame.getBackgroundImage(), 0, 0);
 		graphics.setColor(Color.white);
 		// draw all active circles
 		drawActiveCircles(graphics);
 		drawFloatingScores(graphics);
 		RND.drawColor(graphics, ceilingImageN, ceilingImageA, getLeftWall().getWidth() 
 				- CEILING_DRAW_X_DEVIATION, getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION, 
-				mg.getColor());
+				mainGame.getColor());
 		drawGates(container, graphics);
 		weaponList.drawWeapons(graphics);
 		// draw player
-		mg.getPlayerList().drawPlayers(graphics);
+		mainGame.getPlayerList().drawPlayers(graphics);
 		drawItems(graphics);
 		// Draw walls, floor and ceiling
-		RND.drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mg.getColor());
+		RND.drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mainGame.getColor());
 		drawCountdownBar(container, graphics);
 		// Draw level/Score data
 		RND.text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
-						+ Integer.toString(mg.getLevelCounter() + 1));
+						+ Integer.toString(mainGame.getLevelCounter() + 1));
 		String renderedScore;
-		if (mg.getShouldSwitchState()) {
-			renderedScore = Integer.toString(mg.getScore());
+		if (mainGame.getShouldSwitchState()) {
+			renderedScore = Integer.toString(mainGame.getScore());
 		} else {
-			renderedScore = Integer.toString(mg.getScore() + score);
+			renderedScore = Integer.toString(mainGame.getScore() + score);
 		}
 		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + renderedScore);
@@ -573,11 +576,11 @@ public class GameState extends BasicGameState {
 			drawPausedScreen(container, graphics);
 		}
 		// draw version number
-		mg.drawWaterMark();
+		mainGame.drawWaterMark();
 		// draw foreground layer
-		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		// draw terminal
-		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 		// disable button when paused
 		if (!playingState) {
 			graphics.drawImage(nobuttonImage, 0, 0);
@@ -588,27 +591,27 @@ public class GameState extends BasicGameState {
 
 	private void drawShieldTimer(Graphics graphics) {
 		int height = SHIELD_COUNTER_OFFSET_Y;
-		if (mg.getPlayerList().getPlayers().get(0).hasShield()) {
+		if (mainGame.getPlayerList().getPlayers().get(0).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
-			float rem = mg.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
+			float rem = mainGame.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
 				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
 						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mg.getColor());
+						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
 			}
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, "#" + rem / SHIELD_COUNTER_DIVIDER + "s");
 		}
-		if (mg.isMultiplayer() && mg.getPlayerList().getPlayers().get(1).hasShield()) {
+		if (mainGame.isMultiplayer() && mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
-			float rem = mg.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
+			float rem = mainGame.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
 				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
 						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mg.getColor());
+						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
 			}
 			RND.text(SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
@@ -628,15 +631,15 @@ public class GameState extends BasicGameState {
 			if (pow.getType() == Powerup.PowerupType.SHIELD) {
 				RND.drawColor(graphics, shieldImageN, shieldImageA, 
 						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-						mg.getColor());
+						mainGame.getColor());
 			} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
 				RND.drawColor(graphics, vineImageN, vineImageA, 
 						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-						mg.getColor());
+						mainGame.getColor());
 			} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
 				RND.drawColor(graphics, laserImageN, laserImageA, 
 						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-						mg.getColor());
+						mainGame.getColor());
 			}
 //			graphics.fillRect(pow.getX(), pow.getY(),
 //					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
@@ -649,7 +652,7 @@ public class GameState extends BasicGameState {
 			System.out.println(coin.getX() + " " + coin.getY());
 			RND.drawColor(graphics, coinImageN, coinImageA, 
 					coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
-					mg.getColor());
+					mainGame.getColor());
 		}
 		graphics.setColor(Color.white);
 	}
@@ -659,7 +662,7 @@ public class GameState extends BasicGameState {
 			RND.drawColor(graphics, counterBarImageN, counterBarImageA,
 					container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION - COUNTER_BAR_PARTS_FACTOR
 					* (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR,
-					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mg.getColor());
+					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mainGame.getColor());
 		}
 	}
 
@@ -676,7 +679,7 @@ public class GameState extends BasicGameState {
 			float srcx2 = gateUpperN.getWidth();
 			float srcy2 = gateUpperN.getHeight();
 			RND.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
-					srcx, srcy, srcx2, srcy2, mg.getColor());
+					srcx, srcy, srcx2, srcy2, mainGame.getColor());
 			//lower
 			left = GATE_LEFT_LOWER;
 			float up = GATE_UP;
@@ -690,7 +693,7 @@ public class GameState extends BasicGameState {
 			srcx2 = gateLowerN.getWidth();
 			srcy2 = GATE_Y_FACTOR_LOWER * gate.getHeightPercentage();
 			RND.drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
-					srcx, srcy, srcx2, srcy2, mg.getColor());
+					srcx, srcy, srcx2, srcy2, mainGame.getColor());
 		}
 	}
 
@@ -700,21 +703,21 @@ public class GameState extends BasicGameState {
 			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
 			switch (r) {
 				case(RADIUS_6) : RND.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
-							circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); 
+							circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); 
 				break;
 				case(RADIUS_5) : RND.drawColor(graphics, ballsImagesN[1], ballsImagesA[1],
-						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
 				case(RADIUS_4) : RND.drawColor(graphics, ballsImagesN[2], ballsImagesA[2],
-						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
 				case(RADIUS_3) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_THREE], ballsImagesA[BALL_IMAGE_THREE],
-						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
 				case(RADIUS_2) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_FOUR], ballsImagesA[BALL_IMAGE_FOUR],
-						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
 				case(MINIMUM_RADIUS) : RND.drawColor(graphics, 
 						ballsImagesN[BALL_IMAGE_FIVE], ballsImagesA[BALL_IMAGE_FIVE],
-						circle.getMinX() - offset, circle.getMinY() - offset, mg.getColor()); break;
+						circle.getMinX() - offset, circle.getMinY() - offset, mainGame.getColor()); break;
 				default:
 					try {
 						throw new SlickException("Radius was not one of the supported");
@@ -728,13 +731,13 @@ public class GameState extends BasicGameState {
 	private void drawFloatingScores(Graphics graphics) {
 		for (FloatingScore score : floatingScoreList) {
 			RND.text(graphics, score.getX(), score.getY(), score.getScore(),
-					new Color(mg.getColor().r, mg.getColor().g,
-							mg.getColor().b, score.getOpacity()));
+					new Color(mainGame.getColor().r, mainGame.getColor().g,
+							mainGame.getColor().b, score.getOpacity()));
 		}
 	}
 	
 	private void drawHealth(Graphics graphics) {
-		switch (mg.getLifeCount()) {
+		switch (mainGame.getLifeCount()) {
 			case(0) :
 				graphics.drawImage(health0Image, 0, 0);
 			break;
@@ -777,26 +780,26 @@ public class GameState extends BasicGameState {
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
 					returnButton.getImageMouseOverA(), returnButton.getX(), returnButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(),
-					returnButton.getX(), returnButton.getY(), mg.getColor());
+					returnButton.getX(), returnButton.getY(), mainGame.getColor());
 		}
 		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, menuButton.getImageMouseOverN(), 
 					menuButton.getImageMouseOverA(), menuButton.getX(), menuButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, menuButton.getImageN(), menuButton.getImageA(),
-					menuButton.getX(), menuButton.getY(), mg.getColor());
+					menuButton.getX(), menuButton.getY(), mainGame.getColor());
 		}
 		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, exitButton.getImageMouseOverN(), 
 					exitButton.getImageMouseOverA(), exitButton.getX(), exitButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
-					exitButton.getX(), exitButton.getY(), mg.getColor());
+					exitButton.getX(), exitButton.getY(), mainGame.getColor());
 		}		
 	}
 
@@ -822,7 +825,7 @@ public class GameState extends BasicGameState {
             RND.drawColor(graphics, counterBarImageN, counterBarImageA,
             		container.getWidth() / 2 - COUNTER_BAR_DRAW_X_DEVIATION, 
             		container.getHeight() / 2 - COUNTER_BAR_DRAW_Y_DEVIATION, 
-            		mg.getColor());
+            		mainGame.getColor());
             counterBarImageN.rotate(-degree);
             counterBarImageA.rotate(-degree);
         }
@@ -989,16 +992,16 @@ public class GameState extends BasicGameState {
 	 * Get the MainGame.
 	 * @return the maingame
 	 */
-	public MainGame getMg() {
-		return mg;
+	public MainGame getmainGame() {
+		return mainGame;
 	}
 
 	/**
 	 * Set the maingame.
-	 * @param mg the maingame to set.
+	 * @param mainGame the maingame to set.
 	 */
-	public void setMg(MainGame mg) {
-		this.mg = mg;
+	public void setmainGame(MainGame mainGame) {
+		this.mainGame = mainGame;
 	}
 
 	/**

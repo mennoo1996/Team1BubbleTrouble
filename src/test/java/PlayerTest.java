@@ -467,8 +467,8 @@ public class PlayerTest {
 	public void testGetAndSetGS() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		GameState gs2 = mock(GameState.class);
-		p.setGs(gs2);
-		assertEquals(gs2, p.getGs());
+		p.setgameState(gs2);
+		assertEquals(gs2, p.getgameState());
 	}
 	
 	@Test

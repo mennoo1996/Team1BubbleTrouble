@@ -23,7 +23,7 @@ public class GameStateTest {
 	public void testGameState() {
 		MainGame mg = new MainGame(null);
 		GameState gamestate = new GameState(mg);
-		assertEquals(gamestate.getMg(),mg);
+		assertEquals(gamestate.getmainGame(),mg);
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class GameStateTest {
 	public void testGetMainGame() {
 		MainGame mg = new MainGame(null);
 		GameState gamestate = new GameState(mg);
-		assertEquals(mg,gamestate.getMg());
+		assertEquals(mg,gamestate.getmainGame());
 	}
 	
 	@Test
@@ -95,8 +95,8 @@ public class GameStateTest {
 		MainGame mg = new MainGame(null);
 		MainGame mo = new MainGame("hi");
 		GameState gamestate = new GameState(mg);
-		gamestate.setMg(mo);
-		assertEquals(mo,gamestate.getMg());
+		gamestate.setmainGame(mo);
+		assertEquals(mo,gamestate.getmainGame());
 	}
 
 }

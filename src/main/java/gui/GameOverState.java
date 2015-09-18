@@ -24,8 +24,8 @@ public class GameOverState extends BasicGameState {
 	private Button saveButton;
 	private Button exitButton;
 	
-	private MainGame mg;
-	private TextField tf;
+	private MainGame mainGame;
+	private TextField textField;
 	private Image tfBackgroundN;
 	private Image tfBackgroundA;
 	private Image health0Image;
@@ -79,10 +79,10 @@ public class GameOverState extends BasicGameState {
 	
 	/**
 	 * Constructor.
-	 * @param mg the maingame in which this state will be used.
+	 * @param mainGame the maingame in which this state will be used.
 	 */
-	public GameOverState(MainGame mg) {
-		this.mg = mg;
+	public GameOverState(MainGame mainGame) {
+		this.mainGame = mainGame;
 	}
 	
 	/**
@@ -141,14 +141,14 @@ public class GameOverState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
 		RND.setOpacity(0.0f);
-		mg.stopSwitchState();
-		tf = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
+		mainGame.stopSwitchState();
+		textField = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
 				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
-		tf.setBackgroundColor(null);
-		tf.setBorderColor(null);
-		tf.setFocus(true);
-		displayLives = mg.getLifeCount();
-		mg.setLifeCount(MainGame.getLives());
+		textField.setBackgroundColor(null);
+		textField.setBorderColor(null);
+		textField.setFocus(true);
+		displayLives = mainGame.getLifeCount();
+		mainGame.setLifeCount(MainGame.getLives());
 		inputMessage = null;
 		highScoreEntered = false;
 	}
@@ -160,18 +160,18 @@ public class GameOverState extends BasicGameState {
 	 * @param delta the deltatime in ms
 	 */
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
-		if (mg.getShouldSwitchState()) {
+		if (mainGame.getShouldSwitchState()) {
 			if (RND.getOpacity() > 0.0f) {
-				int fadeTimer = mg.getOpacityFadeTimer();
-				if (mg.getSwitchState() == -1) {
+				int fadeTimer = mainGame.getOpacityFadeTimer();
+				if (mainGame.getSwitchState() == -1) {
 					fadeTimer = 2 * 2 * 2 * fadeTimer;
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
-				if (mg.getSwitchState() == -1) {
-					mg.closeRequested();
+				if (mainGame.getSwitchState() == -1) {
+					mainGame.closeRequested();
 				} else {
-					sbg.enterState(mg.getSwitchState());
+					sbg.enterState(mainGame.getSwitchState());
 				}
 			}	
 		}
@@ -186,17 +186,17 @@ public class GameOverState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
-		if (RND.getOpacity() < 1.0f && !mg.getShouldSwitchState()) {
-			RND.setOpacity(RND.getOpacity() + ((float) delta) / mg.getOpacityFadeTimer());
+		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
 			Input input = container.getInput();
-			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mg.getShouldSwitchState()) {
+			if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 				if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 					// Start over
-					mg.resetLifeCount();
-					mg.resetLevelCount();
-					mg.setScore(0);
-					mg.setSwitchState(mg.getGameState());
+					mainGame.resetLifeCount();
+					mainGame.resetLevelCount();
+					mainGame.setScore(0);
+					mainGame.setSwitchState(mainGame.getGameState());
 				} 
 				else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 					// Save score
@@ -204,23 +204,23 @@ public class GameOverState extends BasicGameState {
 				}
 				else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 					// Go to startState
-					mg.setScore(0);
-					mg.setLevelCounter(0);
-					mg.setSwitchState(mg.getStartState());
+					mainGame.setScore(0);
+					mainGame.setLevelCounter(0);
+					mainGame.setSwitchState(mainGame.getStartState());
 				}
 				else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-					mg.setSwitchState(-1);
+					mainGame.setSwitchState(-1);
 				}
 			}
-			handleTF(input);
+			handleTextField(input);
 			exit(container, sbg, delta);
 		}
 	
-	private void handleTF(Input input) {
-		if (tf.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
+	private void handleTextField(Input input) {
+		if (textField.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
 				|| inputMessage.equals("Maximum length is 34 characters")) 
 				&& !highScoreEntered) {
-			if (tf.getText().length() < MAX_NAME_LENGTH) {
+			if (textField.getText().length() < MAX_NAME_LENGTH) {
                 highScoreEntered = true;
                 saveScore(); }
 			else {
@@ -238,7 +238,7 @@ public class GameOverState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		graphics.drawImage(mg.getBackgroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
 				"Waiting for user input...");
@@ -248,26 +248,26 @@ public class GameOverState extends BasicGameState {
 			RND.text(graphics, TEXT_X, TEXT_1_Y, "# You won! You are the champion!");
 		}
 		
-		RND.text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " + mg.getScore());
+		RND.text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " + mainGame.getScore());
 		RND.text(graphics, TEXT_X, TEXT_3_Y, "# Please enter your name below");
 
 		RND.drawColor(graphics, tfBackgroundN, tfBackgroundA,
-				tf.getX() - TF_BACKGROUND_DEVIATION, tf.getY() - TF_BACKGROUND_DEVIATION, 
-				mg.getColor());
-		RND.text(graphics, tf.getX(), tf.getY(), tf.getText(), mg.getColor());
+				textField.getX() - TF_BACKGROUND_DEVIATION, textField.getY() - TF_BACKGROUND_DEVIATION, 
+				mainGame.getColor());
+		RND.text(graphics, textField.getX(), textField.getY(), textField.getText(), mainGame.getColor());
 		if (inputMessage != null) {
 			RND.text(graphics, TEXT_X, TEXT_4_Y, inputMessage);
 		}
 		renderButtons(container, graphics);
-		mg.drawWaterMark();
-		RND.drawColor(graphics, mg.getGameLogoN(), mg.getGameLogoA(),
-				LOGO_X, LOGO_Y, mg.getColor());
+		mainGame.drawWaterMark();
+		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
+				LOGO_X, LOGO_Y, mainGame.getColor());
 		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
-		mg.getHighscores().sort();
-		String highScoresString = mg.getHighscores().toString();
+		mainGame.getHighscores().sort();
+		String highScoresString = mainGame.getHighscores().toString();
 		RND.text(graphics, HIGHSCORES_X, SEPARATOR_Y, highScoresString);
-		graphics.drawImage(mg.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mg.getTerminalImage(), 0, 0);
+		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 		renderLives(graphics);
 	}
 	
@@ -314,18 +314,18 @@ public class GameOverState extends BasicGameState {
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, playButton.getImageMouseOverN(), 
 					playButton.getImageMouseOverA(), playButton.getX(), playButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, playButton.getImageN(), playButton.getImageA(),
-					playButton.getX(), playButton.getY(), mg.getColor());
+					playButton.getX(), playButton.getY(), mainGame.getColor());
 		}
 		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, menuButton.getImageMouseOverN(), 
 					menuButton.getImageMouseOverA(), menuButton.getX(), menuButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, menuButton.getImageN(), menuButton.getImageA(),
-					menuButton.getX(), menuButton.getY(), mg.getColor());
+					menuButton.getX(), menuButton.getY(), mainGame.getColor());
 		}
 		drawButtonMouseOvers(input, graphics);
 	}
@@ -335,18 +335,18 @@ public class GameOverState extends BasicGameState {
 			if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 				RND.drawColor(graphics, saveButton.getImageMouseOverN(), 
 						saveButton.getImageMouseOverA(), saveButton.getX(), saveButton.getY(), 
-						mg.getColor());
+						mainGame.getColor());
 			} else {
 				RND.drawColor(graphics, saveButton.getImageN(), saveButton.getImageA(),
-						saveButton.getX(), saveButton.getY(), mg.getColor());
+						saveButton.getX(), saveButton.getY(), mainGame.getColor());
 			} }
 		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, exitButton.getImageMouseOverN(), 
 					exitButton.getImageMouseOverA(), exitButton.getX(), exitButton.getY(), 
-					mg.getColor());
+					mainGame.getColor());
 		} else {
 			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
-					exitButton.getX(), exitButton.getY(), mg.getColor());
+					exitButton.getX(), exitButton.getY(), mainGame.getColor());
 		}
 	}
 
@@ -354,11 +354,11 @@ public class GameOverState extends BasicGameState {
 	 * Saves score for this player.
 	 */
 	private void saveScore() {
-		Score score = new Score(mg.getScore(), tf.getText());
-		mg.getHighscores().add(score);
-		mg.getHighscores().sort();
-		HighScoresParser.writeHighScores(mg.getHighscoresFile(), mg.getHighscores());
-		inputMessage = "# " + tf.getText() + ", your score of " + mg.getScore();
+		Score score = new Score(mainGame.getScore(), textField.getText());
+		mainGame.getHighscores().add(score);
+		mainGame.getHighscores().sort();
+		HighScoresParser.writeHighScores(mainGame.getHighscoresFile(), mainGame.getHighscores());
+		inputMessage = "# " + textField.getText() + ", your score of " + mainGame.getScore();
 		inputMessage += " points is saved!";
 	}
 	

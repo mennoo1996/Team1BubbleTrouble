@@ -76,6 +76,9 @@ public class MainGame extends StateBasedGame {
 	private static final int SETTINGS_STATE = 3;
 	
 	private GameState gameStateState;
+	private SettingsState settingsState;
+	private StartState startState;
+	private GameOverState gameOverState;
 	private Logger logger;
 	
 	private boolean shouldSwitchState = false;
@@ -124,13 +127,13 @@ public class MainGame extends StateBasedGame {
 		shutDownHook.attachShutDownHook();
 	}
 	
-	@Override
-	public boolean closeRequested() {
-		logger.log("Exit Requested", Logger.PriorityLevels.VERYHIGH, "System");
-		logger.writeToFile();
-		System.exit(0);
-		return false;
-	}
+//	@Override
+//	public boolean closeRequested() {
+//		logger.log("Exit Requested", Logger.PriorityLevels.VERYHIGH, "System");
+//		logger.writeToFile();
+//		System.exit(0);
+//		return false;
+//	}
 
 	/**
 	 * Get the playerImage_norm.

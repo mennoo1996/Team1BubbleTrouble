@@ -35,9 +35,9 @@ public class Player {
 	private SpriteSheet spritesheetN;
 	private SpriteSheet spritesheetA;
 	private boolean freeToRoam;
-	private MainGame mg;
+	private MainGame mainGame;
 	private Logger logger;
-	private GameState gs;
+	private GameState gameState;
 	private Gate intersectingGate;
 	private boolean stoodStillOnLastUpdate = false;
 	// weapon management
@@ -71,11 +71,11 @@ public class Player {
 	 * @param imageA additive image
 	 * @param shieldImageN normal shield image
 	 * @param shieldImageA additive shield image
-	 * @param mg maingame app object
+	 * @param mainGame maingame app object
 	 */
 	public Player(float x, float y, float width, float height, 
 			Image imageN, Image imageA, Image shieldImageN,
-			Image shieldImageA, MainGame mg) {
+			Image shieldImageA, MainGame mainGame) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -89,9 +89,9 @@ public class Player {
 		this.shieldImageA = shieldImageA;
 		this.spritesheetN = new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.spritesheetA = new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
-		this.mg = mg;
-		this.logger = mg.getLogger();
-		this.gs = (GameState) mg.getState(mg.getGameState());
+		this.mainGame = mainGame;
+		this.logger = mainGame.getLogger();
+		this.gameState = (GameState) mainGame.getState(mainGame.getGameState());
 		moveLeftKey = Input.KEY_LEFT;
 		moveRightKey = Input.KEY_RIGHT;
 		shootKey = Input.KEY_SPACE;
@@ -110,7 +110,7 @@ public class Player {
 	 */
 	public void update(float deltaFloat, float containerHeight, float containerWidth, 
 			boolean testing) {
-		if (!gs.isPaused() && shieldTimeRemaining > 0) {
+		if (!gameState.isPaused() && shieldTimeRemaining > 0) {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
 		//System.out.println(deltaFloat);
@@ -124,7 +124,7 @@ public class Player {
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
-		for (Gate someGate :gs.getGateList()) {
+		for (Gate someGate :gameState.getGateList()) {
 			if (this.getRectangle().intersects(someGate.getRectangle())) {
 				freeToRoam = false;
 				intersectingGate = someGate;
@@ -139,47 +139,47 @@ public class Player {
 	private void processPowerups(float deltaFloat, float containerHeight,
 			float containerWidth) { // MARKED
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
-		for (Powerup powerup : gs.getDroppedPowerups()) {
-			powerup.update(gs, containerHeight, deltaFloat);
+		for (Powerup powerup : gameState.getDroppedPowerups()) {
+			powerup.update(gameState, containerHeight, deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
 				this.addPowerup(powerup.getType());
-				gs.getFloatingScores().add(new FloatingScore(powerup));
+				gameState.getFloatingScores().add(new FloatingScore(powerup));
 				usedPowerups.add(powerup);
 			}
 		}
 
-		gs.getDroppedPowerups().removeAll(usedPowerups);
-		gs.getDroppedPowerups().removeIf(Powerup::removePowerup);
+		gameState.getDroppedPowerups().removeAll(usedPowerups);
+		gameState.getDroppedPowerups().removeIf(Powerup::removePowerup);
 	}
 
 	private void processCoins(float deltaFloat, float containerHeight) {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
-		for (Coin coin : gs.getDroppedCoins()) {
+		for (Coin coin : gameState.getDroppedCoins()) {
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
-				gs.addToScore(coin.getPoints());
-				gs.getFloatingScores().add(new FloatingScore(coin));
+				gameState.addToScore(coin.getPoints());
+				gameState.getFloatingScores().add(new FloatingScore(coin));
 				usedCoins.add(coin);
 			}
 		}
 
-		gs.getDroppedCoins().removeAll(usedCoins);
+		gameState.getDroppedCoins().removeAll(usedCoins);
 	}
 
 	private void processWeapon(float deltaFloat, float containerHeight, boolean testing) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (!testing && gs.getSavedInput().isKeyPressed(shootKey)
+		if (!testing && gameState.getSavedInput().isKeyPressed(shootKey)
 				&& !shot) {
 			shot = true;
-			gs.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
+			gameState.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
 		}
 		
-		Weapon weapon = gs.getWeaponList().getWeaponList().get(playerNumber);
+		Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
 
 		// Update laser
 		if (shot) {
-			weapon.update(gs.getCeiling(), gs.getFloor(), deltaFloat);
+			weapon.update(gameState.getCeiling(), gameState.getFloor(), deltaFloat);
 			// Disable laser when it has reached the ceiling
 			if (!weapon.isVisible()) {
 				shot = false;
@@ -193,10 +193,10 @@ public class Player {
 		}
 		boolean didWalk = false;
 		// Walk left when left key pressed and not at left wall OR a gate
-		boolean isKeyLeft = gs.getSavedInput().isKeyDown(moveLeftKey);
-		if (isKeyLeft && this.getX() > gs.getLeftWall().getWidth()) {
+		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
+		if (isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
-            	this.setX(this.getX() - mg.getPlayerSpeed() * deltaFloat);
+            	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
             	this.movement = 1;
             	didWalk = true;
             	stoodStillOnLastUpdate = false;
@@ -208,10 +208,10 @@ public class Player {
             }
         }
 		// Walk right when right key pressed and not at right wall OR a gate
-		if (gs.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
-				< (containerWidth - gs.getRightWall().getWidth())) {
+		if (gameState.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
+				< (containerWidth - gameState.getRightWall().getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
-        	   this.setX(this.getX() + mg.getPlayerSpeed() * deltaFloat);
+        	   this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
         	   this.movement = 2;
         	   didWalk = true;
         	   stoodStillOnLastUpdate = false;
@@ -234,21 +234,21 @@ public class Player {
 		if (weapons.isEmpty()) {
 			logger.log("Shot regular laser from position " + this.getCenterX(), 
 					PriorityLevels.MEDIUM, "Player");
-			return new Weapon(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
-					mg.getLaserSpeed(), mg.getLaserWidth());
+			return new Weapon(this.getCenterX(), containerHeight - gameState.getFloor().getHeight(),
+					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
 			logger.log("Shot spiky laser from position " + this.getCenterX(), 
 					PriorityLevels.HIGH, "Player");
-			return new Spiky(this.getCenterX(), containerHeight - gs.getFloor().getHeight(),
-					mg.getLaserSpeed(), mg.getLaserWidth());
+			return new Spiky(this.getCenterX(), containerHeight - gameState.getFloor().getHeight(),
+					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
 			logger.log("Shot instant laser from position " + this.getCenterX(), 
 					PriorityLevels.HIGH, "Player");
 			return new InstantLaser(this.getCenterX(),
-					containerHeight - gs.getFloor().getHeight(), mg.getLaserWidth());
+					containerHeight - gameState.getFloor().getHeight(), mainGame.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
@@ -520,17 +520,17 @@ public class Player {
 	}
 
 	/**
-	 * @return the gs
+	 * @return the gameState
 	 */
-	public GameState getGs() {
-		return gs;
+	public GameState getgameState() {
+		return gameState;
 	}
 
 	/**
-	 * @param gs the gs to set
+	 * @param gameState the gameState to set
 	 */
-	public void setGs(GameState gs) {
-		this.gs = gs;
+	public void setgameState(GameState gameState) {
+		this.gameState = gameState;
 	}
 
 	/**

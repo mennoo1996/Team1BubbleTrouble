@@ -69,7 +69,15 @@ public class HighScores {
 	 * Sort the scoreList with the custom scoresComaprator.
 	 */
 	public void sort() {
-		Collections.sort(scoreList, new ScoresComparator());
+		Collections.sort(scoreList, (s1, s2) -> {
+            if (s1.getScore() > s2.getScore()) {
+                return -1;
+            } else if (s1.getScore() == s2.getScore()) {
+                return 0;
+            } else {
+                return 1;
+            }
+        });
 		
 		if (scoreList.size() > MAX_HIGHSCORES) {
 			for (int i = MAX_HIGHSCORES; i < scoreList.size(); i++) {

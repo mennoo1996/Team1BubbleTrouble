@@ -206,8 +206,6 @@ public class GameState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {		
 		mainGame.getLogger().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
-		ArrayList<String> al = new ArrayList<String>();
-		al.get(0);
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 		// If still shooting stop it

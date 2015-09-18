@@ -3,6 +3,7 @@ import logic.Button;
 import logic.Logger;
 import logic.MyRectangle;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -21,8 +22,18 @@ public class SettingsState extends BasicGameState {
 
 	private Button returnButton;
 	
+	// Game Colors
+	private static final Color COLOR_RED = new Color(1.0f, 0.4f, 0.1f);
+	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
+	private static final Color COLOR_GREEN = new Color(0.3f, 1.0f, 0.3f);
+	private static final Color COLOR_BLUE = new Color(0.4f, 0.9f, 1.0f);
+	private static final Color COLOR_PINK = new Color(0.4f, 0.9f, 1.0f);
+	private static final Color COLOR_WHITE = new Color(0.5f, 0.5f, 0.5f);
+	
 	private SpriteSheet mannetjeN;
 	private SpriteSheet mannetjeA;
+	private SpriteSheet telefoonN;
+	private SpriteSheet telefoonA;
 	private SpriteSheet arieN;
 	private SpriteSheet arieA;
 	
@@ -30,8 +41,10 @@ public class SettingsState extends BasicGameState {
 	private Image highLightA;
 	
 	private MyRectangle mannetje1Rectangle;
+	private MyRectangle telefoon1Rectangle;
 	private MyRectangle arie1Rectangle;
 	private MyRectangle mannetje2Rectangle;
+	private MyRectangle telefoon2Rectangle;
 	private MyRectangle arie2Rectangle;
 
 	private MainGame mainGame;
@@ -41,6 +54,7 @@ public class SettingsState extends BasicGameState {
 	private static final int LOGO_Y = 110;
 	private static final int SEPARATOR_X = 164;
 	private static final int SEPARATOR_Y = 190;
+	private static final int SEPARATOR_Y_2 = 510;
 	
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
@@ -59,21 +73,25 @@ public class SettingsState extends BasicGameState {
 	private static final int TEXT_2_Y = 338;
 	private static final int TEXT_3_Y = 388;
 	private static final int TEXT_4_Y = 438;
-	private static final int PLAYER_1_TEXT_Y = 550;
-	private static final int PLAYER_2_TEXT_Y = 700;
+	private static final int PLAYER_1_TEXT_Y = 590;
+	private static final int PLAYER_2_TEXT_Y = 710;
 	
 	private static final int PLAYER_SPRITE_WIDTH = 120;
 	private static final int PLAYER_SPRITE_HEIGHT = 120;
 	
-	private static final int MANNETJE_1_X = 390;
-	private static final int MANNETJE_1_Y = 500;
-	private static final int ARIE_1_X = 550;
-	private static final int ARIE_1_Y = 500;
+	private static final int MANNETJE_1_X = 370;
+	private static final int MANNETJE_1_Y = 540;
+	private static final int TELEFOON_1_X = 500;
+	private static final int TELEFOON_1_Y = 540;
+	private static final int ARIE_1_X = 630;
+	private static final int ARIE_1_Y = 540;
 
-	private static final int MANNETJE_2_X = 390;
-	private static final int MANNETJE_2_Y = 650;
-	private static final int ARIE_2_X = 550;
-	private static final int ARIE_2_Y = 650;
+	private static final int MANNETJE_2_X = 370;
+	private static final int MANNETJE_2_Y = 660;
+	private static final int TELEFOON_2_X = 500;
+	private static final int TELEFOON_2_Y = 660;
+	private static final int ARIE_2_X = 630;
+	private static final int ARIE_2_Y = 660;
 	
 	private static final int MOUSE_OVER_RECT_X = 500;
 	
@@ -110,7 +128,8 @@ public class SettingsState extends BasicGameState {
 			if (RND.getOpacity() > 0.0f) {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / mainGame.getOpacityFadeTimer());
 			} else {
-				mainGame.getLogger().log("Exiting SettingsState", Logger.PriorityLevels.LOW, "States");
+				mainGame.getLogger().log("Exiting SettingsState", 
+						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					container.exit();
 				} else {
@@ -139,15 +158,23 @@ public class SettingsState extends BasicGameState {
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
 		mannetjeA = new SpriteSheet("resources/images_Player/Playersprite_Add.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-		arieN = new SpriteSheet("resources/images_Player/Player2sprite_Norm.png",
+		telefoonN = new SpriteSheet("resources/images_Player/Player2sprite_Norm.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-		arieA = new SpriteSheet("resources/images_Player/Player2sprite_Add.png",
+		telefoonA = new SpriteSheet("resources/images_Player/Player2sprite_Add.png",
+				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
+		arieN = new SpriteSheet("resources/images_Player/arieSprite.png",
+				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
+		arieA = new SpriteSheet("resources/images_Player/arieSprite_Add.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
 		mannetje1Rectangle = new MyRectangle(MANNETJE_1_X, MANNETJE_1_Y, PLAYER_SPRITE_WIDTH,
+				PLAYER_SPRITE_HEIGHT);
+		telefoon1Rectangle = new MyRectangle(TELEFOON_1_X, TELEFOON_1_Y, PLAYER_SPRITE_WIDTH, 
 				PLAYER_SPRITE_HEIGHT);
 		arie1Rectangle = new MyRectangle(ARIE_1_X, ARIE_1_Y, PLAYER_SPRITE_WIDTH, 
 				PLAYER_SPRITE_HEIGHT);
 		mannetje2Rectangle = new MyRectangle(MANNETJE_2_X, MANNETJE_2_Y, PLAYER_SPRITE_WIDTH,
+				PLAYER_SPRITE_HEIGHT);
+		telefoon2Rectangle = new MyRectangle(TELEFOON_2_X, TELEFOON_2_Y, PLAYER_SPRITE_WIDTH, 
 				PLAYER_SPRITE_HEIGHT);
 		arie2Rectangle = new MyRectangle(ARIE_2_X, ARIE_2_Y, PLAYER_SPRITE_WIDTH, 
 				PLAYER_SPRITE_HEIGHT);
@@ -172,7 +199,7 @@ public class SettingsState extends BasicGameState {
 				mainGame.setPlayer1ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
 				mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 						mainGame.getPlayer1ImageStringA());
-			} else if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+			} else if (telefoon1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 				mainGame.setPlayer1ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
 				mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 						mainGame.getPlayer1ImageStringA());
@@ -180,8 +207,16 @@ public class SettingsState extends BasicGameState {
 				mainGame.setPlayer2ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
 				mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 						mainGame.getPlayer2ImageStringA());
-			} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+			} else if (telefoon2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 				mainGame.setPlayer2ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
+				mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
+						mainGame.getPlayer2ImageStringA());
+			} else if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+				mainGame.setPlayer1ImageString("arieSprite.png", "arieSprite_Add.png");
+				mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
+						mainGame.getPlayer1ImageStringA());
+			} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+				mainGame.setPlayer2ImageString("arieSprite.png", "arieSprite_Add.png");
 				mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 						mainGame.getPlayer2ImageStringA());
 			} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
@@ -221,10 +256,11 @@ public class SettingsState extends BasicGameState {
 		String tempString = "========================================";
 		tempString += "=======================================";
 		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, tempString);
+		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y_2, tempString);
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
-		
 		drawControls(graphics);
+		drawColorControls(graphics);
 	}
 	
 	private void drawControls(Graphics graphics) {
@@ -244,14 +280,22 @@ public class SettingsState extends BasicGameState {
 			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_1_X, MANNETJE_1_Y, 
 					mainGame.getColor());
 		} else if (mainGame.getPlayer1ImageStringN().equals("Player2sprite_Norm.png")) {
-			RND.drawColor(graphics, highLightN, highLightA, ARIE_1_X, ARIE_1_Y, mainGame.getColor());
+			RND.drawColor(graphics, highLightN, highLightA, 
+					TELEFOON_1_X, TELEFOON_1_Y, mainGame.getColor());
+		} else if (mainGame.getPlayer1ImageStringN().equals("arieSprite.png")) {
+			RND.drawColor(graphics, highLightN, highLightA, 
+					ARIE_1_X, ARIE_1_Y, mainGame.getColor());
 		}
 		
 		if (mainGame.getPlayer2ImageStringN().equals("Playersprite_Norm.png")) {
 			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_2_X, MANNETJE_2_Y, 
 					mainGame.getColor());
 		} else if (mainGame.getPlayer2ImageStringN().equals("Player2sprite_Norm.png")) {
-			RND.drawColor(graphics, highLightN, highLightA, ARIE_2_X, ARIE_2_Y, mainGame.getColor());
+			RND.drawColor(graphics, highLightN, highLightA, 
+					TELEFOON_2_X, TELEFOON_2_Y, mainGame.getColor());
+		} else if (mainGame.getPlayer2ImageStringN().equals("arieSprite.png")) {
+			RND.drawColor(graphics, highLightN, highLightA, 
+					ARIE_2_X, ARIE_2_Y, mainGame.getColor());
 		}
 		
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
@@ -269,15 +313,23 @@ public class SettingsState extends BasicGameState {
 	private void drawSprites2(Graphics graphics) {
 		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
 				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mainGame.getColor());
+		RND.drawColor(graphics, telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
+				telefoon1Rectangle.getX(), telefoon1Rectangle.getY(), mainGame.getColor());
 		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
 				arie1Rectangle.getX(), arie1Rectangle.getY(), mainGame.getColor());
 		
 		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
 				mannetje2Rectangle.getX(), mannetje2Rectangle.getY(), mainGame.getColor());
+		RND.drawColor(graphics, telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
+				telefoon2Rectangle.getX(), telefoon2Rectangle.getY(), mainGame.getColor());
 		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
 				arie2Rectangle.getX(), arie2Rectangle.getY(), mainGame.getColor());
 	}
 
+	private void drawColorControls(Graphics graphics) {
+		RND.text(graphics, CONTROL_X1, 550, "# Change game color scheme.", mainGame.getColor());
+	}
+	
 
 	@Override
 	public int getID() {

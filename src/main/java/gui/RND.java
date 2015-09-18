@@ -89,11 +89,14 @@ public final class RND {
 	 */
 	public static void drawColor(Graphics g, Image n, Image a,
 			float x, float y, Color color) {
-		g.drawImage(n, x, y, new Color(color.r, color.g, color.b, opacity));
-		g.setDrawMode(Graphics.MODE_ADD);
-		g.drawImage(a, x, y, new Color(color.r * opacity, color.g * opacity, color.b * opacity));
-		g.setDrawMode(Graphics.MODE_NORMAL);
 		
+		g.drawImage(n, x, y, new Color(color.r, color.g, color.b, opacity));
+		if (!a.getTexture().equals(n.getTexture())) {
+			g.setDrawMode(Graphics.MODE_ADD);
+			g.drawImage(a, x, y, new Color(color.r * opacity, color.g * opacity, 
+					color.b * opacity));
+			g.setDrawMode(Graphics.MODE_NORMAL);
+		}
 	}
 
 	/**
@@ -118,12 +121,13 @@ public final class RND {
 		
 		g.drawImage(n, x, y, x2, y2, srcx, srcy, srcx2, srcy2,
 				new Color(color.r, color.g, color.b, opacity)); 
-		g.setDrawMode(Graphics.MODE_ADD);
 		
-		g.drawImage(a, x, y, x2, y2, srcx, srcy, srcx2, srcy2, 
-				new Color(color.r * opacity, color.g * opacity, color.b * opacity)); 
-		g.setDrawMode(Graphics.MODE_NORMAL);
-		
+		if (!a.getTexture().equals(n.getTexture())) {
+			g.setDrawMode(Graphics.MODE_ADD);
+			g.drawImage(a, x, y, x2, y2, srcx, srcy, srcx2, srcy2, 
+					new Color(color.r * opacity, color.g * opacity, color.b * opacity)); 
+			g.setDrawMode(Graphics.MODE_NORMAL);
+		}
 	}
 	
 	/**

@@ -288,26 +288,43 @@ public class SettingsState extends BasicGameState {
 			mainGame.setPlayer1ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
+			mainGame.getLogger().log("Player 1 sprite changed to gameboy", 
+					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (telefoon1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer1ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
+			mainGame.getLogger().log("Player 1 sprite changed to phone", 
+					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (mannetje2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer2ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
+			mainGame.getLogger().log("Player 2 sprite changed to gameboy", 
+					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (telefoon2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer2ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
-		} else if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+			mainGame.getLogger().log("Player 2 sprite changed to phone", 
+					Logger.PriorityLevels.MEDIUM, "players");
+		} 
+		processButtons2(input);
+	}
+	
+	private void processButtons2(Input input) {
+		if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer1ImageString("arieSprite.png", "arieSprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
+			mainGame.getLogger().log("Player 1 sprite changed to arie", 
+					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer2ImageString("arieSprite.png", "arieSprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
+			mainGame.getLogger().log("Player 2 sprite changed to arie", 
+					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 

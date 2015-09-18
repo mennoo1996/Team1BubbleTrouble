@@ -7,7 +7,6 @@ import logic.HighScores;
 import logic.HighScoresParser;
 import logic.Logger;
 import logic.Score;
-
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
@@ -28,10 +27,8 @@ public class HighScoresParserTest {
 		
 		ArrayList<Score> hsl = hs.getScoreList();
 		ArrayList<Score> hsl2 = hs2.getScoreList();
-		int j = 0;
 		
 		assertEquals(hsl.size(), hsl2.size());
-		
 	}
 
 	
@@ -48,7 +45,6 @@ public class HighScoresParserTest {
 
 		ArrayList<Score> hsl = hs.getScoreList();
 		ArrayList<Score> hsl2 = hs2.getScoreList();
-		int j = 0;
 		
 		assertEquals(hsl.size(), hsl2.size());
 		

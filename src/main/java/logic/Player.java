@@ -193,21 +193,17 @@ public class Player {
 		}
 		boolean didWalk = false;
 		// Walk left when left key pressed and not at left wall OR a gate
-		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
-		if (isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) {
-            if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
-            	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
-            	this.movement = 1;
-            	didWalk = true;
-            	stoodStillOnLastUpdate = false;
-            	if (!lastLogMove.equals("left")) {
-            		logger.log("Moving left from position " + this.getCenterX(), 
-            				PriorityLevels.VERYLOW, "Player");
-            		lastLogMove = "left";
-            	}
-            }
-        }
+		didWalk = processMoveLeft(deltaFloat, didWalk);
 		// Walk right when right key pressed and not at right wall OR a gate
+		didWalk = processMoveRight(deltaFloat, containerWidth, didWalk);
+
+		if (!didWalk && !stoodStillOnLastUpdate) {
+			stoodStillOnLastUpdate = true;
+			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
+		}
+	}
+
+	private boolean processMoveRight(float deltaFloat, float containerWidth, boolean didWalk) {
 		if (gameState.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
 				< (containerWidth - gameState.getRightWall().getWidth())) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
@@ -216,18 +212,32 @@ public class Player {
         	   didWalk = true;
         	   stoodStillOnLastUpdate = false;
         	   if (!lastLogMove.equals("right")) {
-        		   logger.log("Moving right from position " + this.getCenterX(), 
+        		   logger.log("Moving right from position " + this.getCenterX(),
         				   PriorityLevels.VERYLOW, "Player");
 
         		   lastLogMove = "right";
         	   }
            }
         }
-		
-		if (!didWalk && !stoodStillOnLastUpdate) {
-			stoodStillOnLastUpdate = true;
-			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
-		}
+		return didWalk;
+	}
+
+	private boolean processMoveLeft(float deltaFloat, boolean didWalk) {
+		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
+		if (isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) {
+            if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
+            	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
+            	this.movement = 1;
+            	didWalk = true;
+            	stoodStillOnLastUpdate = false;
+            	if (!lastLogMove.equals("left")) {
+            		logger.log("Moving left from position " + this.getCenterX(),
+            				PriorityLevels.VERYLOW, "Player");
+            		lastLogMove = "left";
+            	}
+            }
+        }
+		return didWalk;
 	}
 
 	private Weapon getWeapon(float containerHeight) {

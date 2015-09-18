@@ -105,11 +105,11 @@ public class LevelContainer {
 		ArrayList<Level> res = new ArrayList<Level>();
 				ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
 				BouncingCircle circle11 = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y,
-						RADIUS_3, mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity());
+						RADIUS_3, mainGame.getStartingSpeed(),
+						DEFAULT_YSPEED, mainGame.getGravity());
 				
 				circles.add(circle11);
 				ArrayList<Gate> gates = new ArrayList<Gate>();
-				
 				/*if (!testing) {
 					gate11 = new Gate((float) container.getWidth() / 2.0f 
 							+ LEVEL_1_GATE_X_DEVIATION, 0, LEVEL_1_GATE_WIDTH, 
@@ -120,13 +120,13 @@ public class LevelContainer {
 				}
 				gate11.addToRequirements(circle11);
 				*/
-				
 				Level level = new Level(LEVEL_1_TIME, circles, gates);
 				res.add(level); 
 				ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
 				ArrayList<Gate> gates2 = new ArrayList<Gate>();
 				circles2.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, 
-						RADIUS_4, mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity()));
+						RADIUS_4, mainGame.getStartingSpeed(),
+						DEFAULT_YSPEED, mainGame.getGravity()));
 				level = new Level(LEVEL_2_TIME, circles2, gates2);
 				res.add(level);	
 				return res;

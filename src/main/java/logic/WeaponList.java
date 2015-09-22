@@ -30,7 +30,7 @@ public class WeaponList {
 	private Image laserbeamimageA;
 	private Image lasertipimageN;
 	private Image lasertipimageA;
-	
+	 
 	/**
 	 * The constructor of weaponlist.
 	 * @param weapon1 	- the first weapon of the list
@@ -66,6 +66,11 @@ public class WeaponList {
 		}
 	}
 	
+	/**
+	 * Intersect this weapon with a circle.
+	 * @param circle the circle to intersect with
+	 * @param weaponNumber the weapon to check
+	 */
 	private void intersectWeaponWithCircle(BouncingCircle circle, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
 		Player player = mainGame.getPlayerList().getPlayers().get(weaponNumber);
@@ -77,6 +82,10 @@ public class WeaponList {
 		}
 	}
 	
+	/**
+	 * Initalize the images for the weapons.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void initImages() throws SlickException {
 		// laser images
 		laserbeamimageN = new Image("resources/images_Gameplay/laserBeam_Norm.png");
@@ -118,6 +127,11 @@ public class WeaponList {
 		weaponList.set(weaponNumber, weapon);
 	}
 	
+	/**
+	 * Draw a weapon.
+	 * @param graphics the Graphics object to draw things on screen
+	 * @param weaponNumber the number of the weapon to draw
+	 */
 	private void drawWeapon(Graphics graphics, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
 		RND.drawColor(graphics, lasertipimageN, lasertipimageA,

@@ -45,7 +45,7 @@ public class PlayerList {
 		this.mainGame = mainGame;
 		this.gameState = gameState;
 		processCollisions = true;
-	}
+	} 
 	
 	/**
 	 * Update all players.
@@ -170,6 +170,11 @@ public class PlayerList {
 		player.setMovement(Player.Movement.NO_MOVEMENT);
 	}
 
+	/**
+	 * Draw the player after no movement.
+	 * @param player the Player to draw
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawPlayerNoMovement(Player player, Graphics graphics) {
 		player.resetMovementCounter();
 		RND.drawColor(graphics, player.getSpritesheetN().getSprite(2, 0),
@@ -178,6 +183,11 @@ public class PlayerList {
 				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
 	}
 
+	/**
+	 * Draw the player after a movement to the left.
+	 * @param player the Player to draw
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawPlayerMoveLeft(Player player, Graphics graphics) {
 		player.incrementMovementCounter();
 		int sp = 1;
@@ -191,6 +201,11 @@ public class PlayerList {
 				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
 	}
 
+	/**
+	 * Draw the player after a movement to the right.
+	 * @param player the Player to draw
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawPlayerMoveRight(Player player, Graphics graphics) {
 		player.incrementMovementCounter();
 		int sp = SPRITE_SHEET_THREE;

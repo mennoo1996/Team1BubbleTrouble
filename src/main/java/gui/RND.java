@@ -14,10 +14,10 @@ public final class RND {
 	
 	/**
 	 * Constructor for a renderer.
-	 * @param graphics context to use
+	 * 
 	 */
 	private RND() {
-		// Don't use this
+	 	// Don't use this
 	}
 	
 	private static AngelCodeFont dosFontN;

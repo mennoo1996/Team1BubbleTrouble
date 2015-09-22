@@ -29,7 +29,7 @@ public class SettingsState extends BasicGameState {
 	private Button whiteButton;
 	private Button pinkButton;
 	private Button shuffleButton;
-	
+	 
 	// Game Colors
 	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
@@ -205,6 +205,10 @@ public class SettingsState extends BasicGameState {
 				PLAYER_SPRITE_HEIGHT);
 	}
 	
+	/**
+	 * Initialize the buttons.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void initButtons() throws SlickException {
 		returnButton = new Button(RETURN_BUTTON_X, RETURN_BUTTON_Y, RETURN_BUTTON_WIDTH,
 				RETURN_BUTTON_HEIGHT, 
@@ -233,6 +237,10 @@ public class SettingsState extends BasicGameState {
 		initButtons2();
 	}
 	
+	/**
+	 * Initialize the second batch of buttons.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void initButtons2() throws SlickException {
 		greenButton = new Button(COLOR_BUTTON_3_X, COLOR_BUTTON_GREEN_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
@@ -283,6 +291,10 @@ public class SettingsState extends BasicGameState {
 		exit(container, sbg, delta);
 	}
 
+	/**
+	 * Process the buttons.
+	 * @param input the keyboard/mouse input of the user
+	 */
 	private void processButtons(Input input) {
 		if (mannetje1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer1ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
@@ -312,6 +324,10 @@ public class SettingsState extends BasicGameState {
 		processButtons2(input);
 	}
 	
+	/**
+	 * Process the second batch of buttons.
+	 * @param input the keyboard/mouse input of the user.
+	 */
 	private void processButtons2(Input input) {
 		if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer1ImageString("arieSprite.png", "arieSprite_Add.png");
@@ -330,6 +346,10 @@ public class SettingsState extends BasicGameState {
 		} 
 	}
 	
+	/**
+	 * Process the color of the buttons.
+	 * @param input the keyboard/mouse input of the user
+	 */
 	private void processColorButtons(Input input) {
 		if (shuffleButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.shuffleColor(true);
@@ -398,6 +418,10 @@ public class SettingsState extends BasicGameState {
 		drawColorControls(graphics);
 	}
 	
+	/**
+	 * Draw the controls for the players.
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawControls(Graphics graphics) {
 		String controlsPlayer1 = "Move left = left arrow\nMove right = right arrow\n";
 		controlsPlayer1 += "Shoot weapon = spacebar";
@@ -410,6 +434,10 @@ public class SettingsState extends BasicGameState {
 		
 	}
 	
+	/**
+	 * Draw the player sprites.
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawSprites(Graphics graphics) {
 		if (mainGame.getPlayer1ImageStringN().equals("Playersprite_Norm.png")) {
 			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_1_X, MANNETJE_1_Y, 
@@ -440,6 +468,10 @@ public class SettingsState extends BasicGameState {
 		drawSprites2(graphics);
 	}
 	
+	/**
+	 * Draw the second batch of player sprites.
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawSprites2(Graphics graphics) {
 		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
 				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mainGame.getColor());
@@ -456,6 +488,10 @@ public class SettingsState extends BasicGameState {
 				arie2Rectangle.getX(), arie2Rectangle.getY(), mainGame.getColor());
 	}
 
+	/**
+	 * Draw the color of the controls.
+	 * @param graphics the Graphics object to draw things on screen.
+	 */
 	private void drawColorControls(Graphics graphics) {
 		RND.text(graphics, COLOR_TEXT_X, COLOR_TEXT_1_Y,
 				"# Change game color manually,", mainGame.getColor());

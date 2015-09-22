@@ -17,7 +17,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class StartState extends BasicGameState {
 
-	
+	 
 	private MainGame mainGame;
 	private Button playButton;
 	private Button play2Button;
@@ -147,6 +147,10 @@ public class StartState extends BasicGameState {
 		exit(container, sbg, delta);
 	}
 	
+	/**
+	 * Process the buttons.
+	 * @param input the keyboard/mouse input of the user.
+	 */
 	private void processButtons(Input input) {
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			// Go to gamestate in singleplayer
@@ -216,6 +220,11 @@ public class StartState extends BasicGameState {
 		drawQuitButton(graphics, input);
 	}
 
+	/**
+	 * Draw the quit button.
+	 * @param graphics the Graphics object used to draw things on screen
+	 * @param input the keyboard/mouse input of the user
+	 */
 	private void drawQuitButton(Graphics graphics, Input input) {
 		if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, quitButton.getImageMouseOverN(),
@@ -227,6 +236,11 @@ public class StartState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Draw the options button.
+	 * @param graphics the Graphics object to draw things on screen.
+	 * @param input the keyboard/mouse input of the user
+	 */
 	private void drawOptionsButton(Graphics graphics, Input input) {
 		if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, optionsButton.getImageMouseOverN(),
@@ -238,6 +252,11 @@ public class StartState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Draw the multiplayer button.
+	 * @param graphics the Graphics object to draw things on screen.
+	 * @param input the keyboard/mouse input of the user
+	 */
 	private void drawMultiplayerButton(Graphics graphics, Input input) {
 		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, play2Button.getImageMouseOverN(),
@@ -249,6 +268,11 @@ public class StartState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Draw the single player button.
+	 * @param graphics the Graphics object to draw things on screen.
+	 * @param input the keyboard/mouse input of the user
+	 */
 	private void drawSinglePlayButton(Graphics graphics, Input input) {
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, playButton.getImageMouseOverN(),

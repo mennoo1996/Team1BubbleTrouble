@@ -6,4 +6,7 @@
 
 <suppressions>
     <suppress files="[/\\]src[/\\]test[/\\]java[/\\][a-zA-Z0-9]*" checks="[a-zA-Z0-9]*"/>
+    <suppress files="[/\\]src[/\\]main[/\\]java[/\\]gui[/\\][a-zA-Z0-9]*" checks="ParameterNumber"/>
+    <suppress files="[/\\]src[/\\]main[/\\]java[/\\]logic[/\\][a-zA-Z0-9]*" checks="ParameterNumber"/>
+
 </suppressions>

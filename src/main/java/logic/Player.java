@@ -128,6 +128,9 @@ public class Player {
 		processCoins(deltaFloat, containerHeight);
 	}
 	
+	/**
+	 * Process the intersection with gates.
+	 */
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
@@ -142,7 +145,13 @@ public class Player {
 			intersectingGate = null;
 		}
 	}
-	
+	 
+	/**
+	 * Process the intersection of a player with the powerups.
+	 * @param deltaFloat the time in seconds since the last frame.
+	 * @param containerHeight the height of the current GameContainer
+	 * @param containerWidth the width of the current GameContainer
+	 */
 	private void processPowerups(float deltaFloat, float containerHeight,
 			float containerWidth) { // MARKED
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
@@ -160,6 +169,11 @@ public class Player {
 		gameState.getDroppedPowerups().removeIf(Powerup::removePowerup);
 	}
 
+	/**
+	 * Process the intersection of a player with the coins.
+	 * @param deltaFloat the time in seconds since the last frame.
+	 * @param containerHeight the height of the current GameContainer.
+	 */
 	private void processCoins(float deltaFloat, float containerHeight) {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		for (Coin coin : gameState.getDroppedCoins()) {
@@ -176,6 +190,12 @@ public class Player {
 		gameState.getDroppedCoins().removeAll(usedCoins);
 	}
 
+	/**
+	 * Process the weapon of this player.
+	 * @param deltaFloat the time in seconds since the last frame.
+	 * @param containerHeight the height of the current GameContainer
+	 * @param testing to check if we are testing or not.
+	 */
 	private void processWeapon(float deltaFloat, float containerHeight, boolean testing) {
 		// Shoot laser when spacebar is pressed and no laser is active
 		if (!testing && gameState.getSavedInput().isKeyPressed(shootKey)
@@ -196,6 +216,12 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Process the movement of this player.
+	 * @param deltaFloat the time in seconds since the last frame.
+	 * @param containerWidth the width of the current GameContainer
+	 * @param testing to check if we are testing or not
+	 */
 	private void processPlayerMovement(float deltaFloat, float containerWidth, boolean testing) {
 		if (testing) {
 			return;
@@ -212,6 +238,13 @@ public class Player {
 		}
 	}
 
+	/**
+	 * Process a movement to the right.
+	 * @param deltaFloat the time in seconds since the last frame
+	 * @param containerWidth the width of the current GameContainer
+	 * @param didWalk if the player did actually walk
+	 * @return a boolean to check if the player walked.
+	 */
 	private boolean processMoveRight(float deltaFloat, float containerWidth, boolean didWalk) {
 		if (gameState.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
 				< (containerWidth - gameState.getRightWall().getWidth())) {
@@ -231,6 +264,12 @@ public class Player {
 		return didWalk;
 	}
 
+	/**
+	 * Process a movement to the left.
+	 * @param deltaFloat the time in seconds since the last frame
+	 * @param didWalk if the player did actually walk
+	 * @return a boolean to check if the player walked.
+	 */
 	private boolean processMoveLeft(float deltaFloat, boolean didWalk) {
 		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
 		if (isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) {
@@ -249,6 +288,11 @@ public class Player {
 		return didWalk;
 	}
 
+	/**
+	 * Get the weapon of this player.
+	 * @param containerHeight the height of the current GameContainer.
+	 * @return the Weapon of this player.
+	 */
 	private Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
 			logger.log("Shot regular laser from position " + this.getCenterX(), 
@@ -452,6 +496,9 @@ public class Player {
 		}
 	}
 
+	/**
+	 * Add a shield for this player.
+	 */
 	private void addShield() {
         shieldCount += 1;
         shieldTimeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_DURATION);
@@ -462,6 +509,11 @@ public class Player {
                 },
                 POWERUP_DURATION, TimeUnit.SECONDS);
     }
+	
+	/**
+	 * Add a weapon for this player.
+	 * @param type the type of the powerup
+	 */
 	private void addWeapon(Powerup.PowerupType type) {
 		weapons.add(type);
 		Executors.newScheduledThreadPool(1).schedule(() -> {

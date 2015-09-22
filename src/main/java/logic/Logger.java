@@ -141,6 +141,10 @@ public class Logger {
 	    return strDate;
 	}
 	
+	/**
+	 * Get the file name.
+	 * @return the filename
+	 */
 	private String getFileName() {
 		new File("logs").mkdir();
 		if (testing) {

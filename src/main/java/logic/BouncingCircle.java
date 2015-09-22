@@ -101,7 +101,12 @@ public class BouncingCircle extends Circle {
 		}
 		handleXCalculations(gameState, containerWidth, deltaFloat);
 	}
-	
+	/**
+	 * Handle the X coordinate calculations of the circle. 
+	 * @param gameState the GameState that uses this circle.
+	 * @param containerWidth the width of the used GameContainer
+	 * @param deltaFloat the time in seconds since the last frame
+	 */
 	private void handleXCalculations(GameState gameState, float containerWidth, float deltaFloat) {
 		// Calculations for X coordinates
 		this.setX(this.getX() + xSpeed * deltaFloat);

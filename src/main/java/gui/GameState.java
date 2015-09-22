@@ -328,6 +328,13 @@ public class GameState extends BasicGameState {
 		exit(container, sbg, delta);
 	}
 
+	/**
+	 * Process everything in the game, for one frame.
+	 * @param container the GameContainer we are playing in
+	 * @param sbg the StateBasedGame that we are playing in
+	 * @param delta the time since the last frame in ms
+	 * @param curTime the current time
+	 */
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
 		processTime(sbg, curTime);
 
@@ -349,6 +356,11 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Process the time in the current game.
+	 * @param sbg the statebasedgame we are playing in 
+	 * @param curTime the current time, used to calculate the difference
+	 */
 	private void processTime(StateBasedGame sbg, long curTime) {
 		timeRemaining -= timeDelta;
 		fractionTimeParts = Math.round((float) COUNTDOWN_BAR_PARTS 
@@ -367,6 +379,11 @@ public class GameState extends BasicGameState {
 		prevTime = curTime;
 	}
 
+	/**
+	 * Process the buttons if you are in the pause menu.
+	 * @param container the GameContainer we are playing in
+	 * @param sbg the StateBasedGame we are playing
+	 */
 	private void processPauseButtons(GameContainer container, StateBasedGame sbg) {
 		Input input = container.getInput();
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
@@ -385,12 +402,23 @@ public class GameState extends BasicGameState {
 		}
 	}
 	
+	/**
+	 * Process the coins that are currently in the game.
+	 * @param container the GameContainer we are playing in
+	 * @param deltafloat the time in seconds since the last frame
+	 */
 	private void processCoins(GameContainer container, float deltafloat) {
 		for (Coin coin : droppedCoins) {
 			coin.update(getFloor(), deltafloat, container.getHeight());
 		}
 	}
 	
+	/**
+	 * Process the circles in the game.
+	 * @param container the GameContainer we are playing the game in
+	 * @param sbg the StateBasedGame we are playing
+	 * @param deltaFloat the time in seconds since the last frame
+	 */
 	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
 		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
 		updateActiveCircles(container, sbg, deltaFloat, ceilingList);
@@ -398,6 +426,9 @@ public class GameState extends BasicGameState {
 		updateShotCircles();
 	}
 
+	/**
+	 * Update the circles that have been shot.
+	 */
 	private void updateShotCircles() {
 		for (BouncingCircle circle : shotList) {
             if (!circle.isDone()) { // if the circle hasn't been handled
@@ -411,7 +442,7 @@ public class GameState extends BasicGameState {
                 if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
                 	splits = circle.getSplittedCircles(mainGame);
                     circleList.addAll(splits);
-					checkBonus(circle);
+					checkItem(circle);
                 } else {
                 	mainGame.getLogger().log(
 							"Circle with radius 10 shot, no new balls entered the game",
@@ -423,6 +454,11 @@ public class GameState extends BasicGameState {
         }
 	}
 
+	/**
+	 * Process the circles in the requirements lists of the gates.
+	 * @param circle the circle you are processing
+	 * @param splits the list of circles that have been split
+	 */
 	private void processUnlockCirclesGates(BouncingCircle circle,
 										   ArrayList<BouncingCircle> splits) {
 		for (Gate gate : gateList) {
@@ -435,10 +471,21 @@ public class GameState extends BasicGameState {
         }
 	}
 
+	/**
+	 * Remove the circles that hit the ceiling.
+	 * @param ceilingList the list of circles that hit the ceiling
+	 */
 	private void removeCeilingCircles(ArrayList<BouncingCircle> ceilingList) {
 		circleList.removeAll(ceilingList);
 	}
 
+	/**
+	 * Update the circles that are still in the game, after all the other process methods.
+	 * @param container the GameContainer you are playing in
+	 * @param sbg the StateBasedGame you are playing
+	 * @param deltaFloat the time ins seconds since the last frame
+	 * @param ceilingList the circles that have hit the ceiling
+	 */
 	private void updateActiveCircles(GameContainer container, StateBasedGame sbg,
 			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
 		for (BouncingCircle circle : circleList) {
@@ -456,6 +503,10 @@ public class GameState extends BasicGameState {
         }
 	}
 
+	/**
+	 * Update the floating scores in the game.
+	 * @param deltaFloat the time in seconds since the last frame
+	 */
 	private void updateFloatingScores(float deltaFloat) {
 		Iterator<FloatingScore> scoreListIterator = floatingScoreList.iterator();
 		while (scoreListIterator.hasNext()) {
@@ -468,6 +519,10 @@ public class GameState extends BasicGameState {
 		}
 	}
 	
+	/**
+	 * Update the existence of the gates. Remove them if the required balls have disappeared.
+	 * @param deltaFloat the time in seconds since the last frame.
+	 */
 	private void updateGateExistence(float deltaFloat) {
 		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
 		for (Gate gate : gateList) {
@@ -485,6 +540,10 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * End the level if needed.
+	 * @param sbg the StateBasedGame we are playing
+	 */
 	private void endLevel(StateBasedGame sbg) {
 		if (!waitForLevelEnd) {
             waitForLevelEnd = true;
@@ -508,7 +567,10 @@ public class GameState extends BasicGameState {
         }
 	}
 
-	
+
+	/**
+	 * Process the pause screen.
+	 */
 	private void processPause() {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
 			waitEsc = true;
@@ -563,6 +625,11 @@ public class GameState extends BasicGameState {
 		drawMiscellaneous(container, graphics);
 	}
 
+	/**
+	 * Draw the score.
+	 * @param container the GameContainer we are playing in
+	 * @param graphics the graphics object to draw things on screen
+	 */
 	private void drawScore(GameContainer container, Graphics graphics) {
 		String renderedScore;
 		if (mainGame.getShouldSwitchState()) {
@@ -574,11 +641,21 @@ public class GameState extends BasicGameState {
 				- SCORE_STRING_Y_DEVIATION, "Score: " + renderedScore);
 	}
 
+	/**
+	 * Draw all the gates.
+	 * @param container the GameContainer we are playing in
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawGates(GameContainer container, Graphics graphics) {
 		// draw all active gates
 		drawActiveGates(container, graphics);
 	}
 
+	/**
+	 * Draw some things like shield timer, health lights, etc.
+	 * @param container the GameContainer we are playing in
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawMiscellaneous(GameContainer container, Graphics graphics) {
 		// draw shield timers
 		drawShieldTimer(graphics);
@@ -599,6 +676,10 @@ public class GameState extends BasicGameState {
 		drawHealth(graphics);
 	}
 
+	/**
+	 * Draw the shield timer.
+	 * @param graphics the Graphics object to draw things on screne
+	 */
 	private void drawShieldTimer(Graphics graphics) {
 		int height = SHIELD_COUNTER_OFFSET_Y;
 		if (mainGame.getPlayerList().getPlayers().get(0).hasShield()) {
@@ -630,11 +711,19 @@ public class GameState extends BasicGameState {
 		}
 	}
 	
+	/**
+	 * Draw the items in the game.
+	 * @param graphics the Graphics object to draw things on screen.
+	 */
 	private void drawItems(Graphics graphics) {
 		drawPowerups(graphics);
 		drawCoins(graphics);
 	}
 
+	/**
+	 * Draw the powerups.
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawPowerups(Graphics graphics) {
 
 		for (Powerup pow : droppedPowerups) {
@@ -656,6 +745,10 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Draw the coins.
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		for (Coin coin : droppedCoins) {
@@ -666,6 +759,11 @@ public class GameState extends BasicGameState {
 		graphics.setColor(Color.white);
 	}
 
+	/**
+	 * Draw the countdown bar.
+	 * @param container the GameContainer we are playing in
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
 		for (int x = 0; x < fractionTimeParts; x++) {
 			RND.drawColor(graphics, counterBarImageN, counterBarImageA,
@@ -675,6 +773,11 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Draw the active gates.
+	 * @param container the GameContainer we are playing in
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
 		for (Gate gate : gateList) {
 			//upper
@@ -706,6 +809,10 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Draw the active circles.
+	 * @param graphics the Graphics object to draw things on screen.
+	 */
 	private void drawActiveCircles(Graphics graphics) {
 		for (BouncingCircle circle : circleList) {
 			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
@@ -737,6 +844,10 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Draw the floating scores.
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawFloatingScores(Graphics graphics) {
 		for (FloatingScore score : floatingScoreList) {
 			RND.text(graphics, score.getX(), score.getY(), score.getScore(),
@@ -745,6 +856,10 @@ public class GameState extends BasicGameState {
 		}
 	}
 	
+	/**
+	 * Draw the health lights.
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawHealth(Graphics graphics) {
 		switch (mainGame.getLifeCount()) {
 			case(0) :
@@ -774,6 +889,11 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Draw the paused screen if needed.
+	 * @param container the GameContainer we are playing in
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawPausedScreen(GameContainer container, Graphics graphics) {
 		Color overLay = new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR);
 		graphics.setColor(overLay);
@@ -785,6 +905,11 @@ public class GameState extends BasicGameState {
 		drawMouseOvers(input, graphics);
 	}
 	
+	/**
+	 * Draw the buttons with mouse over skin if mouse is near that button.
+	 * @param input the Input of the user
+	 * @param graphics the Graphics object in
+	 */
 	private void drawMouseOvers(Input input, Graphics graphics) {
 		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
@@ -812,6 +937,11 @@ public class GameState extends BasicGameState {
 		}		
 	}
 
+	/**
+	 * Draw the count in.
+	 * @param container the GameContainer we are playing in
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawCountIn(GameContainer container, Graphics graphics) {
 		int count = (int) Math.ceil((COUNT_IN_TIME - timeDelta) / SECOND_TO_MS_FACTOR),
 				amount = Math.round((COUNT_IN_TIME - timeDelta) / COUNT_IN_TIME * COUNT_FACTOR);
@@ -850,6 +980,10 @@ public class GameState extends BasicGameState {
 		return 1;
 	}
 
+	/**
+	 * Load all the images.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void loadImages() throws SlickException {
 		loadHealthAndBallImages();
 		loadPowerupImages();
@@ -877,6 +1011,10 @@ public class GameState extends BasicGameState {
 		coinImageA = new Image("resources/images_Gameplay/coin_Add.png");
 	}
 	
+	/**
+	 * Load all the buttons.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void loadButtons() throws SlickException {
 		returnButton = new Button(BUTTON_X, RETURN_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
@@ -898,6 +1036,10 @@ public class GameState extends BasicGameState {
 				new Image("resources/images_UI/Menu_Button_Quit2_Add.png"));
 	}
 	
+	/**
+	 * Load the powerup images.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void loadPowerupImages() throws SlickException {
 		// load powerup images
 		laserImageN = new Image("resources/images_Gameplay/laserPowerup_Norm.png");
@@ -908,6 +1050,10 @@ public class GameState extends BasicGameState {
 		vineImageA = new Image("resources/images_Gameplay/vinePowerup_Add.png");
 	}
 	
+	/**
+	 * Load the images for health and balls.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void loadHealthAndBallImages() throws SlickException {
 		// load health images
 		health0Image = new Image("resources/Terminal/Terminal_Lights_0.png");
@@ -973,7 +1119,11 @@ public class GameState extends BasicGameState {
 		this.gateList = gatelist;
 	}
 
-	private void checkBonus(BouncingCircle circle) {
+	/**
+	 * Check if an item should be dropped.
+	 * @param circle the circle that could drop this item
+	 */
+	private void checkItem(BouncingCircle circle) {
 		// 5% of the time
 		final int total = 100;
 		int randInt = new Random().nextInt(total) + 1;
@@ -985,11 +1135,19 @@ public class GameState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Drop a coin.
+	 * @param circle the circle that should drop the coin.
+	 */
 	private void dropCoin(BouncingCircle circle) {
 		boolean bigMoney = random.nextBoolean();
 		droppedCoins.add(new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney));
 	}
 
+	/**
+	 * Drop a powerup.
+	 * @param circle the circle that should drop the powerup
+	 */
 	private void dropPowerup(BouncingCircle circle) {
 		// Get a random powerup
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()

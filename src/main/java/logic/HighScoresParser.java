@@ -22,7 +22,10 @@ public final class HighScoresParser {
 	public static void setLogger(Logger loggerIn) {
 		logger = loggerIn;
 	}
-	
+	 
+	/**
+	 * Unused constructor.
+	 */
 	private HighScoresParser() {
 		// do not even call this
 	}

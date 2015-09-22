@@ -8,17 +8,25 @@
     Checkstyle-Configuration: JPacman Coding Standards
     Description: none
 -->
+
+
 <module name="Checker">
+
+	<module name="SuppressionFilter">
+    	<property name="file" value="${samedir}/mysuppressions.xml" />
+    </module>
 
   <module name="SuppressWarningsFilter" />
 <property name="severity" value="warning"/>
   <module name="TreeWalker">
+  	<property name="severity" value="error"/>
     <module name="SuppressWarningsHolder" />
     <property name="tabWidth" value="4"/>
     <module name="FileContentsHolder"/>
     <module name="JavadocMethod">
-      <property name="scope" value="package"/>
+      <property name="scope" value="private"/>
       <property name="suppressLoadErrors" value="true"/>
+      
     </module>
     <module name="JavadocType"/>
     <module name="JavadocVariable">
@@ -77,6 +85,7 @@
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="IllegalInstantiation"/>
+
     <module name="InnerAssignment"/>
     <module name="MagicNumber"/>
     <module name="MissingSwitchDefault"/>

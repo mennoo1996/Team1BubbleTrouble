@@ -88,8 +88,11 @@ public class LevelContainer {
 	public ArrayList<Level> getLevels() {
 		return levels;
 	}
-
-	
+ 
+	/**
+	 * Initialize the levels.
+	 * @return a list of all the levels in the game
+	 */
 	private ArrayList<Level> initializeLevels() {
 		ArrayList<Level> res = new ArrayList<Level>();
 		res.addAll(initializeLevels1());
@@ -101,6 +104,10 @@ public class LevelContainer {
 		return res;
 	}
 	
+	/**
+	 * Initalize the first batch of levels.
+	 * @return a list with the first batch of levels.
+	 */
 	private ArrayList<Level> initializeLevels1() {
 		ArrayList<Level> res = new ArrayList<Level>();
 				ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
@@ -132,6 +139,10 @@ public class LevelContainer {
 				return res;
 	}
 	
+	/**
+	 * Initalize the second batch of levels.
+	 * @return a list with the second batch of levels.
+	 */
 	private ArrayList<Level> initializeLevels2() {
 		Level level;
 		ArrayList<Level> res = new ArrayList<Level>();
@@ -163,6 +174,10 @@ public class LevelContainer {
 		return res;
 	}
 	
+	/**
+	 * Initalize the third batch of levels.
+	 * @return a list with the third batch of levels.
+	 */
 	private ArrayList<Level> initializeLevels3() {
 		
 		Level level;
@@ -189,6 +204,10 @@ public class LevelContainer {
 		return res;
 	}
 	
+	/**
+	 * Initalize the fourth batch of levels.
+	 * @return a list with the fourth batch of levels.
+	 */
 	private ArrayList<Level> initializeLevels4() {
 		Level level; ArrayList<Level> res = new ArrayList<Level>();
 		ArrayList<BouncingCircle> circles7 = new ArrayList<BouncingCircle>();
@@ -220,6 +239,10 @@ public class LevelContainer {
 		level = new Level(LEVEL_8_TIME, circles8, gates8); res.add(level); return res;
 	}
 	
+	/**
+	 * Initalize the fifth batch of levels.
+	 * @return a list with the fifth batch of levels.
+	 */
 	private ArrayList<Level> initializeLevels5() {
 		Level level;
 		ArrayList<Level> res = new ArrayList<Level>();

@@ -175,7 +175,7 @@ public class Button {
 	public Image getImageMouseOverN() {
 		return imageMouseoverN;
 	}
-	
+	 
 	/**
 	 * @return image_add for this button
 	 */

@@ -99,11 +99,19 @@ public class GameOverState extends BasicGameState {
 		initTextFieldBackgroundImgs();
 	}
 
+	/**
+	 * Initialize the background images of the text field.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void initTextFieldBackgroundImgs() throws SlickException {
 		tfBackgroundN = new Image("resources/images_UI/textfield_Norm.png");
 		tfBackgroundA = new Image("resources/images_UI/textfield_Add.png");
 	}
 
+	/**
+	 * Initialize the buttons.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void initButtons() throws SlickException {
 		saveButton = new Button(BUTTON_X, SAVE_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
@@ -131,6 +139,10 @@ public class GameOverState extends BasicGameState {
 				new Image("resources/images_UI/Menu_Button_Quit2_Add.png"));
 	}
 
+	/**
+	 * Initialize the health images.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void initHealthImages() throws SlickException {
 		health0Image = new Image("resources/Terminal/Terminal_Lights_0.png");
 		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
@@ -204,6 +216,10 @@ public class GameOverState extends BasicGameState {
 		exit(container, sbg, delta);
 	}
 	
+	/**
+	 * Process the button clicks.
+	 * @param input the keyboard/mouse input of the user
+	 */
 	private void processButtons(Input input) {
 		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
 			// Start over
@@ -234,7 +250,11 @@ public class GameOverState extends BasicGameState {
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
 	}
-	
+
+	/**
+	 * Handle the text field input.
+	 * @param input the keyboard/mouse input user
+	 */
 	private void handleTextField(Input input) {
 		if (textField.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
 				|| inputMessage.equals("Maximum length is 34 characters")) 
@@ -282,6 +302,11 @@ public class GameOverState extends BasicGameState {
 		renderLives(graphics);
 	}
 
+	/**
+	 * Render the end text.
+	 * @param container the GameContainer we are playing in.
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void renderEndText(GameContainer container, Graphics graphics) {
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
@@ -355,6 +380,11 @@ public class GameOverState extends BasicGameState {
 		drawButtonMouseOvers(input, graphics);
 	}
 	
+	/**
+	 * Draw the button with mouse over image if needed.
+	 * @param input the keyboard/mouse input of the user
+	 * @param graphics the Graphics object to draw things on screen
+	 */
 	private void drawButtonMouseOvers(Input input, Graphics graphics) {
 		if (inputMessage == null) {
 			if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {

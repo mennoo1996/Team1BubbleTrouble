@@ -312,6 +312,10 @@ public class MainGame extends StateBasedGame {
 	
 	}
 	
+	/**
+	 * Initialize the images.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void initImages() throws SlickException {
 		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
 		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
@@ -324,6 +328,10 @@ public class MainGame extends StateBasedGame {
 				"resources/images_Font/dosfont_Add.png"));
 	}
 	
+	/**
+	 * Initalize the players.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
 	private void initPlayers() throws SlickException {
 
 		Image player1ImageN = new Image("resources/images_Player/" + player1ImageStringN);

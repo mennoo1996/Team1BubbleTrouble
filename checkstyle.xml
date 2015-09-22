@@ -17,12 +17,14 @@
   <module name="SuppressWarningsFilter" />
 <property name="severity" value="warning"/>
   <module name="TreeWalker">
+  	<property name="severity" value="error"/>
     <module name="SuppressWarningsHolder" />
     <property name="tabWidth" value="4"/>
     <module name="FileContentsHolder"/>
     <module name="JavadocMethod">
       <property name="scope" value="private"/>
       <property name="suppressLoadErrors" value="true"/>
+      
     </module>
     <module name="JavadocType"/>
     <module name="JavadocVariable">

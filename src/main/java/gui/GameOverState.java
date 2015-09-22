@@ -56,8 +56,6 @@ public class GameOverState extends BasicGameState {
 	private static final int BUTTON_WIDTH = 1000;
 	private static final int BUTTON_HEIGHT = 50;
 	
-	private static final int MOUSE_OVER_RECT_X = 500;
-	
 	private static final int TEXT_FIELD_X = 164;
 	private static final int TEXT_FIELD_Y = 438;
 	private static final int TEXT_FIELD_WIDTH = 700;
@@ -221,7 +219,7 @@ public class GameOverState extends BasicGameState {
 	 * @param input the keyboard/mouse input of the user
 	 */
 	private void processButtons(Input input) {
-		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+		if (playButton.isMouseOver(input)) {
 			// Start over
 			mainGame.resetLifeCount();
 			mainGame.resetLevelCount();
@@ -230,13 +228,13 @@ public class GameOverState extends BasicGameState {
 			mainGame.getLogger().log("play button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} 
-		else if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+		else if (saveButton.isMouseOver(input)) {
 			// Save score
 			saveScore();
 			mainGame.getLogger().log("save button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
-		else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+		else if (menuButton.isMouseOver(input)) {
 			// Go to startState
 			mainGame.setScore(0);
 			mainGame.setLevelCounter(0);
@@ -244,7 +242,7 @@ public class GameOverState extends BasicGameState {
 			mainGame.getLogger().log("Menu Button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
-		else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+		else if (exitButton.isMouseOver(input)) {
 			mainGame.setSwitchState(-1);
 			mainGame.getLogger().log("exit button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
@@ -361,48 +359,12 @@ public class GameOverState extends BasicGameState {
 	 */
 	private void renderButtons(GameContainer container, Graphics graphics) {
 		Input input = container.getInput();
-		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, playButton.getImageMouseOverN(), 
-					playButton.getImageMouseOverA(), playButton.getX(), playButton.getY(), 
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, playButton.getImageN(), playButton.getImageA(),
-					playButton.getX(), playButton.getY(), mainGame.getColor());
-		}
-		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, menuButton.getImageMouseOverN(), 
-					menuButton.getImageMouseOverA(), menuButton.getX(), menuButton.getY(), 
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, menuButton.getImageN(), menuButton.getImageA(),
-					menuButton.getX(), menuButton.getY(), mainGame.getColor());
-		}
-		drawButtonMouseOvers(input, graphics);
-	}
-	
-	/**
-	 * Draw the button with mouse over image if needed.
-	 * @param input the keyboard/mouse input of the user
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawButtonMouseOvers(Input input, Graphics graphics) {
+		playButton.drawColor(graphics, input, mainGame.getColor());
+		menuButton.drawColor(graphics, input, mainGame.getColor());
 		if (inputMessage == null) {
-			if (saveButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-				RND.drawColor(graphics, saveButton.getImageMouseOverN(), 
-						saveButton.getImageMouseOverA(), saveButton.getX(), saveButton.getY(), 
-						mainGame.getColor());
-			} else {
-				RND.drawColor(graphics, saveButton.getImageN(), saveButton.getImageA(),
-						saveButton.getX(), saveButton.getY(), mainGame.getColor());
-			} }
-		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, exitButton.getImageMouseOverN(), 
-					exitButton.getImageMouseOverA(), exitButton.getX(), exitButton.getY(), 
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
-					exitButton.getX(), exitButton.getY(), mainGame.getColor());
+			saveButton.drawColor(graphics, input, mainGame.getColor());
 		}
+		exitButton.drawColor(graphics, input, mainGame.getColor());
 	}
 
 	/**

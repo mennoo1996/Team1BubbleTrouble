@@ -122,8 +122,6 @@ public class SettingsState extends BasicGameState {
 	private static final int ARIE_2_X = 630;
 	private static final int ARIE_2_Y = 660;
 	
-	private static final int MOUSE_OVER_RECT_X = 500;
-	
 	/**
 	 * Construct a SettingsState.
 	 * @param mainGame the MainGame that uses this state.
@@ -341,7 +339,7 @@ public class SettingsState extends BasicGameState {
 					mainGame.getPlayer2ImageStringA());
 			mainGame.getLogger().log("Player 2 sprite changed to arie", 
 					Logger.PriorityLevels.MEDIUM, "players");
-		} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+		} else if (returnButton.isMouseOver(input)) {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 
 	}
@@ -457,14 +455,8 @@ public class SettingsState extends BasicGameState {
 		} else if (mainGame.getPlayer2ImageStringN().equals("arieSprite.png")) {
 			RND.drawColor(graphics, highLightN, highLightA, 
 					ARIE_2_X, ARIE_2_Y, mainGame.getColor()); }
-		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
-					returnButton.getImageMouseOverA(), 
-					returnButton.getX(), returnButton.getY(), mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(), 
-					returnButton.getX(), returnButton.getY(), mainGame.getColor());
-		}
+		returnButton.drawColor(graphics, input, mainGame.getColor());
+		
 		drawSprites2(graphics);
 	}
 	

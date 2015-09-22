@@ -114,7 +114,6 @@ public class GameState extends BasicGameState {
 	private static final int TEXT_2_Y = 190;
 	private static final int BUTTON_WIDTH = 1000;
 	private static final int BUTTON_HEIGHT = 50;
-	private static final int MOUSE_OVER_RECT_X = 500;
 	
 	// CONSTANTS
 	private static final int LEVEL_POINTS = 150;
@@ -387,16 +386,15 @@ public class GameState extends BasicGameState {
 	private void processPauseButtons(GameContainer container, StateBasedGame sbg) {
 		Input input = container.getInput();
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
-			if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY()) 
-					&& !waitEsc) {
+			if (returnButton.isMouseOver(input) && !waitEsc) {
 				prevTime = System.currentTimeMillis();
 				countIn = true;
 				playingState = true;
-			} else if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			} else if (menuButton.isMouseOver(input)) {
 				mainGame.setScore(0);
 				mainGame.setLevelCounter(0);
 				mainGame.setSwitchState(mainGame.getStartState());
-			} else if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+			} else if (exitButton.isMouseOver(input)) {
 				mainGame.setSwitchState(-1);
 			}
 		}
@@ -911,30 +909,9 @@ public class GameState extends BasicGameState {
 	 * @param graphics the Graphics object in
 	 */
 	private void drawMouseOvers(Input input, Graphics graphics) {
-		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
-					returnButton.getImageMouseOverA(), returnButton.getX(), returnButton.getY(), 
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(),
-					returnButton.getX(), returnButton.getY(), mainGame.getColor());
-		}
-		if (menuButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, menuButton.getImageMouseOverN(), 
-					menuButton.getImageMouseOverA(), menuButton.getX(), menuButton.getY(), 
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, menuButton.getImageN(), menuButton.getImageA(),
-					menuButton.getX(), menuButton.getY(), mainGame.getColor());
-		}
-		if (exitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, exitButton.getImageMouseOverN(), 
-					exitButton.getImageMouseOverA(), exitButton.getX(), exitButton.getY(), 
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, exitButton.getImageN(), exitButton.getImageA(),
-					exitButton.getX(), exitButton.getY(), mainGame.getColor());
-		}		
+		returnButton.drawColor(graphics, input, mainGame.getColor());
+		menuButton.drawColor(graphics, input, mainGame.getColor());
+		exitButton.drawColor(graphics, input, mainGame.getColor());
 	}
 
 	/**

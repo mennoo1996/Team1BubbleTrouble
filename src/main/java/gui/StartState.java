@@ -45,9 +45,6 @@ public class StartState extends BasicGameState {
 	private static final int HIGHSCORES_TITLE_X = 760;
 	private static final int HIGHSCORES_TITLE_Y = 140;
 	
-	
-	private static final int MOUSE_OVER_RECT_X = 500;
-	
 	/**
 	 * constructor.
 	 * 
@@ -152,27 +149,27 @@ public class StartState extends BasicGameState {
 	 * @param input the keyboard/mouse input of the user.
 	 */
 	private void processButtons(Input input) {
-		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+		if (playButton.isMouseOver(input)) {
 			// Go to gamestate in singleplayer
 			mainGame.setMultiplayer(false);
 			mainGame.setSwitchState(mainGame.getGameState());
 			mainGame.getLogger().log("Play button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} 
-		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+		if (play2Button.isMouseOver(input)) {
 			// Go to gamestate in multiplayer
 			mainGame.setMultiplayer(true);
 			mainGame.setSwitchState(mainGame.getGameState());
 			mainGame.getLogger().log("Play multiplayer button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} 
-		else if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+		else if (optionsButton.isMouseOver(input)) {
 			// Go to settingsState
 			mainGame.setSwitchState(mainGame.getSettingsState());
 			mainGame.getLogger().log("options button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
-		else if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
+		else if (quitButton.isMouseOver(input)) {
 			// Quit game
 			mainGame.setSwitchState(-1);
 			mainGame.getLogger().log("quit button pressed", 
@@ -209,79 +206,15 @@ public class StartState extends BasicGameState {
 
 	/**
 	 * Method renders buttons in StartState to screen.
-	 * @param container appgamecontainer used
+	 * @param container the GameContainer used
 	 * @param graphics graphics context used
 	 */
 	private void renderButtons(GameContainer container, Graphics graphics) {
 		Input input = container.getInput();
-		drawSinglePlayButton(graphics, input);
-		drawMultiplayerButton(graphics, input);
-		drawOptionsButton(graphics, input);
-		drawQuitButton(graphics, input);
-	}
-
-	/**
-	 * Draw the quit button.
-	 * @param graphics the Graphics object used to draw things on screen
-	 * @param input the keyboard/mouse input of the user
-	 */
-	private void drawQuitButton(Graphics graphics, Input input) {
-		if (quitButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, quitButton.getImageMouseOverN(),
-					quitButton.getImageMouseOverA(), quitButton.getX(), quitButton.getY(),
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, quitButton.getImageN(), quitButton.getImageA(),
-					quitButton.getX(), quitButton.getY(), mainGame.getColor());
-		}
-	}
-
-	/**
-	 * Draw the options button.
-	 * @param graphics the Graphics object to draw things on screen.
-	 * @param input the keyboard/mouse input of the user
-	 */
-	private void drawOptionsButton(Graphics graphics, Input input) {
-		if (optionsButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, optionsButton.getImageMouseOverN(),
-					optionsButton.getImageMouseOverA(), optionsButton.getX(), optionsButton.getY(),
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, optionsButton.getImageN(), optionsButton.getImageA(),
-					optionsButton.getX(), optionsButton.getY(), mainGame.getColor());
-		}
-	}
-
-	/**
-	 * Draw the multiplayer button.
-	 * @param graphics the Graphics object to draw things on screen.
-	 * @param input the keyboard/mouse input of the user
-	 */
-	private void drawMultiplayerButton(Graphics graphics, Input input) {
-		if (play2Button.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, play2Button.getImageMouseOverN(),
-					play2Button.getImageMouseOverA(), play2Button.getX(), play2Button.getY(),
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, play2Button.getImageN(), play2Button.getImageA(),
-					play2Button.getX(), play2Button.getY(), mainGame.getColor());
-		}
-	}
-
-	/**
-	 * Draw the single player button.
-	 * @param graphics the Graphics object to draw things on screen.
-	 * @param input the keyboard/mouse input of the user
-	 */
-	private void drawSinglePlayButton(Graphics graphics, Input input) {
-		if (playButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, playButton.getImageMouseOverN(),
-					playButton.getImageMouseOverA(), playButton.getX(), playButton.getY(),
-					mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, playButton.getImageN(), playButton.getImageA(),
-					playButton.getX(), playButton.getY(), mainGame.getColor());
-		}
+		playButton.drawColor(graphics, input, mainGame.getColor());
+		play2Button.drawColor(graphics, input, mainGame.getColor());
+		optionsButton.drawColor(graphics, input, mainGame.getColor());
+		quitButton.drawColor(graphics, input, mainGame.getColor());
 	}
 
 	@Override

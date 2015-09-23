@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -23,6 +24,10 @@ public class MenuMultiplayerState extends BasicGameState {
 
 	private MainGame mainGame;
 	private Input input;
+
+	private TextField textField;
+	private Image tfBackgroundN;
+	private Image tfBackgroundA;
 	
 	private static final int NUM_3 = 3;
 	private static final int NUM_4 = 4;
@@ -49,6 +54,12 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int HOST_BUTTON_Y = 225;
 	private static final int JOIN_BUTTON_X = 150;
 	private static final int JOIN_BUTTON_Y = 275;
+	
+	private static final int TEXT_FIELD_X = 164;
+	private static final int TEXT_FIELD_Y = 438;
+	private static final int TEXT_FIELD_WIDTH = 700;
+	private static final int TEXT_FIELD_HEIGHT = 60;
+	private static final int TF_BACKGROUND_DEVIATION = 27;
 	
 	private static final int CONTROL_X1 = 800;
 	private static final int CONTROL_X2 = 1000;
@@ -81,6 +92,12 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		mainGame.getLogger().log("Entering MenuMultiplayerState", 
 				Logger.PriorityLevels.LOW, "States");
+		textField = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
+				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+		textField.setBackgroundColor(null);
+		textField.setBorderColor(null);
+		textField.setFocus(true);
+		textField.setText("127.0.0.1");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
@@ -116,6 +133,16 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		initButtons();
+		initTextFieldBackgroundImgs();
+	}
+	
+	/**
+	 * Initialize the background images of the text field.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
+	private void initTextFieldBackgroundImgs() throws SlickException {
+		tfBackgroundN = new Image("resources/images_UI/textfield_Norm.png");
+		tfBackgroundA = new Image("resources/images_UI/textfield_Add.png");
 	}
 	
 	/**
@@ -164,7 +191,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		
 		exit(container, sbg, delta);
 	}
-
+	
 	/**
 	 * Process the buttons.
 	 * @param input the keyboard/mouse input of the user
@@ -204,6 +231,13 @@ public class MenuMultiplayerState extends BasicGameState {
 //	
 //		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
 //		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
+		
+		RND.drawColor(graphics, tfBackgroundN, tfBackgroundA,
+				textField.getX() - TF_BACKGROUND_DEVIATION,
+				textField.getY() - TF_BACKGROUND_DEVIATION,
+				mainGame.getColor());
+		RND.text(graphics, textField.getX(), textField.getY(),
+				textField.getText(), mainGame.getColor());
 	
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");

@@ -1,6 +1,9 @@
 package gui;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import lan.Host;
 import logic.HighScores;
 import logic.HighScoresParser;
 import logic.Logger;
@@ -113,8 +116,11 @@ public class MainGame extends StateBasedGame {
 	private static final int PLAYER_HEIGHT = 92;
 	private static final int VERSION_STRING_X = 164;
 	private static final int VERSION_STRING_Y_DEVIATION = 190;
-	
-	
+	private static final int MULTIPLAYER_PORT = 4455;
+	private boolean lanMultiplayer;
+	private Host host;
+
+
 	/**
 	 * Constructor.
 	 * @param name	- name of mainGame
@@ -123,6 +129,7 @@ public class MainGame extends StateBasedGame {
 	public MainGame(String name) {
 		super(name);
 		this.logger = new Logger(true);
+		logger.setConsoleLoggingOn(false);
 		HighScoresParser.setLogger(logger);
 		this.player1ImageStringN = "Playersprite_Norm.png";
 		this.player1ImageStringA = "Playersprite_Add.png";
@@ -134,9 +141,28 @@ public class MainGame extends StateBasedGame {
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		highscores.setLogger(logger);
 		this.multiplayer = false;
-		
+
+		// Spawn thread logic
+		lanMultiplayer = true;
+		host = new Host(MULTIPLAYER_PORT);
+		ExecutorService executor = Executors.newFixedThreadPool(1);
+		executor.submit(getHost());
+
 		ShutDownHook shutDownHook = new ShutDownHook(this);
 		shutDownHook.attachShutDownHook();
+	}
+
+	/**
+	 * Exit the LAN multiplayer properly.
+	 */
+	public void closeLANMultiplayer() {
+		if (lanMultiplayer) {
+			try {
+				getHost().shutdown();
+			} catch (InterruptedException ec) {
+				ec.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -859,6 +885,12 @@ public class MainGame extends StateBasedGame {
 	public int getSwitchState() {
 		return switchState;
 	}
-	
+
+	/**
+	 * @return the Host object for this game.
+	 */
+	public Host getHost() {
+		return host;
+	}
 }
 

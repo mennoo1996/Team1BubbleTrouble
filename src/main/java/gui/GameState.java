@@ -204,7 +204,7 @@ public class GameState extends BasicGameState {
 	 * @throws SlickException sometimes.
 	 */
 	@Override
-	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {		
+	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		mainGame.getLogger().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();

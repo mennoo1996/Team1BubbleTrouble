@@ -2,13 +2,16 @@ package lan;
 
 import logic.Logger;
 
+import java.util.Scanner;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.nio.channels.SocketChannel;
+import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Client class which connects to server for LAN multiplayer.
@@ -18,13 +21,12 @@ public class Client implements Callable {
 
     private int portNumber;
     private String host;
-    private ExecutorService exQueue;
-    private SocketChannel socketChannel;
+    private Socket socket;
     private boolean isConnected;
     private Logger logger;
-    private ClientLANListener listener;
-
-    private static final int SHUTDOWN_TIMEOUT = 30;
+    private Queue<String> messageQueue;
+    private PrintWriter writer;
+    private Scanner reader;
 
     /**
      * Create a new Client connection for LAN multiplayer.
@@ -35,37 +37,34 @@ public class Client implements Callable {
         this.host = host;
         this.portNumber = portNumber;
         this.isConnected = false;
+        this.messageQueue = new LinkedList<>();
     }
 
     @Override
     public Boolean call() throws IOException {
-        socketChannel = SocketChannel.open();
-        socketChannel.bind(new InetSocketAddress(portNumber));
-        socketChannel.configureBlocking(false);
-        socketChannel.connect(new InetSocketAddress(host, portNumber));
-
-        exQueue = Executors.newSingleThreadExecutor();
-        logger.log("Connecting", Logger.PriorityLevels.LOW, "lan");
-
+    	System.out.println("CLIENT.call");
+        socket = new Socket();
+        socket.connect(new InetSocketAddress(InetAddress.getLocalHost(), portNumber));
+        writer = new PrintWriter(socket.getOutputStream(), true);
+        reader = new Scanner(new InputStreamReader(socket.getInputStream()));
+        System.out.println("Connected to server");
         // This continues ad infinitum
-        while (!exQueue.isShutdown()) {
-            if (this.isConnected) {
-                //Connected logic
-                if (socketChannel.socket().getReceiveBufferSize() > 0) {
-                    exQueue.submit(listener);
-                }
-            } else {
-                // Check if connection has succeeded
-                if (socketChannel.isConnected()) {
-                    this.isConnected = true;
-                    this.listener = new ClientLANListener(socketChannel);
-                } else {
-                    // Throw error if connection didn't succeed
-                    throw new IOException("Client could not connect to host server");
-                }
+        while (true) {
+            // READ AND WRITE LOGIC HERE
+            if (!this.messageQueue.isEmpty()) {
+                writer.println(this.messageQueue.poll());
             }
+            readServerCommands();
         }
-        return true;
+    }
+
+    /**
+     * Process server commands.
+     */
+    private void readServerCommands() {
+        while (reader.hasNextLine()) {
+            System.out.println(reader.nextLine());
+        }
     }
 
     /**
@@ -75,13 +74,10 @@ public class Client implements Callable {
     public void shutdown() throws InterruptedException {
         logger.log("Shutting down client connection", Logger.PriorityLevels.LOW, "lan");
         try {
-            socketChannel.close();
+            socket.close();
         } catch (IOException er) {
             logger.log(er.getMessage(), Logger.PriorityLevels.LOW, "lan");
         }
-        exQueue.shutdown();
-        exQueue.awaitTermination(SHUTDOWN_TIMEOUT, TimeUnit.SECONDS);
-        exQueue.shutdownNow();
     }
 
     /**
@@ -89,14 +85,7 @@ public class Client implements Callable {
      * @param toWrite The message to send
      */
     public void sendMessageToHost(String toWrite) {
-        if (!isConnected) {
-            logger.log("Error: no client yet", Logger.PriorityLevels.LOW, "lan");
-            return;
-        }
-
-        SocketObjectWriter writer = new SocketObjectWriter(socketChannel,
-                toWrite);
-        exQueue.submit(writer);
+        this.messageQueue.add(toWrite);
     }
 
     /**
@@ -111,6 +100,6 @@ public class Client implements Callable {
      * @return Whether or not the client has connected to the remote server
      */
     public boolean connectedToServer() {
-        return this.socketChannel.isConnected();
+        return this.socket.isConnected();
     }
 }

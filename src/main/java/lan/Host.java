@@ -3,12 +3,14 @@ package lan;
 import logic.Logger;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.channels.ServerSocketChannel;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Host server for LAN multiplayer.
@@ -17,13 +19,13 @@ import java.util.concurrent.TimeUnit;
 public class Host implements Callable {
 
     private int portNumber;
-    private ExecutorService exQueue;
-    private ServerSocketChannel serverSocketChannel;
-    private boolean noClientYet;
+    private ServerSocket serverSocket;
     private Logger logger;
-    private HostLANListener listener;
-
-    private static final int SHUTDOWN_TIMEOUT = 30;
+    private boolean noClientYet;
+    private Socket client;
+    private Queue<String> messageQueue;
+    private PrintWriter writer;
+    private Scanner reader;
 
     /**
      * Create a new Host server for LAN multiplayer.
@@ -32,27 +34,39 @@ public class Host implements Callable {
     public Host(int portNumber) {
         this.portNumber = portNumber;
         this.noClientYet = true;
+        this.messageQueue = new LinkedList<>();
+        System.out.println("HOST INITIALIZED");
     }
 
     @Override
     public Boolean call() throws IOException {
-        serverSocketChannel = ServerSocketChannel.open();
-        serverSocketChannel.bind(new InetSocketAddress(portNumber));
-        serverSocketChannel.configureBlocking(false);
-
-        exQueue = Executors.newSingleThreadExecutor();
-        logger.log("Listening", Logger.PriorityLevels.LOW, "lan");
+    	System.out.println("host.call");
+        serverSocket = new ServerSocket(portNumber);
+        client = serverSocket.accept();
+        noClientYet = false;
+        writer = new PrintWriter(client.getOutputStream(), true);
+        reader = new Scanner(new InputStreamReader(client.getInputStream()));
+        System.out.println("Client connected");
+        messageQueue.add("Hi");
 
         // This continues ad infinitum
-        while (!exQueue.isShutdown()) {
-            if (noClientYet && serverSocketChannel.accept() != null) {
-                noClientYet = false;
-                listener = new HostLANListener(serverSocketChannel.accept());
-            } else if (serverSocketChannel.socket().getReceiveBufferSize() > 0) {
-                exQueue.submit(listener);
+        while (true) {
+            if (!messageQueue.isEmpty()) {
+                writer.println(this.messageQueue.poll());
+                System.out.println("Sent message");
             }
+
+            readClientInputs();
         }
-        return true;
+    }
+
+    /**
+     * Process client inputs.
+     */
+    private void readClientInputs() {
+        while (reader.hasNextLine()) {
+            System.out.println(reader.nextLine());
+        }
     }
 
     /**
@@ -61,9 +75,11 @@ public class Host implements Callable {
      */
     public void shutdown() throws InterruptedException {
         logger.log("Shutting down host server", Logger.PriorityLevels.LOW, "lan");
-        exQueue.shutdown();
-        exQueue.awaitTermination(SHUTDOWN_TIMEOUT, TimeUnit.SECONDS);
-        exQueue.shutdownNow();
+        try {
+            serverSocket.close();
+        } catch (IOException er) {
+            logger.log(er.getMessage(), Logger.PriorityLevels.LOW, "lan");
+        }
     }
 
     /**
@@ -71,18 +87,7 @@ public class Host implements Callable {
      * @param toWrite The string to send
      */
     public void sendMessageToClient(String toWrite) {
-        if (noClientYet) {
-            logger.log("Error: no client yet", Logger.PriorityLevels.LOW, "lan");
-            return;
-        }
-
-        try {
-            SocketObjectWriter writer = new SocketObjectWriter(serverSocketChannel.accept(),
-                    toWrite);
-            exQueue.submit(writer);
-        } catch (IOException er) {
-            er.printStackTrace();
-        }
+        this.messageQueue.add(toWrite);
     }
 
     /**

@@ -1,4 +1,9 @@
 package gui;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import lan.Client;
+import lan.Host;
 import logic.Button;
 import logic.Logger;
 
@@ -176,12 +181,26 @@ public class MenuMultiplayerState extends BasicGameState {
 		if (hostButton.isMouseOver(input)) {
 			int i = 1;
 			i = 0;
+			// Spawn thread logic
+			// TODO: Move this to another location for multiplayer menu
+			mainGame.setLanMultiplayer(true);
+			mainGame.setHost(new Host(MainGame.getMultiplayerPort()));
+			ExecutorService executor = Executors.newFixedThreadPool(1);
+			executor.submit(mainGame.getHost());
+			mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
 			// host button stuff
 		} 
 		if (joinButton.isMouseOver(input)) {
 			// join button stuff
 			int i = 1;
 			i = 0;
+			// Spawn thread logic
+			// TODO: Move this to another location for multiplayer menu
+			mainGame.setLanMultiplayer(true);
+			Client client = new Client("127.0.0.1", mainGame.getMultiplayerPort());
+			ExecutorService executor = Executors.newFixedThreadPool(1);
+			executor.submit(client);
+			
 		} 
 	}
 	

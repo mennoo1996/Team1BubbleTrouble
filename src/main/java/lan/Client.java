@@ -39,27 +39,38 @@ public class Client implements Callable {
 
     @Override
     public Boolean call() throws IOException {
+    	System.out.println("CLIENT.call");
         socketChannel = SocketChannel.open();
-        socketChannel.bind(new InetSocketAddress(portNumber));
+        socketChannel.bind(new InetSocketAddress(4456));
         socketChannel.configureBlocking(false);
         socketChannel.connect(new InetSocketAddress(host, portNumber));
 
         exQueue = Executors.newSingleThreadExecutor();
-        logger.log("Connecting", Logger.PriorityLevels.LOW, "lan");
+        System.out.println(exQueue.isShutdown());
 
+        System.out.println(exQueue.isShutdown());
         // This continues ad infinitum
         while (!exQueue.isShutdown()) {
+        	System.out.println("CLIENT RUNNING BITHC");
             if (this.isConnected) {
-                //Connected logic
+
+            	System.out.println("CLIENT connected");
+            	
+            	//Connected logic
                 if (socketChannel.socket().getReceiveBufferSize() > 0) {
                     exQueue.submit(listener);
                 }
             } else {
+            	System.out.println("CLIENT not connected");
                 // Check if connection has succeeded
                 if (socketChannel.isConnected()) {
+
+                	System.out.println("socketchannel connected");
+                	System.out.println("CONNECTION?!");
                     this.isConnected = true;
                     this.listener = new ClientLANListener(socketChannel);
-                } else {
+                } else if (!socketChannel.isConnectionPending()) {
+                	System.out.println("Exception?");
                     // Throw error if connection didn't succeed
                     throw new IOException("Client could not connect to host server");
                 }

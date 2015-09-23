@@ -32,26 +32,34 @@ public class Host implements Callable {
     public Host(int portNumber) {
         this.portNumber = portNumber;
         this.noClientYet = true;
+        System.out.println("HOST INITIALIZED");
     }
 
     @Override
     public Boolean call() throws IOException {
+    	System.out.println("host.call");
         serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.bind(new InetSocketAddress(portNumber));
         serverSocketChannel.configureBlocking(false);
 
         exQueue = Executors.newSingleThreadExecutor();
-        logger.log("Listening", Logger.PriorityLevels.LOW, "lan");
 
         // This continues ad infinitum
         while (!exQueue.isShutdown()) {
+        	System.out.println("host running and shit");
             if (noClientYet && serverSocketChannel.accept() != null) {
+            	System.out.println("trying to connect client");
                 noClientYet = false;
+                System.out.println("CLIENT CONNECTED HEUH");
                 listener = new HostLANListener(serverSocketChannel.accept());
-            } else if (serverSocketChannel.socket().getReceiveBufferSize() > 0) {
+            } else if (listener != null && serverSocketChannel.socket().getReceiveBufferSize() > 0) {
+            	System.out.println("TRYING TO SUBMIT");
                 exQueue.submit(listener);
+
+            	System.out.println("done TRYING TO SUBMIT");
             }
         }
+        System.out.println("exeting host");
         return true;
     }
 

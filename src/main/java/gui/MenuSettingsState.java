@@ -66,7 +66,8 @@ public class MenuSettingsState extends BasicGameState {
 	
 	private static final int LOGO_X = 160;
 	private static final int LOGO_Y = 110;
-	private static final int SEPARATOR_X = 164;
+	private static final int SEPARATOR_X = 319;
+	private static final int SEPARATOR_X_2 = 164;
 	private static final int SEPARATOR_Y = 190;
 	private static final int SEPARATOR_Y_2 = 510;
 	
@@ -74,13 +75,20 @@ public class MenuSettingsState extends BasicGameState {
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
 	
 	private static final int RETURN_BUTTON_X = 150;
-	private static final int RETURN_BUTTON_Y = 225;
+	private static final int RETURN_BUTTON_Y = 175;
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
-	private static final int CONTROL_X1 = 800;
-	private static final int CONTROL_X2 = 1000;
-	private static final int P1_CONTROL_Y = 238;
-	private static final int P2_CONTROL_Y = 388;
+	
+	private static final int TEXT_X = 164;
+	private static final int TEXT_1_Y = 238;
+	private static final int TEXT_2_Y = 288;
+	private static final int PLAYER_1_TEXT_Y = 590;
+	private static final int PLAYER_2_TEXT_Y = 710;
+	
+	private static final int CONTROL_X1 = 164;
+	private static final int CONTROL_XBETW = 210;
+	private static final int CONTROL_X2 = 834;
+	private static final int P1_CONTROL_Y = 388;
 	
 	private static final int COLOR_TEXT_X = 800;
 	private static final int COLOR_TEXT_1_Y = 550;
@@ -97,13 +105,6 @@ public class MenuSettingsState extends BasicGameState {
 	private static final int COLOR_BUTTON_PINK_Y = 740;
 	private static final int COLOR_BUTTON_GREEN_Y = 640;
 	
-	private static final int TEXT_X = 164;
-	private static final int TEXT_1_Y = 288;
-	private static final int TEXT_2_Y = 338;
-	private static final int TEXT_3_Y = 388;
-	private static final int TEXT_4_Y = 438;
-	private static final int PLAYER_1_TEXT_Y = 590;
-	private static final int PLAYER_2_TEXT_Y = 710;
 	
 	private static final int PLAYER_SPRITE_WIDTH = 120;
 	private static final int PLAYER_SPRITE_HEIGHT = 120;
@@ -391,11 +392,11 @@ public class MenuSettingsState extends BasicGameState {
 		this.input = container.getInput();
 		
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
-		RND.text(graphics, TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
-		RND.text(graphics, TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
-		RND.text(graphics, TEXT_X, TEXT_3_Y, "# we advice different sprites for");
-		RND.text(graphics, TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
-	
+		RND.text(graphics, TEXT_X, TEXT_1_Y, 
+				"# You can choose a player skin per player by clicking on it below.");
+		RND.text(graphics, TEXT_X, TEXT_2_Y, 
+				"# We advice different skins for each player but it's your choice!");
+
 		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
 		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
 	
@@ -406,14 +407,16 @@ public class MenuSettingsState extends BasicGameState {
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-		String tempString = "========================================";
+		String tempString = "==============================";
 		tempString += "=======================================";
 		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, tempString);
-		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y_2, tempString);
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		RND.text(graphics, SEPARATOR_X_2, SEPARATOR_Y_2, tempString + "==========");
 		drawControls(graphics);
 		drawColorControls(graphics);
+		// any and all drawing is done BEFORE THESE TWO FOR THE 1000TH TIME
+		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		// NO DRAWING HERE. BAD. BOO. 
 	}
 	
 	/**
@@ -425,10 +428,10 @@ public class MenuSettingsState extends BasicGameState {
 		controlsPlayer1 += "Shoot weapon = spacebar";
 		String controlsPlayer2 = "Move left = a\nMove right = d\nShoot weapon = w";
 		
-		RND.text(graphics, CONTROL_X1, P1_CONTROL_Y, "Player 1:");
-		RND.text(graphics, CONTROL_X2, P1_CONTROL_Y, controlsPlayer1);
-		RND.text(graphics, CONTROL_X1, P2_CONTROL_Y, "Player 2:");
-		RND.text(graphics, CONTROL_X2, P2_CONTROL_Y, controlsPlayer2);
+		RND.text(graphics, CONTROL_X1, P1_CONTROL_Y, "# Player 1:");
+		RND.text(graphics, CONTROL_X1 + CONTROL_XBETW, P1_CONTROL_Y, controlsPlayer1);
+		RND.text(graphics, CONTROL_X2, P1_CONTROL_Y, "# Player 2:");
+		RND.text(graphics, CONTROL_X2 + CONTROL_XBETW, P1_CONTROL_Y, controlsPlayer2);
 		
 	}
 	

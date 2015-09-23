@@ -19,9 +19,10 @@ public class MenuMainState extends BasicGameState {
 
 	 
 	private MainGame mainGame;
+	
 	private Button playButton;
 	private Button play2Button;
-
+	private Button lanButton;
 	private Button optionsButton;
 	private Button quitButton;
 	
@@ -38,8 +39,9 @@ public class MenuMainState extends BasicGameState {
 	private static final int BUTTON_X = 150;
 	private static final int PLAYBUTTON_Y = 225;
 	private static final int PLAYBUTTON2_Y = 275;
-	private static final int OPTIONSBUTTON_Y = 325;
-	private static final int QUITBUTTON_Y = 375;
+	private static final int PLAYBUTTONLAN_Y = 325;
+	private static final int OPTIONSBUTTON_Y = 375;
+	private static final int QUITBUTTON_Y = 425;
 	private static final int HIGHSCORES_X = 900;
 	private static final int HIGHSCORES_Y = 240;
 	private static final int HIGHSCORES_TITLE_X = 760;
@@ -72,6 +74,11 @@ public class MenuMainState extends BasicGameState {
 				new Image("resources/images_UI/Menu_Button_2Player_Add.png"),
 				new Image("resources/images_UI/Menu_Button_2Player2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_2Player2_Add.png"));
+		lanButton = new Button(BUTTON_X, PLAYBUTTONLAN_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
+				new Image("resources/images_UI/Menu_Button_LAN_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_LAN_Add.png"),
+				new Image("resources/images_UI/Menu_Button_LAN2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_LAN2_Add.png"));
 		optionsButton = new Button(BUTTON_X, OPTIONSBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/images_UI/Menu_Button_Options_Norm.png"), 
 				new Image("resources/images_UI/Menu_Button_Options_Add.png"),
@@ -150,28 +157,26 @@ public class MenuMainState extends BasicGameState {
 	 * @param input the keyboard/mouse input of the user.
 	 */
 	private void processButtons(Input input) {
-		if (playButton.isMouseOver(input)) {
-			// Go to gamestate in singleplayer
+		if (playButton.isMouseOver(input)) { // Go to gamestate in singleplayer
 			mainGame.setMultiplayer(false);
 			mainGame.setSwitchState(mainGame.getGameState());
 			mainGame.getLogger().log("Play button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
-		} 
-		if (play2Button.isMouseOver(input)) {
-			// Go to gamestate in multiplayer
+		} else if (play2Button.isMouseOver(input)) { // Go to gamestate in multiplayer
 			mainGame.setMultiplayer(true);
 			mainGame.setSwitchState(mainGame.getGameState());
 			mainGame.getLogger().log("Play multiplayer button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
-		} 
-		else if (optionsButton.isMouseOver(input)) {
-			// Go to settingsState
+		} else if (lanButton.isMouseOver(input)) { // Go to gamestate in multiplayer
+			mainGame.setMultiplayer(true);
+			mainGame.setSwitchState(mainGame.getMultiplayerState());
+			mainGame.getLogger().log("Play lan button pressed", 
+					Logger.PriorityLevels.MEDIUM, "user-input");
+		} else if (optionsButton.isMouseOver(input)) { // Go to settingsState
 			mainGame.setSwitchState(mainGame.getSettingsState());
 			mainGame.getLogger().log("options button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
-		}
-		else if (quitButton.isMouseOver(input)) {
-			// Quit game
+		} else if (quitButton.isMouseOver(input)) { // Quit game
 			mainGame.setSwitchState(-1);
 			mainGame.getLogger().log("quit button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
@@ -197,12 +202,14 @@ public class MenuMainState extends BasicGameState {
 		String equalsString = "===================================================================";
 		equalsString += "============";
 		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, equalsString);
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 		String highScoresString = mainGame.getHighscores().toString();
 		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
-				"The best scores of your predecessor!");
+				"The best scores of your predecessors!");
+		// NO DRAWING AFTER THIS. BOO.
+		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		// NO DRAWING HERE. BAD PROGRAMMER. BAD.
 	}
 
 	/**
@@ -214,6 +221,7 @@ public class MenuMainState extends BasicGameState {
 		Input input = container.getInput();
 		playButton.drawColor(graphics, input, mainGame.getColor());
 		play2Button.drawColor(graphics, input, mainGame.getColor());
+		lanButton.drawColor(graphics, input, mainGame.getColor());
 		optionsButton.drawColor(graphics, input, mainGame.getColor());
 		quitButton.drawColor(graphics, input, mainGame.getColor());
 	}

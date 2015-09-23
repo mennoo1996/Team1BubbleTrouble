@@ -14,11 +14,11 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- * This class represents the state of the settings menu.
- * @author Menno
+ * This class represents the state of the multiplayer menu.
+ * @author Mark
  *
  */
-public class SettingsState extends BasicGameState {
+public class MenuMultiplayerState extends BasicGameState {
 
 	private Button returnButton;
 	
@@ -126,7 +126,7 @@ public class SettingsState extends BasicGameState {
 	 * Construct a SettingsState.
 	 * @param mainGame the MainGame that uses this state.
 	 */
-	public SettingsState(MainGame mainGame) {
+	public MenuMultiplayerState(MainGame mainGame) {
 		this.mainGame = mainGame;
 	}
 	
@@ -138,7 +138,7 @@ public class SettingsState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		mainGame.getLogger().log("Entering SettingsState", 
+		mainGame.getLogger().log("Entering MenuMultiplayerState", 
 				Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
@@ -155,7 +155,7 @@ public class SettingsState extends BasicGameState {
 			if (RND.getOpacity() > 0.0f) {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / mainGame.getOpacityFadeTimer());
 			} else {
-				mainGame.getLogger().log("Exiting SettingsState", 
+				mainGame.getLogger().log("Exiting MenuMultiplayerState", 
 						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					container.exit();

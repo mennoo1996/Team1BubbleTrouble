@@ -81,15 +81,17 @@ public class MainGame extends StateBasedGame {
 	private HighScores highscores;
 	
 	//////////////////////// STATES //////////////
-	private static  final int START_STATE = 0;
+	private static  final int MENU_START_STATE = 0;
 	private static final int GAME_STATE = 1;
-	private static final int GAME_OVER_STATE = 2;
-	private static final int SETTINGS_STATE = 3;
+	private static final int MENU_GAMEOVER_STATE = 2;
+	private static final int MENU_SETTINGS_STATE = 3;
+	private static final int MENU_MULTIPLAYER_STATE = 4;
 	
 	private GameState gameStateState;
-	private SettingsState settingsState;
-	private StartState startState;
-	private GameOverState gameOverState;
+	private MenuSettingsState menuSettingsState;
+	private MenuMainState menuMainState;
+	private MenuGameoverState menuGameoverState;
+	private MenuMultiplayerState menuMultiplayerState;
 	private Logger logger;
 	
 	private boolean shouldSwitchState = false;
@@ -283,33 +285,32 @@ public class MainGame extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.container = container;
-		
 		this.gameStateState = new GameState(this);
 		logger.log("GameState initialized", Logger.PriorityLevels.LOW, "States");
-		this.settingsState = new SettingsState(this);
-		logger.log("SettingsState initialized", Logger.PriorityLevels.LOW, "States");
-		this.startState = new StartState(this);
-		logger.log("StartState initialized", Logger.PriorityLevels.LOW, "States");
-		this.gameOverState = new GameOverState(this);
-		logger.log("GameOverState initialized", Logger.PriorityLevels.LOW, "States");
-		
-		
-		this.addState(startState);
-		logger.log("Startstate added", Logger.PriorityLevels.LOW, "States");
+		this.menuSettingsState = new MenuSettingsState(this);
+		logger.log("MenuSettingsState initialized", Logger.PriorityLevels.LOW, "States");
+		this.menuMainState = new MenuMainState(this);
+		logger.log("MenuMainState initialized", Logger.PriorityLevels.LOW, "States");
+		this.menuGameoverState = new MenuGameoverState(this);
+		logger.log("MenuGameoverState initialized", Logger.PriorityLevels.LOW, "States");
+		this.menuMultiplayerState = new MenuMultiplayerState(this);
+		logger.log("MenuMultiplayerState initialized", Logger.PriorityLevels.LOW, "States");
+		this.addState(menuMainState);
+		logger.log("MenuMainstate added", Logger.PriorityLevels.LOW, "States");
 		this.addState(gameStateState);
 		logger.log("GameState added", Logger.PriorityLevels.LOW, "States");
-		this.addState(gameOverState);
-		logger.log("GameOverState added", Logger.PriorityLevels.LOW, "States");
-		this.addState(settingsState);
-		logger.log("Settingsstate added", Logger.PriorityLevels.LOW, "States");
-		
+		this.addState(menuGameoverState);
+		logger.log("MenuGameoverState added", Logger.PriorityLevels.LOW, "States");
+		this.addState(menuSettingsState);
+		logger.log("MenuSettingsstate added", Logger.PriorityLevels.LOW, "States");
+		this.addState(menuMultiplayerState);
+		logger.log("MenuMultiplayerState added", Logger.PriorityLevels.LOW, "States");
 		initImages();
 		initPlayers();
 		Calendar cal = Calendar.getInstance();
 		this.currentDate = cal.get(Calendar.DATE) 
 				+ "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
-	
 	}
 	
 	/**
@@ -653,7 +654,7 @@ public class MainGame extends StateBasedGame {
 	 * @return the startState
 	 */
 	public int getStartState() {
-		return START_STATE;
+		return MENU_START_STATE;
 	}
 
 	/**
@@ -667,14 +668,21 @@ public class MainGame extends StateBasedGame {
 	 * @return the gameOverState
 	 */
 	public int getGameOverState() {
-		return GAME_OVER_STATE;
+		return MENU_GAMEOVER_STATE;
 	}
 
 	/**
 	 * @return the settingsState
 	 */
 	public int getSettingsState() {
-		return SETTINGS_STATE;
+		return MENU_SETTINGS_STATE;
+	}
+	
+	/**
+	 * @return the multiplayerState
+	 */
+	public int getMultiplayerState() {
+		return MENU_MULTIPLAYER_STATE;
 	}
 
 	/**
@@ -827,6 +835,9 @@ public class MainGame extends StateBasedGame {
 			break;
 		case (2 + 1):
 			stateString += "SettingsState";	
+			break;
+		case (2 + 2):
+			stateString += "MultiplayerState";	
 			break;
 		default:
 			break;

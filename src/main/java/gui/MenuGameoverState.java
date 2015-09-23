@@ -18,7 +18,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Menno
  *
  */
-public class GameOverState extends BasicGameState {
+public class MenuGameoverState extends BasicGameState {
 
 	private Button playButton;
 	private Button menuButton;
@@ -80,7 +80,7 @@ public class GameOverState extends BasicGameState {
 	 * Constructor.
 	 * @param mainGame the maingame in which this state will be used.
 	 */
-	public GameOverState(MainGame mainGame) {
+	public MenuGameoverState(MainGame mainGame) {
 		this.mainGame = mainGame;
 	}
 	
@@ -153,7 +153,7 @@ public class GameOverState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
-		mainGame.getLogger().log("Entering GameOverState", Logger.PriorityLevels.LOW, "States");
+		mainGame.getLogger().log("Entering MenuGameoverState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 		textField = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
@@ -182,7 +182,7 @@ public class GameOverState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
-				mainGame.getLogger().log("Exiting GameOverState", 
+				mainGame.getLogger().log("Exiting MenuGameoverState", 
 						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					System.exit(0);

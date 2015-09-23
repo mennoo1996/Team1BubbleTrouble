@@ -1,6 +1,6 @@
 import static org.junit.Assert.*;
 import gui.MainGame;
-import gui.SettingsState;
+import gui.MenuSettingsState;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,14 +14,14 @@ public class SettingsStateTest {
 	@Test
 	public void testGetID() {
 		MainGame mg = new MainGame("Test");
-		SettingsState s = new SettingsState(mg);
+		MenuSettingsState s = new MenuSettingsState(mg);
 		assertEquals(3, s.getID());
 	}
 
 	@Test
 	public void testSettingsState() {
 		MainGame mg = new MainGame("Test");
-		SettingsState s = new SettingsState(mg);
+		MenuSettingsState s = new MenuSettingsState(mg);
 		s.setmainGame(mg);
 		assertEquals(mg, s.getmainGame());
 	}

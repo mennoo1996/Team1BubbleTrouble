@@ -15,7 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Menno
  *
  */
-public class StartState extends BasicGameState {
+public class MenuMainState extends BasicGameState {
 
 	 
 	private MainGame mainGame;
@@ -50,7 +50,7 @@ public class StartState extends BasicGameState {
 	 * 
 	 * @param mainGame	- the maingame this state belongs to
 	 */
-	public StartState(MainGame mainGame) {
+	public MenuMainState(MainGame mainGame) {
 		this.mainGame = mainGame;
 	}
 	
@@ -93,7 +93,7 @@ public class StartState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		mainGame.getLogger().log("Entering StartState", Logger.PriorityLevels.LOW, "States");
+		mainGame.getLogger().log("Entering MenuMainState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
@@ -113,7 +113,8 @@ public class StartState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
-				mainGame.getLogger().log("Exiting StartState", Logger.PriorityLevels.LOW, "States");
+				mainGame.getLogger().log("Exiting MenuMainState", 
+						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					System.exit(0);
 				} else {

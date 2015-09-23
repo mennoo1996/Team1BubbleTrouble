@@ -143,6 +143,7 @@ public class MainGame extends StateBasedGame {
 		this.multiplayer = false;
 
 		// Spawn thread logic
+		// TODO: Move this to another location for multiplayer menu
 		lanMultiplayer = true;
 		host = new Host(MULTIPLAYER_PORT);
 		ExecutorService executor = Executors.newFixedThreadPool(1);

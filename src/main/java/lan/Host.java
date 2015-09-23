@@ -11,7 +11,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by alexandergeenen on 22/09/15.
+ * Host server for LAN multiplayer.
+ * @author alexandergeenen
  */
 public class Host implements Callable {
 
@@ -20,6 +21,7 @@ public class Host implements Callable {
     private ServerSocketChannel serverSocketChannel;
     private boolean noClientYet;
     private Logger logger;
+    private HostLANListener listener;
 
     private static final int SHUTDOWN_TIMEOUT = 30;
 
@@ -37,13 +39,17 @@ public class Host implements Callable {
         serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.bind(new InetSocketAddress(portNumber));
         serverSocketChannel.configureBlocking(false);
-        System.out.println(serverSocketChannel.isOpen());
 
         exQueue = Executors.newSingleThreadExecutor();
         logger.log("Listening", Logger.PriorityLevels.LOW, "lan");
+
+        // This continues ad infinitum
         while (!exQueue.isShutdown()) {
             if (noClientYet && serverSocketChannel.accept() != null) {
                 noClientYet = false;
+                listener = new HostLANListener(serverSocketChannel.accept());
+            } else if (serverSocketChannel.socket().getReceiveBufferSize() > 0) {
+                exQueue.submit(listener);
             }
         }
         return true;
@@ -61,10 +67,10 @@ public class Host implements Callable {
     }
 
     /**
-     * Send an object to the client.
-     * @param toWrite The object to send
+     * Send a message to the client.
+     * @param toWrite The string to send
      */
-    public void writeObjectToClient(Object toWrite) {
+    public void sendMessageToClient(String toWrite) {
         if (noClientYet) {
             logger.log("Error: no client yet", Logger.PriorityLevels.LOW, "lan");
             return;
@@ -85,6 +91,13 @@ public class Host implements Callable {
      */
     public void setLogger(Logger logger) {
         this.logger = logger;
+    }
+
+    /**
+     * @return Whether or not the client has connected
+     */
+    public boolean clientConnected() {
+        return !noClientYet;
     }
 }
 

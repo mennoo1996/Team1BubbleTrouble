@@ -27,7 +27,6 @@ public class ShutDownHook {
 				mainGame.getLogger().log("Shutdown requested", 
 						Logger.PriorityLevels.HIGH, "shutdown");
 				mainGame.getLogger().writeToFile();
-				mainGame.closeLANMultiplayer();
 			}
 		});
 		mainGame.getLogger().log("Shutdown hook attacked", 

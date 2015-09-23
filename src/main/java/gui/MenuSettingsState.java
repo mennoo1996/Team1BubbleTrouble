@@ -18,7 +18,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Menno
  *
  */
-public class SettingsState extends BasicGameState {
+public class MenuSettingsState extends BasicGameState {
 
 	private Button returnButton;
 	
@@ -66,7 +66,8 @@ public class SettingsState extends BasicGameState {
 	
 	private static final int LOGO_X = 160;
 	private static final int LOGO_Y = 110;
-	private static final int SEPARATOR_X = 164;
+	private static final int SEPARATOR_X = 319;
+	private static final int SEPARATOR_X_2 = 164;
 	private static final int SEPARATOR_Y = 190;
 	private static final int SEPARATOR_Y_2 = 510;
 	
@@ -74,13 +75,20 @@ public class SettingsState extends BasicGameState {
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
 	
 	private static final int RETURN_BUTTON_X = 150;
-	private static final int RETURN_BUTTON_Y = 225;
+	private static final int RETURN_BUTTON_Y = 175;
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
-	private static final int CONTROL_X1 = 800;
-	private static final int CONTROL_X2 = 1000;
-	private static final int P1_CONTROL_Y = 238;
-	private static final int P2_CONTROL_Y = 388;
+	
+	private static final int TEXT_X = 164;
+	private static final int TEXT_1_Y = 238;
+	private static final int TEXT_2_Y = 288;
+	private static final int PLAYER_1_TEXT_Y = 590;
+	private static final int PLAYER_2_TEXT_Y = 710;
+	
+	private static final int CONTROL_X1 = 164;
+	private static final int CONTROL_XBETW = 210;
+	private static final int CONTROL_X2 = 834;
+	private static final int P1_CONTROL_Y = 388;
 	
 	private static final int COLOR_TEXT_X = 800;
 	private static final int COLOR_TEXT_1_Y = 550;
@@ -97,13 +105,6 @@ public class SettingsState extends BasicGameState {
 	private static final int COLOR_BUTTON_PINK_Y = 740;
 	private static final int COLOR_BUTTON_GREEN_Y = 640;
 	
-	private static final int TEXT_X = 164;
-	private static final int TEXT_1_Y = 288;
-	private static final int TEXT_2_Y = 338;
-	private static final int TEXT_3_Y = 388;
-	private static final int TEXT_4_Y = 438;
-	private static final int PLAYER_1_TEXT_Y = 590;
-	private static final int PLAYER_2_TEXT_Y = 710;
 	
 	private static final int PLAYER_SPRITE_WIDTH = 120;
 	private static final int PLAYER_SPRITE_HEIGHT = 120;
@@ -122,13 +123,11 @@ public class SettingsState extends BasicGameState {
 	private static final int ARIE_2_X = 630;
 	private static final int ARIE_2_Y = 660;
 	
-	private static final int MOUSE_OVER_RECT_X = 500;
-	
 	/**
 	 * Construct a SettingsState.
 	 * @param mainGame the MainGame that uses this state.
 	 */
-	public SettingsState(MainGame mainGame) {
+	public MenuSettingsState(MainGame mainGame) {
 		this.mainGame = mainGame;
 	}
 	
@@ -140,7 +139,7 @@ public class SettingsState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		mainGame.getLogger().log("Entering SettingsState", 
+		mainGame.getLogger().log("Entering MenuSettingsState", 
 				Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
@@ -157,7 +156,7 @@ public class SettingsState extends BasicGameState {
 			if (RND.getOpacity() > 0.0f) {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / mainGame.getOpacityFadeTimer());
 			} else {
-				mainGame.getLogger().log("Exiting SettingsState", 
+				mainGame.getLogger().log("Exiting MenuSettingsState", 
 						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					container.exit();
@@ -341,7 +340,7 @@ public class SettingsState extends BasicGameState {
 					mainGame.getPlayer2ImageStringA());
 			mainGame.getLogger().log("Player 2 sprite changed to arie", 
 					Logger.PriorityLevels.MEDIUM, "players");
-		} else if (returnButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+		} else if (returnButton.isMouseOver(input)) {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 
 	}
@@ -393,11 +392,11 @@ public class SettingsState extends BasicGameState {
 		this.input = container.getInput();
 		
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
-		RND.text(graphics, TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
-		RND.text(graphics, TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
-		RND.text(graphics, TEXT_X, TEXT_3_Y, "# we advice different sprites for");
-		RND.text(graphics, TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
-	
+		RND.text(graphics, TEXT_X, TEXT_1_Y, 
+				"# You can choose a player skin per player by clicking on it below.");
+		RND.text(graphics, TEXT_X, TEXT_2_Y, 
+				"# We advice different skins for each player but it's your choice!");
+
 		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
 		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
 	
@@ -408,14 +407,16 @@ public class SettingsState extends BasicGameState {
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-		String tempString = "========================================";
+		String tempString = "==============================";
 		tempString += "=======================================";
 		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, tempString);
-		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y_2, tempString);
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		RND.text(graphics, SEPARATOR_X_2, SEPARATOR_Y_2, tempString + "==========");
 		drawControls(graphics);
 		drawColorControls(graphics);
+		// any and all drawing is done BEFORE THESE TWO FOR THE 1000TH TIME
+		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		// NO DRAWING HERE. BAD. BOO. 
 	}
 	
 	/**
@@ -427,10 +428,10 @@ public class SettingsState extends BasicGameState {
 		controlsPlayer1 += "Shoot weapon = spacebar";
 		String controlsPlayer2 = "Move left = a\nMove right = d\nShoot weapon = w";
 		
-		RND.text(graphics, CONTROL_X1, P1_CONTROL_Y, "Player 1:");
-		RND.text(graphics, CONTROL_X2, P1_CONTROL_Y, controlsPlayer1);
-		RND.text(graphics, CONTROL_X1, P2_CONTROL_Y, "Player 2:");
-		RND.text(graphics, CONTROL_X2, P2_CONTROL_Y, controlsPlayer2);
+		RND.text(graphics, CONTROL_X1, P1_CONTROL_Y, "# Player 1:");
+		RND.text(graphics, CONTROL_X1 + CONTROL_XBETW, P1_CONTROL_Y, controlsPlayer1);
+		RND.text(graphics, CONTROL_X2, P1_CONTROL_Y, "# Player 2:");
+		RND.text(graphics, CONTROL_X2 + CONTROL_XBETW, P1_CONTROL_Y, controlsPlayer2);
 		
 	}
 	
@@ -457,14 +458,8 @@ public class SettingsState extends BasicGameState {
 		} else if (mainGame.getPlayer2ImageStringN().equals("arieSprite.png")) {
 			RND.drawColor(graphics, highLightN, highLightA, 
 					ARIE_2_X, ARIE_2_Y, mainGame.getColor()); }
-		if (returnButton.getRectangle().contains(MOUSE_OVER_RECT_X, input.getMouseY())) {
-			RND.drawColor(graphics, returnButton.getImageMouseOverN(), 
-					returnButton.getImageMouseOverA(), 
-					returnButton.getX(), returnButton.getY(), mainGame.getColor());
-		} else {
-			RND.drawColor(graphics, returnButton.getImageN(), returnButton.getImageA(), 
-					returnButton.getX(), returnButton.getY(), mainGame.getColor());
-		}
+		returnButton.drawColor(graphics, input, mainGame.getColor());
+		
 		drawSprites2(graphics);
 	}
 	

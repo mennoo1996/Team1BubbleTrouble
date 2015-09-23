@@ -1,5 +1,10 @@
 package logic;
+import gui.RND;
+
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 
 /**
  * Class that respresents a button - you can click on it and something might happen.
@@ -60,7 +65,34 @@ public class Button {
 		this.imageMouseoverN = imageMouseoverN;
 		this.imageMouseoverA = imageMouseroverA;
 	}
-
+	
+	/**
+	 * returns boolean if the mouse is hovering over button right now.
+	 * @param input input used to find mouse.
+	 * @return boolean whether or not the mouse is hovering over the button.
+	 */
+	public boolean isMouseOver(Input input) {
+		if (getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Draw function that draws a button, using graphics/input to determine its state and draw.
+	 * @param graphics context the drawing is done in.
+	 * @param input used to determine the button's state (such as mouse-over)
+	 * @param color the color used to draw this button
+	 */
+	public void drawColor(Graphics graphics, Input input, Color color) {
+		if (isMouseOver(input)) {
+			RND.drawColor(graphics, getImageMouseOverN(), 
+					getImageMouseOverA(), getX(), getY(), color);
+		} else {
+			RND.drawColor(graphics, getImageN(), getImageA(), getX(), getY(), color);
+		}
+	}
+	
 	/**
 	 * get bounding box rectangle of the button.
 	 * @return the Rectangle object of this button.

@@ -206,7 +206,7 @@ public class MenuMainState extends BasicGameState {
 		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
 				"The best scores of your predecessors!");
-		// NO DRAWING AFTER THIS. BOO.
+		// NO DRAWING AFTER THIS POINT. BOO.
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 		// NO DRAWING HERE. BAD PROGRAMMER. BAD.

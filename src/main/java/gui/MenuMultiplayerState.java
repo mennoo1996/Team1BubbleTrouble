@@ -18,6 +18,8 @@ import org.newdawn.slick.state.StateBasedGame;
 public class MenuMultiplayerState extends BasicGameState {
 
 	private Button returnButton;
+	private Button hostButton;
+	private Button joinButton;
 
 	private MainGame mainGame;
 	private Input input;
@@ -42,6 +44,12 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int RETURN_BUTTON_Y = 175;
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
+	
+	private static final int HOST_BUTTON_X = 150;
+	private static final int HOST_BUTTON_Y = 225;
+	private static final int JOIN_BUTTON_X = 150;
+	private static final int JOIN_BUTTON_Y = 275;
+	
 	private static final int CONTROL_X1 = 800;
 	private static final int CONTROL_X2 = 1000;
 	private static final int P1_CONTROL_Y = 238;
@@ -121,6 +129,18 @@ public class MenuMultiplayerState extends BasicGameState {
 				new Image("resources/images_UI/Menu_Button_Return_Add.png"),
 				new Image("resources/images_UI/Menu_Button_Return2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_Return2_Add.png"));
+		hostButton = new Button(HOST_BUTTON_X, HOST_BUTTON_Y, RETURN_BUTTON_WIDTH,
+				RETURN_BUTTON_HEIGHT, 
+				new Image("resources/images_UI/Menu_Button_Host_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Host_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Host2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Host2_Add.png"));
+		joinButton = new Button(JOIN_BUTTON_X, JOIN_BUTTON_Y, RETURN_BUTTON_WIDTH,
+				RETURN_BUTTON_HEIGHT, 
+				new Image("resources/images_UI/Menu_Button_Join_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Join_Add.png"),
+				new Image("resources/images_UI/Menu_Button_Join2_Norm.png"),
+				new Image("resources/images_UI/Menu_Button_Join2_Add.png"));
 	}
 	
 	/**
@@ -153,6 +173,16 @@ public class MenuMultiplayerState extends BasicGameState {
 		if (returnButton.isMouseOver(input)) {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 
+		if (hostButton.isMouseOver(input)) {
+			int i = 1;
+			i = 0;
+			// host button stuff
+		} 
+		if (joinButton.isMouseOver(input)) {
+			// join button stuff
+			int i = 1;
+			i = 0;
+		} 
 	}
 	
 	/**
@@ -167,13 +197,13 @@ public class MenuMultiplayerState extends BasicGameState {
 		this.input = container.getInput();
 		
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
-		RND.text(graphics, TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
-		RND.text(graphics, TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
-		RND.text(graphics, TEXT_X, TEXT_3_Y, "# we advice different sprites for");
-		RND.text(graphics, TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
-	
-		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
-		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
+//		RND.text(graphics, TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
+//		RND.text(graphics, TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
+//		RND.text(graphics, TEXT_X, TEXT_3_Y, "# we advice different sprites for");
+//		RND.text(graphics, TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
+//	
+//		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
+//		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
 	
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
@@ -196,6 +226,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	private void drawSprites(Graphics graphics) {
 		returnButton.drawColor(graphics, input, mainGame.getColor());
+		hostButton.drawColor(graphics, input, mainGame.getColor());
+		joinButton.drawColor(graphics, input, mainGame.getColor());
 	}
 	
 

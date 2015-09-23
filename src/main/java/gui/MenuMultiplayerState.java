@@ -1,6 +1,7 @@
 package gui;
 import logic.Button;
 import logic.Logger;
+import logic.Separator;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -29,6 +30,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	private Image tfBackgroundN;
 	private Image tfBackgroundA;
 	
+	private Separator sep;
+	
 	private static final int NUM_3 = 3;
 	private static final int NUM_4 = 4;
 	private static final int NUM_5 = 5;
@@ -40,7 +43,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int SEPARATOR_X = 319;
 	private static final int SEPARATOR_X_2 = 164;
 	private static final int SEPARATOR_Y = 190;
-	private static final int SEPARATOR_Y_2 = 510;
+	private static final int SEPARATOR_Y_2 = 388;
 	
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
@@ -50,13 +53,19 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
 	
+	private static final int TEXT_HELP_X = 164;
+	private static final int TEXT_HELP_Y_1 = 238;
+	private static final int TEXT_HELP_Y_2 = 288;
+	private static final int TEXT_HELP_Y_3 = 338;
+	
 	private static final int HOST_BUTTON_X = 150;
-	private static final int HOST_BUTTON_Y = 225;
+	private static final int HOST_BUTTON_Y = 425;
+	
 	private static final int JOIN_BUTTON_X = 150;
-	private static final int JOIN_BUTTON_Y = 275;
+	private static final int JOIN_BUTTON_Y = 475;
 	
 	private static final int TEXT_FIELD_X = 164;
-	private static final int TEXT_FIELD_Y = 438;
+	private static final int TEXT_FIELD_Y = 638;
 	private static final int TEXT_FIELD_WIDTH = 700;
 	private static final int TEXT_FIELD_HEIGHT = 60;
 	private static final int TF_BACKGROUND_DEVIATION = 27;
@@ -100,6 +109,9 @@ public class MenuMultiplayerState extends BasicGameState {
 		textField.setText("127.0.0.1");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
+		
+		sep = new Separator(164, 100, false, " LAN Multiplayer ", mainGame.getxRes());
+		
 	}
 	
 	/**
@@ -231,6 +243,19 @@ public class MenuMultiplayerState extends BasicGameState {
 //	
 //		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
 //		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
+		
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_1, 
+				"# You can play a game together with another player, over LAN.",
+				mainGame.getColor());
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_2, 
+				"# If you are the host, you will have to wait until another player joins you.",
+				mainGame.getColor());
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_3, 
+				"# If you wish to join another player,"
+				+ " please enter their IP-address below.",
+				mainGame.getColor());
+		
+		RND.text(graphics, sep.getX(), sep.getY(), sep.getText(), mainGame.getColor());
 		
 		RND.drawColor(graphics, tfBackgroundN, tfBackgroundA,
 				textField.getX() - TF_BACKGROUND_DEVIATION,

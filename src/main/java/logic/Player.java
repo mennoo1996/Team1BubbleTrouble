@@ -173,10 +173,9 @@ public class Player {
 					if (mainGame.isHost()) {
 						mainGame.getHost().updatePowerupsHost(powerup);
 					}
+				} else if (mainGame.isClient()) {
+					mainGame.getClient().updatePowerupsClient(powerup);
 				}
-				//} else if (mainGame.isClient()) {
-				//	//Client
-				//}
 			}
 		}
 		//UsedPowerups is empty if client
@@ -201,10 +200,13 @@ public class Player {
 					usedCoins.add(coin);
 					mainGame.getLogger().log("Picked up coin", 
 							Logger.PriorityLevels.MEDIUM, "powerups");
+					if (mainGame.isHost()) {
+						mainGame.getHost().updateCoinsHost(coin);
+					}
+				} else if (mainGame.isClient()) {
+					mainGame.getClient().updateCoinsClient(coin);
 				}
-				if (mainGame.isHost()) {
-					mainGame.getHost().updateCoinsHost(coin);
-				}
+				
 			}
 		}
 		//If client no used coins

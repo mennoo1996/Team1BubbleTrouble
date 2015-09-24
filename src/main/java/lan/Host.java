@@ -37,6 +37,9 @@ public class Host implements Callable {
     private GameState gameState;
     private ArrayList<Client> clientList;
     
+
+    private static final int THREE = 3;
+    
     /**
      * Create a new Host server for LAN multiplayer.
      * @param portNumber Port number for multiplayer
@@ -91,7 +94,6 @@ public class Host implements Callable {
 				String message2 = message.trim();
 				System.out.println(message2);
 				if (message2.startsWith("PLAYER")) {
-					System.out.println("wel toch");
 					playerMessage(message2.replaceFirst("PLAYER", ""));
 				}
 			}
@@ -108,11 +110,69 @@ public class Host implements Callable {
     	String message2 = message.trim();
     	System.out.println(message2);
     	
-    	if (message2.startsWith("DEAD")) {
+    	if (message2.startsWith("MOVEMENT")) {
+    		movementMessage(message2.replaceFirst("MOVEMENT", ""));
+    	} else if (message2.startsWith("DEAD")) {
     		deadMessage(message2.replaceFirst("DEAD", ""));
     	} else if (message2.startsWith("NAME")) {
     		nameMessage(message2.replaceFirst("NAME", ""));
     	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementMessage(String message) {
+    	String message2 = message.trim();
+    
+    	if (message2.startsWith("STARTED")) {
+    		movementStarted(message2.replaceFirst("STARTED", ""));
+    	} else if (message2.startsWith("STOPPED")) {
+    		movementStopped(message2.replaceFirst("STOPPED", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementStarted(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+
+    	int playerNumber = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
+        String direction = stringList[THREE];
+    
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        
+        if (direction.equals("LEFT")) {
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
+        } else if (direction.equals("RIGHT")) {
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
+        }
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementStopped(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+
+    	int playerNumber = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
+    	
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
     }
     
     /**

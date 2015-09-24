@@ -208,6 +208,31 @@ public class Client implements Callable {
     }
     
     /**
+     * javadoc. 
+     * @param x .
+     * @param y .
+     * @param playerNumber .
+     * @param direction .
+     */
+    public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
+    	String message = "PLAYER MOVEMENT STARTED " + playerNumber + " " + x + " " 
+    			+ y  + " " + direction;
+    	sendMessageToHost(message);
+    }
+    
+    /**
+     * javadoc.
+     * @param x .
+     * @param y .
+     * @param playerNumber .
+     */
+    public void playerStoppedMoving(float x, float y, int playerNumber) {
+    	String message = "PLAYER MOVEMENT STOPPED " + playerNumber + " " + x + " " 
+    			+ y;
+    	sendMessageToHost(message);
+    }
+    
+    /**
      * javadoc.
      * @param message .
      */

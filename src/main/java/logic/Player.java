@@ -265,9 +265,14 @@ public class Player {
 		if (!didWalk && !stoodStillOnLastUpdate) {
 			stoodStillOnLastUpdate = true;
 			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
-			if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
-				mainGame.getHost().playerStoppedMoving(x, y, playerNumber);
+			if (mainGame.isLanMultiplayer()) {
+				if (mainGame.isHost()) {
+					mainGame.getHost().playerStoppedMoving(x, y, playerNumber);
+				} else if (mainGame.isClient()) {
+					mainGame.getClient().playerStoppedMoving(x, y, playerNumber);
+				}
 			}
+			
 		}
 	}
 
@@ -279,9 +284,7 @@ public class Player {
 	 * @return a boolean to check if the player walked.
 	 */
 	private boolean processMoveRight(float deltaFloat, float containerWidth, boolean didWalk) {
-
 		boolean isMovingRight = false;
-		
 		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && movingRight) {
 			isMovingRight = true;
 		}
@@ -294,9 +297,13 @@ public class Player {
         	   this.movement = Movement.RIGHT;
         	   didWalk = true;
         	   stoodStillOnLastUpdate = false;
-        	   if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
-    			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
-    		   }   
+        	   if (mainGame.isLanMultiplayer()) {
+        		   if (mainGame.isHost()) {
+        			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
+        		   } else if (mainGame.isClient()) {
+        			   mainGame.getClient().playerStartedMoving(x, y, playerNumber, "RIGHT");
+        		   }
+        	   } 
         	   if (!lastLogMove.equals("right")) {
         		   logger.log("Moving right from position " + this.getCenterX(),
         				   PriorityLevels.VERYLOW, "Player");
@@ -314,7 +321,6 @@ public class Player {
 	 * @return a boolean to check if the player walked.
 	 */
 	private boolean processMoveLeft(float deltaFloat, boolean didWalk) {
-		
 		boolean isMovingLeft = false;
 		
 		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && movingLeft) {
@@ -328,9 +334,13 @@ public class Player {
             	this.movement = Movement.LEFT;
             	didWalk = true;
             	stoodStillOnLastUpdate = false;
-            	if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
-        			mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
-        		}
+            	if (mainGame.isLanMultiplayer()) {
+         		   if (mainGame.isHost()) {
+         			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
+         		   } else if (mainGame.isClient()) {
+         			   mainGame.getClient().playerStartedMoving(x, y, playerNumber, "LEFT");
+         		   }
+         	   } 
             	if (!lastLogMove.equals("left")) {
             		logger.log("Moving left from position " + this.getCenterX(),
             				PriorityLevels.VERYLOW, "Player");

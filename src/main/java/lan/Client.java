@@ -44,6 +44,7 @@ public class Client implements Runnable {
     private static final int FOUR = 4;
     private static final int FIVE = 5;
 	private static final int TIMEOUT_ATTEMPT = 3000;
+	private static final int MENU_MULTIPLAYER_STATE = 4;
 
     /**
      * Create a new Client connection for LAN multiplayer.
@@ -88,6 +89,7 @@ public class Client implements Runnable {
 			System.out.println(err);
 			System.out.println(err.getLocalizedMessage());
 			// TODO: Add proper connection error handling i.e. back to menu
+			this.mainGame.setSwitchState(MENU_MULTIPLAYER_STATE);
 		}
     }
 

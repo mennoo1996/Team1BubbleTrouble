@@ -39,7 +39,8 @@ public class Host implements Runnable {
     private long timeLastInput;
 
     private static final int TIMEOUT_ATTEMPT = 3000;
-    
+    private static final int MENU_MULTIPLAYER_STATE = 4;
+
     /**
      * Create a new Host server for LAN multiplayer.
      * @param portNumber Port number for multiplayer
@@ -80,7 +81,7 @@ public class Host implements Runnable {
         } catch (IOException err) {
             System.out.println(err);
             System.out.println(err.getLocalizedMessage());
-            // TODO: Add proper connection error handling i.e. back to menu
+            this.mainGame.setSwitchState(MENU_MULTIPLAYER_STATE);
         }
     }
 

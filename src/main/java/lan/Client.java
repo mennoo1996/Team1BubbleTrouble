@@ -43,7 +43,7 @@ public class Client implements Runnable {
     private static final int THREE = 3;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
-	private static final int TIMEOUT_ATTEMPT = 3000;
+	private static final int TIMEOUT_ATTEMPT = 10000;
 	private static final int MENU_MULTIPLAYER_STATE = 4;
 
     /**
@@ -79,7 +79,7 @@ public class Client implements Runnable {
 			while (true) {
 				// READ AND WRITE LOGIC HERE
 				manageHeartbeatCheck();
-				if (!this.messageQueue.isEmpty()) {
+				while (!this.messageQueue.isEmpty()) {
 					System.out.println("sending message: " + this.messageQueue.peek());
 					writer.println(this.messageQueue.poll());
 				}
@@ -132,15 +132,49 @@ public class Client implements Runnable {
 					coinMessage(message2.replaceFirst("COIN", ""));
 				} else if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
-				} else if (message2.startsWith("HEARTBEAT_ALIVE")) {
-					heartBeatCheck = false;
-				}
+				} 
+				readServerCommands2(message2);
 				timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println(e);
 		}
+    }
+    
+    /**
+     * second part of the method that reads server commands.
+     * @param message2	the message
+     */
+    private void readServerCommands2(String message2) {
+    	if (message2.startsWith("HEARTBEAT_ALIVE")) {
+			heartBeatCheck = false;
+		} else if (message2.startsWith("LASER")) {
+			laserMessage(message2.replaceFirst("LASER", ""));
+		}
+    }
+    
+    /**
+     * Message about lasers.
+     * @param message	the message
+     */
+    private void laserMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.startsWith("DONE")) {
+    		laserDoneMessage(message2.replaceFirst("DONE", ""));
+    	}
+    }
+    
+    /**
+     * Message about a laser that is done.
+     * @param message	the message
+     */
+    private void laserDoneMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	int id = Integer.parseInt(message2);
+    	gameState.getWeaponList().getWeaponList().get(id).setVisible(false);
     }
     
     /**
@@ -381,7 +415,7 @@ public class Client implements Runnable {
     	if (message2.startsWith("PLAYERLOCATION")) {
     		playerLocation(message2.replaceFirst("PLAYERLOCATION", ""));
     	} else if (message2.startsWith("LASER")) {
-    		laserMessage(message2.replaceFirst("LASER", ""));
+    		newLaserMessage(message2.replaceFirst("LASER", ""));
     	}
     }
     
@@ -389,7 +423,7 @@ public class Client implements Runnable {
      * javadoc.
      * @param message .
      */
-    private void laserMessage(String message) {
+    private void newLaserMessage(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	

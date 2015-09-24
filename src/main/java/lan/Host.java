@@ -42,7 +42,7 @@ public class Host implements Runnable {
     private boolean heartBeatCheck;
     private long timeLastInput;
 
-    private static final int TIMEOUT_ATTEMPT = 3000;
+    private static final int TIMEOUT_ATTEMPT = 10000;
     private static final int MENU_MULTIPLAYER_STATE = 4;
 
     /**
@@ -77,7 +77,7 @@ public class Host implements Runnable {
             // This continues ad infinitum
             while (true) {
                 manageHeartbeatCheck();
-                if (!messageQueue.isEmpty()) {
+                while (!messageQueue.isEmpty()) {
                     writer.println(this.messageQueue.poll());
                 }
                 readClientInputs();
@@ -331,14 +331,19 @@ public class Host implements Runnable {
     }
     
     /**
+     * Send to client when a laser/weapon is done.
+     * @param id	the id of the weapon
+     */
+    public void laserDone(int id) {
+    	sendMessageToClient("LASER DONE " + id);
+    }
+    
+    /**
      * javadoc.
      * @param circleList .
      */
     public void updateCircles(ArrayList<BouncingCircle> circleList) {
-		sendMessageToClient("UPDATE CIRCLELIST");
-		for (BouncingCircle bCircle : circleList) {
-			sendMessageToClient(bCircle.toString());
-		}
+    	sendMessageToClient(BouncingCircle.circleListToString(circleList));
     }
     
     /**

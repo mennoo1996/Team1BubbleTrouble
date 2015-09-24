@@ -24,10 +24,9 @@ public class MenuMultiplayerState extends BasicGameState {
 
 	private MainGame mainGame;
 	private Input input;
-
-	private TextField textField;
-	private Image tfBackgroundN;
-	private Image tfBackgroundA;
+	
+	private Textfield nameField;
+	private Textfield ipField;
 	
 	private Separator separatorTop;
 	private String separatorTopTitle = "";
@@ -46,8 +45,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int LOGO_Y = 110;
 	private static final int SEPARATOR_X = 164;
 	private static final int SEPARATOR_Y = 190;
-	private static final int SEPARATOR_Y_2 = 388;
-	private static final int SEPARATOR_Y_3 = 588;
+	private static final int SEPARATOR_Y_2 = 438;
+	private static final int SEPARATOR_Y_3 = 638;
 	
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
@@ -61,6 +60,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int TEXT_HELP_Y_1 = 238;
 	private static final int TEXT_HELP_Y_2 = 288;
 	private static final int TEXT_HELP_Y_3 = 338;
+	private static final int TEXT_HELP_Y_4 = 388;
 	
 	private static final int HOST_BUTTON_X = 150;
 	private static final int HOST_BUTTON_Y = 425;
@@ -68,24 +68,9 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int JOIN_BUTTON_X = 150;
 	private static final int JOIN_BUTTON_Y = 625;
 	
-	private static final int TEXT_FIELD_X = 164;
-	private static final int TEXT_FIELD_Y = 688;
-	private static final int TEXT_FIELD_WIDTH = 700;
-	private static final int TEXT_FIELD_HEIGHT = 60;
-	private static final int TF_BACKGROUND_DEVIATION = 27;
-	
-	private static final int CONTROL_X1 = 800;
-	private static final int CONTROL_X2 = 1000;
-	private static final int P1_CONTROL_Y = 238;
-	private static final int P2_CONTROL_Y = 388;
-	
-	private static final int TEXT_X = 164;
-	private static final int TEXT_1_Y = 288;
-	private static final int TEXT_2_Y = 338;
-	private static final int TEXT_3_Y = 388;
-	private static final int TEXT_4_Y = 438;
-	private static final int PLAYER_1_TEXT_Y = 590;
-	private static final int PLAYER_2_TEXT_Y = 710;
+	private static final int TEXT_FIELD_X = 264;
+	private static final int TEXT_FIELD_Y = 388;
+	private static final int TEXT_FIELD_Y_2 = 688;
 	
 	/**
 	 * Construct a SettingsState.
@@ -105,12 +90,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		mainGame.getLogger().log("Entering MenuMultiplayerState", 
 				Logger.PriorityLevels.LOW, "States");
-		textField = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
-				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
-		textField.setBackgroundColor(null);
-		textField.setBorderColor(null);
-		textField.setFocus(true);
-		textField.setText("127.0.0.1");
+		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player", container);
+		ipField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y_2, "127.0.0.1", container);
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
@@ -146,22 +127,12 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		initButtons();
-		initTextFieldBackgroundImgs();
 		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, true, separatorTopTitle,
 				container.getWidth());
 		separatorHost = new Separator(SEPARATOR_X, SEPARATOR_Y_2, false, separatorHostTitle,
 				container.getWidth());
 		separatorJoin = new Separator(SEPARATOR_X, SEPARATOR_Y_3, false, separatorJoinTitle,
 				container.getWidth());
-	}
-	
-	/**
-	 * Initialize the background images of the text field.
-	 * @throws SlickException if something goes wrong / file not found
-	 */
-	private void initTextFieldBackgroundImgs() throws SlickException {
-		tfBackgroundN = new Image("resources/images_UI/textfield_Norm.png");
-		tfBackgroundA = new Image("resources/images_UI/textfield_Add.png");
 	}
 	
 	/**
@@ -207,7 +178,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			processButtons(input);
 		}
-		textField.setFocus(true);
+		
 		exit(container, sbg, delta);
 	}
 	
@@ -254,17 +225,13 @@ public class MenuMultiplayerState extends BasicGameState {
 				"# If you wish to join another player,"
 				+ " please enter their IP-address below.",
 				mainGame.getColor());
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_4, "# Your player name:", mainGame.getColor());
 		
 		separatorTop.drawColor(graphics, mainGame.getColor());
 		separatorHost.drawColor(graphics, mainGame.getColor());
 		separatorJoin.drawColor(graphics, mainGame.getColor());
-		
-		RND.drawColor(graphics, tfBackgroundN, tfBackgroundA,
-				textField.getX() - TF_BACKGROUND_DEVIATION,
-				textField.getY() - TF_BACKGROUND_DEVIATION,
-				mainGame.getColor());
-		RND.text(graphics, textField.getX(), textField.getY(),
-				textField.getText(), mainGame.getColor());
+		nameField.drawColor(graphics, mainGame.getColor());
+		ipField.drawColor(graphics, mainGame.getColor());
 	
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");

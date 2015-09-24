@@ -44,8 +44,7 @@ public class Client implements Runnable {
     private static final int THREE = 3;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
-	private static final int TIMEOUT_ATTEMPT = 3000;
-	private static final int MENU_MULTIPLAYER_STATE = 4;
+	private static final int TIMEOUT_ATTEMPT = 10000;
 
     /**
      * Create a new Client connection for LAN multiplayer.
@@ -70,7 +69,6 @@ public class Client implements Runnable {
 			socket = new Socket();
 			// Connect to socket with timeout
 			socket.connect(new InetSocketAddress(host, portNumber), TIMEOUT_ATTEMPT);
-			// Set timeout for subsequent packets
 			mainGame.setSwitchState(mainGame.getGameState());
 			writer = new PrintWriter(socket.getOutputStream(), true);
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -81,9 +79,8 @@ public class Client implements Runnable {
 			timeLastInput = System.currentTimeMillis();
 			// This continues ad infinitum
 			while (true) {
-				// READ AND WRITE LOGIC HERE
 				manageHeartbeatCheck();
-				if (!this.messageQueue.isEmpty()) {
+				while (!this.messageQueue.isEmpty()) {
 					System.out.println("sending message: " + this.messageQueue.peek());
 					writer.println(this.messageQueue.poll());
 				}
@@ -92,7 +89,6 @@ public class Client implements Runnable {
 		} catch (IOException err) {
 			System.out.println(err);
 			System.out.println(err.getLocalizedMessage());
-			// TODO: Add proper connection error handling i.e. back to menu
 			this.mainGame.setSwitchState(mainGame.getMultiplayerState());
 		}
     }

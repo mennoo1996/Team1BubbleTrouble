@@ -41,7 +41,7 @@ public class Host implements Runnable {
     private boolean heartBeatCheck;
     private long timeLastInput;
 
-    private static final int TIMEOUT_ATTEMPT = 3000;
+    private static final int TIMEOUT_ATTEMPT = 10000;
     private static final int MENU_MULTIPLAYER_STATE = 4;
 
     /**
@@ -74,11 +74,11 @@ public class Host implements Runnable {
                 + mainGame.getPlayerList().getPlayers().get(0).getPlayerName());
             System.out.println("Client connected");
             timeLastInput = System.currentTimeMillis();
-            
+
             // This continues ad infinitum
             while (true) {
                 manageHeartbeatCheck();
-                if (!messageQueue.isEmpty()) {
+                while (!messageQueue.isEmpty()) {
                     writer.println(this.messageQueue.poll());
                 }
                 readClientInputs();
@@ -86,7 +86,7 @@ public class Host implements Runnable {
         } catch (IOException err) {
             System.out.println(err);
             System.out.println(err.getLocalizedMessage());
-            this.mainGame.setSwitchState(MENU_MULTIPLAYER_STATE);
+            this.mainGame.setSwitchState(mainGame.getMultiplayerState());
         }
     }
 

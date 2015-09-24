@@ -285,7 +285,7 @@ public class Player {
 	 */
 	private boolean processMoveRight(float deltaFloat, float containerWidth, boolean didWalk) {
 		boolean isMovingRight = false;
-		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && movingRight) {
+		if (mainGame.isLanMultiplayer() && isOthersPlayer() && movingRight) {
 			isMovingRight = true;
 		}
 		
@@ -314,6 +314,7 @@ public class Player {
 		return didWalk;
 	}
 
+
 	/**
 	 * Process a movement to the left.
 	 * @param deltaFloat the time in seconds since the last frame
@@ -322,11 +323,10 @@ public class Player {
 	 */
 	private boolean processMoveLeft(float deltaFloat, boolean didWalk) {
 		boolean isMovingLeft = false;
-		
-		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && movingLeft) {
+		if (mainGame.isLanMultiplayer() && isOthersPlayer() && movingLeft) {
 			isMovingLeft = true;
 		}
-		
+
 		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
 		if ((isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) || isMovingLeft) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
@@ -334,12 +334,12 @@ public class Player {
             	this.movement = Movement.LEFT;
             	didWalk = true;
             	if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate) {
-         		   if (mainGame.isHost()) {
+         		   if (mainGame.isHost() && playerNumber == 0) {
          			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
-         		   } else if (mainGame.isClient()) {
+         		   } else if (mainGame.isClient() && playerNumber == 1) {
          			   mainGame.getClient().playerStartedMoving(x, y, playerNumber, "LEFT");
          		   }
-         	   } 
+         	   }
             	if (!lastLogMove.equals("left")) {
             		logger.log("Moving left from position " + this.getCenterX(),
             				PriorityLevels.VERYLOW, "Player");
@@ -352,13 +352,24 @@ public class Player {
 	}
 
 	/**
+	 * @return Whether or not current player is the host
+	 */
+	private boolean isOthersPlayer() {
+		if (mainGame.isHost()) {
+			return playerNumber == 1;
+		} else {
+			return playerNumber == 0;
+		}
+	}
+
+	/**
 	 * Get the weapon of this player.
 	 * @param containerHeight the height of the current GameContainer.
 	 * @return the Weapon of this player.
 	 */
 	private Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
-			logger.log("Shot regular laser from position " + this.getCenterX(), 
+			logger.log("Shot regular laser from position " + this.getCenterX(),
 					PriorityLevels.MEDIUM, "Player");
 			return new Weapon(this.getCenterX(), containerHeight - gameState.getFloor().getHeight(),
 					mainGame.getLaserSpeed(), mainGame.getLaserWidth());

@@ -7,13 +7,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.Callable;
 
 import logic.BouncingCircle;
 import logic.Coin;
@@ -79,13 +77,7 @@ public class Client implements Runnable {
 			// This continues ad infinitum
 			while (true) {
 				// READ AND WRITE LOGIC HERE
-				if (heartBeatCheck && (System.currentTimeMillis() - timeLastInput) >= 2*TIMEOUT_ATTEMPT) {
-					throw new IOException("No connection");
-				}
-				if (!heartBeatCheck && (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
-					heartBeatCheck = true;
-					this.messageQueue.add("HEARTBEAT_CHECK");
-				}
+				manageHeartbeatCheck();
 				if (!this.messageQueue.isEmpty()) {
 					System.out.println("sending message: " + this.messageQueue.peek());
 					writer.println(this.messageQueue.poll());
@@ -99,7 +91,23 @@ public class Client implements Runnable {
 		}
     }
 
-    /**
+	/**
+	 * Triggers/ends the heartbeat check for a possible missing connection.
+	 * @throws IOException Thrown if connection no longer exists
+	 */
+	private void manageHeartbeatCheck() throws IOException {
+		if (heartBeatCheck
+				&& (System.currentTimeMillis() - timeLastInput) >= 2 * TIMEOUT_ATTEMPT) {
+            throw new IOException("No connection");
+        }
+		if (!heartBeatCheck
+				&& (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
+            heartBeatCheck = true;
+            this.messageQueue.add("HEARTBEAT_CHECK");
+        }
+	}
+
+	/**
      * Process server commands.
      */
     private void readServerCommands() {

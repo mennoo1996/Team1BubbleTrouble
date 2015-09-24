@@ -163,6 +163,7 @@ public class MenuMainState extends BasicGameState {
 		if (playButton.isMouseOver(input)) { // Go to gamestate in singleplayer
 			mainGame.setMultiplayer(false);
 			mainGame.setSwitchState(mainGame.getGameState());
+			mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
 			mainGame.getLogger().log("Play button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} else if (play2Button.isMouseOver(input)) { // Go to gamestate in multiplayer
@@ -170,6 +171,8 @@ public class MenuMainState extends BasicGameState {
 			mainGame.setSwitchState(mainGame.getGameState());
 			mainGame.getPlayerList().getPlayers().get(0).setPlayerName("PLayer_1");
 			mainGame.getPlayerList().getPlayers().get(1).setPlayerName("PLayer_2");
+			mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
+			mainGame.getPlayerList().getPlayers().get(1).setControlsForPlayer2();
 			mainGame.getLogger().log("Play multiplayer button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} else if (lanButton.isMouseOver(input)) { // Go to gamestate in multiplayer

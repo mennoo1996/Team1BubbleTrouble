@@ -18,6 +18,7 @@ import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
 import logic.Powerup;
+import logic.Player.Movement;
 import logic.Powerup.PowerupType;
 
 /**
@@ -37,12 +38,12 @@ public class Host implements Runnable {
     private MainGame mainGame;
     private GameState gameState;
     private ArrayList<Client> clientList;
-    
+
     private static final int THREE = 3;
     private boolean heartBeatCheck;
     private long timeLastInput;
 
-    private static final int TIMEOUT_ATTEMPT = 3000;
+    private static final int TIMEOUT_ATTEMPT = 10000;
     private static final int MENU_MULTIPLAYER_STATE = 4;
 
     /**
@@ -71,13 +72,15 @@ public class Host implements Runnable {
             mainGame.setSwitchState(mainGame.getGameState());
             writer = new PrintWriter(client.getOutputStream(), true);
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            messageQueue.add("PLAYER NAME " // send your player's name to client
+                + mainGame.getPlayerList().getPlayers().get(0).getPlayerName());
             System.out.println("Client connected");
             timeLastInput = System.currentTimeMillis();
 
             // This continues ad infinitum
             while (true) {
                 manageHeartbeatCheck();
-                if (!messageQueue.isEmpty()) {
+                while (!messageQueue.isEmpty()) {
                     writer.println(this.messageQueue.poll());
                 }
                 readClientInputs();
@@ -85,7 +88,7 @@ public class Host implements Runnable {
         } catch (IOException err) {
             System.out.println(err);
             System.out.println(err.getLocalizedMessage());
-            this.mainGame.setSwitchState(MENU_MULTIPLAYER_STATE);
+            this.mainGame.setSwitchState(mainGame.getMultiplayerState());
         }
     }
 
@@ -118,7 +121,6 @@ public class Host implements Runnable {
 				String message2 = message.trim();
 				System.out.println(message2);
 				if (message2.startsWith("PLAYER")) {
-					System.out.println("wel toch");
 					playerMessage(message2.replaceFirst("PLAYER", ""));
 				} else if (message2.startsWith("POWERUP")) {
 					powerupMessage(message2.replaceFirst("POWERUP", ""));
@@ -209,9 +211,81 @@ public class Host implements Runnable {
     	String message2 = message.trim();
     	System.out.println(message2);
     	
-    	if (message2.startsWith("DEAD")) {
+    	if (message2.startsWith("MOVEMENT")) {
+    		movementMessage(message2.replaceFirst("MOVEMENT", ""));
+    	} else if (message2.startsWith("DEAD")) {
     		deadMessage(message2.replaceFirst("DEAD", ""));
+    	} else if (message2.startsWith("NAME")) {
+    		nameMessage(message2.replaceFirst("NAME", ""));
     	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementMessage(String message) {
+    	String message2 = message.trim();
+    
+    	if (message2.startsWith("STARTED")) {
+    		movementStarted(message2.replaceFirst("STARTED", ""));
+    	} else if (message2.startsWith("STOPPED")) {
+    		movementStopped(message2.replaceFirst("STOPPED", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementStarted(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+
+    	int playerNumber = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
+        String direction = stringList[THREE];
+    
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        
+        if (direction.equals("LEFT")) {
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.LEFT);
+        } else if (direction.equals("RIGHT")) {
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.RIGHT);
+        }
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementStopped(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+
+    	int playerNumber = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
+    	
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.NO_MOVEMENT);
+    }
+    
+    /**
+     * Work through the name message from the host.
+     * @param message containing their player name.
+     */
+    private void nameMessage(String message) {
+    	String message2 = message.trim();
+    	mainGame.getPlayerList().getPlayers().get(1).setPlayerName(message2);
     }
     
     /**
@@ -300,7 +374,8 @@ public class Host implements Runnable {
      * @param direction .
      */
     public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
-    	String message = "PLAYER MOVEMENT STARTED " + playerNumber + " " + x + " " 
+    	String message = "PLAYER MOVEMENT STARTED ";
+    	message = message + playerNumber + " " + x + " " 
     			+ y  + " " + direction;
     	sendMessageToClient(message);
     }
@@ -312,7 +387,8 @@ public class Host implements Runnable {
      * @param playerNumber .
      */
     public void playerStoppedMoving(float x, float y, int playerNumber) {
-    	String message = "PLAYER MOVEMENT STOPPED " + playerNumber + " " + x + " " 
+    	String message = "PLAYER MOVEMENT STOPPED ";
+    	message = message + playerNumber + " " + x + " " 
     			+ y;
     	sendMessageToClient(message);
     }

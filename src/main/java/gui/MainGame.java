@@ -131,7 +131,7 @@ public class MainGame extends StateBasedGame {
 	public MainGame(String name) {
 		super(name);
 		this.logger = new Logger(true);
-		logger.setConsoleLoggingOn(true);
+		logger.setConsoleLoggingOn(false);
 		HighScoresParser.setLogger(logger);
 		this.player1ImageStringN = "Playersprite_Norm.png";
 		this.player1ImageStringA = "Playersprite_Add.png";

@@ -104,6 +104,7 @@ public class Host implements Callable {
      * @param toWrite The string to send
      */
     public void sendMessageToClient(String toWrite) {
+    	System.out.println(toWrite);
         this.messageQueue.add(toWrite);
     }
 
@@ -130,6 +131,31 @@ public class Host implements Callable {
      */
     public void updatePlayerLocation(int id, float x, float y) {
     	sendMessageToClient("NEW PLAYERLOCATION " + id + " " + x + " " + y);
+    }
+    
+    /**
+     * javadoc. 
+     * @param x .
+     * @param y .
+     * @param playerNumber .
+     * @param direction .
+     */
+    public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
+    	String message = "PLAYER MOVEMENT STARTED " + playerNumber + " " + x + " " 
+    			+ y  + " " + direction;
+    	sendMessageToClient(message);
+    }
+    
+    /**
+     * javadoc.
+     * @param x .
+     * @param y .
+     * @param playerNumber .
+     */
+    public void playerStoppedMoving(float x, float y, int playerNumber) {
+    	String message = "PLAYER MOVEMENT STOPPED " + playerNumber + " " + x + " " 
+    			+ y;
+    	sendMessageToClient(message);
     }
     
     /**

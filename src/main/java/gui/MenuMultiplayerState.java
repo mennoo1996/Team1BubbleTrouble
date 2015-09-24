@@ -214,7 +214,7 @@ public class MenuMultiplayerState extends BasicGameState {
 			mainGame.setIsClient(false);
 			System.out.println(mainGame.isHost());
 			ExecutorService executor = Executors.newFixedThreadPool(1);
-			mainGame.getPlayerList().getPlayers().get(0).setPlayerName(nameField.getText());
+			processPlayerHost();
 			executor.submit(mainGame.getHost());
 			mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
 		} 
@@ -226,12 +226,29 @@ public class MenuMultiplayerState extends BasicGameState {
 	        mainGame.setIsClient(true);
 	        mainGame.setIsHost(false);
 			ExecutorService executor = Executors.newFixedThreadPool(1);
-			mainGame.getPlayerList().getPlayers().get(1).setPlayerName(nameField.getText());
+			processPlayerClient();
 			executor.submit(client);
-			
 		} 
 	}
 
+	/**
+	 * Prepare players for the host's viewpoint.
+	 */
+	private void processPlayerHost() {
+		mainGame.getPlayerList().getPlayers().get(0).setPlayerName(nameField.getText());
+		mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
+		mainGame.getPlayerList().getPlayers().get(1).setControlsDisabled();
+	}
+	
+	/**
+	 * Prepare players for the client's viewpoint.
+	 */
+	private void processPlayerClient() {
+		mainGame.getPlayerList().getPlayers().get(1).setPlayerName(nameField.getText());
+		mainGame.getPlayerList().getPlayers().get(1).setControlsForPlayer1();
+		mainGame.getPlayerList().getPlayers().get(0).setControlsDisabled();
+	}
+	
 	/**
 	 * Render this state.
 	 * @param container the Gamecontainer that contains this state

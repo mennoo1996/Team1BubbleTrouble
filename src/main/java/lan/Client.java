@@ -18,6 +18,7 @@ import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
 import logic.Powerup;
+import logic.Player.Movement;
 import logic.Powerup.PowerupType;
 import logic.Weapon;
 
@@ -45,7 +46,6 @@ public class Client implements Runnable {
     private static final int FIVE = 5;
 	private static final int TIMEOUT_ATTEMPT = 10000;
 	private static final int MENU_MULTIPLAYER_STATE = 4;
-
     /**
      * Create a new Client connection for LAN multiplayer.
      * @param host Host server address
@@ -69,15 +69,16 @@ public class Client implements Runnable {
 			socket = new Socket();
 			// Connect to socket with timeout
 			socket.connect(new InetSocketAddress(host, portNumber), TIMEOUT_ATTEMPT);
-			// Set timeout for subsequent packets
 			mainGame.setSwitchState(mainGame.getGameState());
 			writer = new PrintWriter(socket.getOutputStream(), true);
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        	// Say hello here
+        	messageQueue.add("PLAYER NAME "  // send your player's name to host
+        		+ mainGame.getPlayerList().getPlayers().get(1).getPlayerName());
 			System.out.println("Connected to server");
 			timeLastInput = System.currentTimeMillis();
 			// This continues ad infinitum
 			while (true) {
-				// READ AND WRITE LOGIC HERE
 				manageHeartbeatCheck();
 				while (!this.messageQueue.isEmpty()) {
 					System.out.println("sending message: " + this.messageQueue.peek());
@@ -88,8 +89,7 @@ public class Client implements Runnable {
 		} catch (IOException err) {
 			System.out.println(err);
 			System.out.println(err.getLocalizedMessage());
-			// TODO: Add proper connection error handling i.e. back to menu
-			this.mainGame.setSwitchState(MENU_MULTIPLAYER_STATE);
+			this.mainGame.setSwitchState(mainGame.getMultiplayerState());
 		}
     }
 
@@ -116,7 +116,7 @@ public class Client implements Runnable {
         try {
 			while (reader.ready()) {
 				String message = reader.readLine();
-				System.out.println(message);
+				System.out.println("received message: " + message);
 				String message2 = message.trim();
 				if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
@@ -188,7 +188,20 @@ public class Client implements Runnable {
     		movementMessage(message2.replaceFirst("MOVEMENT", ""));
     	} else if (message2.startsWith("DEAD")) {
     		deadMessage(message2.replaceFirst("DEAD", ""));
+    	} else if (message2.startsWith("NAME")) {
+    		nameMessage(message2.replaceFirst("NAME", ""));
     	}
+    	
+    	
+    }
+    
+    /**
+     * Work through the name message from the host.
+     * @param message containing their player name.
+     */
+    private void nameMessage(String message) {
+    	String message2 = message.trim();
+    	mainGame.getPlayerList().getPlayers().get(0).setPlayerName(message2);
     }
     
     /**
@@ -235,8 +248,10 @@ public class Client implements Runnable {
         
         if (direction.equals("LEFT")) {
         	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.LEFT);
         } else if (direction.equals("RIGHT")) {
         	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.RIGHT);
         }
     }
     
@@ -257,6 +272,34 @@ public class Client implements Runnable {
         
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.NO_MOVEMENT);
+    }
+    
+    /**
+     * javadoc. 
+     * @param x .
+     * @param y .
+     * @param playerNumber .
+     * @param direction .
+     */
+    public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
+    	String message = "PLAYER MOVEMENT STARTED ";
+    	message = message + playerNumber + " " + x + " " 
+    			+ y  + " " + direction;
+    	sendMessageToHost(message);
+    }
+    
+    /**
+     * javadoc.
+     * @param x .
+     * @param y .
+     * @param playerNumber .
+     */
+    public void playerStoppedMoving(float x, float y, int playerNumber) {
+    	String message = "PLAYER MOVEMENT STOPPED ";
+    	message = message + playerNumber + " " + x + " " 
+    			+ y;
+    	sendMessageToHost(message);
     }
     
     /**
@@ -509,6 +552,19 @@ public class Client implements Runnable {
      */
     public void updateCoinsClient(Coin coin) {
     	sendMessageToHost(coin.toString() + "PLEA ");
+    }
+    
+    /**
+     * javadoc.
+     * @param id .
+     * @param x .
+     * @param y .
+     * @param laserSpeed .
+     * @param laserWidth .
+     */
+    public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
+    	sendMessageToHost("NEW LASER " 
+    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth);
     }
     
     /**

@@ -378,9 +378,6 @@ public class MainGame extends StateBasedGame {
 				container.getHeight() - PLAYER_Y_DEVIATION, PLAYER_WIDTH, PLAYER_HEIGHT,
 				player2ImageN, player2ImageA, shieldImageN, shieldImageA, this);
 		player2.setPlayerNumber(1);
-		player2.setMoveLeftKey(Input.KEY_A);
-		player2.setMoveRightKey(Input.KEY_D);
-		player2.setShootKey(Input.KEY_W);
 		
 		playerList = new PlayerList(player1, this, gameStateState);
 		playerList.add(player2);

@@ -808,4 +808,31 @@ public class Player {
 		return playerName;
 	}
 	
+	/**
+	 * Changes controls of player to be arrow-key based.
+	 */
+	public void setControlsForPlayer1() {
+		setMoveLeftKey(Input.KEY_LEFT);
+		setMoveRightKey(Input.KEY_RIGHT);
+		setShootKey(Input.KEY_SPACE);
+	}
+	
+	/**
+	 * Changes controls of player to be wasd-key based.
+	 */
+	public void setControlsForPlayer2() {
+		setMoveLeftKey(Input.KEY_A);
+		setMoveRightKey(Input.KEY_D);
+		setShootKey(Input.KEY_W);
+	}
+	
+	/**
+	 * Changes controls of player to be disabled.
+	 */
+	public void setControlsDisabled() {
+		setMoveLeftKey(0);
+		setMoveRightKey(0);
+		setShootKey(0);
+	}
+	
 }

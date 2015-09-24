@@ -63,7 +63,10 @@ public class Host implements Callable {
         writer = new PrintWriter(client.getOutputStream(), true);
         reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
         System.out.println("Client connected");
-        messageQueue.add("Hi");
+        // Say hello here
+        messageQueue.add("Hi"); // yep like that
+        messageQueue.add("PLAYER NAME " // send your player's name to client
+        + mainGame.getPlayerList().getPlayers().get(0).getPlayerName());
 
         // This continues ad infinitum
         while (true) {
@@ -107,7 +110,18 @@ public class Host implements Callable {
     	
     	if (message2.startsWith("DEAD")) {
     		deadMessage(message2.replaceFirst("DEAD", ""));
+    	} else if (message2.startsWith("NAME")) {
+    		nameMessage(message2.replaceFirst("NAME", ""));
     	}
+    }
+    
+    /**
+     * Work through the name message from the host.
+     * @param message containing their player name.
+     */
+    private void nameMessage(String message) {
+    	String message2 = message.trim();
+    	mainGame.getPlayerList().getPlayers().get(1).setPlayerName(message2);
     }
     
     /**

@@ -357,7 +357,7 @@ public class Client implements Callable {
     /**
      * Send a message to the host.
      * @param toWrite The message to send
-     */
+     */ 
     public void sendMessageToHost(String toWrite) {
         this.messageQueue.add(toWrite);
     }

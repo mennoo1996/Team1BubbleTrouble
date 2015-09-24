@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.Callable;
 
 import logic.BouncingCircle;
 import logic.Coin;
@@ -23,7 +22,7 @@ import logic.Powerup;
  * Host server for LAN multiplayer.
  * @author alexandergeenen
  */
-public class Host implements Callable {
+public class Host implements Runnable {
 
     private int portNumber;
     private ServerSocket serverSocket;
@@ -36,7 +35,12 @@ public class Host implements Callable {
     private MainGame mainGame;
     private GameState gameState;
     private ArrayList<Client> clientList;
-    
+    private boolean heartBeatCheck;
+    private long timeLastInput;
+
+    private static final int TIMEOUT_ATTEMPT = 3000;
+    private static final int MENU_MULTIPLAYER_STATE = 4;
+
     /**
      * Create a new Host server for LAN multiplayer.
      * @param portNumber Port number for multiplayer
@@ -54,25 +58,47 @@ public class Host implements Callable {
     }
 
     @Override
-    public Boolean call() throws IOException {
-    	System.out.println("host.call");
-        serverSocket = new ServerSocket(portNumber);
-        client = serverSocket.accept();
-        noClientYet = false;
-		mainGame.setSwitchState(mainGame.getGameState());
-        writer = new PrintWriter(client.getOutputStream(), true);
-        reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        System.out.println("Client connected");
-        messageQueue.add("Hi");
+    public void run()  {
+        try {
+            System.out.println("host.call");
+            serverSocket = new ServerSocket(portNumber);
+            client = serverSocket.accept();
+            noClientYet = false;
+            mainGame.setSwitchState(mainGame.getGameState());
+            writer = new PrintWriter(client.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            System.out.println("Client connected");
+            timeLastInput = System.currentTimeMillis();
 
-        // This continues ad infinitum
-        while (true) {
-            if (!messageQueue.isEmpty()) {
-                writer.println(this.messageQueue.poll());
+            // This continues ad infinitum
+            while (true) {
+                manageHeartbeatCheck();
+                if (!messageQueue.isEmpty()) {
+                    writer.println(this.messageQueue.poll());
+                }
+                readClientInputs();
             }
-            readClientInputs();
+        } catch (IOException err) {
+            System.out.println(err);
+            System.out.println(err.getLocalizedMessage());
+            this.mainGame.setSwitchState(MENU_MULTIPLAYER_STATE);
         }
-        
+    }
+
+    /**
+     * Triggers/ends the heartbeat check for a possible missing client.
+     * @throws IOException Thrown if connection to client no longer exists
+     */
+    private void manageHeartbeatCheck() throws IOException {
+        if (heartBeatCheck
+                && (System.currentTimeMillis() - timeLastInput) >= 2 * TIMEOUT_ATTEMPT) {
+            throw new IOException("No connection");
+        }
+        if (!heartBeatCheck
+                && (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
+            heartBeatCheck = true;
+            this.messageQueue.add("HEARTBEAT_CHECK");
+        }
     }
 
     /**
@@ -90,7 +116,12 @@ public class Host implements Callable {
 				if (message2.startsWith("PLAYER")) {
 					System.out.println("wel toch");
 					playerMessage(message2.replaceFirst("PLAYER", ""));
-				}
+				} else if (message2.startsWith("HEARTBEAT_CHECK")) {
+                    this.sendMessageToClient("HEARTBEAT_ALIVE");
+                } else if (message2.startsWith("HEARTBEAT_ALIVE")) {
+                    heartBeatCheck = false;
+                }
+                timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -20,7 +20,7 @@ public class Powerup {
     private static final int POWERUP_TIME = 5;
     private static final int SECONDS_TO_MS = 1000;
 
-    private float x, y, width, height;
+    private float x, y, width, height, xId, yId;
     private long timeRemaining;
     private PowerupType type;
 
@@ -33,10 +33,23 @@ public class Powerup {
     public Powerup(float x, float y, PowerupType power) {
         this.x = x;
         this.y = y;
+        this.xId = x;
+        this.yId = y;
         this.width = POWERUP_WIDTH;
         this.height = POWERUP_HEIGHT;
         this.type = power;
         this.timeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_TIME);
+        //System.out.println("Poooooow: " + power);
+    }
+    
+    /**
+     * Create a string out of a Powerup.
+     * @return Powerup as a string
+     */
+    @Override
+    public String toString() {
+    	String res = "POWERUP " + this.xId + " " + this.yId + " " + this.type + " ";
+    	return res;
     }
 
     /**
@@ -71,6 +84,38 @@ public class Powerup {
     }
 
     /**
+     * 
+     * @return .
+     */
+    public float getxId() {
+		return xId;
+	}
+
+    /**
+     * 
+     * @param xId .
+     */
+	public void setxId(float xId) {
+		this.xId = xId;
+	}
+
+	/**
+	 * 
+	 * @return .
+	 */
+	public float getyId() {
+		return yId;
+	}
+
+	/**
+	 * 
+	 * @param yId .
+	 */
+	public void setyId(float yId) {
+		this.yId = yId;
+	}
+
+	/**
      * @return powerup's x coord
      */
     public float getY() {

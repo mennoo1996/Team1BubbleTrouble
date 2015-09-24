@@ -15,7 +15,9 @@ import java.util.Queue;
 import java.util.concurrent.Callable;
 
 import logic.BouncingCircle;
+import logic.Coin;
 import logic.Logger;
+import logic.Powerup;
 
 /**
  * Host server for LAN multiplayer.
@@ -180,6 +182,38 @@ public class Host implements Callable {
 		for (BouncingCircle bCircle : circleList) {
 			sendMessageToClient(bCircle.toString());
 		}
+    }
+    
+    /**
+     * javadoc.
+     * @param a the powerup to sent
+     */
+    public void updatePowerups(Powerup a) {
+    	sendMessageToClient(a.toString() + "ADD ");
+    }
+    
+    /**
+     * javadoc.
+     * @param a the coin to sent
+     */
+    public void updateCoins(Coin a) {
+    	sendMessageToClient(a.toString() + "ADD ");
+    }
+    
+    /**
+     * javadoc.
+     * @param a the powerup to sent
+     */
+    public void updatePowerupsHost(Powerup a) {
+    	sendMessageToClient(a.toString() + "DICTATE ");
+    }
+    
+    /**
+     * javadoc.
+     * @param a the coin to sent
+     */
+    public void updateCoinsHost(Coin a) {
+    	sendMessageToClient(a.toString() + "DICTATE ");
     }
     
     /**

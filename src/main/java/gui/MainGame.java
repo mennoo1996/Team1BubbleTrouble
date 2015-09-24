@@ -944,6 +944,14 @@ public class MainGame extends StateBasedGame {
 	public void setIsHost(boolean isHost) {
 		this.isHost = isHost;
 	}
+
+	/**
+	 * 
+	 * @param isClient .
+	 */
+	public void setClient(boolean isClient) {
+		this.isClient = isClient;
+	}
 	
 	/**
 	 * @return the isHost

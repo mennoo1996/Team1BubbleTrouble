@@ -12,6 +12,7 @@ public class Coin {
 
     private int points;
     private float x, y, width, height;
+    private boolean largeAmount;
 
     /**
      * Create a coin.
@@ -25,6 +26,7 @@ public class Coin {
         this.width = COIN_WIDTH;
         this.height = COIN_HEIGHT;
         
+        this.largeAmount = largeAmount;
         if (largeAmount) {
         	this.points = COIN_EXPENSIVE;
         } else {
@@ -32,6 +34,16 @@ public class Coin {
         }
     }
 
+    /**
+    * Create a string out of a Coin.
+    * @return Coin as a string
+    */
+   @Override
+   public String toString() {
+   	String res = "COIN " + this.x + " " + this.y + " " + this.largeAmount + " ";
+   	return res;
+   }
+    
     /**
      * Update Powerups graphical thingy.
      * @param floor - floor of the game.

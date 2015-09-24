@@ -16,7 +16,10 @@ import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 import logic.BouncingCircle;
+import logic.Coin;
 import logic.Logger;
+import logic.Powerup;
+import logic.Powerup.PowerupType;
 import logic.Weapon;
 
 /**
@@ -91,6 +94,10 @@ public class Client implements Callable {
         		updateMessage(message2.replaceFirst("UPDATE", ""));
         	} else if (message2.startsWith("CIRCLE")) {
         		circleMessage(message2.replaceFirst("CIRCLE", ""));
+        	} else if (message2.startsWith("POWERUP")) {
+        		powerupMessage(message2.replaceFirst("POWERUP", ""));
+        	} else if (message2.startsWith("COIN")) {
+        		coinMessage(message2.replaceFirst("COIN", ""));
         	}
         	
         }
@@ -119,6 +126,37 @@ public class Client implements Callable {
     		gameState.setCircleList(new ArrayList<BouncingCircle>());
     	}
     	
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void powerupMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	// SHIELD, SPIKY, INSTANT
+    	if (stringList[2].equals("SHIELD")) {
+    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), PowerupType.SHIELD));
+    	} else if (stringList[2].equals("SPIKY")) {
+    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), PowerupType.SPIKY));
+    	} else if (stringList[2].equals("INSTANT")) {
+    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), PowerupType.INSTANT));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void coinMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	gameState.getDroppedCoins().add(new Coin(Float.parseFloat(stringList[0]),
+				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
     }
     
     /**

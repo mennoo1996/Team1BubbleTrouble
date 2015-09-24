@@ -44,7 +44,7 @@ public class PlayerList {
 		playerList.add(player1);
 		this.mainGame = mainGame;
 		this.gameState = gameState;
-		processCollisions = true;
+		processCollisions = false;
 	} 
 	
 	/**

@@ -1148,14 +1148,16 @@ public class GameState extends BasicGameState {
 	 * @param circle the circle that could drop this item
 	 */
 	private void checkItem(BouncingCircle circle) {
-		// 5% of the time
-		final int total = 100;
-		int randInt = new Random().nextInt(total) + 1;
-		if (randInt <= POWERUP_CHANCE) {
-			dropPowerup(circle);
-		}
-		else if (randInt <= POWERUP_CHANCE + COIN_CHANCE) {
-			dropCoin(circle);
+		if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+			// 5% of the time
+			final int total = 100;
+			int randInt = new Random().nextInt(total) + 1;
+			if (randInt <= POWERUP_CHANCE) {
+				dropPowerup(circle);
+			}
+			else if (randInt <= POWERUP_CHANCE + COIN_CHANCE) {
+				dropCoin(circle);
+			}
 		}
 	}
 
@@ -1165,7 +1167,11 @@ public class GameState extends BasicGameState {
 	 */
 	private void dropCoin(BouncingCircle circle) {
 		boolean bigMoney = random.nextBoolean();
-		droppedCoins.add(new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney));
+		Coin someCoin = new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney);
+		droppedCoins.add(someCoin);
+		if (mainGame.isLanMultiplayer()) {
+			mainGame.getHost().updateCoins(someCoin);
+		}
 	}
 
 	/**
@@ -1176,7 +1182,11 @@ public class GameState extends BasicGameState {
 		// Get a random powerup
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
 				.nextInt(Powerup.PowerupType.values().length)];
-		droppedPowerups.add(new Powerup(circle.getCenterX(), circle.getCenterY(), newPowerup));
+		Powerup somePowerup = new Powerup(circle.getCenterX(), circle.getCenterY(), newPowerup);
+		droppedPowerups.add(somePowerup);
+		if (mainGame.isLanMultiplayer()) {
+			mainGame.getHost().updatePowerups(somePowerup);
+		}
 	}
 
 	/**

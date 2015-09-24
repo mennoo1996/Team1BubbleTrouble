@@ -37,6 +37,17 @@ public class Powerup {
         this.height = POWERUP_HEIGHT;
         this.type = power;
         this.timeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_TIME);
+        //System.out.println("Poooooow: " + power);
+    }
+    
+    /**
+     * Create a string out of a Powerup.
+     * @return Powerup as a string
+     */
+    @Override
+    public String toString() {
+    	String res = "POWERUP " + this.x + " " + this.y + " " + this.type + " ";
+    	return res;
     }
 
     /**

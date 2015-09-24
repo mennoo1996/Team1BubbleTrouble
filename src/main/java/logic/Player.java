@@ -126,6 +126,7 @@ public class Player {
 		processPlayerMovement(deltaFloat, containerWidth, testing);
 		processPowerups(deltaFloat, containerHeight, containerWidth);
 		processCoins(deltaFloat, containerHeight);
+		
 	}
 	
 	/**
@@ -200,8 +201,16 @@ public class Player {
 		// Shoot laser when spacebar is pressed and no laser is active
 		if (!testing && gameState.getSavedInput().isKeyPressed(shootKey)
 				&& !shot) {
+			
 			shot = true;
 			gameState.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
+			
+			Weapon weapon = gameState.getWeaponList().getWeaponList().get(0);
+			if (mainGame.isHost()) {
+				mainGame.getHost().updateLaser(weapon.getX(), 
+						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth());
+			}
+			
 		}
 		
 		Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
@@ -235,6 +244,10 @@ public class Player {
 		if (!didWalk && !stoodStillOnLastUpdate) {
 			stoodStillOnLastUpdate = true;
 			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
+		}
+		
+		if (didWalk && mainGame.isHost()) {
+			mainGame.getHost().updatePlayerLocation(x, y);
 		}
 	}
 

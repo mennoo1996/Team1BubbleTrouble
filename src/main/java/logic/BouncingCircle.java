@@ -368,8 +368,26 @@ public class BouncingCircle extends Circle {
 	public void setLogger(Logger logger) {
 		this.logger = logger;
 	}
+//	
+//	float centerPointX, float centerPointY, 
+//	float radius, float xSpeed, float ySpeed, float gravity
 	
-	
+	/**
+	 * javadoc.
+	 */
+	@Override
+	public String toString() {
+		float centerPointX = this.getCenterX();
+		float centerPointY = this.getCenterY();
+		float radius = this.getRadius();
+		float xSpeed = this.xSpeed;
+		float ySpeed = this.ySpeed;
+		float gravity = this.gravity;
+		
+		String res = "CIRCLE " + centerPointX + " " + centerPointY 
+				+ " " + radius + " " + xSpeed + " " + ySpeed + " " + gravity + " ";
+		return res;
+	}
 	
 	
 	

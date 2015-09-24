@@ -294,14 +294,13 @@ public class Player {
         	   this.movement = Movement.RIGHT;
         	   didWalk = true;
         	   stoodStillOnLastUpdate = false;
+        	   if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
+    			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
+    		   }   
         	   if (!lastLogMove.equals("right")) {
         		   logger.log("Moving right from position " + this.getCenterX(),
         				   PriorityLevels.VERYLOW, "Player");
         		   lastLogMove = "right";
-
-        		   if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
-        			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
-        		   }   
         	   }
            }
         }
@@ -329,14 +328,13 @@ public class Player {
             	this.movement = Movement.LEFT;
             	didWalk = true;
             	stoodStillOnLastUpdate = false;
+            	if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
+        			mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
+        		}
             	if (!lastLogMove.equals("left")) {
             		logger.log("Moving left from position " + this.getCenterX(),
             				PriorityLevels.VERYLOW, "Player");
             		lastLogMove = "left";
-            		
-            		if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
-            			mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
-            		}
             	}
             }
         }

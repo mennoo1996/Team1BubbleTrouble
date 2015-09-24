@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -64,7 +63,7 @@ public class Client implements Callable {
     public Boolean call() throws IOException {
     	System.out.println("CLIENT.call");
         socket = new Socket();
-        socket.connect(new InetSocketAddress(InetAddress.getLocalHost(), portNumber));
+        socket.connect(new InetSocketAddress(host, portNumber));
 		mainGame.setSwitchState(mainGame.getGameState());
         writer = new PrintWriter(socket.getOutputStream(), true);
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

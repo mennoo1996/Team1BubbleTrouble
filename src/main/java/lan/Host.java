@@ -270,7 +270,8 @@ public class Host implements Callable {
      * @param direction .
      */
     public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
-    	String message = "PLAYER MOVEMENT STARTED " + playerNumber + " " + x + " " 
+    	String message = "PLAYER MOVEMENT STARTED ";
+    	message = message + playerNumber + " " + x + " " 
     			+ y  + " " + direction;
     	sendMessageToClient(message);
     }
@@ -282,7 +283,8 @@ public class Host implements Callable {
      * @param playerNumber .
      */
     public void playerStoppedMoving(float x, float y, int playerNumber) {
-    	String message = "PLAYER MOVEMENT STOPPED " + playerNumber + " " + x + " " 
+    	String message = "PLAYER MOVEMENT STOPPED ";
+    	message = message + playerNumber + " " + x + " " 
     			+ y;
     	sendMessageToClient(message);
     }

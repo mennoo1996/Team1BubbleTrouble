@@ -89,7 +89,7 @@ public class Client implements Callable {
         try {
 			while (reader.ready()) {
 				String message = reader.readLine();
-				System.out.println(message);
+				System.out.println("received message: " + message);
 				String message2 = message.trim();
 				if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
@@ -215,7 +215,8 @@ public class Client implements Callable {
      * @param direction .
      */
     public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
-    	String message = "PLAYER MOVEMENT STARTED " + playerNumber + " " + x + " " 
+    	String message = "PLAYER MOVEMENT STARTED ";
+    	message = message + playerNumber + " " + x + " " 
     			+ y  + " " + direction;
     	sendMessageToHost(message);
     }
@@ -227,7 +228,8 @@ public class Client implements Callable {
      * @param playerNumber .
      */
     public void playerStoppedMoving(float x, float y, int playerNumber) {
-    	String message = "PLAYER MOVEMENT STOPPED " + playerNumber + " " + x + " " 
+    	String message = "PLAYER MOVEMENT STOPPED ";
+    	message = message + playerNumber + " " + x + " " 
     			+ y;
     	sendMessageToHost(message);
     }

@@ -54,6 +54,7 @@ public class Player {
 	private final float startX;
 	private final float startY;
 	private String lastLogMove = "";
+	private String playerName = "";
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final int PLAYER1_X_DEVIATION = 720;
@@ -778,6 +779,21 @@ public class Player {
 	 */
 	public void setMovingLeft(boolean movingLeft) {
 		this.movingLeft = movingLeft;
+	}
+	
+	/**
+	 * Name for player.
+	 * @param name to set.
+	 */
+	public void setPlayerName(String name) {
+		this.playerName = name;
+	}
+	
+	/**
+	 * @return Name of player.
+	 */
+	public String getPlayerName() {
+		return playerName;
 	}
 	
 }

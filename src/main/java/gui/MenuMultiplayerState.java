@@ -55,8 +55,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int SEPARATOR_X = 164;
 	private static final int SEPARATOR_Y = 190;
 	private static final int SEPARATOR_Y_2 = 388;
-	private static final int SEPARATOR_Y_3 = 538;
-	private static final int SEPARATOR_Y_4 = 738;
+	private static final int SEPARATOR_Y_3 = 488;
+	private static final int SEPARATOR_Y_4 = 658;
 	
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
@@ -74,15 +74,16 @@ public class MenuMultiplayerState extends BasicGameState {
 	
 	private static final int HOST_BUTTON_X = 150;
 	private static final int HOST_BUTTON_Y = 425;
-	private static final int TEXT_HOST_Y = 488;
+	private static final int TEXT_HOST_X = 350;
+	private static final int TEXT_HOST_Y = 438;
 	
 	private static final int JOIN_BUTTON_X = 150;
-	private static final int JOIN_BUTTON_Y = 575;
-	private static final int TEXT_JOIN_Y = 638;
+	private static final int JOIN_BUTTON_Y = 525;
+	private static final int TEXT_JOIN_Y = 588;
 	
 	private static final int TEXT_FIELD_X = 564;
-	private static final int TEXT_FIELD_Y = 638;
-	private static final int TEXT_FIELD_Y_2 = 738;
+	private static final int TEXT_FIELD_Y = 738;
+	private static final int TEXT_FIELD_Y_2 = 588;
 	
 	/**
 	 * Construct a SettingsState.
@@ -207,7 +208,6 @@ public class MenuMultiplayerState extends BasicGameState {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 
 		if (hostButton.isMouseOver(input)) {
-			// Spawn thread logic
 			mainGame.setLanMultiplayer(true);
 			mainGame.setHost(new Host(MainGame.getMultiplayerPort(), mainGame, gameState));
 			mainGame.setIsHost(true);
@@ -215,8 +215,6 @@ public class MenuMultiplayerState extends BasicGameState {
 			ExecutorService executor = Executors.newFixedThreadPool(1);
 			executor.submit(mainGame.getHost());
 			mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
-			
-			// host button stuff
 		} 
 		if (joinButton.isMouseOver(input)) {
 			mainGame.setLanMultiplayer(true);
@@ -240,6 +238,22 @@ public class MenuMultiplayerState extends BasicGameState {
 		this.input = container.getInput();
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
 		
+		drawText(graphics, container);
+		drawSprites(graphics);
+		mainGame.drawWaterMark();
+		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
+				LOGO_X, LOGO_Y, mainGame.getColor());
+
+		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
+		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+	}
+	
+	/**
+	 * Draw all the text in this state.
+	 * @param graphics context to use
+	 * @param container appgamecontainer to use
+	 */
+	private void drawText(Graphics graphics, GameContainer container) {
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_1, 
 				"# You can play a game together with another player, over LAN.",
 				mainGame.getColor());
@@ -250,29 +264,17 @@ public class MenuMultiplayerState extends BasicGameState {
 				"# If you wish to join another player,"
 				+ " please enter their IP-address below.", mainGame.getColor());
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_4, "# Your player name:", mainGame.getColor());
-		
-
 		if (mainGame.isHost()) {
 			try {
-				RND.text(graphics, TEXT_HELP_X, TEXT_HOST_Y, "# Hosting game on IP: " 
+				RND.text(graphics, TEXT_HOST_X, TEXT_HOST_Y, "# Hosting game on IP: " 
 						+ InetAddress.getLocalHost().getHostAddress(), mainGame.getColor());
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
 		}
-		
 		RND.text(graphics, TEXT_HELP_X, TEXT_JOIN_Y, "# Join this IP: ", mainGame.getColor());
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
-		drawSprites(graphics);
-
-		mainGame.drawWaterMark();
-		
-		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
-				LOGO_X, LOGO_Y, mainGame.getColor());
-
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 	}
 	
 	/**

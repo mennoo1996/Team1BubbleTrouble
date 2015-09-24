@@ -171,7 +171,7 @@ public class MenuMainState extends BasicGameState {
 			mainGame.getLogger().log("Play multiplayer button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} else if (lanButton.isMouseOver(input)) { // Go to gamestate in multiplayer
-			mainGame.setMultiplayer(true);
+			//mainGame.setMultiplayer(true);
 			mainGame.setSwitchState(mainGame.getMultiplayerState());
 			mainGame.getLogger().log("Play lan button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");

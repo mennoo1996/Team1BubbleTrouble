@@ -5,15 +5,8 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.BasicGameState;
-import org.newdawn.slick.state.StateBasedGame;
-
+import lan.GameStateObserver;
+import lan.PlayerMovementObserver;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
@@ -27,15 +20,30 @@ import logic.Powerup;
 import logic.Weapon;
 import logic.WeaponList;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+
 /**
  * This class is the state that we are in during gameplay.
  * It contains basically all the game logic.
  * @author Menno
  *
  */
+/**
+ * @author Bart
+ *
+ */
 public class GameState extends BasicGameState {
 	
 	private  int totaltime;
+	private ArrayList<PlayerMovementObserver> playerMovementObservers 
+		= new ArrayList<PlayerMovementObserver>();
 	
 	private MainGame mainGame;
 	private ArrayList<BouncingCircle> circleList;
@@ -53,6 +61,7 @@ public class GameState extends BasicGameState {
 	private boolean countIn;
 	private boolean playingState;
 	private boolean waitEsc;
+	private boolean levelStarted;
 	
 	// Images
 	private Image health0Image;
@@ -233,6 +242,25 @@ public class GameState extends BasicGameState {
 	}
 	
 	/**
+	 * javadoc.
+	 * @param observer .
+	 */
+	public void attach(GameStateObserver observer) {
+		if (observer instanceof PlayerMovementObserver) {
+			playerMovementObservers.add((PlayerMovementObserver) observer);
+		}
+	}
+	
+	/**
+	 * javadoc.
+	 */
+	public void notifyAllPlayerMovementObservers() {
+		for (PlayerMovementObserver observer : playerMovementObservers) {
+			observer.update();
+		}
+	}
+	
+	/**
 	 * Exit function for state. Fades out and everything.
 	 * @param container the GameContainer we are running in
 	 * @param sbg the gamestate cont.
@@ -309,21 +337,35 @@ public class GameState extends BasicGameState {
 					mainGame.getLogger().log("Starting level", 
 							Logger.PriorityLevels.MEDIUM, "levels");
 					countIn = false;
+					if (mainGame.isHost()) {
+						mainGame.getHost().updateLevelStarted();
+					}
 					prevTime = curTime;
 				}
 			} else {
-				playGame(container, sbg, delta, curTime);
+				if (!mainGame.isLanMultiplayer() || mainGame.isHost() || levelStarted) {
+					playGame(container, sbg, delta, curTime);
+				}
 			}
 		} else {
-			if (getSavedInput().isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
-				// Reset time countdown
-				prevTime = System.currentTimeMillis();
-				countIn = true;
-				playingState = true;
-			}
-			processPauseButtons(container, sbg);
+			processEscape(container, sbg);
 		}
 		exit(container, sbg, delta);
+	}
+	
+	/**
+	 * javadoc.
+	 * @param container .
+	 * @param sbg .
+	 */
+	private void processEscape(GameContainer container, StateBasedGame sbg) {
+		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
+			// Reset time countdown
+			prevTime = System.currentTimeMillis();
+			countIn = true;
+			playingState = true;
+		}
+		processPauseButtons(container, sbg);
 	}
 
 	/**
@@ -343,6 +385,7 @@ public class GameState extends BasicGameState {
 				container.getHeight(),
 				container.getWidth());
 		processPause();
+		
 		processCircles(container, sbg, deltaFloat);
 		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate
@@ -447,6 +490,10 @@ public class GameState extends BasicGameState {
 							"BouncingCircles");
                 } // if it was part of the gate reqs, add to new gate reqs
 				processUnlockCirclesGates(circle, splits);
+				
+				if (mainGame.isHost()) {
+					mainGame.getHost().updateCircles(getCircleList());
+				}
 			}
         }
 	}
@@ -1282,4 +1329,33 @@ public class GameState extends BasicGameState {
 	public boolean isPaused() {
 		return !playingState;
 	}
+
+	/**
+	 * @return the levelStarted
+	 */
+	public boolean isLevelStarted() {
+		return levelStarted;
+	}
+
+	/**
+	 * @param levelStarted the levelStarted to set
+	 */
+	public void setLevelStarted(boolean levelStarted) {
+		this.levelStarted = levelStarted;
+	}
+
+	/**
+	 * @return the circleList
+	 */
+	public ArrayList<BouncingCircle> getCircleList() {
+		return circleList;
+	}
+
+	/**
+	 * @param circleList the circleList to set
+	 */
+	public void setCircleList(ArrayList<BouncingCircle> circleList) {
+		this.circleList = circleList;
+	}
+	
 }

@@ -1,7 +1,5 @@
 package gui;
 import java.util.Calendar;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import lan.Host;
 import logic.HighScores;
@@ -121,6 +119,7 @@ public class MainGame extends StateBasedGame {
 	private static final int MULTIPLAYER_PORT = 4455;
 	private boolean lanMultiplayer;
 	private Host host;
+	private boolean isHost;
 
 
 	/**
@@ -143,13 +142,9 @@ public class MainGame extends StateBasedGame {
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		highscores.setLogger(logger);
 		this.multiplayer = false;
-
-		// Spawn thread logic
-		// TODO: Move this to another location for multiplayer menu
-		lanMultiplayer = true;
-		host = new Host(MULTIPLAYER_PORT);
-		ExecutorService executor = Executors.newFixedThreadPool(1);
-		executor.submit(getHost());
+		this.lanMultiplayer = false;
+		this.isHost = false;
+		
 
 		ShutDownHook shutDownHook = new ShutDownHook(this);
 		shutDownHook.attachShutDownHook();
@@ -296,6 +291,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		app = new AppGameContainer(new MainGame("StateGame"));
+		app.setAlwaysRender(true);
 		app.setDisplayMode(xRes, yRes, false);
 		app.setVSync(true);
 		app.setTargetFrameRate(TARGET_FRAMERATE);
@@ -320,7 +316,7 @@ public class MainGame extends StateBasedGame {
 		logger.log("MenuMainState initialized", Logger.PriorityLevels.LOW, "States");
 		this.menuGameoverState = new MenuGameoverState(this);
 		logger.log("MenuGameoverState initialized", Logger.PriorityLevels.LOW, "States");
-		this.menuMultiplayerState = new MenuMultiplayerState(this);
+		this.menuMultiplayerState = new MenuMultiplayerState(this, gameStateState);
 		logger.log("MenuMultiplayerState initialized", Logger.PriorityLevels.LOW, "States");
 		this.addState(menuMainState);
 		logger.log("MenuMainstate added", Logger.PriorityLevels.LOW, "States");
@@ -904,5 +900,49 @@ public class MainGame extends StateBasedGame {
 	public Host getHost() {
 		return host;
 	}
+
+	/**
+	 * @return the multiplayerPort
+	 */
+	public static int getMultiplayerPort() {
+		return MULTIPLAYER_PORT;
+	}
+
+	/**
+	 * @param host the host to set
+	 */
+	public void setHost(Host host) {
+		this.host = host;
+	}
+
+	/**
+	 * @return the lanMultiplayer
+	 */
+	public boolean isLanMultiplayer() {
+		return lanMultiplayer;
+	}
+
+	/**
+	 * @param lanMultiplayer the lanMultiplayer to set
+	 */
+	public void setLanMultiplayer(boolean lanMultiplayer) {
+		this.lanMultiplayer = lanMultiplayer;
+	}
+
+	/**
+	 * @return the isHost
+	 */
+	public boolean isHost() {
+		return isHost;
+	}
+
+	/**
+	 * @param isHost the isHost to set
+	 */
+	public void setIsHost(boolean isHost) {
+		this.isHost = isHost;
+	}
+	
+	
 }
 

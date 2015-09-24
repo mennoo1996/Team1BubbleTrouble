@@ -196,9 +196,9 @@ public class MenuMultiplayerState extends BasicGameState {
 		if (joinButton.isMouseOver(input)) {
 			// Spawn thread logic
 			mainGame.setLanMultiplayer(true);
-			mainGame.setClient(true);
 			Client client = new Client("127.0.0.1", 
 					mainGame.getMultiplayerPort(), mainGame, gameState);
+			mainGame.setClient(client);
 	        mainGame.setIsClient(true);
 	        mainGame.setIsHost(false);
 			ExecutorService executor = Executors.newFixedThreadPool(1);

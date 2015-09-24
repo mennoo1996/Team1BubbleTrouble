@@ -81,12 +81,49 @@ public class Host implements Callable {
     private void readClientInputs() {
     	try {
 			while (reader.ready()) {
-			    System.out.println(reader.readLine());
+
+				System.out.println("in loop");
+				String message = reader.readLine();
+				System.out.println(message);
+				String message2 = message.trim();
+				System.out.println(message2);
+				if (message2.startsWith("PLAYER")) {
+					System.out.println("wel toch");
+					playerMessage(message2.replaceFirst("PLAYER", ""));
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void playerMessage(String message) {
+    	String message2 = message.trim();
+    	System.out.println(message2);
+    	
+    	if (message2.startsWith("DEAD")) {
+    		deadMessage(message2.replaceFirst("DEAD", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void deadMessage(String message) {
+    	String message2 = message.trim();
+    	System.out.println(message2);
+    	
+    	if (message2.equals("CLIENT")) {
+    		System.out.println("client dead");
+    		mainGame.getPlayerList().playerDeath(mainGame);
+    	}
+    }
+    
 
     /**
      * Attempt to gracefully shut down the LAN threads.
@@ -123,6 +160,13 @@ public class Host implements Callable {
      */
     public boolean clientConnected() {
         return !noClientYet;
+    }
+    
+    /**
+     * javadoc.
+     */
+    public void updateHostDead() {
+    	sendMessageToClient("PLAYER DEAD HOST");
     }
     
     /**

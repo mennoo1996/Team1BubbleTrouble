@@ -1,6 +1,7 @@
 package gui;
 import java.util.Calendar;
 
+import lan.Client;
 import lan.Host;
 import logic.HighScores;
 import logic.HighScoresParser;
@@ -119,6 +120,7 @@ public class MainGame extends StateBasedGame {
 	private static final int MULTIPLAYER_PORT = 4455;
 	private boolean lanMultiplayer;
 	private Host host;
+	private Client client;
 	private boolean isHost;
 	private boolean isClient;
 
@@ -946,14 +948,6 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
-	 * 
-	 * @param isClient .
-	 */
-	public void setClient(boolean isClient) {
-		this.isClient = isClient;
-	}
-	
-	/**
 	 * @return the isHost
 	 */
 	public boolean isClient() {
@@ -965,6 +959,20 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setIsClient(boolean isClient) {
 		this.isClient = isClient;
+	}
+
+	/**
+	 * @return the client
+	 */
+	public Client getClient() {
+		return client;
+	}
+
+	/**
+	 * @param client the client to set
+	 */
+	public void setClient(Client client) {
+		this.client = client;
 	}
 	
 	

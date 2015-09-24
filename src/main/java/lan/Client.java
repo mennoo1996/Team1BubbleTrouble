@@ -3,6 +3,7 @@ package lan;
 import gui.GameState;
 import gui.MainGame;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -36,7 +37,7 @@ public class Client implements Callable {
     private Logger logger;
     private Queue<String> messageQueue;
     private PrintWriter writer;
-    private Scanner reader;
+    private BufferedReader reader;
     private MainGame mainGame;
     private GameState gameState;
     
@@ -67,12 +68,13 @@ public class Client implements Callable {
         socket.connect(new InetSocketAddress(InetAddress.getLocalHost(), portNumber));
 		mainGame.setSwitchState(mainGame.getGameState());
         writer = new PrintWriter(socket.getOutputStream(), true);
-        reader = new Scanner(new InputStreamReader(socket.getInputStream()));
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         System.out.println("Connected to server");
         // This continues ad infinitum
         while (true) {
             // READ AND WRITE LOGIC HERE
             if (!this.messageQueue.isEmpty()) {
+            	System.out.println("sending message: " + this.messageQueue.peek());
                 writer.println(this.messageQueue.poll());
             }
             readServerCommands();
@@ -83,26 +85,30 @@ public class Client implements Callable {
      * Process server commands.
      */
     private void readServerCommands() {
-        while (reader.hasNextLine()) {
-        	String message = reader.nextLine();
-        	System.out.println(message);
-        	String message2 = message.trim();
-        	if (message2.startsWith("NEW")) {
-        		newMessage(message2.replaceFirst("NEW", ""));
-        	} else if (message2.startsWith("SYSTEM")) {
-        		systemMessage(message2.replaceFirst("SYSTEM", ""));
-        	} else if (message2.startsWith("UPDATE")) {
-        		updateMessage(message2.replaceFirst("UPDATE", ""));
-        	} else if (message2.startsWith("CIRCLE")) {
-        		circleMessage(message2.replaceFirst("CIRCLE", ""));
-        	} else if (message2.startsWith("POWERUP")) {
-        		powerupMessage(message2.replaceFirst("POWERUP", ""));
-        	} else if (message2.startsWith("COIN")) {
-        		coinMessage(message2.replaceFirst("COIN", ""));
-        	} else if (message2.startsWith("PLAYER")) {
-        		playerMessage(message2.replaceFirst("PLAYER", ""));
-        	}	
-        }
+        try {
+			while (reader.ready()) {
+				String message = reader.readLine();
+				System.out.println(message);
+				String message2 = message.trim();
+				if (message2.startsWith("NEW")) {
+					newMessage(message2.replaceFirst("NEW", ""));
+				} else if (message2.startsWith("SYSTEM")) {
+					systemMessage(message2.replaceFirst("SYSTEM", ""));
+				} else if (message2.startsWith("UPDATE")) {
+					updateMessage(message2.replaceFirst("UPDATE", ""));
+				} else if (message2.startsWith("CIRCLE")) {
+					circleMessage(message2.replaceFirst("CIRCLE", ""));
+				} else if (message2.startsWith("POWERUP")) {
+					powerupMessage(message2.replaceFirst("POWERUP", ""));
+				} else if (message2.startsWith("COIN")) {
+					coinMessage(message2.replaceFirst("COIN", ""));
+				} else if (message2.startsWith("PLAYER")) {
+					playerMessage(message2.replaceFirst("PLAYER", ""));
+				}	
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -114,6 +120,20 @@ public class Client implements Callable {
     	
     	if (message2.startsWith("MOVEMENT")) {
     		movementMessage(message2.replaceFirst("MOVEMENT", ""));
+    	} else if (message2.startsWith("DEAD")) {
+    		deadMessage(message2.replaceFirst("DEAD", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void deadMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.equals("HOST")) {
+    		mainGame.getPlayerList().playerDeath(mainGame);
     	}
     }
     
@@ -340,6 +360,13 @@ public class Client implements Callable {
      */
     public void sendMessageToHost(String toWrite) {
         this.messageQueue.add(toWrite);
+    }
+    
+    /**
+     * javadoc.
+     */
+    public void updateClientDead() {
+    	sendMessageToHost("PLAYER DEAD CLIENT");
     }
 
     /**

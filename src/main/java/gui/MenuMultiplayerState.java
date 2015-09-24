@@ -222,6 +222,7 @@ public class MenuMultiplayerState extends BasicGameState {
 			mainGame.setLanMultiplayer(true);
 			Client client = new Client(ipField.getText(), 
 					mainGame.getMultiplayerPort(), mainGame, gameState);
+			mainGame.setClient(client);
 	        mainGame.setIsClient(true);
 	        mainGame.setIsHost(false);
 			ExecutorService executor = Executors.newFixedThreadPool(1);

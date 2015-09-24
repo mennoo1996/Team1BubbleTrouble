@@ -80,14 +80,24 @@ public class PlayerList {
 			if (playerList.get(0).getRectangle().intersects(circle) 
 					&& !playerList.get(0).hasShield()) {
 				//LIVES FUNCTIONALITY
-				playerDeath(mainGame);
+				if (!mainGame.isLanMultiplayer()) {
+					playerDeath(mainGame);
+				} else if (mainGame.isHost()) {
+					mainGame.getHost().updateHostDead();
+					playerDeath(mainGame);
+				}
 			}
 			
 			if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
 					&& playerList.get(1).getRectangle().intersects(circle)
 					&& !playerList.get(1).hasShield()) {
 				//LIVES FUNCTIONALITY
-				playerDeath(mainGame);
+				if (!mainGame.isLanMultiplayer()) {
+					playerDeath(mainGame);
+				} else if (mainGame.isClient()) {
+					mainGame.getClient().updateClientDead();
+					playerDeath(mainGame);
+				}
 			}
 		}
 	}

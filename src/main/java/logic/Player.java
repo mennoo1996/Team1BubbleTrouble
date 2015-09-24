@@ -64,6 +64,8 @@ public class Player {
 	private int moveLeftKey;
 	private int moveRightKey;
 	private int shootKey;
+    private boolean movingRight;
+    private boolean movingLeft;
 	
 	private static final int POWERUP_DURATION = 10;
 	private long shieldTimeRemaining;
@@ -106,6 +108,8 @@ public class Player {
 		this.shieldCount = 0;
 		this.shieldTimeRemaining = 0;
 		this.shot = false;
+		this.movingLeft = false;
+		this.movingRight = false;
 	}
 	
 	/**
@@ -244,11 +248,12 @@ public class Player {
 		if (!didWalk && !stoodStillOnLastUpdate) {
 			stoodStillOnLastUpdate = true;
 			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
+		
+			if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
+				mainGame.getHost().playerStoppedMoving(x, y, playerNumber);
+			}
 		}
 		
-		if (didWalk && mainGame.isHost()) {
-			mainGame.getHost().updatePlayerLocation(x, y);
-		}
 	}
 
 	/**
@@ -259,8 +264,16 @@ public class Player {
 	 * @return a boolean to check if the player walked.
 	 */
 	private boolean processMoveRight(float deltaFloat, float containerWidth, boolean didWalk) {
-		if (gameState.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
-				< (containerWidth - gameState.getRightWall().getWidth())) {
+
+		boolean isMovingRight = false;
+		
+		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && playerNumber == 0 && movingRight) {
+			isMovingRight = true;
+		}
+		
+		if ((gameState.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
+				< (containerWidth - gameState.getRightWall().getWidth()))
+				|| isMovingRight) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
         	   this.movement = Movement.RIGHT;
@@ -269,8 +282,11 @@ public class Player {
         	   if (!lastLogMove.equals("right")) {
         		   logger.log("Moving right from position " + this.getCenterX(),
         				   PriorityLevels.VERYLOW, "Player");
-
         		   lastLogMove = "right";
+
+        		   if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
+        			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
+        		   }   
         	   }
            }
         }
@@ -284,8 +300,15 @@ public class Player {
 	 * @return a boolean to check if the player walked.
 	 */
 	private boolean processMoveLeft(float deltaFloat, boolean didWalk) {
+		
+		boolean isMovingLeft = false;
+		
+		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && playerNumber == 0 && movingLeft) {
+			isMovingLeft = true;
+		}
+		
 		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
-		if (isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) {
+		if ((isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) || isMovingLeft) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
             	this.movement = Movement.LEFT;
@@ -295,6 +318,10 @@ public class Player {
             		logger.log("Moving left from position " + this.getCenterX(),
             				PriorityLevels.VERYLOW, "Player");
             		lastLogMove = "left";
+            		
+            		if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
+            			mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
+            		}
             	}
             }
         }
@@ -723,6 +750,34 @@ public class Player {
 	 */
 	public void setShieldTimeRemaining(long shieldTimeRemaining) {
 		this.shieldTimeRemaining = shieldTimeRemaining;
+	}
+
+	/**
+	 * @return the movingRight
+	 */
+	public boolean isMovingRight() {
+		return movingRight;
+	}
+
+	/**
+	 * @param movingRight the movingRight to set
+	 */
+	public void setMovingRight(boolean movingRight) {
+		this.movingRight = movingRight;
+	}
+
+	/**
+	 * @return the movingLeft
+	 */
+	public boolean isMovingLeft() {
+		return movingLeft;
+	}
+
+	/**
+	 * @param movingLeft the movingLeft to set
+	 */
+	public void setMovingLeft(boolean movingLeft) {
+		this.movingLeft = movingLeft;
 	}
 	
 }

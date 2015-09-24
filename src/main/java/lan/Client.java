@@ -91,9 +91,78 @@ public class Client implements Callable {
         		updateMessage(message2.replaceFirst("UPDATE", ""));
         	} else if (message2.startsWith("CIRCLE")) {
         		circleMessage(message2.replaceFirst("CIRCLE", ""));
-        	}
-        	
+        	} else if (message2.startsWith("PLAYER")) {
+        		playerMessage(message2.replaceFirst("PLAYER", ""));
+        	}	
         }
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void playerMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.startsWith("MOVEMENT")) {
+    		movementMessage(message2.replaceFirst("MOVEMENT", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementMessage(String message) {
+    	String message2 = message.trim();
+    
+    	if (message2.startsWith("STARTED")) {
+    		movementStarted(message2.replaceFirst("STARTED", ""));
+    	} else if (message2.startsWith("STOPPED")) {
+    		movementStopped(message2.replaceFirst("STOPPED", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementStarted(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	
+    	float x = Float.parseFloat(stringList[0]);
+    	float y = Float.parseFloat(stringList[1]);
+    	int playerNumber = Integer.parseInt(stringList[2]);
+        String direction = stringList[THREE];
+    
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        
+        if (direction.equals("LEFT")) {
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
+        } else if (direction.equals("RIGHT")) {
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
+        }
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementStopped(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	
+    	float x = Float.parseFloat(stringList[0]);
+    	float y = Float.parseFloat(stringList[1]);
+    	int playerNumber = Integer.parseInt(stringList[2]);
+    	
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
     }
     
     /**

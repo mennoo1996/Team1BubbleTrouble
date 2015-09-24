@@ -19,6 +19,7 @@ import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
 import logic.Powerup;
+import logic.Player.Movement;
 import logic.Powerup.PowerupType;
 import logic.Weapon;
 
@@ -183,8 +184,10 @@ public class Client implements Callable {
         
         if (direction.equals("LEFT")) {
         	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.LEFT);
         } else if (direction.equals("RIGHT")) {
         	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.RIGHT);
         }
     }
     
@@ -205,6 +208,7 @@ public class Client implements Callable {
         
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.NO_MOVEMENT);
     }
     
     /**

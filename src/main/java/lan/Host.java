@@ -18,6 +18,7 @@ import logic.BouncingCircle;
 import logic.Coin;
 import logic.Logger;
 import logic.Powerup;
+import logic.Player.Movement;
 
 /**
  * Host server for LAN multiplayer.
@@ -151,8 +152,10 @@ public class Host implements Callable {
         
         if (direction.equals("LEFT")) {
         	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.LEFT);
         } else if (direction.equals("RIGHT")) {
         	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.RIGHT);
         }
     }
     
@@ -173,6 +176,7 @@ public class Host implements Callable {
         
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.NO_MOVEMENT);
     }
     
     /**

@@ -390,7 +390,19 @@ public class BouncingCircle extends Circle {
 		return res;
 	}
 	
-	
-	
+	/**
+	 * Method that returns a string representations of a circleList.
+	 * @param circleList	the circlelist to represent
+	 * @return				a string containing the representations
+	 */
+	public static String circleListToString(ArrayList<BouncingCircle> circleList) {
+		String res = "UPDATE CIRCLELIST";
+		
+		for (BouncingCircle bCircle : circleList) {
+			res += "\n" + bCircle.toString();
+		}
+		
+		return res;
+	}
 	
 }

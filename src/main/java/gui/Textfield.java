@@ -17,9 +17,10 @@ public class Textfield {
 	private int y;
 	private TextField textfield;
 	
-	private static final int TEXT_FIELD_WIDTH = 700;
+	private static final int TEXT_FIELD_WIDTH = 800;
 	private static final int TEXT_FIELD_HEIGHT = 60;
 	private static final int TF_BACKGROUND_DEVIATION = 27;
+	private static final int TF_MAX_LENGTH = 40;
 	
 	private String text;
 	
@@ -51,6 +52,8 @@ public class Textfield {
 		this.y = y;
 		
 		textfield.setText(text);
+		textfield.setCursorPos(text.length());
+		textfield.setMaxLength(TF_MAX_LENGTH);
 		textfield.setFocus(false);
 	}
 	
@@ -60,6 +63,28 @@ public class Textfield {
 	 */
 	public void setFocus(boolean focus) {
 		textfield.setFocus(focus);
+	}
+	
+	/**
+	 * @return whether or not the text field has focus.
+	 */
+	public boolean hasFocus() {
+		return textfield.hasFocus();
+	}
+	
+	/**
+	 * @return the text inside this textfield.
+	 */
+	public String getText() {
+		return text;
+	}
+	
+	/**
+	 * Set text inside the textfield to a string.
+	 * @param text string to set
+	 */
+	public void setText(String text) {
+		this.text = text;
 	}
 	
 	/**

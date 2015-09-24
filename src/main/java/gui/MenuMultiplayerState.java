@@ -1,13 +1,11 @@
 package gui;
 import logic.Logger;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -45,7 +43,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int LOGO_Y = 110;
 	private static final int SEPARATOR_X = 164;
 	private static final int SEPARATOR_Y = 190;
-	private static final int SEPARATOR_Y_2 = 438;
+	private static final int SEPARATOR_Y_2 = 488;
 	private static final int SEPARATOR_Y_3 = 638;
 	
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
@@ -60,17 +58,19 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int TEXT_HELP_Y_1 = 238;
 	private static final int TEXT_HELP_Y_2 = 288;
 	private static final int TEXT_HELP_Y_3 = 338;
-	private static final int TEXT_HELP_Y_4 = 388;
+	private static final int TEXT_HELP_Y_4 = 438;
 	
 	private static final int HOST_BUTTON_X = 150;
-	private static final int HOST_BUTTON_Y = 425;
+	private static final int HOST_BUTTON_Y = 525;
+	private static final int TEXT_HOST_Y = 588;
 	
 	private static final int JOIN_BUTTON_X = 150;
-	private static final int JOIN_BUTTON_Y = 625;
+	private static final int JOIN_BUTTON_Y = 675;
+	private static final int TEXT_JOIN_Y = 738;
 	
-	private static final int TEXT_FIELD_X = 264;
-	private static final int TEXT_FIELD_Y = 388;
-	private static final int TEXT_FIELD_Y_2 = 688;
+	private static final int TEXT_FIELD_X = 564;
+	private static final int TEXT_FIELD_Y = 438;
+	private static final int TEXT_FIELD_Y_2 = 738;
 	
 	/**
 	 * Construct a SettingsState.
@@ -212,7 +212,6 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		this.input = container.getInput();
-		
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
 		
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_1, 
@@ -223,21 +222,18 @@ public class MenuMultiplayerState extends BasicGameState {
 				mainGame.getColor());
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_3, 
 				"# If you wish to join another player,"
-				+ " please enter their IP-address below.",
-				mainGame.getColor());
+				+ " please enter their IP-address below.", mainGame.getColor());
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_4, "# Your player name:", mainGame.getColor());
-		
-		separatorTop.drawColor(graphics, mainGame.getColor());
-		separatorHost.drawColor(graphics, mainGame.getColor());
-		separatorJoin.drawColor(graphics, mainGame.getColor());
-		nameField.drawColor(graphics, mainGame.getColor());
-		ipField.drawColor(graphics, mainGame.getColor());
 	
+		RND.text(graphics, TEXT_HELP_X, TEXT_HOST_Y, "# Host IP: ", mainGame.getColor());
+		RND.text(graphics, TEXT_HELP_X, TEXT_JOIN_Y, "# Join this IP: ", mainGame.getColor());
+		
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		drawSprites(graphics);
 
 		mainGame.drawWaterMark();
+		
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
 
@@ -253,6 +249,11 @@ public class MenuMultiplayerState extends BasicGameState {
 		returnButton.drawColor(graphics, input, mainGame.getColor());
 		hostButton.drawColor(graphics, input, mainGame.getColor());
 		joinButton.drawColor(graphics, input, mainGame.getColor());
+		separatorTop.drawColor(graphics, mainGame.getColor());
+		separatorHost.drawColor(graphics, mainGame.getColor());
+		separatorJoin.drawColor(graphics, mainGame.getColor());
+		ipField.drawColor(graphics, mainGame.getColor());
+		nameField.drawColor(graphics, mainGame.getColor());
 	}
 	
 

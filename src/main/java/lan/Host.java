@@ -49,8 +49,8 @@ public class Host implements Runnable {
     /**
      * Create a new Host server for LAN multiplayer.
      * @param portNumber Port number for multiplayer
-     * @param mainGame javaodc
-     * @param gameState javado
+     * @param mainGame the MainGame that is this host
+     * @param gameState the GameState that synchronizes using this host.
      */
     public Host(int portNumber, MainGame mainGame, GameState gameState) {
         this.portNumber = portNumber;
@@ -138,8 +138,8 @@ public class Host implements Runnable {
 		}
     }
     /**
-     * Javadoc.
-     * @param message .
+     * Process a message about a coin.
+     * @param message the message to process
      */
     private void coinMessage(String message) {
     	String message2 = message.trim();
@@ -159,16 +159,16 @@ public class Host implements Runnable {
 	}
 
     /**
-     * 
-     * @param coin .
+     * Grant a coin.
+     * @param coin the coin to grant.
      */
     private void updateCoinsGrant(Coin coin) {
     	sendMessageToClient(coin.toString() + "GRANT ");
 	}
 
 	/**
-     * Javadoc.
-     * @param message .
+     * Process a powerup message.
+     * @param message the message to process
      */
 	private void powerupMessage(String message) {
 		String message2 = message.trim();
@@ -196,16 +196,16 @@ public class Host implements Runnable {
 	}
 
 	/**
-	 * Javadoc.
-	 * @param powerup .
+	 * Grant a powerup.
+	 * @param powerup the powerup to grant
 	 */
 	private void updatePowerupsGrant(Powerup powerup) {
 		sendMessageToClient(powerup.toString() + "GRANT ");
 	}
 
 	/**
-     * javadoc.
-     * @param message .
+     * Process a player message.
+     * @param message the message to process
      */
     private void playerMessage(String message) {
     	String message2 = message.trim();
@@ -221,8 +221,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a movement message.
+     * @param message the message to process
      */
     private void movementMessage(String message) {
     	String message2 = message.trim();
@@ -235,8 +235,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a started movement.
+     * @param message the message to process
      */
     private void movementStarted(String message) {
     	String message2 = message.trim();
@@ -260,8 +260,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a stopped movement.
+     * @param message the message to process
      */
     private void movementStopped(String message) {
     	String message2 = message.trim();
@@ -289,8 +289,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a dead message.
+     * @param message the message to process
      */
     private void deadMessage(String message) {
     	String message2 = message.trim();
@@ -341,17 +341,17 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
+     *	Notify the client that the host is dead.
      */
     public void updateHostDead() {
     	sendMessageToClient("PLAYER DEAD HOST");
     }
     
     /**
-     * javadoc.
-     * @param id .
-     * @param x .
-     * @param y .
+     * Update the player location on the client.
+     * @param id the id of the player.
+     * @param x the new x position
+     * @param y the new y position
      */
     public void updatePlayerLocation(int id, float x, float y) {
     	sendMessageToClient("NEW PLAYERLOCATION " + id + " " + x + " " + y);
@@ -367,11 +367,11 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc. 
-     * @param x .
-     * @param y .
-     * @param playerNumber .
-     * @param direction .
+     * Start a player movement on the client.
+     * @param x the x position of the player
+     * @param y the y position of the player
+     * @param playerNumber the player number
+     * @param direction the direction that the player started to move in
      */
     public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
     	String message = "PLAYER MOVEMENT STARTED ";
@@ -381,10 +381,10 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param x .
-     * @param y .
-     * @param playerNumber .
+     * Stop a player movement on the client.
+     * @param x the new x position of the player
+     * @param y the new y position of the player
+     * @param playerNumber the player number
      */
     public void playerStoppedMoving(float x, float y, int playerNumber) {
     	String message = "PLAYER MOVEMENT STOPPED ";
@@ -394,12 +394,12 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param id .
-     * @param x .
-     * @param y .
-     * @param laserSpeed .
-     * @param laserWidth .
+     * Update the laser on the client.
+     * @param id the id of the laser
+     * @param x the new x position
+     * @param y the new y position
+     * @param laserSpeed the new speed
+     * @param laserWidth the new width
      */
     public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
     	sendMessageToClient("NEW LASER " 
@@ -407,8 +407,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param circleList .
+     * Update the circles on the client.
+     * @param circleList the list with new circles
      */
     public void updateCircles(ArrayList<BouncingCircle> circleList) {
 		sendMessageToClient("UPDATE CIRCLELIST");
@@ -418,7 +418,7 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
+     * Send a powerup to the client.
      * @param a the powerup to sent
      */
     public void updatePowerups(Powerup a) {
@@ -426,7 +426,7 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
+     * Send a coin to the client.
      * @param a the coin to sent
      */
     public void updateCoins(Coin a) {
@@ -434,7 +434,7 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
+     * Update a powerup on the client.
      * @param a the powerup to sent
      */
     public void updatePowerupsHost(Powerup a) {
@@ -442,7 +442,7 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
+     * Update a powerup on the client.
      * @param a the coin to sent
      */
     public void updateCoinsHost(Coin a) {
@@ -450,7 +450,7 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
+     * Notify the client that the level has started.
      */
     public void updateLevelStarted() {
     	sendMessageToClient("SYSTEM LEVEL STARTED");

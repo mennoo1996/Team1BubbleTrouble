@@ -50,8 +50,8 @@ public class Client implements Runnable {
      * Create a new Client connection for LAN multiplayer.
      * @param host Host server address
      * @param portNumber Port number for multiplayer
-     * @param mainGame javadoc
-     * @param gameState javadoc
+     * @param mainGame the mainGame that is this Client.
+     * @param gameState the gameState that uses this client for messaging.
      */
     public Client(String host, int portNumber, MainGame mainGame, GameState gameState) {
         this.host = host;
@@ -144,8 +144,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about the player.
+     * @param message the message to process
      */
     private void playerMessage(String message) {
     	String message2 = message.trim();
@@ -171,8 +171,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about a player death.
+     * @param message the message to process
      */
     private void deadMessage(String message) {
     	String message2 = message.trim();
@@ -183,8 +183,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about the movement of a player.
+     * @param message the message to process
      */
     private void movementMessage(String message) {
     	String message2 = message.trim();
@@ -197,8 +197,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about the start of a movement.
+     * @param message the message to process
      */
     private void movementStarted(String message) {
     	String message2 = message.trim();
@@ -222,8 +222,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about a movement that stopped.
+     * @param message the message
      */
     private void movementStopped(String message) {
     	String message2 = message.trim();
@@ -242,11 +242,11 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc. 
-     * @param x .
-     * @param y .
-     * @param playerNumber .
-     * @param direction .
+     * Process a message about a player that started moving.
+     * @param x the x position of the player
+     * @param y the y position of the player
+     * @param playerNumber the player number
+     * @param direction the direction in which the player started moving
      */
     public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
     	String message = "PLAYER MOVEMENT STARTED ";
@@ -256,10 +256,10 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param x .
-     * @param y .
-     * @param playerNumber .
+     * Process a message about a player that stopped moving.
+     * @param x the new x position of the player
+     * @param y the new y position of the player
+     * @param playerNumber the player number
      */
     public void playerStoppedMoving(float x, float y, int playerNumber) {
     	String message = "PLAYER MOVEMENT STOPPED ";
@@ -269,8 +269,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about a circle.
+     * @param message the message to process
      */
     private void circleMessage(String message) {
     	String message2 = message.trim();
@@ -282,8 +282,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about an update.
+     * @param message the message to process
      */
     private void updateMessage(String message) {
     	String message2 = message.trim();
@@ -294,8 +294,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about a powerup.
+     * @param message the message to process
      */
     private void powerupMessage(String message) {
     	String message2 = message.trim();
@@ -352,8 +352,8 @@ public class Client implements Runnable {
 	}
 
 	/**
-     * javadoc.
-     * @param message .
+     * Process a message about a coin.
+     * @param message the message to process
      */
     private void coinMessage(String message) {
     	String message2 = message.trim();
@@ -377,8 +377,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * 
-     * @param stringList .
+     * Grant a coin to a player.
+     * @param stringList the IDs of the coins
      */
     private void grantCoin(String[] stringList) {
     	ArrayList<Coin> machvise = new ArrayList<Coin>();
@@ -393,8 +393,8 @@ public class Client implements Runnable {
 	}
 
     /**
-     * 
-     * @param stringList .
+     * Grant a powerup to a player.
+     * @param stringList the IDs of the powerups
      */
     private void grantPowerup(String[] stringList) {
     	if (stringList[2].equals("SHIELD")) {
@@ -416,8 +416,8 @@ public class Client implements Runnable {
 	}
     
 	/**
-     * javadoc.
-     * @param message .
+     * Process a new message.
+     * @param message the message to process
      */
     private void newMessage(String message) {
     	String message2 = message.trim();
@@ -429,8 +429,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about a laser.
+     * @param message the message to process
      */
     private void laserMessage(String message) {
     	String message2 = message.trim();
@@ -447,8 +447,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about the location of a player.
+     * @param message the message to process
      */
     private void playerLocation(String message) {
     	String message2 = message.trim();
@@ -462,8 +462,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about the system.
+     * @param message the message to process
      */
     private void systemMessage(String message) {
     	String message2 = message.trim();
@@ -473,8 +473,8 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message about the level
+     * @param message the message to process
      */
     private void levelMessage(String message) {
     	String message2 = message.trim();
@@ -505,23 +505,23 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param powerup .
+     * Confirm a powerup to the host.
+     * @param powerup the powerup to confirm
      */
     public void updatePowerupsClient(Powerup powerup) {
     	sendMessageToHost(powerup.toString() + "PLEA ");
     }
     
     /**
-     * javadoc.
-     * @param coin .
+     * Confirm a coin to the host.
+     * @param coin the coin to confirm
      */
     public void updateCoinsClient(Coin coin) {
     	sendMessageToHost(coin.toString() + "PLEA ");
     }
     
     /**
-     * javadoc.
+     * Notify the host that you are dead.
      */
     public void updateClientDead() {
     	sendMessageToHost("PLAYER DEAD CLIENT");

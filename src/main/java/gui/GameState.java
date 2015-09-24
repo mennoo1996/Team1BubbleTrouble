@@ -5,8 +5,6 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import lan.GameStateObserver;
-import lan.PlayerMovementObserver;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
@@ -42,8 +40,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class GameState extends BasicGameState {
 	
 	private  int totaltime;
-	private ArrayList<PlayerMovementObserver> playerMovementObservers 
-		= new ArrayList<PlayerMovementObserver>();
+	
 	
 	private MainGame mainGame;
 	private ArrayList<BouncingCircle> circleList;
@@ -241,24 +238,7 @@ public class GameState extends BasicGameState {
 		droppedCoins = new ArrayList<>();
 	}
 	
-	/**
-	 * javadoc.
-	 * @param observer .
-	 */
-	public void attach(GameStateObserver observer) {
-		if (observer instanceof PlayerMovementObserver) {
-			playerMovementObservers.add((PlayerMovementObserver) observer);
-		}
-	}
 	
-	/**
-	 * javadoc.
-	 */
-	public void notifyAllPlayerMovementObservers() {
-		for (PlayerMovementObserver observer : playerMovementObservers) {
-			observer.update();
-		}
-	}
 	
 	/**
 	 * Exit function for state. Fades out and everything.
@@ -354,9 +334,9 @@ public class GameState extends BasicGameState {
 	}
 	
 	/**
-	 * javadoc.
-	 * @param container .
-	 * @param sbg .
+	 * Process the "press escape" event.
+	 * @param container the GameContainer we are playing in.
+	 * @param sbg the StateBasedGame that calls this method.
 	 */
 	private void processEscape(GameContainer container, StateBasedGame sbg) {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {

@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.Callable;
 
 import logic.BouncingCircle;
 import logic.Coin;
@@ -27,7 +26,7 @@ import logic.Weapon;
  * Client class which connects to server for LAN multiplayer.
  * @author alexandergeenen
  */
-public class Client implements Callable {
+public class Client implements Runnable {
 
     private int portNumber;
     private String host;
@@ -39,10 +38,14 @@ public class Client implements Callable {
     private BufferedReader reader;
     private MainGame mainGame;
     private GameState gameState;
+	private long timeLastInput;
+	private boolean heartBeatCheck;
     
     private static final int THREE = 3;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
+	private static final int TIMEOUT_ATTEMPT = 3000;
+	private static final int MENU_MULTIPLAYER_STATE = 4;
 
     /**
      * Create a new Client connection for LAN multiplayer.
@@ -61,29 +64,56 @@ public class Client implements Callable {
     }
 
     @Override
-    public Boolean call() throws IOException {
-    	System.out.println("CLIENT.call");
-        socket = new Socket();
-        socket.connect(new InetSocketAddress(host, portNumber));
-		mainGame.setSwitchState(mainGame.getGameState());
-        writer = new PrintWriter(socket.getOutputStream(), true);
-        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        System.out.println("Connected to server");
-        // Say hello here
-        messageQueue.add("PLAYER NAME "  // send your player's name to host
-        + mainGame.getPlayerList().getPlayers().get(1).getPlayerName());
-        // This continues ad infinitum
-        while (true) {
-            // READ AND WRITE LOGIC HERE
-            if (!this.messageQueue.isEmpty()) {
-            	System.out.println("sending message: " + this.messageQueue.peek());
-                writer.println(this.messageQueue.poll());
-            }
-            readServerCommands();
-        }
+    public void run() {
+		try {
+			System.out.println("CLIENT.call");
+			socket = new Socket();
+			// Connect to socket with timeout
+			socket.connect(new InetSocketAddress(host, portNumber), TIMEOUT_ATTEMPT);
+			// Set timeout for subsequent packets
+			mainGame.setSwitchState(mainGame.getGameState());
+			writer = new PrintWriter(socket.getOutputStream(), true);
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        	// Say hello here
+        	messageQueue.add("PLAYER NAME "  // send your player's name to host
+        		+ mainGame.getPlayerList().getPlayers().get(1).getPlayerName());
+			System.out.println("Connected to server");
+			timeLastInput = System.currentTimeMillis();
+			// This continues ad infinitum
+			while (true) {
+				// READ AND WRITE LOGIC HERE
+				manageHeartbeatCheck();
+				if (!this.messageQueue.isEmpty()) {
+					System.out.println("sending message: " + this.messageQueue.peek());
+					writer.println(this.messageQueue.poll());
+				}
+				readServerCommands();
+			}
+		} catch (IOException err) {
+			System.out.println(err);
+			System.out.println(err.getLocalizedMessage());
+			// TODO: Add proper connection error handling i.e. back to menu
+			this.mainGame.setSwitchState(mainGame.getMultiplayerState());
+		}
     }
 
-    /**
+	/**
+	 * Triggers/ends the heartbeat check for a possible missing connection.
+	 * @throws IOException Thrown if connection no longer exists
+	 */
+	private void manageHeartbeatCheck() throws IOException {
+		if (heartBeatCheck
+				&& (System.currentTimeMillis() - timeLastInput) >= 2 * TIMEOUT_ATTEMPT) {
+            throw new IOException("No connection");
+        }
+		if (!heartBeatCheck
+				&& (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
+            heartBeatCheck = true;
+            this.messageQueue.add("HEARTBEAT_CHECK");
+        }
+	}
+
+	/**
      * Process server commands.
      */
     private void readServerCommands() {
@@ -106,10 +136,14 @@ public class Client implements Callable {
 					coinMessage(message2.replaceFirst("COIN", ""));
 				} else if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
-				}	
+				} else if (message2.startsWith("HEARTBEAT_ALIVE")) {
+					heartBeatCheck = false;
+				}
+				timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println(e);
 		}
     }
     
@@ -245,10 +279,10 @@ public class Client implements Callable {
     private void circleMessage(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
-    	gameState.getCircleList().add(new BouncingCircle(Float.parseFloat(stringList[0]), 
-    			Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]), 
-    			Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]), 
-    			Float.parseFloat(stringList[FIVE])));
+    	gameState.getCircleList().add(new BouncingCircle(Float.parseFloat(stringList[0]),
+				Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]),
+				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
+				Float.parseFloat(stringList[FIVE])));
     }
     
     /**

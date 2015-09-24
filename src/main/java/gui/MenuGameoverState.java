@@ -1,5 +1,4 @@
 package gui;
-import logic.Button;
 import logic.HighScoresParser;
 import logic.Logger;
 import logic.Score;
@@ -36,6 +35,8 @@ public class MenuGameoverState extends BasicGameState {
 	private Image health4Image;
 	private Image health5Image;
 	private String inputMessage;
+	
+	private Textfield nameField;
 
 	private boolean highScoreEntered;
 	
@@ -95,6 +96,7 @@ public class MenuGameoverState extends BasicGameState {
 		initButtons();
 		initHealthImages();
 		initTextFieldBackgroundImgs();
+		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player", container);
 	}
 
 	/**
@@ -254,10 +256,11 @@ public class MenuGameoverState extends BasicGameState {
 	 * @param input the keyboard/mouse input user
 	 */
 	private void handleTextField(Input input) {
-		if (textField.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
+		
+		if (nameField.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
 				|| inputMessage.equals("Maximum length is 34 characters")) 
 				&& !highScoreEntered) {
-			if (textField.getText().length() < MAX_NAME_LENGTH) {
+			if (nameField.getText().length() < MAX_NAME_LENGTH) {
                 highScoreEntered = true;
                 saveScore(); }
 			else {
@@ -278,12 +281,7 @@ public class MenuGameoverState extends BasicGameState {
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
 		renderEndText(container, graphics);
 
-		RND.drawColor(graphics, tfBackgroundN, tfBackgroundA,
-				textField.getX() - TF_BACKGROUND_DEVIATION,
-				textField.getY() - TF_BACKGROUND_DEVIATION,
-				mainGame.getColor());
-		RND.text(graphics, textField.getX(), textField.getY(),
-				textField.getText(), mainGame.getColor());
+		nameField.drawColor(graphics, mainGame.getColor());
 		if (inputMessage != null) {
 			RND.text(graphics, TEXT_X, TEXT_4_Y, inputMessage);
 		}
@@ -371,11 +369,11 @@ public class MenuGameoverState extends BasicGameState {
 	 * Saves score for this player.
 	 */
 	private void saveScore() {
-		Score score = new Score(mainGame.getScore(), textField.getText());
+		Score score = new Score(mainGame.getScore(), nameField.getText());
 		mainGame.getHighscores().add(score);
 		mainGame.getHighscores().sort();
 		HighScoresParser.writeHighScores(mainGame.getHighscoresFile(), mainGame.getHighscores());
-		inputMessage = "# " + textField.getText() + ", your score of " + mainGame.getScore();
+		inputMessage = "# " + nameField.getText() + ", your score of " + mainGame.getScore();
 		inputMessage += " points is saved!";
 		mainGame.getLogger().log("Score saved", Logger.PriorityLevels.MEDIUM, "highscores");
 	}

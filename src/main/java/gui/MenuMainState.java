@@ -1,5 +1,4 @@
 package gui;
-import logic.Button;
 import logic.Logger;
 
 import org.newdawn.slick.GameContainer;
@@ -47,6 +46,9 @@ public class MenuMainState extends BasicGameState {
 	private static final int HIGHSCORES_TITLE_X = 760;
 	private static final int HIGHSCORES_TITLE_Y = 140;
 	
+	private Separator separatorTop;
+	private String separatorTopTitle = " Main Menu ";
+	
 	/**
 	 * constructor.
 	 * 
@@ -63,7 +65,8 @@ public class MenuMainState extends BasicGameState {
 	 * @throws SlickException if something goes wrong
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
-		
+		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, false, separatorTopTitle,
+				container.getWidth());
 		playButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
 				new Image("resources/images_UI/Menu_Button_1Player_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_1Player_Add.png"),
@@ -165,10 +168,11 @@ public class MenuMainState extends BasicGameState {
 		} else if (play2Button.isMouseOver(input)) { // Go to gamestate in multiplayer
 			mainGame.setMultiplayer(true);
 			mainGame.setSwitchState(mainGame.getGameState());
+			mainGame.getPlayerList().getPlayers().get(0).setPlayerName("PLayer_1");
+			mainGame.getPlayerList().getPlayers().get(1).setPlayerName("PLayer_2");
 			mainGame.getLogger().log("Play multiplayer button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} else if (lanButton.isMouseOver(input)) { // Go to gamestate in multiplayer
-			//mainGame.setMultiplayer(true);
 			mainGame.setSwitchState(mainGame.getMultiplayerState());
 			mainGame.getLogger().log("Play lan button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
@@ -199,9 +203,7 @@ public class MenuMainState extends BasicGameState {
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-		String equalsString = "===================================================================";
-		equalsString += "============";
-		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, equalsString);
+		separatorTop.drawColor(graphics, mainGame.getColor());
 		String highScoresString = mainGame.getHighscores().toString();
 		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 

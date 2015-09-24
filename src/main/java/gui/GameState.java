@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import lan.GameStateObserver;
 import lan.PlayerMovementObserver;
 import logic.BouncingCircle;
-import logic.Button;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Gate;

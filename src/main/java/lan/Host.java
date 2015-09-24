@@ -180,6 +180,15 @@ public class Host implements Callable {
     }
     
     /**
+     * Inform client of a player's name.
+     * @param id of the player
+     * @param name of the player
+     */
+    public void updatePlayerName(int id, String name) {
+    	sendMessageToClient("PLAYER NAME " + id + " " + name);
+    }
+    
+    /**
      * javadoc. 
      * @param x .
      * @param y .

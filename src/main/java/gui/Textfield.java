@@ -13,8 +13,8 @@ import org.newdawn.slick.gui.TextField;
  */
 public class Textfield {
 
-	private int x;
-	private int y;
+	private float x;
+	private float y;
 	private TextField textfield;
 	
 	private static final int TEXT_FIELD_WIDTH = 800;
@@ -37,8 +37,8 @@ public class Textfield {
 	 * @param container necessary appgamegontainer for it to live in
 	 * @throws SlickException probably the images cant be found
 	 */
-	public Textfield(int x, int y, String text, GameContainer container) throws SlickException {
-		textfield = new TextField(container, RND.getFont_Normal(), x, y,
+	public Textfield(float x, float y, String text, GameContainer container) throws SlickException {
+		textfield = new TextField(container, RND.getFont_Normal(), (int) x, (int) y,
 				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 		textfield.setBackgroundColor(null);
 		textfield.setBorderColor(null);

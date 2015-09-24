@@ -15,9 +15,11 @@ import java.util.Queue;
 
 import logic.BouncingCircle;
 import logic.Coin;
+import logic.FloatingScore;
 import logic.Logger;
 import logic.Powerup;
 import logic.Player.Movement;
+import logic.Powerup.PowerupType;
 
 /**
  * Host server for LAN multiplayer.
@@ -120,6 +122,10 @@ public class Host implements Runnable {
 				System.out.println(message2);
 				if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
+				} else if (message2.startsWith("POWERUP")) {
+					powerupMessage(message2.replaceFirst("POWERUP", ""));
+				} else if (message2.startsWith("COIN")) {
+					coinMessage(message2.replaceFirst("POWERUP", ""));
 				} else if (message2.startsWith("HEARTBEAT_CHECK")) {
                     this.sendMessageToClient("HEARTBEAT_ALIVE");
                 } else if (message2.startsWith("HEARTBEAT_ALIVE")) {
@@ -131,8 +137,73 @@ public class Host implements Runnable {
 			e.printStackTrace();
 		}
     }
-    
     /**
+     * Javadoc.
+     * @param message .
+     */
+    private void coinMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	if (stringList[THREE].equals("PLEA")) {
+    		ArrayList<Coin> machvise = new ArrayList<Coin>();
+    		for (Coin george : gameState.getDroppedCoins()) {
+    			if (george.getxId() == Float.parseFloat(stringList[0])
+    					&& george.getyId() == Float.parseFloat(stringList[1])) {
+    				machvise.add(george);
+    				this.updateCoinsGrant(george);
+    				gameState.getFloatingScores().add(new FloatingScore(george));
+    			}
+    		}
+    		gameState.getDroppedCoins().removeAll(machvise);
+    	}
+	}
+
+    /**
+     * 
+     * @param coin .
+     */
+    private void updateCoinsGrant(Coin coin) {
+    	sendMessageToClient(coin.toString() + "GRANT ");
+	}
+
+	/**
+     * Javadoc.
+     * @param message .
+     */
+	private void powerupMessage(String message) {
+		String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	if (stringList[THREE].equals("PLEA")) {
+    		ArrayList<Powerup> machvise = new ArrayList<Powerup>();
+    		for (Powerup george : gameState.getDroppedPowerups()) {
+    			if (george.getxId() == Float.parseFloat(stringList[0])
+    					&& george.getyId() == Float.parseFloat(stringList[1])) {
+    				machvise.add(george);
+    				this.updatePowerupsGrant(george);
+    				gameState.getFloatingScores().add(new FloatingScore(george));
+    				if (stringList[2].equals("SHIELD")) {
+    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
+    				} else if (stringList[2].equals("SPIKY")) {
+    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SPIKY);
+    				} else if (stringList[2].equals("INSTANT")) {
+    					mainGame.getPlayerList().getPlayers()
+    					.get(1).addPowerup(PowerupType.INSTANT);
+    				}
+    			}
+    		} //end of loop
+    		gameState.getDroppedPowerups().removeAll(machvise);
+    	}
+	}
+
+	/**
+	 * Javadoc.
+	 * @param powerup .
+	 */
+	private void updatePowerupsGrant(Powerup powerup) {
+		sendMessageToClient(powerup.toString() + "GRANT ");
+	}
+
+	/**
      * javadoc.
      * @param message .
      */

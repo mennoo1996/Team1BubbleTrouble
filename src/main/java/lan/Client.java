@@ -304,10 +304,12 @@ public class Client implements Runnable {
     		addPowerup(stringList);
     	} else if (stringList[THREE].equals("DICTATE")) {
     		dictatePowerup(stringList);
+    	} else if (stringList[THREE].equals("GRANT")) {
+    		grantPowerup(stringList);
     	}
     }
-    
-    /**
+
+	/**
      * Remove a powerup in the list of powerups from the client.
      * @param stringList information on powerup
      */
@@ -369,10 +371,51 @@ public class Client implements Runnable {
     			}
     		}
     		gameState.getDroppedCoins().removeAll(machvise);
+    	} else if (stringList[THREE].equals("GRANT")) {
+    		grantCoin(stringList);
     	}
     }
     
     /**
+     * 
+     * @param stringList .
+     */
+    private void grantCoin(String[] stringList) {
+    	ArrayList<Coin> machvise = new ArrayList<Coin>();
+		for (Coin george : gameState.getDroppedCoins()) {
+			if (george.getxId() == Float.parseFloat(stringList[0])
+					&& george.getyId() == Float.parseFloat(stringList[1])) {
+				machvise.add(george);
+				gameState.getFloatingScores().add(new FloatingScore(george));
+			}
+		}
+		gameState.getDroppedCoins().removeAll(machvise);
+	}
+
+    /**
+     * 
+     * @param stringList .
+     */
+    private void grantPowerup(String[] stringList) {
+    	if (stringList[2].equals("SHIELD")) {
+    		mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
+    	} else if (stringList[2].equals("SPIKY")) {
+    		mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
+    	} else if (stringList[2].equals("INSTANT")) {
+    		mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
+    	}
+    	ArrayList<Powerup> machvise = new ArrayList<Powerup>();
+		for (Powerup george : gameState.getDroppedPowerups()) {
+			if (george.getxId() == Float.parseFloat(stringList[0])
+					&& george.getyId() == Float.parseFloat(stringList[1])) {
+				machvise.add(george);
+				gameState.getFloatingScores().add(new FloatingScore(george));
+			}
+		}
+		gameState.getDroppedPowerups().removeAll(machvise);
+	}
+    
+	/**
      * javadoc.
      * @param message .
      */
@@ -463,10 +506,27 @@ public class Client implements Runnable {
     
     /**
      * javadoc.
+     * @param powerup .
+     */
+    public void updatePowerupsClient(Powerup powerup) {
+    	sendMessageToHost(powerup.toString() + "PLEA ");
+    }
+    
+    /**
+     * javadoc.
+     * @param coin .
+     */
+    public void updateCoinsClient(Coin coin) {
+    	sendMessageToHost(coin.toString() + "PLEA ");
+    }
+    
+    /**
+     * javadoc.
      */
     public void updateClientDead() {
     	sendMessageToHost("PLAYER DEAD CLIENT");
     }
+    
 
     /**
      * Set the logger for this host.

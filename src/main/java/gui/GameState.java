@@ -48,8 +48,8 @@ public class GameState extends BasicGameState {
 	private MainGame mainGame;
 	private ArrayList<BouncingCircle> circleList;
 	private ArrayList<BouncingCircle> shotList;
-	private ArrayList<Powerup> droppedPowerups;
-	private ArrayList<Coin> droppedCoins;
+	private ArrayList<Powerup> droppedPowerups = new ArrayList<>();
+	private ArrayList<Coin> droppedCoins = new ArrayList<>();
 	private ArrayList<FloatingScore> floatingScoreList;
 	private ArrayList<Gate> gateList;
 

@@ -473,7 +473,7 @@ public class Client implements Runnable {
     }
     
     /**
-     * Process a message about the level
+     * Process a message about the level.
      * @param message the message to process
      */
     private void levelMessage(String message) {

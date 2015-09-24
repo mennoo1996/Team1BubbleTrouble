@@ -266,9 +266,9 @@ public class Player {
 			stoodStillOnLastUpdate = true;
 			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
 			if (mainGame.isLanMultiplayer()) {
-				if (mainGame.isHost()) {
+				if (mainGame.isHost() && playerNumber == 0) {
 					mainGame.getHost().playerStoppedMoving(x, y, playerNumber);
-				} else if (mainGame.isClient()) {
+				} else if (mainGame.isClient() && playerNumber == 1) {
 					mainGame.getClient().playerStoppedMoving(x, y, playerNumber);
 				}
 			}
@@ -296,11 +296,10 @@ public class Player {
         	   this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
         	   this.movement = Movement.RIGHT;
         	   didWalk = true;
-        	   stoodStillOnLastUpdate = false;
-        	   if (mainGame.isLanMultiplayer()) {
-        		   if (mainGame.isHost()) {
+        	   if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate) {
+        		   if (mainGame.isHost() && playerNumber == 0) {
         			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
-        		   } else if (mainGame.isClient()) {
+        		   } else if (mainGame.isClient() && playerNumber == 1) {
         			   mainGame.getClient().playerStartedMoving(x, y, playerNumber, "RIGHT");
         		   }
         	   } 
@@ -309,6 +308,7 @@ public class Player {
         				   PriorityLevels.VERYLOW, "Player");
         		   lastLogMove = "right";
         	   }
+        	   stoodStillOnLastUpdate = false;
            }
         }
 		return didWalk;
@@ -333,8 +333,7 @@ public class Player {
             	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
             	this.movement = Movement.LEFT;
             	didWalk = true;
-            	stoodStillOnLastUpdate = false;
-            	if (mainGame.isLanMultiplayer()) {
+            	if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate) {
          		   if (mainGame.isHost()) {
          			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
          		   } else if (mainGame.isClient()) {
@@ -346,6 +345,7 @@ public class Player {
             				PriorityLevels.VERYLOW, "Player");
             		lastLogMove = "left";
             	}
+            	stoodStillOnLastUpdate = false;
             }
         }
 		return didWalk;

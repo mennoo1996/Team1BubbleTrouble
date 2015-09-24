@@ -211,8 +211,10 @@ public class MenuMultiplayerState extends BasicGameState {
 			mainGame.setLanMultiplayer(true);
 			mainGame.setHost(new Host(MainGame.getMultiplayerPort(), mainGame, gameState));
 			mainGame.setIsHost(true);
+			mainGame.setIsClient(false);
 			System.out.println(mainGame.isHost());
 			ExecutorService executor = Executors.newFixedThreadPool(1);
+			mainGame.getPlayerList().getPlayers().get(0).setPlayerName(nameField.getText());
 			executor.submit(mainGame.getHost());
 			mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
 		} 
@@ -220,7 +222,10 @@ public class MenuMultiplayerState extends BasicGameState {
 			mainGame.setLanMultiplayer(true);
 			Client client = new Client(ipField.getText(), 
 					mainGame.getMultiplayerPort(), mainGame, gameState);
+	        mainGame.setIsClient(true);
+	        mainGame.setIsHost(false);
 			ExecutorService executor = Executors.newFixedThreadPool(1);
+			mainGame.getPlayerList().getPlayers().get(1).setPlayerName(nameField.getText());
 			executor.submit(client);
 			
 		} 

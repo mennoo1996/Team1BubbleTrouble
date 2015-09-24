@@ -11,7 +11,8 @@ public class Coin {
     private static final int COIN_EXPENSIVE = 400;
 
     private int points;
-    private float x, y, width, height;
+    private float x, y, width, height, xId, yId;
+    private boolean largeAmount;
 
     /**
      * Create a coin.
@@ -22,9 +23,12 @@ public class Coin {
     public Coin(float x, float y, boolean largeAmount) {
         this.x = x;
         this.y = y;
+        this.xId = x;
+        this.yId = y;
         this.width = COIN_WIDTH;
         this.height = COIN_HEIGHT;
         
+        this.largeAmount = largeAmount;
         if (largeAmount) {
         	this.points = COIN_EXPENSIVE;
         } else {
@@ -32,6 +36,16 @@ public class Coin {
         }
     }
 
+    /**
+    * Create a string out of a Coin.
+    * @return Coin as a string
+    */
+   @Override
+   public String toString() {
+   	String res = "COIN " + this.xId + " " + this.yId + " " + this.largeAmount + " ";
+   	return res;
+   }
+    
     /**
      * Update Powerups graphical thingy.
      * @param floor - floor of the game.
@@ -54,13 +68,45 @@ public class Coin {
     }
 
     /**
-     * @return x coord
+     * @return x-coord
      */
     public float getX() {
         return this.x;
     }
 
     /**
+     * 
+     * @return .
+     */
+    public float getxId() {
+		return xId;
+	}
+
+    /**
+     * 
+     * @param xId .
+     */
+	public void setxId(float xId) {
+		this.xId = xId;
+	}
+
+	/**
+	 * 
+	 * @return .
+	 */
+	public float getyId() {
+		return yId;
+	}
+
+	/**
+	 * .
+	 * @param yId .
+	 */
+	public void setyId(float yId) {
+		this.yId = yId;
+	}
+
+	/**
      * @return y coord
      */
     public float getY() {

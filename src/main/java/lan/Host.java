@@ -15,7 +15,9 @@ import java.util.Queue;
 import java.util.concurrent.Callable;
 
 import logic.BouncingCircle;
+import logic.Coin;
 import logic.Logger;
+import logic.Powerup;
 
 /**
  * Host server for LAN multiplayer.
@@ -125,11 +127,21 @@ public class Host implements Callable {
     
     /**
      * javadoc.
+     * @param id .
      * @param x .
      * @param y .
      */
-    public void updatePlayerLocation(float x, float y) {
-    	sendMessageToClient("NEW PLAYERLOCATION " + x + " " + y);
+    public void updatePlayerLocation(int id, float x, float y) {
+    	sendMessageToClient("NEW PLAYERLOCATION " + id + " " + x + " " + y);
+    }
+    
+    /**
+     * Inform client of a player's name.
+     * @param id of the player
+     * @param name of the player
+     */
+    public void updatePlayerName(int id, String name) {
+    	sendMessageToClient("PLAYER NAME " + id + " " + name);
     }
     
     /**
@@ -140,8 +152,8 @@ public class Host implements Callable {
      * @param direction .
      */
     public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
-    	String message = "PLAYER MOVEMENT STARTED " + x + " " 
-    			+ y + " " + playerNumber + " " + direction;
+    	String message = "PLAYER MOVEMENT STARTED " + playerNumber + " " + x + " " 
+    			+ y  + " " + direction;
     	sendMessageToClient(message);
     }
     
@@ -152,19 +164,22 @@ public class Host implements Callable {
      * @param playerNumber .
      */
     public void playerStoppedMoving(float x, float y, int playerNumber) {
-    	String message = "PLAYER MOVEMENT STOPPED " + x + " " + y + " " + playerNumber;
+    	String message = "PLAYER MOVEMENT STOPPED " + playerNumber + " " + x + " " 
+    			+ y;
     	sendMessageToClient(message);
     }
     
     /**
      * javadoc.
+     * @param id .
      * @param x .
      * @param y .
      * @param laserSpeed .
      * @param laserWidth .
      */
-    public void updateLaser(float x, float y, float laserSpeed, float laserWidth) {
-    	sendMessageToClient("NEW LASER " + x + " " + y + " " + laserSpeed + " " + laserWidth);
+    public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
+    	sendMessageToClient("NEW LASER " 
+    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth);
     }
     
     /**
@@ -176,6 +191,38 @@ public class Host implements Callable {
 		for (BouncingCircle bCircle : circleList) {
 			sendMessageToClient(bCircle.toString());
 		}
+    }
+    
+    /**
+     * javadoc.
+     * @param a the powerup to sent
+     */
+    public void updatePowerups(Powerup a) {
+    	sendMessageToClient(a.toString() + "ADD ");
+    }
+    
+    /**
+     * javadoc.
+     * @param a the coin to sent
+     */
+    public void updateCoins(Coin a) {
+    	sendMessageToClient(a.toString() + "ADD ");
+    }
+    
+    /**
+     * javadoc.
+     * @param a the powerup to sent
+     */
+    public void updatePowerupsHost(Powerup a) {
+    	sendMessageToClient(a.toString() + "DICTATE ");
+    }
+    
+    /**
+     * javadoc.
+     * @param a the coin to sent
+     */
+    public void updateCoinsHost(Coin a) {
+    	sendMessageToClient(a.toString() + "DICTATE ");
     }
     
     /**

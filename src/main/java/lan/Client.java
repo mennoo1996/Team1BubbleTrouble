@@ -16,7 +16,11 @@ import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 import logic.BouncingCircle;
+import logic.Coin;
+import logic.FloatingScore;
 import logic.Logger;
+import logic.Powerup;
+import logic.Powerup.PowerupType;
 import logic.Weapon;
 
 /**
@@ -91,6 +95,10 @@ public class Client implements Callable {
         		updateMessage(message2.replaceFirst("UPDATE", ""));
         	} else if (message2.startsWith("CIRCLE")) {
         		circleMessage(message2.replaceFirst("CIRCLE", ""));
+        	} else if (message2.startsWith("POWERUP")) {
+        		powerupMessage(message2.replaceFirst("POWERUP", ""));
+        	} else if (message2.startsWith("COIN")) {
+        		coinMessage(message2.replaceFirst("COIN", ""));
         	} else if (message2.startsWith("PLAYER")) {
         		playerMessage(message2.replaceFirst("PLAYER", ""));
         	}	
@@ -130,10 +138,10 @@ public class Client implements Callable {
     private void movementStarted(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
-    	
-    	float x = Float.parseFloat(stringList[0]);
-    	float y = Float.parseFloat(stringList[1]);
-    	int playerNumber = Integer.parseInt(stringList[2]);
+
+    	int playerNumber = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
         String direction = stringList[THREE];
     
         mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
@@ -153,10 +161,10 @@ public class Client implements Callable {
     private void movementStopped(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
-    	
-    	float x = Float.parseFloat(stringList[0]);
-    	float y = Float.parseFloat(stringList[1]);
-    	int playerNumber = Integer.parseInt(stringList[2]);
+
+    	int playerNumber = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
     	
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
         mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
@@ -194,6 +202,61 @@ public class Client implements Callable {
      * javadoc.
      * @param message .
      */
+    private void powerupMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	if (stringList[THREE].equals("ADD")) {
+    		// SHIELD, SPIKY, INSTANT
+        	if (stringList[2].equals("SHIELD")) {
+        		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+        				Float.parseFloat(stringList[1]), PowerupType.SHIELD));
+        	} else if (stringList[2].equals("SPIKY")) {
+        		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+        				Float.parseFloat(stringList[1]), PowerupType.SPIKY));
+        	} else if (stringList[2].equals("INSTANT")) {
+        		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+        				Float.parseFloat(stringList[1]), PowerupType.INSTANT));
+        	}
+    	} else if (stringList[THREE].equals("DICTATE")) {
+    		ArrayList<Powerup> machvise = new ArrayList<Powerup>();
+    		for (Powerup george : gameState.getDroppedPowerups()) {
+    			if (george.getxId() == Float.parseFloat(stringList[0])
+    					&& george.getyId() == Float.parseFloat(stringList[1])) {
+    				machvise.add(george);
+    				gameState.getFloatingScores().add(new FloatingScore(george));
+    			}
+    		}
+    		gameState.getDroppedPowerups().removeAll(machvise);
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void coinMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	if (stringList[THREE].equals("ADD")) {
+    		gameState.getDroppedCoins().add(new Coin(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
+    	} else if (stringList[THREE].equals("DICTATE")) {
+    		ArrayList<Coin> machvise = new ArrayList<Coin>();
+    		for (Coin george : gameState.getDroppedCoins()) {
+    			if (george.getxId() == Float.parseFloat(stringList[0])
+    					&& george.getyId() == Float.parseFloat(stringList[1])) {
+    				machvise.add(george);
+    				gameState.getFloatingScores().add(new FloatingScore(george));
+    			}
+    		}
+    		gameState.getDroppedCoins().removeAll(machvise);
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
     private void newMessage(String message) {
     	String message2 = message.trim();
     	if (message2.startsWith("PLAYERLOCATION")) {
@@ -211,12 +274,14 @@ public class Client implements Callable {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	
-    	Weapon weapon = new Weapon(Float.parseFloat(stringList[0]), 
-    			Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]), 
-    			Float.parseFloat(stringList[THREE]));
+    	int id = Integer.parseInt(stringList[0]);
+    	System.out.println("PLAYERID" + id);
+    	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
+    			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+    			Float.parseFloat(stringList[FOUR]));
     	
-    	gameState.getWeaponList().setWeapon(0, weapon);
-    	mainGame.getPlayerList().getPlayers().get(0).setShot(true);
+    	gameState.getWeaponList().setWeapon(id, weapon);
+    	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
     }
     
     /**
@@ -226,12 +291,12 @@ public class Client implements Callable {
     private void playerLocation(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
+    	int id = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
     	
-    	float x = Float.parseFloat(stringList[0]);
-    	float y = Float.parseFloat(stringList[1]);
-    	
-    	mainGame.getPlayerList().getPlayers().get(0).setX(x);
-    	mainGame.getPlayerList().getPlayers().get(0).setY(y);
+    	mainGame.getPlayerList().getPlayers().get(id).setX(x);
+    	mainGame.getPlayerList().getPlayers().get(id).setY(y);
     }
     
     /**

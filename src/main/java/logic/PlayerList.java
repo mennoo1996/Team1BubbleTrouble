@@ -55,10 +55,9 @@ public class PlayerList {
 	 */
 	public void updatePlayers(float deltaFloat, float containerHeight, float containerWidth) {
 		playerList.get(0).update(deltaFloat, containerHeight, containerWidth, false);
-		if (mainGame.isMultiplayer()) {
+		if (mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) {
 			playerList.get(1).update(deltaFloat, containerHeight, containerWidth, false);	
-		}
-		
+		}	
 	}
 	
 	/**
@@ -84,7 +83,8 @@ public class PlayerList {
 				playerDeath(mainGame);
 			}
 			
-			if (mainGame.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)
+			if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
+					&& playerList.get(1).getRectangle().intersects(circle)
 					&& !playerList.get(1).hasShield()) {
 				//LIVES FUNCTIONALITY
 				playerDeath(mainGame);
@@ -98,7 +98,7 @@ public class PlayerList {
 	 */
 	public void drawPlayers(Graphics graphics) {
 		drawPlayer(playerList.get(0), graphics);
-		if (mainGame.isMultiplayer()) {
+		if (mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) {
 			RND.text(graphics, playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION,
 					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, 
 					"#" + playerList.get(0).getPlayerName());
@@ -211,7 +211,6 @@ public class PlayerList {
 	private void drawPlayerMoveRight(Player player, Graphics graphics) {
 		player.incrementMovementCounter();
 		int sp = SPRITE_SHEET_THREE;
-		//System.out.println(player.getMovementCounter_Max() * MOVEMENT_COUNTER_FACTOR);
 		if (player.getMovementCounter() > player.getMovementCounter_Max()
                 * MOVEMENT_COUNTER_FACTOR) {
             sp = SPRITE_SHEET_FOUR;

@@ -165,12 +165,21 @@ public class Player {
 			powerup.update(gameState, containerHeight, deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
-				this.addPowerup(powerup.getType());
-				gameState.getFloatingScores().add(new FloatingScore(powerup));
-				usedPowerups.add(powerup);
+				if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+					this.addPowerup(powerup.getType());
+					gameState.getFloatingScores().add(new FloatingScore(powerup));
+					usedPowerups.add(powerup);
+					
+					if (mainGame.isHost()) {
+						mainGame.getHost().updatePowerupsHost(powerup);
+					}
+				}
+				//} else if (mainGame.isClient()) {
+				//	//Client
+				//}
 			}
 		}
-
+		//UsedPowerups is empty if client
 		gameState.getDroppedPowerups().removeAll(usedPowerups);
 		gameState.getDroppedPowerups().removeIf(Powerup::removePowerup);
 	}
@@ -185,14 +194,20 @@ public class Player {
 		for (Coin coin : gameState.getDroppedCoins()) {
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
-				gameState.addToScore(coin.getPoints());
-				gameState.getFloatingScores().add(new FloatingScore(coin));
-				usedCoins.add(coin);
-				mainGame.getLogger().log("Picked up coin", 
-						Logger.PriorityLevels.MEDIUM, "powerups");
+				if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+					//Here is the claim
+					gameState.addToScore(coin.getPoints());
+					gameState.getFloatingScores().add(new FloatingScore(coin));
+					usedCoins.add(coin);
+					mainGame.getLogger().log("Picked up coin", 
+							Logger.PriorityLevels.MEDIUM, "powerups");
+				}
+				if (mainGame.isHost()) {
+					mainGame.getHost().updateCoinsHost(coin);
+				}
 			}
 		}
-
+		//If client no used coins
 		gameState.getDroppedCoins().removeAll(usedCoins);
 	}
 
@@ -210,9 +225,9 @@ public class Player {
 			shot = true;
 			gameState.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
 			
-			Weapon weapon = gameState.getWeaponList().getWeaponList().get(0);
+			Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
 			if (mainGame.isHost()) {
-				mainGame.getHost().updateLaser(weapon.getX(), 
+				mainGame.getHost().updateLaser(playerNumber, weapon.getX(), 
 						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth());
 			}
 			
@@ -246,15 +261,14 @@ public class Player {
 		// Walk right when right key pressed and not at right wall OR a gate
 		didWalk = processMoveRight(deltaFloat, containerWidth, didWalk);
 
+		// didnt walk, stating still.
 		if (!didWalk && !stoodStillOnLastUpdate) {
 			stoodStillOnLastUpdate = true;
 			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
-		
 			if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
 				mainGame.getHost().playerStoppedMoving(x, y, playerNumber);
 			}
 		}
-		
 	}
 
 	/**
@@ -268,7 +282,7 @@ public class Player {
 
 		boolean isMovingRight = false;
 		
-		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && playerNumber == 0 && movingRight) {
+		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && movingRight) {
 			isMovingRight = true;
 		}
 		
@@ -304,7 +318,7 @@ public class Player {
 		
 		boolean isMovingLeft = false;
 		
-		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && playerNumber == 0 && movingLeft) {
+		if (mainGame.isLanMultiplayer() && !mainGame.isHost() && movingLeft) {
 			isMovingLeft = true;
 		}
 		

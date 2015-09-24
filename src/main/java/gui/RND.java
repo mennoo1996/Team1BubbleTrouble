@@ -200,4 +200,13 @@ public final class RND {
 		
 	}
 	
+	/**
+	 * Returns the pixel width of rendered text.
+	 * @param text to examine
+	 * @return pixel width of text in int
+	 */
+	public static int getStringPixelWidth(String text) {
+		return dosFontN.getWidth(text);
+	}
+	
 }

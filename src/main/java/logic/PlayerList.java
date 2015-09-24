@@ -83,7 +83,8 @@ public class PlayerList {
 				playerDeath(mainGame);
 			}
 			
-			if (mainGame.isMultiplayer() && playerList.get(1).getRectangle().intersects(circle)
+			if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
+					&& playerList.get(1).getRectangle().intersects(circle)
 					&& !playerList.get(1).hasShield()) {
 				//LIVES FUNCTIONALITY
 				playerDeath(mainGame);
@@ -99,10 +100,12 @@ public class PlayerList {
 		drawPlayer(playerList.get(0), graphics);
 		if (mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) {
 			RND.text(graphics, playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION,
-					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_1");
+					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, 
+					"#" + playerList.get(0).getPlayerName());
 			drawPlayer(playerList.get(1), graphics);
 			RND.text(graphics, playerList.get(1).getX() - PLAYER_NAME_X_DEVIATION,
-					playerList.get(1).getCenterY() - PLAYER_NAME_Y_DEVIATION, "#PLAYER_2");
+					playerList.get(1).getCenterY() - PLAYER_NAME_Y_DEVIATION, 
+					"#" + playerList.get(1).getPlayerName());
 		}
 	}
 	

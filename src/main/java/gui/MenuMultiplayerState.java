@@ -1,10 +1,12 @@
 package gui;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import lan.Client;
 import lan.Host;
-import logic.Button;
 import logic.Logger;
 
 import org.newdawn.slick.GameContainer;
@@ -30,6 +32,18 @@ public class MenuMultiplayerState extends BasicGameState {
 	private GameState gameState;
 	private Input input;
 	
+	private Textfield nameField;
+	private Textfield ipField;
+	
+	private Separator separatorTop;
+	private String separatorTopTitle = "";
+	private Separator separatorHost;
+	private String separatorHostTitle = " Host Game ";
+	private Separator separatorJoin;
+	private String separatorJoinTitle = " Join Game ";
+	private Separator separatorMisc;
+	private String separatorMiscTitle = " Miscellaneous ";
+	
 	private static final int NUM_3 = 3;
 	private static final int NUM_4 = 4;
 	private static final int NUM_5 = 5;
@@ -38,10 +52,11 @@ public class MenuMultiplayerState extends BasicGameState {
 	
 	private static final int LOGO_X = 160;
 	private static final int LOGO_Y = 110;
-	private static final int SEPARATOR_X = 319;
-	private static final int SEPARATOR_X_2 = 164;
+	private static final int SEPARATOR_X = 164;
 	private static final int SEPARATOR_Y = 190;
-	private static final int SEPARATOR_Y_2 = 510;
+	private static final int SEPARATOR_Y_2 = 388;
+	private static final int SEPARATOR_Y_3 = 488;
+	private static final int SEPARATOR_Y_4 = 658;
 	
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
@@ -51,23 +66,24 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
 	
+	private static final int TEXT_HELP_X = 164;
+	private static final int TEXT_HELP_Y_1 = 238;
+	private static final int TEXT_HELP_Y_2 = 288;
+	private static final int TEXT_HELP_Y_3 = 338;
+	private static final int TEXT_HELP_Y_4 = 738;
+	
 	private static final int HOST_BUTTON_X = 150;
-	private static final int HOST_BUTTON_Y = 225;
+	private static final int HOST_BUTTON_Y = 425;
+	private static final int TEXT_HOST_X = 350;
+	private static final int TEXT_HOST_Y = 438;
+	
 	private static final int JOIN_BUTTON_X = 150;
-	private static final int JOIN_BUTTON_Y = 275;
+	private static final int JOIN_BUTTON_Y = 525;
+	private static final int TEXT_JOIN_Y = 588;
 	
-	private static final int CONTROL_X1 = 800;
-	private static final int CONTROL_X2 = 1000;
-	private static final int P1_CONTROL_Y = 238;
-	private static final int P2_CONTROL_Y = 388;
-	
-	private static final int TEXT_X = 164;
-	private static final int TEXT_1_Y = 288;
-	private static final int TEXT_2_Y = 338;
-	private static final int TEXT_3_Y = 388;
-	private static final int TEXT_4_Y = 438;
-	private static final int PLAYER_1_TEXT_Y = 590;
-	private static final int PLAYER_2_TEXT_Y = 710;
+	private static final int TEXT_FIELD_X = 564;
+	private static final int TEXT_FIELD_Y = 738;
+	private static final int TEXT_FIELD_Y_2 = 588;
 	
 	/**
 	 * Construct a SettingsState.
@@ -89,6 +105,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		mainGame.getLogger().log("Entering MenuMultiplayerState", 
 				Logger.PriorityLevels.LOW, "States");
+		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player", container);
+		ipField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y_2, "127.0.0.1", container);
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
@@ -124,6 +142,14 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		initButtons();
+		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, true, separatorTopTitle,
+				container.getWidth());
+		separatorHost = new Separator(SEPARATOR_X, SEPARATOR_Y_2, false, separatorHostTitle,
+				container.getWidth());
+		separatorJoin = new Separator(SEPARATOR_X, SEPARATOR_Y_3, false, separatorJoinTitle,
+				container.getWidth());
+		separatorMisc = new Separator(SEPARATOR_X, SEPARATOR_Y_4, false, separatorMiscTitle,
+				container.getWidth());
 	}
 	
 	/**
@@ -172,7 +198,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		
 		exit(container, sbg, delta);
 	}
-
+	
 	/**
 	 * Process the buttons.
 	 * @param input the keyboard/mouse input of the user
@@ -182,26 +208,24 @@ public class MenuMultiplayerState extends BasicGameState {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 
 		if (hostButton.isMouseOver(input)) {
-			// Spawn thread logic
 			mainGame.setLanMultiplayer(true);
 			mainGame.setHost(new Host(MainGame.getMultiplayerPort(), mainGame, gameState));
 			mainGame.setIsHost(true);
 			mainGame.setIsClient(false);
 			System.out.println(mainGame.isHost());
 			ExecutorService executor = Executors.newFixedThreadPool(1);
+			mainGame.getPlayerList().getPlayers().get(0).setPlayerName(nameField.getText());
 			executor.submit(mainGame.getHost());
 			mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
-			// host button stuff
 		} 
 		if (joinButton.isMouseOver(input)) {
-			// Spawn thread logic
 			mainGame.setLanMultiplayer(true);
-			mainGame.setClient(true);
-			Client client = new Client("127.0.0.1", 
+			Client client = new Client(ipField.getText(), 
 					mainGame.getMultiplayerPort(), mainGame, gameState);
 	        mainGame.setIsClient(true);
 	        mainGame.setIsHost(false);
 			ExecutorService executor = Executors.newFixedThreadPool(1);
+			mainGame.getPlayerList().getPlayers().get(1).setPlayerName(nameField.getText());
 			executor.submit(client);
 			
 		} 
@@ -217,29 +241,45 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		this.input = container.getInput();
-		
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
-//		RND.text(graphics, TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
-//		RND.text(graphics, TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
-//		RND.text(graphics, TEXT_X, TEXT_3_Y, "# we advice different sprites for");
-//		RND.text(graphics, TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
-//	
-//		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
-//		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
-	
-		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
-				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
+		
+		drawText(graphics, container);
 		drawSprites(graphics);
-
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-		String tempString = "==============================";
-		tempString += "=======================================";
-		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, tempString);
-		RND.text(graphics, SEPARATOR_X_2, SEPARATOR_Y_2, tempString + "==========");
+
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+	}
+	
+	/**
+	 * Draw all the text in this state.
+	 * @param graphics context to use
+	 * @param container appgamecontainer to use
+	 */
+	private void drawText(Graphics graphics, GameContainer container) {
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_1, 
+				"# You can play a game together with another player, over LAN.",
+				mainGame.getColor());
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_2, 
+				"# If you are the host, you will have to wait until another player joins you.",
+				mainGame.getColor());
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_3, 
+				"# If you wish to join another player,"
+				+ " please enter their IP-address below.", mainGame.getColor());
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_4, "# Your player name:", mainGame.getColor());
+		if (mainGame.isHost()) {
+			try {
+				RND.text(graphics, TEXT_HOST_X, TEXT_HOST_Y, "# Hosting game on IP: " 
+						+ InetAddress.getLocalHost().getHostAddress(), mainGame.getColor());
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+		}
+		RND.text(graphics, TEXT_HELP_X, TEXT_JOIN_Y, "# Join this IP: ", mainGame.getColor());
+		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 	}
 	
 	/**
@@ -250,6 +290,12 @@ public class MenuMultiplayerState extends BasicGameState {
 		returnButton.drawColor(graphics, input, mainGame.getColor());
 		hostButton.drawColor(graphics, input, mainGame.getColor());
 		joinButton.drawColor(graphics, input, mainGame.getColor());
+		separatorTop.drawColor(graphics, mainGame.getColor());
+		separatorHost.drawColor(graphics, mainGame.getColor());
+		separatorJoin.drawColor(graphics, mainGame.getColor());
+		separatorMisc.drawColor(graphics, mainGame.getColor());
+		ipField.drawColor(graphics, mainGame.getColor());
+		nameField.drawColor(graphics, mainGame.getColor());
 	}
 	
 

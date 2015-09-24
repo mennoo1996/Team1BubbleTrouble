@@ -68,7 +68,7 @@ public class Coin {
     }
 
     /**
-     * @return x coord
+     * @return x-coord
      */
     public float getX() {
         return this.x;

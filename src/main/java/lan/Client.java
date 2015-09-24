@@ -142,12 +142,14 @@ public class Client implements Callable {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	
-    	Weapon weapon = new Weapon(Float.parseFloat(stringList[0]), 
-    			Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]), 
-    			Float.parseFloat(stringList[THREE]));
+    	int id = Integer.parseInt(stringList[0]);
+    	System.out.println("PLAYERID" + id);
+    	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
+    			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+    			Float.parseFloat(stringList[FOUR]));
     	
-    	gameState.getWeaponList().setWeapon(0, weapon);
-    	mainGame.getPlayerList().getPlayers().get(0).setShot(true);
+    	gameState.getWeaponList().setWeapon(id, weapon);
+    	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
     }
     
     /**
@@ -157,12 +159,12 @@ public class Client implements Callable {
     private void playerLocation(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
+    	int id = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
     	
-    	float x = Float.parseFloat(stringList[0]);
-    	float y = Float.parseFloat(stringList[1]);
-    	
-    	mainGame.getPlayerList().getPlayers().get(0).setX(x);
-    	mainGame.getPlayerList().getPlayers().get(0).setY(y);
+    	mainGame.getPlayerList().getPlayers().get(id).setX(x);
+    	mainGame.getPlayerList().getPlayers().get(id).setY(y);
     }
     
     /**

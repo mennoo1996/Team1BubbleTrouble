@@ -124,22 +124,25 @@ public class Host implements Callable {
     
     /**
      * javadoc.
+     * @param id .
      * @param x .
      * @param y .
      */
-    public void updatePlayerLocation(float x, float y) {
-    	sendMessageToClient("NEW PLAYERLOCATION " + x + " " + y);
+    public void updatePlayerLocation(int id, float x, float y) {
+    	sendMessageToClient("NEW PLAYERLOCATION " + id + " " + x + " " + y);
     }
     
     /**
      * javadoc.
+     * @param id .
      * @param x .
      * @param y .
      * @param laserSpeed .
      * @param laserWidth .
      */
-    public void updateLaser(float x, float y, float laserSpeed, float laserWidth) {
-    	sendMessageToClient("NEW LASER " + x + " " + y + " " + laserSpeed + " " + laserWidth);
+    public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
+    	sendMessageToClient("NEW LASER " 
+    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth);
     }
     
     /**

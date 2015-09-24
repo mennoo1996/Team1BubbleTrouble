@@ -205,9 +205,9 @@ public class Player {
 			shot = true;
 			gameState.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
 			
-			Weapon weapon = gameState.getWeaponList().getWeaponList().get(0);
+			Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
 			if (mainGame.isHost()) {
-				mainGame.getHost().updateLaser(weapon.getX(), 
+				mainGame.getHost().updateLaser(playerNumber, weapon.getX(), 
 						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth());
 			}
 			
@@ -247,8 +247,10 @@ public class Player {
 		}
 		
 		if (didWalk && mainGame.isHost()) {
-			mainGame.getHost().updatePlayerLocation(x, y);
+			mainGame.getHost().updatePlayerLocation(playerNumber, x, y);
 		}
+		
+		
 	}
 
 	/**

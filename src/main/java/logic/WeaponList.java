@@ -61,7 +61,7 @@ public class WeaponList {
 	public void intersectWeaponsWithCircle(BouncingCircle circle) {
 		intersectWeaponWithCircle(circle, 0);
 		
-		if (mainGame.isMultiplayer()) {
+		if (mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) {
 			intersectWeaponWithCircle(circle, 1);
 		}
 	}
@@ -113,7 +113,8 @@ public class WeaponList {
 			drawWeapon(graphics, 0);
 		}
 		
-		if (mainGame.isMultiplayer() && mainGame.getPlayerList().getPlayers().get(1).isShot()) {
+		if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
+				&& mainGame.getPlayerList().getPlayers().get(1).isShot()) {
 			drawWeapon(graphics, 1);
 		}
 	}

@@ -145,6 +145,7 @@ public class MainGame extends StateBasedGame {
 		this.multiplayer = false;
 		this.lanMultiplayer = false;
 		this.isHost = false;
+		this.isClient = false;
 		
 
 		ShutDownHook shutDownHook = new ShutDownHook(this);
@@ -946,17 +947,23 @@ public class MainGame extends StateBasedGame {
 
 	/**
 	 * 
-	 * @return .
+	 * @param isClient .
+	 */
+	public void setClient(boolean isClient) {
+		this.isClient = isClient;
+	}
+	
+	/**
+	 * @return the isHost
 	 */
 	public boolean isClient() {
 		return isClient;
 	}
 
 	/**
-	 * 
-	 * @param isClient .
+	 * @param isClient the isClient to set
 	 */
-	public void setClient(boolean isClient) {
+	public void setIsClient(boolean isClient) {
 		this.isClient = isClient;
 	}
 	

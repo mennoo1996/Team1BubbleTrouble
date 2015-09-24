@@ -99,9 +99,78 @@ public class Client implements Callable {
         		powerupMessage(message2.replaceFirst("POWERUP", ""));
         	} else if (message2.startsWith("COIN")) {
         		coinMessage(message2.replaceFirst("COIN", ""));
-        	}
-        	
+        	} else if (message2.startsWith("PLAYER")) {
+        		playerMessage(message2.replaceFirst("PLAYER", ""));
+        	}	
         }
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void playerMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.startsWith("MOVEMENT")) {
+    		movementMessage(message2.replaceFirst("MOVEMENT", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementMessage(String message) {
+    	String message2 = message.trim();
+    
+    	if (message2.startsWith("STARTED")) {
+    		movementStarted(message2.replaceFirst("STARTED", ""));
+    	} else if (message2.startsWith("STOPPED")) {
+    		movementStopped(message2.replaceFirst("STOPPED", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementStarted(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+
+    	int playerNumber = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
+        String direction = stringList[THREE];
+    
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        
+        if (direction.equals("LEFT")) {
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
+        } else if (direction.equals("RIGHT")) {
+        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
+        }
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void movementStopped(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+
+    	int playerNumber = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
+    	
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
     }
     
     /**
@@ -205,12 +274,14 @@ public class Client implements Callable {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	
-    	Weapon weapon = new Weapon(Float.parseFloat(stringList[0]), 
-    			Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]), 
-    			Float.parseFloat(stringList[THREE]));
+    	int id = Integer.parseInt(stringList[0]);
+    	System.out.println("PLAYERID" + id);
+    	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
+    			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+    			Float.parseFloat(stringList[FOUR]));
     	
-    	gameState.getWeaponList().setWeapon(0, weapon);
-    	mainGame.getPlayerList().getPlayers().get(0).setShot(true);
+    	gameState.getWeaponList().setWeapon(id, weapon);
+    	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
     }
     
     /**
@@ -220,12 +291,12 @@ public class Client implements Callable {
     private void playerLocation(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
+    	int id = Integer.parseInt(stringList[0]);
+    	float x = Float.parseFloat(stringList[1]);
+    	float y = Float.parseFloat(stringList[2]);
     	
-    	float x = Float.parseFloat(stringList[0]);
-    	float y = Float.parseFloat(stringList[1]);
-    	
-    	mainGame.getPlayerList().getPlayers().get(0).setX(x);
-    	mainGame.getPlayerList().getPlayers().get(0).setY(y);
+    	mainGame.getPlayerList().getPlayers().get(id).setX(x);
+    	mainGame.getPlayerList().getPlayers().get(id).setY(y);
     }
     
     /**

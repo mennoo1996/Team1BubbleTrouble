@@ -18,6 +18,7 @@ import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
 import logic.Powerup;
+import logic.Weapon;
 import logic.Player.Movement;
 import logic.Powerup.PowerupType;
 
@@ -45,6 +46,7 @@ public class Host implements Runnable {
 
     private static final int TIMEOUT_ATTEMPT = 10000;
     private static final int MENU_MULTIPLAYER_STATE = 4;
+    private static final int FOUR = 4;
 
     /**
      * Create a new Host server for LAN multiplayer.
@@ -130,13 +132,45 @@ public class Host implements Runnable {
                     this.sendMessageToClient("HEARTBEAT_ALIVE");
                 } else if (message2.startsWith("HEARTBEAT_ALIVE")) {
                     heartBeatCheck = false;
-                }
+                } else if (message2.startsWith("NEW")) {
+					newMessage(message2.replaceFirst("NEW", ""));
+				} 
                 timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void newMessage(String message) {
+    	String message2 = message.trim();
+    	if (message2.startsWith("LASER")) {
+    		newLaserMessage(message2.replaceFirst("LASER", ""));
+    	}
+    }
+    
+    /**
+     * javadoc.
+     * @param message .
+     */
+    private void newLaserMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	
+    	int id = Integer.parseInt(stringList[0]);
+    	System.out.println("PLAYERID" + id);
+    	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
+    			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+    			Float.parseFloat(stringList[FOUR]));
+    	
+    	gameState.getWeaponList().setWeapon(id, weapon);
+    	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
+    }
+    
     /**
      * Javadoc.
      * @param message .
@@ -407,14 +441,19 @@ public class Host implements Runnable {
     }
     
     /**
+     * Send to client when a laser/weapon is done.
+     * @param id	the id of the weapon
+     */
+    public void laserDone(int id) {
+    	sendMessageToClient("LASER DONE " + id);
+    }
+    
+    /**
      * javadoc.
      * @param circleList .
      */
     public void updateCircles(ArrayList<BouncingCircle> circleList) {
-		sendMessageToClient("UPDATE CIRCLELIST");
-		for (BouncingCircle bCircle : circleList) {
-			sendMessageToClient(bCircle.toString());
-		}
+    	sendMessageToClient(BouncingCircle.circleListToString(circleList));
     }
     
     /**

@@ -120,6 +120,7 @@ public class MainGame extends StateBasedGame {
 	private boolean lanMultiplayer;
 	private Host host;
 	private boolean isHost;
+	private boolean isClient;
 
 
 	/**
@@ -144,6 +145,7 @@ public class MainGame extends StateBasedGame {
 		this.multiplayer = false;
 		this.lanMultiplayer = false;
 		this.isHost = false;
+		this.isClient = false;
 		
 
 		ShutDownHook shutDownHook = new ShutDownHook(this);
@@ -941,6 +943,20 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setIsHost(boolean isHost) {
 		this.isHost = isHost;
+	}
+	
+	/**
+	 * @return the isHost
+	 */
+	public boolean isClient() {
+		return isClient;
+	}
+
+	/**
+	 * @param isClient the isClient to set
+	 */
+	public void setIsClient(boolean isClient) {
+		this.isClient = isClient;
 	}
 	
 	

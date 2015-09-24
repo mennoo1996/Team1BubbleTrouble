@@ -125,11 +125,12 @@ public class Host implements Callable {
     
     /**
      * javadoc.
+     * @param id .
      * @param x .
      * @param y .
      */
-    public void updatePlayerLocation(float x, float y) {
-    	sendMessageToClient("NEW PLAYERLOCATION " + x + " " + y);
+    public void updatePlayerLocation(int id, float x, float y) {
+    	sendMessageToClient("NEW PLAYERLOCATION " + id + " " + x + " " + y);
     }
     
     /**
@@ -140,8 +141,8 @@ public class Host implements Callable {
      * @param direction .
      */
     public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
-    	String message = "PLAYER MOVEMENT STARTED " + x + " " 
-    			+ y + " " + playerNumber + " " + direction;
+    	String message = "PLAYER MOVEMENT STARTED " + playerNumber + " " + x + " " 
+    			+ y  + " " + direction;
     	sendMessageToClient(message);
     }
     
@@ -152,19 +153,22 @@ public class Host implements Callable {
      * @param playerNumber .
      */
     public void playerStoppedMoving(float x, float y, int playerNumber) {
-    	String message = "PLAYER MOVEMENT STOPPED " + x + " " + y + " " + playerNumber;
+    	String message = "PLAYER MOVEMENT STOPPED " + playerNumber + " " + x + " " 
+    			+ y;
     	sendMessageToClient(message);
     }
     
     /**
      * javadoc.
+     * @param id .
      * @param x .
      * @param y .
      * @param laserSpeed .
      * @param laserWidth .
      */
-    public void updateLaser(float x, float y, float laserSpeed, float laserWidth) {
-    	sendMessageToClient("NEW LASER " + x + " " + y + " " + laserSpeed + " " + laserWidth);
+    public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
+    	sendMessageToClient("NEW LASER " 
+    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth);
     }
     
     /**

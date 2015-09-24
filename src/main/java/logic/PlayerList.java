@@ -208,7 +208,6 @@ public class PlayerList {
 	private void drawPlayerMoveRight(Player player, Graphics graphics) {
 		player.incrementMovementCounter();
 		int sp = SPRITE_SHEET_THREE;
-		//System.out.println(player.getMovementCounter_Max() * MOVEMENT_COUNTER_FACTOR);
 		if (player.getMovementCounter() > player.getMovementCounter_Max()
                 * MOVEMENT_COUNTER_FACTOR) {
             sp = SPRITE_SHEET_FOUR;

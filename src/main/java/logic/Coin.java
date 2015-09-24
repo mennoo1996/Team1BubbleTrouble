@@ -11,7 +11,7 @@ public class Coin {
     private static final int COIN_EXPENSIVE = 400;
 
     private int points;
-    private float x, y, width, height;
+    private float x, y, width, height, xId, yId;
     private boolean largeAmount;
 
     /**
@@ -23,6 +23,8 @@ public class Coin {
     public Coin(float x, float y, boolean largeAmount) {
         this.x = x;
         this.y = y;
+        this.xId = x;
+        this.yId = y;
         this.width = COIN_WIDTH;
         this.height = COIN_HEIGHT;
         
@@ -40,7 +42,7 @@ public class Coin {
     */
    @Override
    public String toString() {
-   	String res = "COIN " + this.x + " " + this.y + " " + this.largeAmount + " ";
+   	String res = "COIN " + this.xId + " " + this.yId + " " + this.largeAmount + " ";
    	return res;
    }
     
@@ -73,6 +75,38 @@ public class Coin {
     }
 
     /**
+     * 
+     * @return .
+     */
+    public float getxId() {
+		return xId;
+	}
+
+    /**
+     * 
+     * @param xId .
+     */
+	public void setxId(float xId) {
+		this.xId = xId;
+	}
+
+	/**
+	 * 
+	 * @return .
+	 */
+	public float getyId() {
+		return yId;
+	}
+
+	/**
+	 * .
+	 * @param yId .
+	 */
+	public void setyId(float yId) {
+		this.yId = yId;
+	}
+
+	/**
      * @return y coord
      */
     public float getY() {

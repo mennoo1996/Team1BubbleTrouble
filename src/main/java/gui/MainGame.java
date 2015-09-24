@@ -120,6 +120,7 @@ public class MainGame extends StateBasedGame {
 	private boolean lanMultiplayer;
 	private Host host;
 	private boolean isHost;
+	private boolean isClient;
 
 
 	/**
@@ -941,6 +942,22 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setIsHost(boolean isHost) {
 		this.isHost = isHost;
+	}
+
+	/**
+	 * 
+	 * @return .
+	 */
+	public boolean isClient() {
+		return isClient;
+	}
+
+	/**
+	 * 
+	 * @param isClient .
+	 */
+	public void setClient(boolean isClient) {
+		this.isClient = isClient;
 	}
 	
 	

@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 
 import logic.BouncingCircle;
 import logic.Coin;
+import logic.FloatingScore;
 import logic.Logger;
 import logic.Powerup;
 import logic.Powerup.PowerupType;
@@ -135,16 +136,28 @@ public class Client implements Callable {
     private void powerupMessage(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
-    	// SHIELD, SPIKY, INSTANT
-    	if (stringList[2].equals("SHIELD")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SHIELD));
-    	} else if (stringList[2].equals("SPIKY")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SPIKY));
-    	} else if (stringList[2].equals("INSTANT")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.INSTANT));
+    	if (stringList[THREE].equals("ADD")) {
+    		// SHIELD, SPIKY, INSTANT
+        	if (stringList[2].equals("SHIELD")) {
+        		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+        				Float.parseFloat(stringList[1]), PowerupType.SHIELD));
+        	} else if (stringList[2].equals("SPIKY")) {
+        		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+        				Float.parseFloat(stringList[1]), PowerupType.SPIKY));
+        	} else if (stringList[2].equals("INSTANT")) {
+        		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+        				Float.parseFloat(stringList[1]), PowerupType.INSTANT));
+        	}
+    	} else if (stringList[THREE].equals("DICTATE")) {
+    		ArrayList<Powerup> machvise = new ArrayList<Powerup>();
+    		for (Powerup george : gameState.getDroppedPowerups()) {
+    			if (george.getxId() == Float.parseFloat(stringList[0])
+    					&& george.getyId() == Float.parseFloat(stringList[1])) {
+    				machvise.add(george);
+    				gameState.getFloatingScores().add(new FloatingScore(george));
+    			}
+    		}
+    		gameState.getDroppedPowerups().removeAll(machvise);
     	}
     }
     
@@ -155,8 +168,20 @@ public class Client implements Callable {
     private void coinMessage(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
-    	gameState.getDroppedCoins().add(new Coin(Float.parseFloat(stringList[0]),
-				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
+    	if (stringList[THREE].equals("ADD")) {
+    		gameState.getDroppedCoins().add(new Coin(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
+    	} else if (stringList[THREE].equals("DICTATE")) {
+    		ArrayList<Coin> machvise = new ArrayList<Coin>();
+    		for (Coin george : gameState.getDroppedCoins()) {
+    			if (george.getxId() == Float.parseFloat(stringList[0])
+    					&& george.getyId() == Float.parseFloat(stringList[1])) {
+    				machvise.add(george);
+    				gameState.getFloatingScores().add(new FloatingScore(george));
+    			}
+    		}
+    		gameState.getDroppedCoins().removeAll(machvise);
+    	}
     }
     
     /**

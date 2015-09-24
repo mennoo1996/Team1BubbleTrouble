@@ -160,7 +160,7 @@ public class Host implements Callable {
      * @param a the powerup to sent
      */
     public void updatePowerups(Powerup a) {
-    	sendMessageToClient(a.toString());
+    	sendMessageToClient(a.toString() + "ADD ");
     }
     
     /**
@@ -168,7 +168,23 @@ public class Host implements Callable {
      * @param a the coin to sent
      */
     public void updateCoins(Coin a) {
-    	sendMessageToClient(a.toString());
+    	sendMessageToClient(a.toString() + "ADD ");
+    }
+    
+    /**
+     * javadoc.
+     * @param a the powerup to sent
+     */
+    public void updatePowerupsHost(Powerup a) {
+    	sendMessageToClient(a.toString() + "DICTATE ");
+    }
+    
+    /**
+     * javadoc.
+     * @param a the coin to sent
+     */
+    public void updateCoinsHost(Coin a) {
+    	sendMessageToClient(a.toString() + "DICTATE ");
     }
     
     /**

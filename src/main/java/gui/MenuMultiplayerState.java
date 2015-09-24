@@ -27,6 +27,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	private Button joinButton;
 
 	private MainGame mainGame;
+	private GameState gameState;
 	private Input input;
 	
 	private static final int NUM_3 = 3;
@@ -71,9 +72,11 @@ public class MenuMultiplayerState extends BasicGameState {
 	/**
 	 * Construct a SettingsState.
 	 * @param mainGame the MainGame that uses this state.
+	 * @param gameState javadoc
 	 */
-	public MenuMultiplayerState(MainGame mainGame) {
+	public MenuMultiplayerState(MainGame mainGame, GameState gameState) {
 		this.mainGame = mainGame;
+		this.gameState = gameState;
 	}
 	
 	/**
@@ -179,31 +182,27 @@ public class MenuMultiplayerState extends BasicGameState {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 
 		if (hostButton.isMouseOver(input)) {
-			int i = 1;
-			i = 0;
 			// Spawn thread logic
-			// TODO: Move this to another location for multiplayer menu
 			mainGame.setLanMultiplayer(true);
-			mainGame.setHost(new Host(MainGame.getMultiplayerPort()));
+			mainGame.setHost(new Host(MainGame.getMultiplayerPort(), mainGame, gameState));
+			mainGame.setIsHost(true);
+			System.out.println(mainGame.isHost());
 			ExecutorService executor = Executors.newFixedThreadPool(1);
 			executor.submit(mainGame.getHost());
 			mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
 			// host button stuff
 		} 
 		if (joinButton.isMouseOver(input)) {
-			// join button stuff
-			int i = 1;
-			i = 0;
 			// Spawn thread logic
-			// TODO: Move this to another location for multiplayer menu
 			mainGame.setLanMultiplayer(true);
-			Client client = new Client("127.0.0.1", mainGame.getMultiplayerPort());
+			Client client = new Client("127.0.0.1", 
+					mainGame.getMultiplayerPort(), mainGame, gameState);
 			ExecutorService executor = Executors.newFixedThreadPool(1);
 			executor.submit(client);
 			
 		} 
 	}
-	
+
 	/**
 	 * Render this state.
 	 * @param container the Gamecontainer that contains this state

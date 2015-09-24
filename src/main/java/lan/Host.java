@@ -1,16 +1,21 @@
 package lan;
 
-import logic.Logger;
+import gui.GameState;
+import gui.MainGame;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 import java.util.concurrent.Callable;
+
+import logic.BouncingCircle;
+import logic.Logger;
 
 /**
  * Host server for LAN multiplayer.
@@ -25,16 +30,24 @@ public class Host implements Callable {
     private Socket client;
     private Queue<String> messageQueue;
     private PrintWriter writer;
-    private Scanner reader;
-
+    private BufferedReader reader;
+    private MainGame mainGame;
+    private GameState gameState;
+    private ArrayList<Client> clientList;
+    
     /**
      * Create a new Host server for LAN multiplayer.
      * @param portNumber Port number for multiplayer
+     * @param mainGame javaodc
+     * @param gameState javado
      */
-    public Host(int portNumber) {
+    public Host(int portNumber, MainGame mainGame, GameState gameState) {
         this.portNumber = portNumber;
+        this.gameState = gameState;
+        this.mainGame = mainGame;
         this.noClientYet = true;
         this.messageQueue = new LinkedList<>();
+        clientList = new ArrayList<Client>();
         System.out.println("HOST INITIALIZED");
     }
 
@@ -44,8 +57,9 @@ public class Host implements Callable {
         serverSocket = new ServerSocket(portNumber);
         client = serverSocket.accept();
         noClientYet = false;
+		mainGame.setSwitchState(mainGame.getGameState());
         writer = new PrintWriter(client.getOutputStream(), true);
-        reader = new Scanner(new InputStreamReader(client.getInputStream()));
+        reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
         System.out.println("Client connected");
         messageQueue.add("Hi");
 
@@ -53,20 +67,23 @@ public class Host implements Callable {
         while (true) {
             if (!messageQueue.isEmpty()) {
                 writer.println(this.messageQueue.poll());
-                System.out.println("Sent message");
             }
-
             readClientInputs();
         }
+        
     }
 
     /**
      * Process client inputs.
      */
     private void readClientInputs() {
-        while (reader.hasNextLine()) {
-            System.out.println(reader.nextLine());
-        }
+    	try {
+			while (reader.ready()) {
+			    System.out.println(reader.readLine());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -103,6 +120,44 @@ public class Host implements Callable {
      */
     public boolean clientConnected() {
         return !noClientYet;
+    }
+    
+    /**
+     * javadoc.
+     * @param x .
+     * @param y .
+     */
+    public void updatePlayerLocation(float x, float y) {
+    	sendMessageToClient("NEW PLAYERLOCATION " + x + " " + y);
+    }
+    
+    /**
+     * javadoc.
+     * @param x .
+     * @param y .
+     * @param laserSpeed .
+     * @param laserWidth .
+     */
+    public void updateLaser(float x, float y, float laserSpeed, float laserWidth) {
+    	sendMessageToClient("NEW LASER " + x + " " + y + " " + laserSpeed + " " + laserWidth);
+    }
+    
+    /**
+     * javadoc.
+     * @param circleList .
+     */
+    public void updateCircles(ArrayList<BouncingCircle> circleList) {
+		sendMessageToClient("UPDATE CIRCLELIST");
+		for (BouncingCircle bCircle : circleList) {
+			sendMessageToClient(bCircle.toString());
+		}
+    }
+    
+    /**
+     * javadoc.
+     */
+    public void updateLevelStarted() {
+    	sendMessageToClient("SYSTEM LEVEL STARTED");
     }
 }
 

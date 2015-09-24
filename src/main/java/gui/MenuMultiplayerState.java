@@ -1,8 +1,7 @@
 package gui;
-import logic.Button;
 import logic.Logger;
-import logic.Separator;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -30,7 +29,12 @@ public class MenuMultiplayerState extends BasicGameState {
 	private Image tfBackgroundN;
 	private Image tfBackgroundA;
 	
-	private Separator sep;
+	private Separator separatorTop;
+	private String separatorTopTitle = "";
+	private Separator separatorHost;
+	private String separatorHostTitle = " Host Game ";
+	private Separator separatorJoin;
+	private String separatorJoinTitle = " Join Game ";
 	
 	private static final int NUM_3 = 3;
 	private static final int NUM_4 = 4;
@@ -40,10 +44,10 @@ public class MenuMultiplayerState extends BasicGameState {
 	
 	private static final int LOGO_X = 160;
 	private static final int LOGO_Y = 110;
-	private static final int SEPARATOR_X = 319;
-	private static final int SEPARATOR_X_2 = 164;
+	private static final int SEPARATOR_X = 164;
 	private static final int SEPARATOR_Y = 190;
 	private static final int SEPARATOR_Y_2 = 388;
+	private static final int SEPARATOR_Y_3 = 588;
 	
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
@@ -62,10 +66,10 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int HOST_BUTTON_Y = 425;
 	
 	private static final int JOIN_BUTTON_X = 150;
-	private static final int JOIN_BUTTON_Y = 475;
+	private static final int JOIN_BUTTON_Y = 625;
 	
 	private static final int TEXT_FIELD_X = 164;
-	private static final int TEXT_FIELD_Y = 638;
+	private static final int TEXT_FIELD_Y = 688;
 	private static final int TEXT_FIELD_WIDTH = 700;
 	private static final int TEXT_FIELD_HEIGHT = 60;
 	private static final int TF_BACKGROUND_DEVIATION = 27;
@@ -109,9 +113,6 @@ public class MenuMultiplayerState extends BasicGameState {
 		textField.setText("127.0.0.1");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
-		
-		sep = new Separator(164, 100, false, " LAN Multiplayer ", mainGame.getxRes());
-		
 	}
 	
 	/**
@@ -146,6 +147,12 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		initButtons();
 		initTextFieldBackgroundImgs();
+		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, true, separatorTopTitle,
+				container.getWidth());
+		separatorHost = new Separator(SEPARATOR_X, SEPARATOR_Y_2, false, separatorHostTitle,
+				container.getWidth());
+		separatorJoin = new Separator(SEPARATOR_X, SEPARATOR_Y_3, false, separatorJoinTitle,
+				container.getWidth());
 	}
 	
 	/**
@@ -200,7 +207,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			processButtons(input);
 		}
-		
+		textField.setFocus(true);
 		exit(container, sbg, delta);
 	}
 	
@@ -236,13 +243,6 @@ public class MenuMultiplayerState extends BasicGameState {
 		this.input = container.getInput();
 		
 		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
-//		RND.text(graphics, TEXT_X, TEXT_1_Y, "# You can choose a player skin per");
-//		RND.text(graphics, TEXT_X, TEXT_2_Y, "# player by clicking on it below,");
-//		RND.text(graphics, TEXT_X, TEXT_3_Y, "# we advice different sprites for");
-//		RND.text(graphics, TEXT_X, TEXT_4_Y, "# each player but it's your choice!");
-//	
-//		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
-//		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
 		
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_1, 
 				"# You can play a game together with another player, over LAN.",
@@ -255,7 +255,9 @@ public class MenuMultiplayerState extends BasicGameState {
 				+ " please enter their IP-address below.",
 				mainGame.getColor());
 		
-		RND.text(graphics, sep.getX(), sep.getY(), sep.getText(), mainGame.getColor());
+		separatorTop.drawColor(graphics, mainGame.getColor());
+		separatorHost.drawColor(graphics, mainGame.getColor());
+		separatorJoin.drawColor(graphics, mainGame.getColor());
 		
 		RND.drawColor(graphics, tfBackgroundN, tfBackgroundA,
 				textField.getX() - TF_BACKGROUND_DEVIATION,
@@ -271,10 +273,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-		String tempString = "==============================";
-		tempString += "=======================================";
-		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, tempString);
-		RND.text(graphics, SEPARATOR_X_2, SEPARATOR_Y_2, tempString + "==========");
+
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 	}

@@ -15,7 +15,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import logic.BouncingCircle;
-import logic.Button;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Gate;

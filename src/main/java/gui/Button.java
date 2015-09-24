@@ -1,5 +1,5 @@
-package logic;
-import gui.RND;
+package gui;
+import logic.MyRectangle;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;

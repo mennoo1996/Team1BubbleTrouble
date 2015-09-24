@@ -1,5 +1,4 @@
 package gui;
-import logic.Button;
 import logic.HighScoresParser;
 import logic.Logger;
 import logic.Score;

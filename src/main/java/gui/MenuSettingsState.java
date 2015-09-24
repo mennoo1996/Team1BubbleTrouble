@@ -1,5 +1,4 @@
 package gui;
-import logic.Button;
 import logic.Logger;
 import logic.MyRectangle;
 
@@ -55,6 +54,9 @@ public class MenuSettingsState extends BasicGameState {
 	private MyRectangle telefoon2Rectangle;
 	private MyRectangle arie2Rectangle;
 
+	private Separator separatorTop;
+	private String separatorTopTitle = " Options Menu ";
+	
 	private MainGame mainGame;
 	private Input input;
 	
@@ -176,6 +178,28 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		initButtons();
+		initPlayerImages();
+		mannetje1Rectangle = new MyRectangle(MANNETJE_1_X, MANNETJE_1_Y, PLAYER_SPRITE_WIDTH,
+				PLAYER_SPRITE_HEIGHT);
+		telefoon1Rectangle = new MyRectangle(TELEFOON_1_X, TELEFOON_1_Y, PLAYER_SPRITE_WIDTH, 
+				PLAYER_SPRITE_HEIGHT);
+		arie1Rectangle = new MyRectangle(ARIE_1_X, ARIE_1_Y, PLAYER_SPRITE_WIDTH, 
+				PLAYER_SPRITE_HEIGHT);
+		mannetje2Rectangle = new MyRectangle(MANNETJE_2_X, MANNETJE_2_Y, PLAYER_SPRITE_WIDTH,
+				PLAYER_SPRITE_HEIGHT);
+		telefoon2Rectangle = new MyRectangle(TELEFOON_2_X, TELEFOON_2_Y, PLAYER_SPRITE_WIDTH, 
+				PLAYER_SPRITE_HEIGHT);
+		arie2Rectangle = new MyRectangle(ARIE_2_X, ARIE_2_Y, PLAYER_SPRITE_WIDTH, 
+				PLAYER_SPRITE_HEIGHT);
+		separatorTop = new Separator(SEPARATOR_X_2, SEPARATOR_Y, true, separatorTopTitle,
+				container.getWidth());
+	}
+	
+	/**
+	 * Initialize player images.
+	 * @throws SlickException if something goes wrong / file not found
+	 */
+	private void initPlayerImages() throws SlickException {
 		highLightN = new Image("resources/images_UI/Menu_Highlight_Norm.png");
 		highLightA = new Image("resources/images_UI/Menu_Highlight_Add.png");
 		mannetjeN = new SpriteSheet("resources/images_Player/Playersprite_Norm.png",
@@ -190,18 +214,6 @@ public class MenuSettingsState extends BasicGameState {
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
 		arieA = new SpriteSheet("resources/images_Player/arieSprite_Add.png",
 				PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-		mannetje1Rectangle = new MyRectangle(MANNETJE_1_X, MANNETJE_1_Y, PLAYER_SPRITE_WIDTH,
-				PLAYER_SPRITE_HEIGHT);
-		telefoon1Rectangle = new MyRectangle(TELEFOON_1_X, TELEFOON_1_Y, PLAYER_SPRITE_WIDTH, 
-				PLAYER_SPRITE_HEIGHT);
-		arie1Rectangle = new MyRectangle(ARIE_1_X, ARIE_1_Y, PLAYER_SPRITE_WIDTH, 
-				PLAYER_SPRITE_HEIGHT);
-		mannetje2Rectangle = new MyRectangle(MANNETJE_2_X, MANNETJE_2_Y, PLAYER_SPRITE_WIDTH,
-				PLAYER_SPRITE_HEIGHT);
-		telefoon2Rectangle = new MyRectangle(TELEFOON_2_X, TELEFOON_2_Y, PLAYER_SPRITE_WIDTH, 
-				PLAYER_SPRITE_HEIGHT);
-		arie2Rectangle = new MyRectangle(ARIE_2_X, ARIE_2_Y, PLAYER_SPRITE_WIDTH, 
-				PLAYER_SPRITE_HEIGHT);
 	}
 	
 	/**
@@ -409,7 +421,7 @@ public class MenuSettingsState extends BasicGameState {
 				LOGO_X, LOGO_Y, mainGame.getColor());
 		String tempString = "==============================";
 		tempString += "=======================================";
-		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, tempString);
+		separatorTop.drawColor(graphics, mainGame.getColor());
 		RND.text(graphics, SEPARATOR_X_2, SEPARATOR_Y_2, tempString + "==========");
 		drawControls(graphics);
 		drawColorControls(graphics);

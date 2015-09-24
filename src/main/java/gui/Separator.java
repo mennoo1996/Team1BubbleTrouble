@@ -1,8 +1,15 @@
-package logic;
+package gui;
 
-import gui.MainGame;
-import gui.RND;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
+
+/**
+ * Separator class, which is mainly a GUI element. The separator is a line that may contain a title.
+ * Please note this class is HIGHLY untestable, as it is dependent on AngelCodeFont and RND,
+ * both of which dive very, very deeply into Slick2D.
+ * @author Mark
+ */
 public class Separator {
 	
 	private float x;
@@ -29,34 +36,20 @@ public class Separator {
 		this.hasButton = button;
 		this.title = title;
 		recalculate();
-	//	String secondHalf = "", firstHalf = "";
-		
-	
-		
-//		// lengths
-//		int titleLength = RND.getStringPixelWidth(text);
-//		int secondLength = (int) (width / 2 - x) - titleLength / 2;
-//		int firstLength = secondLength;
-//		
-//		// if there's a return button in front!
-//		if (button) {
-//			for (int i  = 0; i < RETURN_BUTTON_WIDTH; i++) {
-//				firstHalf += " ";
-//			}
-//		}
-//		
-//		// fill with characters
-//		while (RND.getStringPixelWidth(firstHalf) < firstLength) {
-//			firstHalf += "=";
-//		}
-//		while (RND.getStringPixelWidth(secondHalf) < firstLength) {
-//			secondHalf += "=";
-//		}
-//		
-//		// add together
-//		this.text = firstHalf + text + secondHalf;
 	}
 
+	/**
+	 * Performs call to RND to draw the text elements of the separator in the right color.
+	 * @param graphics context to draw in
+	 * @param color to draw in
+	 */
+	public void drawColor(Graphics graphics, Color color) {
+		RND.text(graphics, x, y, text, color);
+	}
+	
+	/**
+	 * Recalculates the position, size and layout of text.
+	 */
 	private void recalculate() {
 
 		String secondHalf = "", firstHalf = "";
@@ -82,6 +75,10 @@ public class Separator {
 
 		// add together
 		this.text = firstHalf + title + secondHalf;
+		
+		if (titleLength == 0) {
+			this.text += "=";
+		}
 	}
 	
 	/**

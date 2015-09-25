@@ -167,8 +167,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message that starts with NEW.
+     * @param message String containing the message
      */
     private void newMessage(String message) {
     	String message2 = message.trim();
@@ -178,8 +178,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message regarding the weapon of the client.
+     * @param message String that contains the information of the message
      */
     private void newLaserMessage(String message) {
     	String message2 = message.trim();

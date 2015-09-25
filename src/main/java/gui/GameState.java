@@ -1384,14 +1384,14 @@ public class GameState extends BasicGameState {
 	/**
 	 * @return the circleList
 	 */
-	public ArrayList<BouncingCircle> getCircleList() {
+	public synchronized ArrayList<BouncingCircle> getCircleList() {
 		return circleList;
 	}
 
 	/**
 	 * @param circleList the circleList to set
 	 */
-	public void setCircleList(ArrayList<BouncingCircle> circleList) {
+	public synchronized void setCircleList(ArrayList<BouncingCircle> circleList) {
 		this.circleList = circleList;
 	}
 

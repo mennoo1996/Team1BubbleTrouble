@@ -40,6 +40,8 @@ public class Client implements Runnable {
     private GameState gameState;
 	private long timeLastInput;
 	private boolean heartBeatCheck;
+    private boolean editingCircleList;
+    private ArrayList<BouncingCircle> circleList;
     
     private static final int THREE = 3;
     private static final int FOUR = 4;
@@ -60,6 +62,8 @@ public class Client implements Runnable {
         this.portNumber = portNumber;
         this.isConnected = false;
         this.messageQueue = new LinkedList<>();
+        this.circleList = new ArrayList<BouncingCircle>();
+        this.editingCircleList = false;
     }
 
     @Override
@@ -309,7 +313,7 @@ public class Client implements Runnable {
     private void circleMessage(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
-    	gameState.getCircleList().add(new BouncingCircle(Float.parseFloat(stringList[0]),
+    	this.circleList.add(new BouncingCircle(Float.parseFloat(stringList[0]),
 				Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]),
 				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
 				Float.parseFloat(stringList[FIVE])));
@@ -321,10 +325,27 @@ public class Client implements Runnable {
      */
     private void updateMessage(String message) {
     	String message2 = message.trim();
-    	if (message2.equals("CIRCLELIST")) {
-    		gameState.setCircleList(new ArrayList<BouncingCircle>());
+    	if (message2.startsWith("CIRCLELIST")) {
+    		circleListMessage(message2.replaceFirst("CIRCLELIST", ""));
     	}
     	
+    }
+    
+    /**
+     * Process a message about the circleList.
+     * @param message	the message to process
+     */
+    private void circleListMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.equals("START") && !this.editingCircleList) {
+    		this.circleList = new ArrayList<BouncingCircle>();
+    		this.editingCircleList = true;
+    	} else if (message2.equals("END") && this.editingCircleList) {
+    		System.out.println("setting shit");
+    		this.editingCircleList = false;
+    		gameState.setCircleList(circleList);
+    	}
     }
     
     /**

@@ -207,7 +207,7 @@ public class Host implements Runnable {
     }
 
 	/**
-     * Process a player message.
+     * Process a player message`
      * @param message the message to process
      */
     private void playerMessage(String message) {

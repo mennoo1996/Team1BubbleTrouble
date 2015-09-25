@@ -59,6 +59,7 @@ public class GameState extends BasicGameState {
 	private boolean playingState;
 	private boolean waitEsc;
 	private boolean levelStarted;
+	private boolean countinStarted;
 	
 	// Images
 	private Image health0Image;
@@ -222,6 +223,19 @@ public class GameState extends BasicGameState {
 		timeRemaining = totaltime;
 		prevTime = startTime;
 		countIn = true;
+		if (mainGame.isHost()) {
+			mainGame.getHost().updateCountinStarted();
+		} else if (mainGame.isClient()) {
+			countIn = false;
+		}
+		enter2(container);
+	}
+	
+	/**
+	 * Second part of enter method.
+	 * @param container	the container of the game
+	 */
+	private void enter2(GameContainer container) {
 		playingState = true;
 		// Add player sprite and walls
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
@@ -312,7 +326,9 @@ public class GameState extends BasicGameState {
 			// Timer logic
 			long curTime = System.currentTimeMillis();
 			timeDelta = curTime - prevTime;
-			if (countIn) {
+			boolean countingIn = (countIn && !mainGame.isClient()) || (mainGame.isClient()
+					&& countinStarted);
+			if (countingIn) {
 				if (timeDelta >= COUNT_IN_TIME) {
 					mainGame.getLogger().log("Starting level", 
 							Logger.PriorityLevels.MEDIUM, "levels");
@@ -320,7 +336,7 @@ public class GameState extends BasicGameState {
 					if (mainGame.isHost()) {
 						mainGame.getHost().updateLevelStarted();
 					}
-					prevTime = curTime;
+					prevTime = curTime;					
 				}
 			} else {
 				if (!mainGame.isLanMultiplayer() || mainGame.isHost() || levelStarted) {
@@ -329,8 +345,7 @@ public class GameState extends BasicGameState {
 			}
 		} else {
 			processEscape(container, sbg);
-		}
-		exit(container, sbg, delta);
+		} exit(container, sbg, delta);
 	}
 	
 	/**
@@ -341,9 +356,7 @@ public class GameState extends BasicGameState {
 	private void processEscape(GameContainer container, StateBasedGame sbg) {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
 			// Reset time countdown
-			prevTime = System.currentTimeMillis();
-			countIn = true;
-			playingState = true;
+			pauseStopped(false);
 		}
 		processPauseButtons(container, sbg);
 	}
@@ -409,9 +422,7 @@ public class GameState extends BasicGameState {
 		Input input = container.getInput();
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			if (returnButton.isMouseOver(input) && !waitEsc) {
-				prevTime = System.currentTimeMillis();
-				countIn = true;
-				playingState = true;
+				pauseStopped(false);
 			} else if (menuButton.isMouseOver(input)) {
 				mainGame.setScore(0);
 				mainGame.setLevelCounter(0);
@@ -419,6 +430,28 @@ public class GameState extends BasicGameState {
 			} else if (exitButton.isMouseOver(input)) {
 				mainGame.setSwitchState(-1);
 			}
+		}
+	}
+	
+	/**
+	 * Stop the paused mode of the game.
+	 * @param fromPeer	indicates if this has been requested from peer
+	 */
+	public void pauseStopped(boolean fromPeer) {
+		prevTime = System.currentTimeMillis();
+		countIn = true;
+		playingState = true;		
+		
+		if (mainGame.isHost() && !fromPeer) {
+			mainGame.getHost().updatePauseStopped();
+		}
+		
+		if (mainGame.isHost()) {
+			mainGame.getHost().updateCountinStarted();
+		}
+		
+		if (mainGame.isClient()) {
+			mainGame.getClient().updatePauseStopped();
 		}
 	}
 	
@@ -597,11 +630,25 @@ public class GameState extends BasicGameState {
 	 */
 	private void processPause() {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
-			waitEsc = true;
-			Executors.newScheduledThreadPool(1).schedule(() -> waitEsc = false,
-					PAUSE_FACTOR, TimeUnit.MILLISECONDS);
-			playingState = false;
+			pauseStarted(false);
         }
+	}
+	
+	/**
+	 * Set the game to paused mode.
+	 * @param fromPeer	indicates if the pause has ben requested from peer
+	 */
+	public void pauseStarted(boolean fromPeer) {
+		waitEsc = true;
+		Executors.newScheduledThreadPool(1).schedule(() -> waitEsc = false,
+				PAUSE_FACTOR, TimeUnit.MILLISECONDS);
+		playingState = false;
+		
+		if (mainGame.isHost() && !fromPeer) {
+			mainGame.getHost().updatePauseStarted();
+		} else if (mainGame.isClient() && !fromPeer) {
+			mainGame.getClient().updatePauseStarted();
+		}
 	}
 
 	/**
@@ -643,7 +690,7 @@ public class GameState extends BasicGameState {
 						+ Integer.toString(mainGame.getLevelCounter() + 1));
 		drawScore(container, graphics);
 		// Pause overlay and counter
-		if (playingState && countIn) {
+		if (playingState && (countIn || (mainGame.isClient() && countinStarted))) {
 			drawCountIn(container, graphics);
 		}
 		drawMiscellaneous(container, graphics);
@@ -1347,5 +1394,21 @@ public class GameState extends BasicGameState {
 	public void setCircleList(ArrayList<BouncingCircle> circleList) {
 		this.circleList = circleList;
 	}
+
+	/**
+	 * @return the countinStarted
+	 */
+	public boolean isCountinStarted() {
+		return countinStarted;
+	}
+
+	/**
+	 * @param countinStarted the countinStarted to set
+	 */
+	public void setCountinStarted(boolean countinStarted) {
+		this.countinStarted = countinStarted;
+	}
+	
+	
 	
 }

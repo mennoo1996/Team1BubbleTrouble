@@ -503,6 +503,36 @@ public class Client implements Runnable {
     	String message2 = message.trim();
     	if (message2.startsWith("LEVEL")) {
     		levelMessage(message2.replaceFirst("LEVEL", ""));
+    	} else if (message2.startsWith("COUNTIN")) {
+    		countinMessage(message2.replaceFirst("COUNTIN", ""));
+    	} else if (message2.startsWith("PAUSE")) {
+    		pauseMessage(message2.replaceFirst("PAUSE", ""));
+    	}
+    }
+    
+    /**
+     * Process a message about pause.
+     * @param message	the message to process
+     */
+    private void pauseMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.equals("STARTED")) {
+    		gameState.pauseStarted(true);
+    	} else if (message2.equals("STOPPED")) {
+    		gameState.pauseStopped(true);
+    	}
+    }
+    
+    /**
+     * Process a message about the coutnin.
+     * @param message	the message to process
+     */
+    private void countinMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.equals("STARTED")) {
+    		gameState.setCountinStarted(true);
     	}
     }
     
@@ -514,6 +544,7 @@ public class Client implements Runnable {
     	String message2 = message.trim();
     	if (message2.equals("STARTED")) {
     		gameState.setLevelStarted(true);
+    		gameState.setCountinStarted(false);
     	}
     }
 
@@ -555,9 +586,7 @@ public class Client implements Runnable {
     }
     
     /**
-<<<<<<< HEAD
      * Notify the host that you are dead.
-=======
      * javadoc.
      * @param id .
      * @param x .
@@ -572,12 +601,25 @@ public class Client implements Runnable {
     
     /**
      * javadoc.
->>>>>>> master
      */
     public void updateClientDead() {
     	sendMessageToHost("PLAYER DEAD CLIENT");
     }
+
     
+    /**
+     * Notify the client that the game has been paused.
+     */
+    public void updatePauseStarted() {
+    	sendMessageToHost("SYSTEM PAUSE STARTED");
+    }
+    
+    /**
+     * Notify the client that the game has been resumed.
+     */
+    public void updatePauseStopped() {
+    	sendMessageToHost("SYSTEM PAUSE STOPPED");
+    }
 
     /**
      * Set the logger for this host.

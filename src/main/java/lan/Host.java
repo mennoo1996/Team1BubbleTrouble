@@ -134,12 +134,39 @@ public class Host implements Runnable {
                     heartBeatCheck = false;
                 } else if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
-				} 
+				} else if (message2.startsWith("SYSTEM")) {
+					systemMessage(message2.replaceFirst("SYSTEM", ""));
+				}
                 timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+    }
+    
+    /**
+     * Process a message about the system.
+     * @param message the message to process
+     */
+    private void systemMessage(String message) {
+    	String message2 = message.trim();
+    	if (message2.startsWith("PAUSE")) {
+    		pauseMessage(message2.replaceFirst("PAUSE", ""));
+    	}
+    }
+    
+    /**
+     * Process a message about pause.
+     * @param message	the message to process
+     */
+    private void pauseMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.equals("STARTED")) {
+    		gameState.pauseStarted(true);
+    	} else if (message2.equals("STOPPED")) {
+    		gameState.pauseStopped(true);
+    	}
     }
     
     /**
@@ -170,6 +197,7 @@ public class Host implements Runnable {
     	gameState.getWeaponList().setWeapon(id, weapon);
     	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
     }
+    
     
     /**
      * Process a message about a coin.
@@ -494,6 +522,27 @@ public class Host implements Runnable {
      */
     public void updateLevelStarted() {
     	sendMessageToClient("SYSTEM LEVEL STARTED");
+    }
+    
+    /**
+     * Notify the client that the countin has started.
+     */
+    public void updateCountinStarted() {
+    	sendMessageToClient("SYSTEM COUNTIN STARTED");
+    }
+    
+    /**
+     * Notify the client that the game has been paused.
+     */
+    public void updatePauseStarted() {
+    	sendMessageToClient("SYSTEM PAUSE STARTED");
+    }
+    
+    /**
+     * Notify the client that the game has been resumed.
+     */
+    public void updatePauseStopped() {
+    	sendMessageToClient("SYSTEM PAUSE STOPPED");
     }
 }
 

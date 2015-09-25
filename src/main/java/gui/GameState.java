@@ -228,6 +228,14 @@ public class GameState extends BasicGameState {
 		} else if (mainGame.isClient()) {
 			countIn = false;
 		}
+		enter2(container);
+	}
+	
+	/**
+	 * Second part of enter method.
+	 * @param container	the container of the game
+	 */
+	private void enter2(GameContainer container) {
 		playingState = true;
 		// Add player sprite and walls
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
@@ -318,10 +326,8 @@ public class GameState extends BasicGameState {
 			// Timer logic
 			long curTime = System.currentTimeMillis();
 			timeDelta = curTime - prevTime;
-			
 			boolean countingIn = (countIn && !mainGame.isClient()) || (mainGame.isClient()
 					&& countinStarted);
-			
 			if (countingIn) {
 				if (timeDelta >= COUNT_IN_TIME) {
 					mainGame.getLogger().log("Starting level", 
@@ -339,8 +345,7 @@ public class GameState extends BasicGameState {
 			}
 		} else {
 			processEscape(container, sbg);
-		}
-		exit(container, sbg, delta);
+		} exit(container, sbg, delta);
 	}
 	
 	/**

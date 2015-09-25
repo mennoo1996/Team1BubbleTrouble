@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import gui.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
@@ -43,6 +44,7 @@ public class Host implements Runnable {
     private static final int THREE = 3;
     private boolean heartBeatCheck;
     private long timeLastInput;
+    private boolean running;
 
     private static final int TIMEOUT_ATTEMPT = 10000;
     private static final String NO_CLIENT_CONNECTION = "No connection";
@@ -60,6 +62,7 @@ public class Host implements Runnable {
         this.gameState = gameState;
         this.mainGame = mainGame;
         this.noClientYet = true;
+        this.running = true;
         this.logger = mainGame.getLogger();
         this.messageQueue = new LinkedList<>();
         System.out.println("HOST INITIALIZED");
@@ -81,7 +84,7 @@ public class Host implements Runnable {
             timeLastInput = System.currentTimeMillis();
 
             // This continues ad infinitum
-            while (true) {
+            while (running) {
                 manageHeartbeatCheck();
                 while (!messageQueue.isEmpty()) {
                     writer.println(this.messageQueue.poll());
@@ -100,7 +103,12 @@ public class Host implements Runnable {
     private void processConnectionException(IOException err) {
         System.out.println(err);
         System.out.println(err.getLocalizedMessage());
+        MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
+                this.mainGame.getState(mainGame.getMultiplayerState());
         if (!err.getMessage().equals("Socket closed")) {
+            if (err.getMessage().equals("No connection")) {
+                multiplayerState.addMessage("Client disconnected");
+            }
             this.mainGame.setSwitchState(mainGame.getMultiplayerState());
         }
     }
@@ -116,6 +124,7 @@ public class Host implements Runnable {
         }
         if (!heartBeatCheck
                 && (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
+            System.out.println("Sending heartbeat check");
             heartBeatCheck = true;
             this.messageQueue.add("HEARTBEAT_CHECK");
         }
@@ -130,7 +139,7 @@ public class Host implements Runnable {
 
 				//System.out.println("in loop");
 				String message = reader.readLine();
-				//System.out.println(message);
+				System.out.println(message);
 				String message2 = message.trim();
 				//System.out.println(message2);
 				if (message2.startsWith("PLAYER")) {
@@ -323,6 +332,7 @@ public class Host implements Runnable {
      */
     public void shutdown() throws InterruptedException {
         logger.log("Shutting down host server", Logger.PriorityLevels.LOW, "lan");
+        running = false;
         try {
             serverSocket.close();
         } catch (IOException er) {

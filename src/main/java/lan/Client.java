@@ -49,8 +49,8 @@ public class Client implements Runnable {
     private static final int THREE = 3;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
-	private static final int TIMEOUT_ATTEMPT = 500000;
-	private static final int MENU_MULTIPLAYER_STATE = 4;
+	private static final int TIMEOUT_ATTEMPT = 10000;
+
     /**
      * Create a new Client connection for LAN multiplayer.
      * @param host Host server address
@@ -106,9 +106,13 @@ public class Client implements Runnable {
 	private void processConnectionException(IOException err) {
 		System.out.println(err);
 		System.out.println(err.getLocalizedMessage());
+		MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
+				this.mainGame.getState(mainGame.getMultiplayerState());
 		if (err.getMessage().equals("Connection refused")) {
-			((MenuMultiplayerState) this.mainGame.getState(mainGame.getMultiplayerState()))
-					.addMessage("Connection Refused");
+			multiplayerState.addMessage("Connection Refused");
+		}
+		if (err.getMessage().equals("No connection")) {
+			multiplayerState.addMessage("Host disconnected");
 		}
 		this.mainGame.setSwitchState(mainGame.getMultiplayerState());
 	}
@@ -120,7 +124,8 @@ public class Client implements Runnable {
 	private void manageHeartbeatCheck() throws IOException {
 		if (heartBeatCheck
 				&& (System.currentTimeMillis() - timeLastInput) >= 2 * TIMEOUT_ATTEMPT) {
-            throw new IOException("No connection");
+			System.out.println("Heartbeat gone");
+			throw new IOException("No connection");
         }
 		if (!heartBeatCheck
 				&& (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
@@ -184,6 +189,7 @@ public class Client implements Runnable {
 			floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
 		}
 		// heartBeat reset
+		System.out.println("Reset heartbeat");
 		heartBeatCheck = false;
 		timeLastInput = System.currentTimeMillis();
     }

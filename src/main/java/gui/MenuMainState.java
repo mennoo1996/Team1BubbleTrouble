@@ -46,6 +46,8 @@ public class MenuMainState extends BasicGameState {
 	private static final int HIGHSCORES_TITLE_X = 760;
 	private static final int HIGHSCORES_TITLE_Y = 238;
 	
+	private Popup popup;
+	
 	private Separator separatorTop;
 	private String separatorTopTitle = "";
 	
@@ -92,6 +94,9 @@ public class MenuMainState extends BasicGameState {
 				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
 				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_Quit2_add.png"));
+		
+		popup = new Popup("DADA", mainGame.getDefaultXRes(), mainGame.getDefaultYRes());
+		popup.setActive(true);
 		
 	}
 	
@@ -152,6 +157,7 @@ public class MenuMainState extends BasicGameState {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			processButtons(input);
 		}
+		
 		exit(container, sbg, delta);
 	}
 	
@@ -229,6 +235,7 @@ public class MenuMainState extends BasicGameState {
 		lanButton.drawColor(graphics, input, mainGame.getColor());
 		optionsButton.drawColor(graphics, input, mainGame.getColor());
 		quitButton.drawColor(graphics, input, mainGame.getColor());
+		popup.drawColor(graphics, input, mainGame.getColor());
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -25,9 +24,6 @@ public class MenuGameoverState extends BasicGameState {
 	private Button exitButton;
 	
 	private MainGame mainGame;
-	private TextField textField;
-	private Image tfBackgroundN;
-	private Image tfBackgroundA;
 	private Image health0Image;
 	private Image health1Image;
 	private Image health2Image;
@@ -52,16 +48,11 @@ public class MenuGameoverState extends BasicGameState {
 	private static final int MENU_BUTTON_Y = 625;
 	private static final int EXIT_BUTTON_Y = 675;
 	
-	private static final int HIGHSCORES_X = 1000;
-	
 	private static final int BUTTON_WIDTH = 1000;
 	private static final int BUTTON_HEIGHT = 50;
 	
 	private static final int TEXT_FIELD_X = 164;
 	private static final int TEXT_FIELD_Y = 438;
-	private static final int TEXT_FIELD_WIDTH = 700;
-	private static final int TEXT_FIELD_HEIGHT = 60;
-	private static final int TF_BACKGROUND_DEVIATION = 27;
 	
 	private static final int HEALTH_IMAGE_THREE = 3;
 	private static final int HEALTH_IMAGE_FOUR = 4;
@@ -74,6 +65,14 @@ public class MenuGameoverState extends BasicGameState {
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
 	private static final int MAX_NAME_LENGTH = 34;
+	
+	private static final int HIGHSCORES_X = 900;
+	private static final int HIGHSCORES_Y = 288;
+	private static final int HIGHSCORES_TITLE_X = 760;
+	private static final int HIGHSCORES_TITLE_Y = 238;
+
+	private Separator separatorTop;
+	private String separatorTopTitle = "";
 	
 	private int displayLives;
 	
@@ -95,17 +94,9 @@ public class MenuGameoverState extends BasicGameState {
 			throws SlickException {
 		initButtons();
 		initHealthImages();
-		initTextFieldBackgroundImgs();
-		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player", container);
-	}
-
-	/**
-	 * Initialize the background images of the text field.
-	 * @throws SlickException if something goes wrong / file not found
-	 */
-	private void initTextFieldBackgroundImgs() throws SlickException {
-		tfBackgroundN = new Image("resources/images_UI/textfield_Norm.png");
-		tfBackgroundA = new Image("resources/images_UI/textfield_Add.png");
+		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, false, separatorTopTitle,
+				container.getWidth());
+		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player name", container);
 	}
 
 	/**
@@ -152,17 +143,11 @@ public class MenuGameoverState extends BasicGameState {
 		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 	}
 	
-	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
 		mainGame.getLogger().log("Entering MenuGameoverState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
-		textField = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
-				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
-		textField.setBackgroundColor(null);
-		textField.setBorderColor(null);
-		textField.setFocus(true);
 		displayLives = mainGame.getLifeCount();
 		mainGame.setLifeCount(MainGame.getLives());
 		inputMessage = null;
@@ -212,6 +197,7 @@ public class MenuGameoverState extends BasicGameState {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			processButtons(input);
 		}
+		nameField.update(input);
 		handleTextField(input);
 		exit(container, sbg, delta);
 	}
@@ -256,7 +242,6 @@ public class MenuGameoverState extends BasicGameState {
 	 * @param input the keyboard/mouse input user
 	 */
 	private void handleTextField(Input input) {
-		
 		if (nameField.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
 				|| inputMessage.equals("Maximum length is 34 characters")) 
 				&& !highScoreEntered) {
@@ -289,10 +274,12 @@ public class MenuGameoverState extends BasicGameState {
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-		RND.text(graphics, SEPARATOR_X, SEPARATOR_Y, "========================");
+		separatorTop.drawColor(graphics, mainGame.getColor());
 		mainGame.getHighscores().sort();
 		String highScoresString = mainGame.getHighscores().toString();
-		RND.text(graphics, HIGHSCORES_X, SEPARATOR_Y, highScoresString);
+		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
+		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
+				"The best scores of your predecessors!");
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 		renderLives(graphics);
@@ -373,7 +360,7 @@ public class MenuGameoverState extends BasicGameState {
 		mainGame.getHighscores().add(score);
 		mainGame.getHighscores().sort();
 		HighScoresParser.writeHighScores(mainGame.getHighscoresFile(), mainGame.getHighscores());
-		inputMessage = "# " + nameField.getText() + ", your score of " + mainGame.getScore();
+		inputMessage = "# Your score of " + mainGame.getScore();
 		inputMessage += " points is saved!";
 		mainGame.getLogger().log("Score saved", Logger.PriorityLevels.MEDIUM, "highscores");
 	}

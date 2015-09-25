@@ -32,7 +32,7 @@ public class MenuSettingsState extends BasicGameState {
 	// Game Colors
 	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
-	private static final Color COLOR_GREEN = new Color(0.25f, 0.6f, 0.1f);
+	private static final Color COLOR_GREEN = new Color(0.35f, 0.6f, 0.05f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
 	private static final Color COLOR_PINK = new Color(0.85f, 0.0f, 0.4f);
 	private static final Color COLOR_WHITE = new Color(0.5f, 0.5f, 0.5f);
@@ -55,7 +55,11 @@ public class MenuSettingsState extends BasicGameState {
 	private MyRectangle arie2Rectangle;
 
 	private Separator separatorTop;
-	private String separatorTopTitle = " Options Menu ";
+	private Separator separatorMiddle;
+	private Separator separatorBottom;
+	private String separatorTopTitle = "";
+	private String separatorMiddleTitle = " Player Controls ";
+	private String separatorBottomTitle = " Settings ";
 	
 	private MainGame mainGame;
 	private Input input;
@@ -68,10 +72,10 @@ public class MenuSettingsState extends BasicGameState {
 	
 	private static final int LOGO_X = 160;
 	private static final int LOGO_Y = 110;
-	private static final int SEPARATOR_X = 319;
-	private static final int SEPARATOR_X_2 = 164;
+	private static final int SEPARATOR_X = 164;
 	private static final int SEPARATOR_Y = 190;
-	private static final int SEPARATOR_Y_2 = 510;
+	private static final int SEPARATOR_Y_2 = 338;
+	private static final int SEPARATOR_Y_3 = 510;
 	
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
@@ -191,7 +195,11 @@ public class MenuSettingsState extends BasicGameState {
 				PLAYER_SPRITE_HEIGHT);
 		arie2Rectangle = new MyRectangle(ARIE_2_X, ARIE_2_Y, PLAYER_SPRITE_WIDTH, 
 				PLAYER_SPRITE_HEIGHT);
-		separatorTop = new Separator(SEPARATOR_X_2, SEPARATOR_Y, true, separatorTopTitle,
+		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, true, separatorTopTitle,
+				container.getWidth());
+		separatorMiddle = new Separator(SEPARATOR_X, SEPARATOR_Y_2, false, separatorMiddleTitle,
+				container.getWidth());
+		separatorBottom = new Separator(SEPARATOR_X, SEPARATOR_Y_3, false, separatorBottomTitle,
 				container.getWidth());
 	}
 	
@@ -419,10 +427,9 @@ public class MenuSettingsState extends BasicGameState {
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-		String tempString = "==============================";
-		tempString += "=======================================";
 		separatorTop.drawColor(graphics, mainGame.getColor());
-		RND.text(graphics, SEPARATOR_X_2, SEPARATOR_Y_2, tempString + "==========");
+		separatorMiddle.drawColor(graphics, mainGame.getColor());
+		separatorBottom.drawColor(graphics, mainGame.getColor());
 		drawControls(graphics);
 		drawColorControls(graphics);
 		// any and all drawing is done BEFORE THESE TWO FOR THE 1000TH TIME

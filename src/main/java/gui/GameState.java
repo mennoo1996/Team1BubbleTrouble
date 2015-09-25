@@ -186,10 +186,12 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
-	private static final int POWERUP_CHANCE = 50;
-	private static final int COIN_CHANCE = 100;
+	private static final int POWERUP_CHANCE = 20;
+	private static final int COIN_CHANCE = 30;
 	private static final int POWERUP_IMAGE_OFFSET = 12;
 	private static final int COIN_IMAGE_OFFSET = 3;
+	private static final int CIRCLES_UPDATE_RATE = 10;
+	private int lastCircleUpdate;
 	// Level ending, empty bar
 	
 	private Random random;
@@ -251,6 +253,7 @@ public class GameState extends BasicGameState {
 		gateList = levels.getLevel(mainGame.getLevelCounter()).getGates();
 		droppedPowerups = new ArrayList<>();
 		droppedCoins = new ArrayList<>();
+		lastCircleUpdate = 0;
 	}
 	
 	
@@ -370,6 +373,15 @@ public class GameState extends BasicGameState {
 	 * @param curTime the current time
 	 */
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
+		
+		if (mainGame.isHost()) {
+			lastCircleUpdate++;
+			if (lastCircleUpdate >= CIRCLES_UPDATE_RATE) {
+				lastCircleUpdate = 0;
+				mainGame.getHost().updateCircles(circleList.getCircles());
+			}
+		}
+		
 		processTime(sbg, curTime);
 
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
@@ -427,6 +439,7 @@ public class GameState extends BasicGameState {
 			} else if (menuButton.isMouseOver(input)) {
 				mainGame.setScore(0);
 				mainGame.setLevelCounter(0);
+				mainGame.killMultiplayer();
 				mainGame.setSwitchState(mainGame.getStartState());
 			} else if (exitButton.isMouseOver(input)) {
 				mainGame.setSwitchState(-1);
@@ -493,7 +506,7 @@ public class GameState extends BasicGameState {
             	if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
             		mainGame.getHost().sendFloatingScore(floatingScore);
             	}
-            	updateShotCirles2(circle);
+            	updateShotCirles2(circle, false);
 			}
         }
 	}
@@ -501,8 +514,9 @@ public class GameState extends BasicGameState {
 	/**
 	 * Process the effects of a shooting a circle.
 	 * @param circle the circle shot
+	 * @param fromPeer indicates if the split command came from a peer
 	 */
-	private void updateShotCirles2(BouncingCircle circle) {
+	public void updateShotCirles2(BouncingCircle circle, boolean fromPeer) {
 		if (circleList.getCircles().contains(circle)) {
             circleList.getCircles().remove(circle);
             circle.setDone(true);
@@ -521,8 +535,11 @@ public class GameState extends BasicGameState {
         } // if it was part of the gate reqs, add to new gate reqs
 		processUnlockCirclesGates(circle, splits);
 		
-		if (mainGame.isHost()) {
-			mainGame.getHost().updateCircles(getCircleList().getCircles());
+		if (mainGame.isHost() && !fromPeer) {
+			//mainGame.getHost().updateCircles(getCircleList().getCircles());
+			mainGame.getHost().splittedCircle(circle);
+		} else if (mainGame.isClient() && !fromPeer) {
+			mainGame.getClient().splittedCircle(circle);
 		}
 	}
 

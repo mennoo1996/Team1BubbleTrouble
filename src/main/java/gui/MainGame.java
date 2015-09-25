@@ -1,5 +1,7 @@
 package gui;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import lan.Client;
 import lan.Host;
@@ -39,7 +41,7 @@ public class MainGame extends StateBasedGame {
 	private static final int COLOR_COUNT = 6;
 	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
-	private static final Color COLOR_GREEN = new Color(0.25f, 0.6f, 0.1f);
+	private static final Color COLOR_GREEN = new Color(0.35f, 0.6f, 0.05f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
 	private static final Color COLOR_PINK = new Color(0.85f, 0.0f, 0.4f);
 	private static final Color COLOR_WHITE = new Color(0.5f, 0.5f, 0.5f);
@@ -122,6 +124,7 @@ public class MainGame extends StateBasedGame {
 	private Client client;
 	private boolean isHost;
 	private boolean isClient;
+	private ExecutorService multiplayerThreadManager;
 
 
 	/**
@@ -139,8 +142,8 @@ public class MainGame extends StateBasedGame {
 		this.player2ImageStringN = "Player2sprite_Norm.png";
 		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
-		this.setColor(COLOR_ORANGE);
-		this.setNextColor(COLOR_ORANGE);
+		this.setColor(COLOR_GREEN);
+		this.setNextColor(COLOR_GREEN);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		highscores.setLogger(logger);
 		this.multiplayer = false;
@@ -909,10 +912,13 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
+	 * Sets and starts the host.
 	 * @param host the host to set
 	 */
-	public void setHost(Host host) {
+	public void spawnHost(Host host) {
 		this.host = host;
+		multiplayerThreadManager = Executors.newFixedThreadPool(1);
+		multiplayerThreadManager.submit(this.host);
 	}
 
 	/**
@@ -965,12 +971,40 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
+	 * Sets and starts client.
 	 * @param client the client to set
 	 */
-	public void setClient(Client client) {
+	public void spawnClient(Client client) {
 		this.client = client;
+		this.multiplayerThreadManager = Executors.newFixedThreadPool(1);
+		this.multiplayerThreadManager.submit(this.client);
 	}
-	
+
+	/**
+	 * Kill any multiplayer socket connections running.
+	 */
+	public void killMultiplayer() {
+		System.out.println("Killing multiplayer");
+		if (this.lanMultiplayer) {
+			if (isHost) {
+				try {
+					host.shutdown();
+				} catch (InterruptedException e) {
+					System.out.println(e);
+				}
+				this.isHost = false;
+			} else {
+				try {
+					client.shutdown();
+				} catch (InterruptedException e) {
+					System.out.println(e);
+				}
+				this.isClient = false;
+			}
+			this.lanMultiplayer = false;
+			this.multiplayerThreadManager.shutdownNow();
+		}
+	}
 	
 }
 

@@ -105,8 +105,6 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		mainGame.getLogger().log("Entering MenuMultiplayerState", 
 				Logger.PriorityLevels.LOW, "States");
-		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player", container);
-		ipField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y_2, "127.0.0.1", container);
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
@@ -142,6 +140,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		initButtons();
+		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player", container);
+		ipField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y_2, "127.0.0.1", container);
 		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, true, separatorTopTitle,
 				container.getWidth());
 		separatorHost = new Separator(SEPARATOR_X, SEPARATOR_Y_2, false, separatorHostTitle,

@@ -160,8 +160,15 @@ public class Player {
 	 */
 	private void processPowerups(float deltaFloat, float containerHeight,
 			float containerWidth) { // MARKED
+		ArrayList<Powerup> dummyList = new ArrayList<Powerup>();
+		
+		synchronized (gameState.getDroppedPowerups()) {
+			for (Powerup powerup : gameState.getDroppedPowerups()) {
+				dummyList.add(powerup.clone());
+			}
+		}
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
-		for (Powerup powerup : gameState.getDroppedPowerups()) {
+		for (Powerup powerup : dummyList) {
 			powerup.update(gameState, containerHeight, deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {

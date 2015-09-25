@@ -149,4 +149,31 @@ public class Powerup {
     public boolean removePowerup() {
         return timeRemaining <= 0;
     }
+    
+    
+    /**
+	 * @return the timeRemaining
+	 */
+	public long getTimeRemaining() {
+		return timeRemaining;
+	}
+
+	/**
+	 * @param timeRemaining the timeRemaining to set
+	 */
+	public void setTimeRemaining(long timeRemaining) {
+		this.timeRemaining = timeRemaining;
+	}
+
+	/**
+	 * Clone the powerup.
+	 */
+	@Override
+	public Powerup clone() {
+		Powerup res = new Powerup(x, y, type);
+		res.setTimeRemaining(timeRemaining);
+		res.setxId(xId);
+		res.setyId(yId);
+		return res;
+	}
 }

@@ -435,6 +435,25 @@ public class BouncingCircle extends Circle {
 	}
 	
 	/**
+	 * Method that returns a string representations of a circleList.
+	 * @param circleList	the circlelist to represent\
+	 * @param gateNumber	the gatenumber
+	 * @return				a string containing the representations
+	 */
+	public static String requiredListToString(ArrayList<BouncingCircle> circleList, 
+			int gateNumber) {
+		String res = "UPDATE REQUIREDLIST START " + gateNumber;
+		
+		for (BouncingCircle bCircle : circleList) {
+			res += "\n" + bCircle.toString();
+		}
+		
+		res += "\nUPDATE CIRCLELIST END";
+		
+		return res;
+	}
+	
+	/**
 	 * Clone the bouncingCircle.
 	 */
 	@Override

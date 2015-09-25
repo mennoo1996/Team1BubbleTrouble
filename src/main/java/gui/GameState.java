@@ -190,7 +190,7 @@ public class GameState extends BasicGameState {
 	private static final int COIN_CHANCE = 30;
 	private static final int POWERUP_IMAGE_OFFSET = 12;
 	private static final int COIN_IMAGE_OFFSET = 3;
-	private static final int CIRCLES_UPDATE_RATE = 10;
+	private static final int CIRCLES_UPDATE_RATE = 600;
 	private int lastCircleUpdate;
 	// Level ending, empty bar
 	
@@ -372,26 +372,26 @@ public class GameState extends BasicGameState {
 	 * @param delta the time since the last frame in ms
 	 * @param curTime the current time
 	 */
-	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
-		
+	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {	
 		if (mainGame.isHost()) {
 			lastCircleUpdate++;
 			if (lastCircleUpdate >= CIRCLES_UPDATE_RATE) {
 				lastCircleUpdate = 0;
 				mainGame.getHost().updateCircles(circleList.getCircles());
+				
+				for (int i = 0; i < gateList.size(); i++) {
+					mainGame.getHost().updateRequiredForGateList(
+							gateList.get(i).getUnlockCircles(), i);
+				}
 			}
 		}
-		
 		processTime(sbg, curTime);
-
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
-
 		// player-thingy
 		mainGame.getPlayerList().updatePlayers(deltaFloat,
 				container.getHeight(),
 				container.getWidth());
 		processPause();
-		
 		processCircles(container, sbg, deltaFloat);
 		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate

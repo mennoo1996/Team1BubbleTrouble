@@ -44,7 +44,10 @@ public class Client implements Runnable {
 	private long timeLastInput;
 	private boolean heartBeatCheck;
     private boolean editingCircleList;
+    private boolean editingRequiredList;
     private ArrayList<BouncingCircle> circleList;
+    private ArrayList<BouncingCircle> requiredList;
+    private int gateNumber;
 	private boolean running;
     
     private static final int THREE = 3;
@@ -75,7 +78,9 @@ public class Client implements Runnable {
 
         this.messageQueue = new LinkedList<>();
         this.circleList = new ArrayList<BouncingCircle>();
+        this.requiredList = new ArrayList<BouncingCircle>();
         this.editingCircleList = false;
+        this.editingRequiredList = false;
     }
 
     @Override
@@ -410,8 +415,29 @@ public class Client implements Runnable {
     	String message2 = message.trim();
     	if (message2.startsWith("CIRCLELIST")) {
     		circleListMessage(message2.replaceFirst("CIRCLELIST", ""));
+    	} else if (message2.startsWith("REQUIREDLIST")) {
+    		requiredListMessage(message2.replaceFirst("REQUIREDLIST", ""));
     	}
     	
+    }
+    
+    /**
+     * Process a message about the circleList.
+     * @param message	the message to process
+     */
+    private void requiredListMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	this.gateNumber = Integer.parseInt(stringList[1]);
+    	
+    	if (stringList[0].equals("START") && !this.editingCircleList) {
+    		this.requiredList = new ArrayList<BouncingCircle>();
+    		this.editingRequiredList = true;
+    	} else if (stringList[0].equals("END") && this.editingCircleList) {
+    		System.out.println("setting shit");
+    		this.editingRequiredList = false;
+    		gameState.getGateList().get(gateNumber).setRequired(requiredList);
+    	}
     }
     
     /**

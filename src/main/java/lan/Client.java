@@ -114,13 +114,12 @@ public class Client implements Runnable {
 	}
 
 	/**
-     * Process server commands.
+     * Process the commands given by the server.
      */
     private void readServerCommands() {
         try {
 			while (reader.ready()) {
 				String message = reader.readLine();
-				//System.out.println("received message: " + message);
 				String message2 = message.trim();
 				if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
@@ -136,7 +135,7 @@ public class Client implements Runnable {
 					coinMessage(message2.replaceFirst("COIN", ""));
 				} else if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
-				} 
+				}
 				readServerCommands2(message2);
 				timeLastInput = System.currentTimeMillis();
 			}
@@ -147,20 +146,33 @@ public class Client implements Runnable {
     }
     
     /**
-     * second part of the method that reads server commands.
-     * @param message2	the message
+     * Add a FloatingScore to the list.
+     * @param message String containing the FloatingScore to add
+     */
+    private void floatingMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+		gameState.getFloatingScores().add(new FloatingScore(stringList[2],
+				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
+	}
+
+	/**
+     * Continue processing the commands given by the server.
+     * @param message2	the message to process
      */
     private void readServerCommands2(String message2) {
     	if (message2.startsWith("HEARTBEAT_ALIVE")) {
 			heartBeatCheck = false;
 		} else if (message2.startsWith("LASER")) {
 			laserMessage(message2.replaceFirst("LASER", ""));
+		} else if (message2.startsWith("FLOATINGSCORE")) {
+			floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
 		}
     }
     
     /**
      * Message about lasers.
-     * @param message	the message
+     * @param message String containing information about lasers
      */
     private void laserMessage(String message) {
     	String message2 = message.trim();
@@ -172,7 +184,7 @@ public class Client implements Runnable {
     
     /**
      * Message about a laser that is done.
-     * @param message	the message
+     * @param message String containing information about the laser
      */
     private void laserDoneMessage(String message) {
     	String message2 = message.trim();
@@ -183,7 +195,7 @@ public class Client implements Runnable {
     
     /**
      * Process a message about the player.
-     * @param message the message to process
+     * @param message String containing information about the Player
      */
     private void playerMessage(String message) {
     	String message2 = message.trim();
@@ -643,13 +655,12 @@ public class Client implements Runnable {
     }
     
     /**
-     * Notify the host that you are dead.
-     * javadoc.
-     * @param id .
-     * @param x .
-     * @param y .
-     * @param laserSpeed .
-     * @param laserWidth .
+     * Send a message to the host in order for it to update the laser.
+     * @param id the player number
+     * @param x the x location of the laser
+     * @param y the y location of the laser
+     * @param laserSpeed the speed of the laser
+     * @param laserWidth the width of the laser
      */
     public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
     	sendMessageToHost("NEW LASER " 
@@ -657,7 +668,7 @@ public class Client implements Runnable {
     }
     
     /**
-     * javadoc.
+     * Tell the host that the client is dead.
      */
     public void updateClientDead() {
     	sendMessageToHost("PLAYER DEAD CLIENT");

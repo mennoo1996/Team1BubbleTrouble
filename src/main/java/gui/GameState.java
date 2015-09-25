@@ -332,7 +332,7 @@ public class GameState extends BasicGameState {
 					mainGame.getLogger().log("Starting level", 
 							Logger.PriorityLevels.MEDIUM, "levels");
 					countIn = false;
-					mainGame.getPlayerList().setDied(true);
+					mainGame.getPlayerList().setDied(false);
 					if (mainGame.isHost()) {
 						mainGame.getHost().updateLevelStarted();
 					}

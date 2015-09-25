@@ -46,6 +46,7 @@ public class PlayerList {
 		this.mainGame = mainGame;
 		this.gameState = gameState;
 		processCollisions = true;
+		this.died = false;
 	} 
 	
 	/**
@@ -237,14 +238,17 @@ public class PlayerList {
 	 * @param sbg The stateBasedGame that uses this state.
 	 */
 	public void playerDeath(StateBasedGame sbg) {
+		System.out.println("playerdeath");
+		System.out.println(died);
 		if (!died) {
-			died = true;
 			mainGame.getLogger().log("Player died, reducing lives", Logger.PriorityLevels.MEDIUM,
 					"players");
 			if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
 				mainGame.decreaselifeCount();
 				if (mainGame.isHost()) {
 					mainGame.getHost().updateLives(mainGame.getLifeCount());
+
+					died = true;
 				}
 			}
 			if (mainGame.getLifeCount() <= 0) {

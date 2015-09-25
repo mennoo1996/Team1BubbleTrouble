@@ -541,5 +541,13 @@ public class Host implements Runnable {
     public void updatePauseStopped() {
     	sendMessageToClient("SYSTEM PAUSE STOPPED");
     }
+    
+    /**
+     * Notify the client with new lives.
+     * @param lives the lives to update
+     */
+    public void updateLives(int lives) {
+    	sendMessageToClient("SYSTEM LIVES " + lives);
+    }
 }
 

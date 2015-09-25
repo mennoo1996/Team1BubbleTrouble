@@ -528,7 +528,20 @@ public class Client implements Runnable {
     		countinMessage(message2.replaceFirst("COUNTIN", ""));
     	} else if (message2.startsWith("PAUSE")) {
     		pauseMessage(message2.replaceFirst("PAUSE", ""));
+    	} else if (message2.startsWith("LIVES")) {
+    		livesMessage(message2.replaceFirst("LIVES", ""));
     	}
+    }
+    
+    /**
+     * Process message about lives.
+     * @param message	the message to process
+     */
+    private void livesMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	int lives = Integer.parseInt(message2);
+    	mainGame.setLifeCount(lives);
     }
     
     /**

@@ -238,7 +238,14 @@ public class PlayerList {
 	public void playerDeath(StateBasedGame sbg) {
 		mainGame.getLogger().log("Player died, reducing lives", 
 				Logger.PriorityLevels.MEDIUM, "players");
-		mainGame.decreaselifeCount();
+		
+		if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+			mainGame.decreaselifeCount();
+			if (mainGame.isHost()) {
+				mainGame.getHost().updateLives(mainGame.getLifeCount());
+			}
+		}
+		
 		if (mainGame.getLifeCount() <= 0) {
 			mainGame.setScore(mainGame.getScore() + gameState.getScore());
 			mainGame.setSwitchState(mainGame.getGameOverState());

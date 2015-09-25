@@ -185,8 +185,8 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
-	private static final int POWERUP_CHANCE = 20;
-	private static final int COIN_CHANCE = 30;
+	private static final int POWERUP_CHANCE = 50;
+	private static final int COIN_CHANCE = 100;
 	private static final int POWERUP_IMAGE_OFFSET = 12;
 	private static final int COIN_IMAGE_OFFSET = 3;
 	// Level ending, empty bar
@@ -545,9 +545,9 @@ public class GameState extends BasicGameState {
 	 */
 	private void updateActiveCircles(GameContainer container, StateBasedGame sbg,
 			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
-		for (BouncingCircle circle : circleList) {
-            //update circles
-            circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
+		for (Iterator<BouncingCircle> iterator = circleList.iterator(); iterator.hasNext();) {
+		    BouncingCircle circle = iterator.next();
+		    circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
 
             mainGame.getPlayerList().intersectPlayersWithCircle(circle);
             
@@ -556,8 +556,7 @@ public class GameState extends BasicGameState {
             if (circle.isHitCeiling()) {
             	ceilingList.add(circle);
             }
-
-        }
+		}
 	}
 
 	/**
@@ -764,9 +763,10 @@ public class GameState extends BasicGameState {
 			}
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
-					* COUNTER_BAR_X_FACTOR, height, "#" + rem / SHIELD_COUNTER_DIVIDER + "s");
-		}
-		if (mainGame.isMultiplayer() && mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
+					* COUNTER_BAR_X_FACTOR, height,
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s", mainGame.getColor()); }
+		if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
+				&& mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
 			float rem = mainGame.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
@@ -775,11 +775,10 @@ public class GameState extends BasicGameState {
 						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
 						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
 			}
-			RND.text(SHIELD_COUNTER_OFFSET_2_X 
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, 
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s");
-		}
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s", mainGame.getColor()); }
 	}
 	
 	/**
@@ -811,8 +810,6 @@ public class GameState extends BasicGameState {
 						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
 						mainGame.getColor());
 			}
-//			graphics.fillRect(pow.getX(), pow.getY(),
-//					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
 		}
 	}
 
@@ -909,8 +906,7 @@ public class GameState extends BasicGameState {
 					try {
 						throw new SlickException("Radius was not one of the supported");
 					} catch (SlickException e) {
-						e.printStackTrace();
-					}
+						e.printStackTrace(); }
 			}
 		}
 	}
@@ -1210,7 +1206,7 @@ public class GameState extends BasicGameState {
 		Coin someCoin = new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney);
 		droppedCoins.add(someCoin);
 		if (mainGame.isLanMultiplayer()) {
-			mainGame.getHost().updateCoins(someCoin);
+			mainGame.getHost().updateCoinsAdd(someCoin);
 		}
 	}
 
@@ -1225,7 +1221,7 @@ public class GameState extends BasicGameState {
 		Powerup somePowerup = new Powerup(circle.getCenterX(), circle.getCenterY(), newPowerup);
 		droppedPowerups.add(somePowerup);
 		if (mainGame.isLanMultiplayer()) {
-			mainGame.getHost().updatePowerups(somePowerup);
+			mainGame.getHost().updatePowerupsAdd(somePowerup);
 		}
 	}
 

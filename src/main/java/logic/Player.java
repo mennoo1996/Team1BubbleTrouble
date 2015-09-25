@@ -165,16 +165,16 @@ public class Player {
 			powerup.update(gameState, containerHeight, deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
-				if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+				if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
 					this.addPowerup(powerup.getType());
 					gameState.getFloatingScores().add(new FloatingScore(powerup));
 					usedPowerups.add(powerup);
 					
-					if (mainGame.isHost()) {
-						mainGame.getHost().updatePowerupsHost(powerup);
+					if (mainGame.isHost() && playerNumber == 0) {
+						mainGame.getHost().updatePowerupsDictate(powerup);
 					}
-				} else if (mainGame.isClient()) {
-					mainGame.getClient().updatePowerupsClient(powerup);
+				} else if (mainGame.isClient() && playerNumber == 1) {
+					mainGame.getClient().pleaPowerup(powerup);
 				}
 			}
 		}
@@ -193,18 +193,18 @@ public class Player {
 		for (Coin coin : gameState.getDroppedCoins()) {
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
-				if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+				if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
 					//Here is the claim
 					gameState.addToScore(coin.getPoints());
 					gameState.getFloatingScores().add(new FloatingScore(coin));
 					usedCoins.add(coin);
 					mainGame.getLogger().log("Picked up coin", 
 							Logger.PriorityLevels.MEDIUM, "powerups");
-					if (mainGame.isHost()) {
-						mainGame.getHost().updateCoinsHost(coin);
+					if (mainGame.isHost() && playerNumber == 0) {
+						mainGame.getHost().updateCoinsDictate(coin);
 					}
-				} else if (mainGame.isClient()) {
-					mainGame.getClient().updateCoinsClient(coin);
+				} else if (mainGame.isClient() && playerNumber == 1) {
+					mainGame.getClient().pleaCoin(coin);
 				}
 				
 			}

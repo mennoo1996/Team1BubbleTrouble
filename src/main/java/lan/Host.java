@@ -172,7 +172,13 @@ public class Host implements Runnable {
     private void readClientInputs2(String message2) {
     	if (message2.startsWith("LASER")) {
 			laserMessage(message2.replaceFirst("LASER", ""));
-		}
+		} else if (message2.startsWith("SHUTDOWN")) {
+            MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
+                    this.mainGame.getState(mainGame.getMultiplayerState());
+            multiplayerState.addMessage("Client Quit.");
+            mainGame.setSwitchState(mainGame.getMultiplayerState());
+            mainGame.killMultiplayer();
+        }
     }
     
     /**
@@ -396,7 +402,10 @@ public class Host implements Runnable {
      */
     public void shutdown() throws InterruptedException {
         logger.log("Shutting down host server", Logger.PriorityLevels.LOW, "lan");
-        running = false;
+        if (writer != null) {
+            writer.println("SHUTDOWN");
+            running = false;
+        }
         try {
             serverSocket.close();
         } catch (IOException er) {

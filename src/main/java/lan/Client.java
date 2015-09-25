@@ -45,6 +45,7 @@ public class Client implements Runnable {
 	private boolean heartBeatCheck;
     private boolean editingCircleList;
     private ArrayList<BouncingCircle> circleList;
+	private boolean running;
     
     private static final int THREE = 3;
     private static final int FOUR = 4;
@@ -69,6 +70,7 @@ public class Client implements Runnable {
         this.portNumber = portNumber;
 		this.logger = mainGame.getLogger();
         this.isConnected = false;
+		this.running = true;
         this.messageQueue = new LinkedList<>();
         this.circleList = new ArrayList<BouncingCircle>();
         this.editingCircleList = false;
@@ -90,7 +92,7 @@ public class Client implements Runnable {
 			System.out.println("Connected to server");
 			timeLastInput = System.currentTimeMillis();
 			// This continues ad infinitum
-			while (true) {
+			while (running) {
 				manageHeartbeatCheck();
 				while (!this.messageQueue.isEmpty()) {
 					System.out.println("sending message: " + this.messageQueue.peek());
@@ -183,6 +185,12 @@ public class Client implements Runnable {
 			floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
 		} else if (message2.startsWith("SPLIT")) {
 			splitMessage(message2.replaceFirst("SPLIT", ""));
+		} else if (message2.startsWith("SHUTDOWN")) {
+			MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
+					this.mainGame.getState(mainGame.getMultiplayerState());
+			multiplayerState.addMessage("Host Quit.");
+			mainGame.setSwitchState(mainGame.getMultiplayerState());
+			mainGame.killMultiplayer();
 		}
 		// heartBeat reset
 		System.out.println("Reset heartbeat");
@@ -556,6 +564,10 @@ public class Client implements Runnable {
      */
     public void shutdown() throws InterruptedException {
         logger.log("Shutting down client connection", Logger.PriorityLevels.LOW, "lan");
+		if (writer != null) {
+			writer.println("SHUTDOWN");
+			running = false;
+		}
         try {
             socket.close();
         } catch (IOException er) {

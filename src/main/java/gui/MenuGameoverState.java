@@ -217,7 +217,6 @@ public class MenuGameoverState extends BasicGameState {
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} 
 		else if (saveButton.isMouseOver(input)) {
-			// Save score
 			saveScore();
 			mainGame.getLogger().log("save button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
@@ -226,6 +225,7 @@ public class MenuGameoverState extends BasicGameState {
 			// Go to startState
 			mainGame.setScore(0);
 			mainGame.setLevelCounter(0);
+			mainGame.killMultiplayer();
 			mainGame.setSwitchState(mainGame.getStartState());
 			mainGame.getLogger().log("Menu Button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");

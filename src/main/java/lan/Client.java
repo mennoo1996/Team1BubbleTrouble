@@ -555,15 +555,15 @@ public class Client implements Runnable {
      * @param stringList the IDs of the coins
      */
     private void grantCoin(String[] stringList) {
-    	ArrayList<Coin> machvise = new ArrayList<Coin>();
-		for (Coin george : gameState.getDroppedCoins()) {
-			if (george.getxId() == Float.parseFloat(stringList[0])
-					&& george.getyId() == Float.parseFloat(stringList[1])) {
-				machvise.add(george);
-				gameState.getFloatingScores().add(new FloatingScore(george));
+    	ArrayList<Coin> coinlist = new ArrayList<Coin>();
+		for (Coin coin : gameState.getDroppedCoins()) {
+			if (coin.getxId() == Float.parseFloat(stringList[0])
+					&& coin.getyId() == Float.parseFloat(stringList[1])) {
+				coinlist.add(coin);
+				gameState.getFloatingScores().add(new FloatingScore(coin));
 			}
 		}
-		gameState.getDroppedCoins().removeAll(machvise);
+		gameState.getDroppedCoins().removeAll(coinlist);
 	}
     
     /**

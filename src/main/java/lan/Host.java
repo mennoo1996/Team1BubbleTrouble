@@ -437,6 +437,14 @@ public class Host implements Runnable {
     }
     
     /**
+     * notify client of splitted circle.
+     * @param circle the splitted circle
+     */
+    public void splittedCircle(BouncingCircle circle) {
+    	sendMessageToClient("SPLIT " + circle.toString());
+    }
+    
+    /**
      * Process an incoming powerup message.
      * @param message the message to process
      */

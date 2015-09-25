@@ -493,7 +493,7 @@ public class GameState extends BasicGameState {
             	if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
             		mainGame.getHost().sendFloatingScore(floatingScore);
             	}
-            	updateShotCirles2(circle);
+            	updateShotCirles2(circle, false);
 			}
         }
 	}
@@ -501,8 +501,9 @@ public class GameState extends BasicGameState {
 	/**
 	 * Process the effects of a shooting a circle.
 	 * @param circle the circle shot
+	 * @param fromPeer indicates if the split command came from a peer
 	 */
-	private void updateShotCirles2(BouncingCircle circle) {
+	public void updateShotCirles2(BouncingCircle circle, boolean fromPeer) {
 		if (circleList.getCircles().contains(circle)) {
             circleList.getCircles().remove(circle);
             circle.setDone(true);
@@ -521,8 +522,9 @@ public class GameState extends BasicGameState {
         } // if it was part of the gate reqs, add to new gate reqs
 		processUnlockCirclesGates(circle, splits);
 		
-		if (mainGame.isHost()) {
-			mainGame.getHost().updateCircles(getCircleList().getCircles());
+		if (mainGame.isHost() && !fromPeer) {
+			//mainGame.getHost().updateCircles(getCircleList().getCircles());
+			mainGame.getHost().splittedCircle(circle);
 		}
 	}
 

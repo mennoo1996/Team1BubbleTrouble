@@ -892,7 +892,6 @@ public class GameState extends BasicGameState {
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
 		synchronized (gateList) {
 			for (Gate gate : gateList) {
-				//upper
 				int left = GATE_LEFT, down = GATE_DOWN;
 				float x = gate.getMinX() - left, y = getCeiling().getHeight() - GATE_Y_DEVIATION;
 				float x2 = x + gateUpperN.getWidth();
@@ -904,7 +903,6 @@ public class GameState extends BasicGameState {
 				float srcy2 = gateUpperN.getHeight();
 				RND.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
 						srcx, srcy, srcx2, srcy2, mainGame.getColor());
-				//lower
 				left = GATE_LEFT_LOWER;
 				float up = GATE_UP;
 				x = gate.getMinX() - left - 1;
@@ -975,16 +973,12 @@ public class GameState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawFloatingScores(Graphics graphics) {
-		ArrayList<FloatingScore> dummyList = new ArrayList<FloatingScore>();
 		synchronized (floatingScoreList) {
-			for (FloatingScore fs : floatingScoreList) {
-				dummyList.add(fs.clone());
+			for (FloatingScore score : floatingScoreList) {
+				RND.text(graphics, score.getX(), score.getY(), score.getScore(),
+						new Color(mainGame.getColor().r, mainGame.getColor().g,
+								mainGame.getColor().b, score.getOpacity()));
 			}
-		}
-		for (FloatingScore score : dummyList) {
-			RND.text(graphics, score.getX(), score.getY(), score.getScore(),
-					new Color(mainGame.getColor().r, mainGame.getColor().g,
-							mainGame.getColor().b, score.getOpacity()));
 		}
 	}
 	

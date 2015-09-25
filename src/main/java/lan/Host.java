@@ -127,7 +127,7 @@ public class Host implements Runnable {
 				} else if (message2.startsWith("POWERUP")) {
 					powerupMessage(message2.replaceFirst("POWERUP", ""));
 				} else if (message2.startsWith("COIN")) {
-					coinMessage(message2.replaceFirst("POWERUP", ""));
+					coinMessage(message2.replaceFirst("COIN", ""));
 				} else if (message2.startsWith("HEARTBEAT_CHECK")) {
                     this.sendMessageToClient("HEARTBEAT_ALIVE");
                 } else if (message2.startsWith("HEARTBEAT_ALIVE")) {
@@ -170,72 +170,6 @@ public class Host implements Runnable {
     	gameState.getWeaponList().setWeapon(id, weapon);
     	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
     }
-    
-    /**
-     * Process a message about a coin.
-     * @param message the message to process
-     */
-    private void coinMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-    	if (stringList[THREE].equals("PLEA")) {
-    		ArrayList<Coin> machvise = new ArrayList<Coin>();
-    		for (Coin george : gameState.getDroppedCoins()) {
-    			if (george.getxId() == Float.parseFloat(stringList[0])
-    					&& george.getyId() == Float.parseFloat(stringList[1])) {
-    				machvise.add(george);
-    				this.updateCoinsGrant(george);
-    				gameState.getFloatingScores().add(new FloatingScore(george));
-    			}
-    		}
-    		gameState.getDroppedCoins().removeAll(machvise);
-    	}
-	}
-
-    /**
-     * Grant a coin.
-     * @param coin the coin to grant.
-     */
-    private void updateCoinsGrant(Coin coin) {
-    	sendMessageToClient(coin.toString() + "GRANT ");
-	}
-
-	/**
-     * Process a powerup message.
-     * @param message the message to process
-     */
-	private void powerupMessage(String message) {
-		String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-    	if (stringList[THREE].equals("PLEA")) {
-    		ArrayList<Powerup> machvise = new ArrayList<Powerup>();
-    		for (Powerup george : gameState.getDroppedPowerups()) {
-    			if (george.getxId() == Float.parseFloat(stringList[0])
-    					&& george.getyId() == Float.parseFloat(stringList[1])) {
-    				machvise.add(george);
-    				this.updatePowerupsGrant(george);
-    				gameState.getFloatingScores().add(new FloatingScore(george));
-    				if (stringList[2].equals("SHIELD")) {
-    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
-    				} else if (stringList[2].equals("SPIKY")) {
-    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SPIKY);
-    				} else if (stringList[2].equals("INSTANT")) {
-    					mainGame.getPlayerList().getPlayers()
-    					.get(1).addPowerup(PowerupType.INSTANT);
-    				}
-    			}
-    		} //end of loop
-    		gameState.getDroppedPowerups().removeAll(machvise);
-    	}
-	}
-
-	/**
-	 * Grant a powerup.
-	 * @param powerup the powerup to grant
-	 */
-	private void updatePowerupsGrant(Powerup powerup) {
-		sendMessageToClient(powerup.toString() + "GRANT ");
-	}
 
 	/**
      * Process a player message.
@@ -336,7 +270,6 @@ public class Host implements Runnable {
     	}
     }
     
-
     /**
      * Attempt to gracefully shut down the LAN threads.
      * @throws InterruptedException Thrown if shutdown takes longer than expected.
@@ -458,36 +391,102 @@ public class Host implements Runnable {
     }
     
     /**
+     * Process an incoming powerup message.
+     * @param message the message to process
+     */
+	private void powerupMessage(String message) {
+		String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	if (stringList[THREE].equals("PLEA")) {
+    		ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
+    		for (Powerup powerup : gameState.getDroppedPowerups()) {
+    			if (powerup.getxId() == Float.parseFloat(stringList[0])
+    					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
+    				poweruplist.add(powerup);
+    				this.updatePowerupsGrant(powerup);
+    				gameState.getFloatingScores().add(new FloatingScore(powerup));
+    				if (stringList[2].equals("SHIELD")) {
+    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
+    				} else if (stringList[2].equals("SPIKY")) {
+    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SPIKY);
+    				} else if (stringList[2].equals("INSTANT")) {
+    					mainGame.getPlayerList().getPlayers()
+    					.get(1).addPowerup(PowerupType.INSTANT);
+    				}
+    			}
+    		} //end of loop
+    		gameState.getDroppedPowerups().removeAll(poweruplist);
+    	}
+	}
+    
+    /**
      * Send a powerup to the client.
-     * @param a the powerup to sent
+     * @param powerup the powerup to sent
      */
-    public void updatePowerups(Powerup a) {
-    	sendMessageToClient(a.toString() + "ADD ");
+    public void updatePowerupsAdd(Powerup powerup) {
+    	sendMessageToClient(powerup.toString() + "ADD ");
     }
     
     /**
-     * Send a coin to the client.
-     * @param a the coin to sent
+     *Dictate to the client a powerup goes to the host.
+     * @param powerup the powerup to dictate on
      */
-    public void updateCoins(Coin a) {
-    	sendMessageToClient(a.toString() + "ADD ");
+    public void updatePowerupsDictate(Powerup powerup) {
+    	sendMessageToClient(powerup.toString() + "DICTATE ");
     }
     
     /**
-     * Update a powerup on the client.
-     * @param a the powerup to sent
+	 * Grant a powerup.
+	 * @param powerup the powerup to grant
+	 */
+	private void updatePowerupsGrant(Powerup powerup) {
+		sendMessageToClient(powerup.toString() + "GRANT ");
+	}
+    
+    /**
+     * Process a message about a coin.
+     * @param message the message to process
      */
-    public void updatePowerupsHost(Powerup a) {
-    	sendMessageToClient(a.toString() + "DICTATE ");
+    private void coinMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	if (stringList[THREE].equals("PLEA")) {
+    		ArrayList<Coin> coinlist = new ArrayList<Coin>();
+    		for (Coin coin : gameState.getDroppedCoins()) {
+    			if (coin.getxId() == Float.parseFloat(stringList[0])
+    					&& coin.getyId() == Float.parseFloat(stringList[1])) {
+    				coinlist.add(coin);
+    				this.updateCoinsGrant(coin);
+    				gameState.getFloatingScores().add(new FloatingScore(coin));
+    			}
+    		}
+    		gameState.getDroppedCoins().removeAll(coinlist);
+    	}
+	}
+	
+    /**
+     * Send a coin to the client, to add to the level.
+     * @param coin the coin to send
+     */
+    public void updateCoinsAdd(Coin coin) {
+    	sendMessageToClient(coin.toString() + "ADD ");
     }
     
     /**
-     * Update a powerup on the client.
-     * @param a the coin to sent
+     * Dictate to the client a coin goes to the host.
+     * @param coin the coin to dictate on.
      */
-    public void updateCoinsHost(Coin a) {
-    	sendMessageToClient(a.toString() + "DICTATE ");
+    public void updateCoinsDictate(Coin coin) {
+    	sendMessageToClient(coin.toString() + "DICTATE ");
     }
+    
+    /**
+     * Grant a coin to the client.
+     * @param coin the coin to grant.
+     */
+    private void updateCoinsGrant(Coin coin) {
+    	sendMessageToClient(coin.toString() + "GRANT ");
+	}
     
     /**
      * Notify the client that the level has started.

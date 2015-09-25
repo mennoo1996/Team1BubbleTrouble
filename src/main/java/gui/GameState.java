@@ -1149,7 +1149,7 @@ public class GameState extends BasicGameState {
 		Coin someCoin = new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney);
 		droppedCoins.add(someCoin);
 		if (mainGame.isLanMultiplayer()) {
-			mainGame.getHost().updateCoins(someCoin);
+			mainGame.getHost().updateCoinsAdd(someCoin);
 		}
 	}
 
@@ -1164,7 +1164,7 @@ public class GameState extends BasicGameState {
 		Powerup somePowerup = new Powerup(circle.getCenterX(), circle.getCenterY(), newPowerup);
 		droppedPowerups.add(somePowerup);
 		if (mainGame.isLanMultiplayer()) {
-			mainGame.getHost().updatePowerups(somePowerup);
+			mainGame.getHost().updatePowerupsAdd(somePowerup);
 		}
 	}
 

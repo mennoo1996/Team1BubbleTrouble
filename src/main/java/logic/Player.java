@@ -171,10 +171,10 @@ public class Player {
 					usedPowerups.add(powerup);
 					
 					if (mainGame.isHost()) {
-						mainGame.getHost().updatePowerupsHost(powerup);
+						mainGame.getHost().updatePowerupsDictate(powerup);
 					}
 				} else if (mainGame.isClient()) {
-					mainGame.getClient().updatePowerupsClient(powerup);
+					mainGame.getClient().pleaPowerup(powerup);
 				}
 			}
 		}
@@ -201,10 +201,10 @@ public class Player {
 					mainGame.getLogger().log("Picked up coin", 
 							Logger.PriorityLevels.MEDIUM, "powerups");
 					if (mainGame.isHost()) {
-						mainGame.getHost().updateCoinsHost(coin);
+						mainGame.getHost().updateCoinsDictate(coin);
 					}
 				} else if (mainGame.isClient()) {
-					mainGame.getClient().updateCoinsClient(coin);
+					mainGame.getClient().pleaCoin(coin);
 				}
 				
 			}

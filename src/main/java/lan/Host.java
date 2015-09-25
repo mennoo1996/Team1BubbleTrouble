@@ -406,9 +406,11 @@ public class Host implements Runnable {
     				this.updatePowerupsGrant(powerup);
     				gameState.getFloatingScores().add(new FloatingScore(powerup));
     				if (stringList[2].equals("SHIELD")) {
-    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
+    					mainGame.getPlayerList().getPlayers()
+    					.get(1).addPowerup(PowerupType.SHIELD);
     				} else if (stringList[2].equals("SPIKY")) {
-    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SPIKY);
+    					mainGame.getPlayerList().getPlayers()
+    					.get(1).addPowerup(PowerupType.SPIKY);
     				} else if (stringList[2].equals("INSTANT")) {
     					mainGame.getPlayerList().getPlayers()
     					.get(1).addPowerup(PowerupType.INSTANT);

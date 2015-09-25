@@ -717,9 +717,9 @@ public class GameState extends BasicGameState {
 			}
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
-					* COUNTER_BAR_X_FACTOR, height, "#" + rem / SHIELD_COUNTER_DIVIDER + "s");
-		}
-		if (mainGame.isMultiplayer() && mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
+					* COUNTER_BAR_X_FACTOR, height, "#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
+		if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
+				&& mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
 			float rem = mainGame.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
@@ -731,8 +731,7 @@ public class GameState extends BasicGameState {
 			RND.text(SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, 
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s");
-		}
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
 	}
 	
 	/**
@@ -764,8 +763,6 @@ public class GameState extends BasicGameState {
 						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
 						mainGame.getColor());
 			}
-//			graphics.fillRect(pow.getX(), pow.getY(),
-//					pow.getRectangle().getWidth(), pow.getRectangle().getHeight());
 		}
 	}
 
@@ -838,10 +835,11 @@ public class GameState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen.
 	 */
 	private void drawActiveCircles(Graphics graphics) {
-		for (BouncingCircle circle : circleList) {
-			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
-			final float xPosition = circle.getMinX() - offset;
-			final float yPosition = circle.getMinY() - offset;
+		for (Iterator<BouncingCircle> iterator = circleList.iterator(); iterator.hasNext();) {
+		    BouncingCircle circle = iterator.next();
+		    int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
+			final float xPosition = circle.getMinX() - offset, 
+						yPosition = circle.getMinY() - offset;
 			switch (r) {
 				case(RADIUS_6) : RND.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
 						xPosition, yPosition, mainGame.getColor()); break;
@@ -862,8 +860,7 @@ public class GameState extends BasicGameState {
 					try {
 						throw new SlickException("Radius was not one of the supported");
 					} catch (SlickException e) {
-						e.printStackTrace();
-					}
+						e.printStackTrace(); }
 			}
 		}
 	}

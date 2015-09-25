@@ -18,6 +18,7 @@ import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
 import logic.Powerup;
+import logic.Spiky;
 import logic.Player.Movement;
 import logic.Powerup.PowerupType;
 import logic.Weapon;
@@ -371,9 +372,18 @@ public class Client implements Runnable {
     	
     	int id = Integer.parseInt(stringList[0]);
     //	System.out.println("PLAYERID" + id);
-    	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
-    			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
-    			Float.parseFloat(stringList[FOUR]));
+    	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
+    	Weapon weapon;
+    	
+    	if (spikey) {
+    		weapon = new Weapon(Float.parseFloat(stringList[1]), 
+        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+        			Float.parseFloat(stringList[FOUR]));
+    	} else {
+    		weapon = new Spiky(Float.parseFloat(stringList[1]), 
+        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+        			Float.parseFloat(stringList[FOUR]));
+    	}
     	
     	gameState.getWeaponList().setWeapon(id, weapon);
     	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
@@ -649,10 +659,12 @@ public class Client implements Runnable {
      * @param y .
      * @param laserSpeed .
      * @param laserWidth .
+     * @param spikey .
      */
-    public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
+    public void updateLaser(int id, float x, float y, float laserSpeed, 
+    		float laserWidth, boolean spikey) {
     	sendMessageToHost("NEW LASER " 
-    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth);
+    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth + " " + spikey);
     }
     
     /**

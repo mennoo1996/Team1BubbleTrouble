@@ -159,13 +159,6 @@ public class Powerup {
 	}
 
 	/**
-	 * @param timeRemaining the timeRemaining to set
-	 */
-	public void setTimeRemaining(long timeRemaining) {
-		this.timeRemaining = timeRemaining;
-	}
-
-	/**
 	 * Clone the powerup.
 	 */
 	@Override
@@ -176,4 +169,12 @@ public class Powerup {
 		res.setyId(yId);
 		return res;
 	}
+
+    /**
+     * Set the time remaining.
+     * @param time the time
+     */
+    public void setTimeRemaining(long time) {
+    	timeRemaining = time;
+    }
 }

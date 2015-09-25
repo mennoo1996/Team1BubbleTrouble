@@ -126,4 +126,11 @@ public class FloatingScore {
 		return y;
 	}
 	
+	/**
+	 * Clone the powerup.
+	 */
+	@Override
+	public FloatingScore clone() {
+	}
+	
 }

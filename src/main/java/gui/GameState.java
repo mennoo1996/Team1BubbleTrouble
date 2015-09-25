@@ -194,9 +194,9 @@ public class GameState extends BasicGameState {
 	private Random random;
 	
 	/**
-	 * constructor.
+	 * The constructor.
 	 * 
-	 * @param mainGame	- the maingame this state belongs to
+	 * @param mainGame the maingame this state belongs to
 	 */
 	public GameState(MainGame mainGame) {
 		this.mainGame = mainGame;
@@ -1045,8 +1045,8 @@ public class GameState extends BasicGameState {
 
 
 	/**
-	 * return id of state.
-	 * @return the id of gamestate
+	 * Return the id of this gameState.
+	 * @return the id of gameState
 	 */
 	@Override
 	public int getID() {

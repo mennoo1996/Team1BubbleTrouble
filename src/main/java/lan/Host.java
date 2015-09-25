@@ -108,7 +108,7 @@ public class Host implements Runnable {
     }
 
     /**
-     * Process client inputs.
+     * Process messages received from the client.
      */
     private void readClientInputs() {
     	try {

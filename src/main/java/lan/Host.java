@@ -198,10 +198,12 @@ public class Host implements Runnable {
     	int index = gameState.getCircleList().getIndexForCircleWithID(
     			Integer.parseInt(stringList[SEVEN]));
     	
-    	gameState.getCircleList().getCircles().set(index, circle);    
-    	circle.setLogger(logger);
-    	
-    	gameState.updateShotCirles2(circle, true);
+    	if (index >= 0) {
+    		gameState.getCircleList().getCircles().set(index, circle);    
+    		circle.setLogger(logger);
+
+    		gameState.updateShotCirles2(circle, true);
+    	}
     }
     
     /**

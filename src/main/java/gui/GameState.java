@@ -190,6 +190,8 @@ public class GameState extends BasicGameState {
 	private static final int COIN_CHANCE = 30;
 	private static final int POWERUP_IMAGE_OFFSET = 12;
 	private static final int COIN_IMAGE_OFFSET = 3;
+	private static final int CIRCLES_UPDATE_RATE = 10;
+	private int lastCircleUpdate;
 	// Level ending, empty bar
 	
 	private Random random;
@@ -251,6 +253,7 @@ public class GameState extends BasicGameState {
 		gateList = levels.getLevel(mainGame.getLevelCounter()).getGates();
 		droppedPowerups = new ArrayList<>();
 		droppedCoins = new ArrayList<>();
+		lastCircleUpdate = 0;
 	}
 	
 	
@@ -370,6 +373,15 @@ public class GameState extends BasicGameState {
 	 * @param curTime the current time
 	 */
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {
+		
+		if (mainGame.isHost()) {
+			lastCircleUpdate++;
+			if (lastCircleUpdate >= CIRCLES_UPDATE_RATE) {
+				lastCircleUpdate = 0;
+				mainGame.getHost().updateCircles(circleList.getCircles());
+			}
+		}
+		
 		processTime(sbg, curTime);
 
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;

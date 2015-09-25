@@ -237,9 +237,7 @@ public class Player {
 			}
 			
 		}
-		
 		Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
-
 		// Update laser
 		if (shot) {
 			weapon.update(gameState.getCeiling(), gameState.getFloor(), deltaFloat);

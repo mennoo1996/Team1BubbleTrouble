@@ -49,9 +49,13 @@ public class Client implements Runnable {
     private static final int THREE = 3;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
-	private static final int TIMEOUT_ATTEMPT = 10000;
 
-    /**
+    private static final int SIX = 6;
+    private static final int SEVEN = 7;
+	private static final int TIMEOUT_ATTEMPT = 10000;
+	private static final int MENU_MULTIPLAYER_STATE = 4;
+
+	/**
      * Create a new Client connection for LAN multiplayer.
      * @param host Host server address
      * @param portNumber Port number for multiplayer
@@ -142,6 +146,7 @@ public class Client implements Runnable {
 			while (reader.ready()) {
 				String message = reader.readLine();
 				String message2 = message.trim();
+				System.out.println(message2);
 				if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
 				} else if (message2.startsWith("SYSTEM")) {
@@ -165,17 +170,6 @@ public class Client implements Runnable {
 		}
     }
 
-    /**
-     * Add a FloatingScore to the list.
-     * @param message String containing the FloatingScore to add
-     */
-    private void floatingMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-		gameState.getFloatingScores().add(new FloatingScore(stringList[2],
-				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
-	}
-
 	/**
      * Continue processing the commands given by the server.
      * @param message2	the message to process
@@ -187,12 +181,54 @@ public class Client implements Runnable {
 			laserMessage(message2.replaceFirst("LASER", ""));
 		} else if (message2.startsWith("FLOATINGSCORE")) {
 			floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
+		} else if (message2.startsWith("SPLIT")) {
+			splitMessage(message2.replaceFirst("SPLIT", ""));
 		}
 		// heartBeat reset
 		System.out.println("Reset heartbeat");
 		heartBeatCheck = false;
 		timeLastInput = System.currentTimeMillis();
     }
+    
+    /**
+     * Process message about splitted circles.
+     * @param message	the message to process
+     */
+    private void splitMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	
+    	
+    	for (String s : stringList) {
+    		System.out.println(s);
+    	}
+    	
+    	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
+				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
+				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
+				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[SEVEN]));
+    	
+    	int index = gameState.getCircleList().getIndexForCircleWithID(
+    			Integer.parseInt(stringList[SEVEN]));
+    	
+    	if (index >= 0) {
+    		gameState.getCircleList().getCircles().set(index, circle);    
+    		circle.setLogger(logger);
+
+    		gameState.updateShotCirles2(circle, true);
+    	}
+    }
+    
+    /**
+     * Add a FloatingScore to the list.
+     * @param message String containing the FloatingScore to add
+     */
+    private void floatingMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+		gameState.getFloatingScores().add(new FloatingScore(stringList[2],
+				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
+	}
     
     /**
      * Message about lasers.
@@ -352,7 +388,7 @@ public class Client implements Runnable {
     	this.circleList.add(new BouncingCircle(Float.parseFloat(stringList[0]),
 				Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]),
 				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
-				Float.parseFloat(stringList[FIVE]), gameState.getCircleList().getNewID()));
+				Float.parseFloat(stringList[FIVE]), Integer.parseInt(stringList[SIX])));
     	this.circleList.get(this.circleList.size() - 1).setLogger(logger);
     }
     
@@ -492,6 +528,14 @@ public class Client implements Runnable {
     	if (message2.equals("STARTED")) {
     		gameState.setCountinStarted(true);
     	}
+    }
+    
+    /**
+     * notify client of splitted circle.
+     * @param circle the splitted circle
+     */
+    public void splittedCircle(BouncingCircle circle) {
+    	sendMessageToHost("SPLIT " + circle.toString());
     }
     
     /**
@@ -700,6 +744,14 @@ public class Client implements Runnable {
     		float laserWidth, boolean spikey) {
     	sendMessageToHost("NEW LASER " 
     			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth + " " + spikey);
+    }
+    
+    /**
+     * Send to host when a laser/weapon is done.
+     * @param id	the id of the weapon
+     */
+    public void laserDone(int id) {
+    	sendMessageToHost("LASER DONE " + id);
     }
     
     /**

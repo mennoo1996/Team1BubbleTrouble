@@ -50,6 +50,8 @@ public class Host implements Runnable {
     private static final String NO_CLIENT_CONNECTION = "No connection";
     private static final int FOUR = 4;
     private static final int FIVE = 5;
+    private static final int SIX = 6;
+    private static final int SEVEN = 7;
 
     /**
      * Create a new Host server for LAN multiplayer.
@@ -136,12 +138,9 @@ public class Host implements Runnable {
     private void readClientInputs() {
     	try {
 			while (reader.ready()) {
-
-				//System.out.println("in loop");
 				String message = reader.readLine();
-				System.out.println(message);
+
 				String message2 = message.trim();
-				//System.out.println(message2);
 				if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
 				} else if (message2.startsWith("POWERUP")) {
@@ -154,13 +153,78 @@ public class Host implements Runnable {
 					newMessage(message2.replaceFirst("NEW", ""));
 				} else if (message2.startsWith("SYSTEM")) {
 					systemMessage(message2.replaceFirst("SYSTEM", ""));
+				} else if (message2.startsWith("SPLIT")) {
+					splitMessage(message2.replaceFirst("SPLIT", ""));
 				}
+				readClientInputs2(message2);
                 heartBeatCheck = false;
                 timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+    }
+    
+    /**
+     * Process messages received from the client part 2.
+     * @param message2 the message to process
+     */
+    private void readClientInputs2(String message2) {
+    	if (message2.startsWith("LASER")) {
+			laserMessage(message2.replaceFirst("LASER", ""));
+		}
+    }
+    
+    /**
+     * Message about lasers.
+     * @param message String containing information about lasers
+     */
+    private void laserMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	if (message2.startsWith("DONE")) {
+    		laserDoneMessage(message2.replaceFirst("DONE", ""));
+    	}
+    }
+    
+    /**
+     * Message about a laser that is done.
+     * @param message String containing information about the laser
+     */
+    private void laserDoneMessage(String message) {
+    	String message2 = message.trim();
+    	
+    	int id = Integer.parseInt(message2);
+    	gameState.getWeaponList().getWeaponList().get(id).setVisible(false);
+    }
+    
+    /**
+     * Process message about splitted circles.
+     * @param message	the message to process
+     */
+    private void splitMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+    	
+    	
+    	for (String s : stringList) {
+    		System.out.println(s);
+    	}
+    	
+    	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
+				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
+				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
+				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[SEVEN]));
+    	
+    	int index = gameState.getCircleList().getIndexForCircleWithID(
+    			Integer.parseInt(stringList[SEVEN]));
+    	
+    	if (index >= 0) {
+    		gameState.getCircleList().getCircles().set(index, circle);    
+    		circle.setLogger(logger);
+
+    		gameState.updateShotCirles2(circle, true);
+    	}
     }
     
     /**
@@ -455,6 +519,14 @@ public class Host implements Runnable {
      */
     public void updateCircles(ArrayList<BouncingCircle> circleList) {
     	sendMessageToClient(BouncingCircle.circleListToString(circleList));
+    }
+    
+    /**
+     * notify client of splitted circle.
+     * @param circle the splitted circle
+     */
+    public void splittedCircle(BouncingCircle circle) {
+    	sendMessageToClient("SPLIT " + circle.toString());
     }
     
     /**

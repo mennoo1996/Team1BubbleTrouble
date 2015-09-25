@@ -36,6 +36,32 @@ public class CircleList {
 	}
 	
 	/**
+	 * method that returns the circle with the given id, if exists and null otherwise.
+	 * @param id	the id to match
+	 * @return		the matched circle
+	 */
+	public BouncingCircle getCircleForID(int id) {
+		for (BouncingCircle circle : circles) {
+			if (circle.getId() == id) {
+				return circle;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Return index of a circle with the given id.
+	 * @param id	the id to match
+	 * @return		the index
+	 */
+	public int getIndexForCircleWithID(int id) {
+		BouncingCircle circle = getCircleForID(id);
+		
+		return circles.indexOf(circle);
+	}
+	
+	/**
 	 * Method that returns a new unused id.
 	 * @return	the new id
 	 */

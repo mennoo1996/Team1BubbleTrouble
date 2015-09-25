@@ -17,10 +17,11 @@ import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
-import logic.Powerup;
-import logic.Weapon;
 import logic.Player.Movement;
+import logic.Powerup;
 import logic.Powerup.PowerupType;
+import logic.Spiky;
+import logic.Weapon;
 
 /**
  * Host server for LAN multiplayer.
@@ -43,8 +44,9 @@ public class Host implements Runnable {
     private boolean heartBeatCheck;
     private long timeLastInput;
 
-    private static final int TIMEOUT_ATTEMPT = 10000;
+    private static final int TIMEOUT_ATTEMPT = 500000;
     private static final int FOUR = 4;
+    private static final int FIVE = 5;
 
     /**
      * Create a new Host server for LAN multiplayer.
@@ -187,9 +189,19 @@ public class Host implements Runnable {
     	
     	int id = Integer.parseInt(stringList[0]);
     	//System.out.println("PLAYERID" + id);
-    	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
-    			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
-    			Float.parseFloat(stringList[FOUR]));
+    	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
+    	System.out.println("spiky = " + spikey);
+    	Weapon weapon;
+    	
+    	if (!spikey) {
+    		weapon = new Weapon(Float.parseFloat(stringList[1]), 
+        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+        			Float.parseFloat(stringList[FOUR]));
+    	} else {
+    		weapon = new Spiky(Float.parseFloat(stringList[1]), 
+        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+        			Float.parseFloat(stringList[FOUR]));
+    	}
     	
     	gameState.getWeaponList().setWeapon(id, weapon);
     	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
@@ -399,10 +411,12 @@ public class Host implements Runnable {
      * @param y the new y position
      * @param laserSpeed the new speed
      * @param laserWidth the new width
+     * @param spikey .
      */
-    public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
+    public void updateLaser(int id, float x, float y, float laserSpeed, 
+    		float laserWidth, boolean spikey) {
     	sendMessageToClient("NEW LASER " 
-    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth);
+    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth + " " + spikey);
     }
     
 

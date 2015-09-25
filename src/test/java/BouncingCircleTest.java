@@ -1,11 +1,10 @@
 import static org.junit.Assert.assertEquals;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 //import edu.umd.cs.findbugs.gui.Logger;
 import gui.GameState;
 import gui.MainGame;
@@ -13,7 +12,9 @@ import gui.MainGame;
 import java.util.ArrayList;
 
 import logic.BouncingCircle;
+import logic.CircleList;
 import logic.Gate;
+import logic.Logger;
 import logic.MyRectangle;
 
 import org.junit.Before;
@@ -23,7 +24,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;
-import logic.Logger;
 @RunWith(MockitoJUnitRunner.class)
 public class BouncingCircleTest {
 	
@@ -37,6 +37,7 @@ public class BouncingCircleTest {
 	public void setUp() throws Exception {
 		mg = new MainGame("TestGame");
 		gs = new GameState(mg);
+		gs.setCircleList(new CircleList(new ArrayList<BouncingCircle>()));
 		
 		mg = mock(MainGame.class);
 		logger = mock(logic.Logger.class);
@@ -182,7 +183,7 @@ public class BouncingCircleTest {
 		Mockito.when(mg.getLogger()).thenReturn(logger);
 		Mockito.doNothing().when(logger).log(Mockito.anyString(), any(Logger.PriorityLevels.class), Mockito.anyString());
 		c = new BouncingCircle(1,2,51,4,-15,6);
-		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
+		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg, gs);
 		assertEquals(-250.0, result.get(0).getySpeed(), 0);
 	}
 	
@@ -192,7 +193,7 @@ public class BouncingCircleTest {
 		Mockito.when(mg.getLogger()).thenReturn(logger);
 		Mockito.doNothing().when(logger).log(Mockito.anyString(), any(Logger.PriorityLevels.class), Mockito.anyString());
 		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
-		assertNull(c.getSplittedCircles(mg));
+		assertNull(c.getSplittedCircles(mg, gs));
 	}
 	
 	@Test
@@ -200,7 +201,7 @@ public class BouncingCircleTest {
 		Mockito.when(mg.getLogger()).thenReturn(logger);
 		Mockito.doNothing().when(logger).log(Mockito.anyString(), any(Logger.PriorityLevels.class), Mockito.anyString());
 		c = new BouncingCircle(1, 2, 20, 4, 5, 6);
-		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
+		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg, gs);
 		assertEquals(-250, result.get(0).getySpeed(), 0);
 	}
 	
@@ -210,7 +211,7 @@ public class BouncingCircleTest {
 		Mockito.doNothing().when(logger).log(Mockito.anyString(), any(Logger.PriorityLevels.class), Mockito.anyString());
 		
 		c = new BouncingCircle(1, 2, 20, 4, -700, 0);
-		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
+		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg, gs);
 		assertEquals(-750, result.get(0).getySpeed(), 0);
 	}
 	
@@ -219,7 +220,7 @@ public class BouncingCircleTest {
 		Mockito.when(mg.getLogger()).thenReturn(logger);
 		Mockito.doNothing().when(logger).log(Mockito.anyString(), any(Logger.PriorityLevels.class), Mockito.anyString());
 		c = new BouncingCircle(1, 2, 20, 4, -400, 0);
-		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg);
+		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg, gs);
 		assertEquals(-450, result.get(1).getySpeed(), 0);
 	}
 	

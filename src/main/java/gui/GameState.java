@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import logic.BouncingCircle;
+import logic.CircleList;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Gate;
@@ -43,7 +44,7 @@ public class GameState extends BasicGameState {
 	
 	
 	private MainGame mainGame;
-	private ArrayList<BouncingCircle> circleList;
+	private CircleList circleList;
 	private ArrayList<BouncingCircle> shotList;
 	private ArrayList<Powerup> droppedPowerups = new ArrayList<>();
 	private ArrayList<Coin> droppedCoins = new ArrayList<>();
@@ -245,7 +246,7 @@ public class GameState extends BasicGameState {
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		floatingScoreList = new ArrayList<FloatingScore>();
-		circleList = levels.getLevel(mainGame.getLevelCounter()).getCircles();
+		circleList = new CircleList(levels.getLevel(mainGame.getLevelCounter()).getCircles());
 		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
 		gateList = levels.getLevel(mainGame.getLevelCounter()).getGates();
 		droppedPowerups = new ArrayList<>();
@@ -385,7 +386,7 @@ public class GameState extends BasicGameState {
 		updateGateExistence(deltaFloat);
 		// if there are no active circles, process to gameover screen
 		processCoins(container, deltaFloat);
-		if (circleList.isEmpty()) {
+		if (circleList.getCircles().isEmpty()) {
 			endLevel(sbg);
 		}
 	}
@@ -485,6 +486,7 @@ public class GameState extends BasicGameState {
 	private void updateShotCircles() {
 		for (BouncingCircle circle : shotList) {
             if (!circle.isDone()) { // if the circle hasn't been handled
+
             	FloatingScore floatingScore = new FloatingScore(circle);
             	floatingScoreList.add(floatingScore);
             	//Send to client
@@ -501,15 +503,15 @@ public class GameState extends BasicGameState {
 	 * @param circle the circle shot
 	 */
 	private void updateShotCirles2(BouncingCircle circle) {
-		if (circleList.contains(circle)) {
-            circleList.remove(circle);
+		if (circleList.getCircles().contains(circle)) {
+            circleList.getCircles().remove(circle);
             circle.setDone(true);
             score += circle.getScore();
         } // if the ball has a radius of 20, split it u
         ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
         if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
-        	splits = circle.getSplittedCircles(mainGame);
-            circleList.addAll(splits);
+        	splits = circle.getSplittedCircles(mainGame, this);
+            circleList.getCircles().addAll(splits);
 			checkItem(circle);
         } else {
         	mainGame.getLogger().log(
@@ -520,7 +522,7 @@ public class GameState extends BasicGameState {
 		processUnlockCirclesGates(circle, splits);
 		
 		if (mainGame.isHost()) {
-			mainGame.getHost().updateCircles(getCircleList());
+			mainGame.getHost().updateCircles(getCircleList().getCircles());
 		}
 	}
 
@@ -546,7 +548,7 @@ public class GameState extends BasicGameState {
 	 * @param ceilingList the list of circles that hit the ceiling
 	 */
 	private void removeCeilingCircles(ArrayList<BouncingCircle> ceilingList) {
-		circleList.removeAll(ceilingList);
+		circleList.getCircles().removeAll(ceilingList);
 	}
 
 	/**
@@ -558,7 +560,8 @@ public class GameState extends BasicGameState {
 	 */
 	private void updateActiveCircles(GameContainer container, StateBasedGame sbg,
 			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
-		for (Iterator<BouncingCircle> iterator = circleList.iterator(); iterator.hasNext();) {
+		for (Iterator<BouncingCircle> iterator = 
+				circleList.getCircles().iterator(); iterator.hasNext();) {
 		    BouncingCircle circle = iterator.next();
 		    circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
 
@@ -931,7 +934,7 @@ public class GameState extends BasicGameState {
 	private ArrayList<BouncingCircle> getDummyList() {
 		ArrayList<BouncingCircle> dummyList = new ArrayList<BouncingCircle>();
 		synchronized (circleList) {
-			for (BouncingCircle bCircle : circleList) {
+			for (BouncingCircle bCircle : circleList.getCircles()) {
 				dummyList.add(bCircle.clone());
 			} 
 		}
@@ -1403,18 +1406,20 @@ public class GameState extends BasicGameState {
 	public void setLevelStarted(boolean levelStarted) {
 		this.levelStarted = levelStarted;
 	}
+	
+	
 
 	/**
 	 * @return the circleList
 	 */
-	public synchronized ArrayList<BouncingCircle> getCircleList() {
+	public CircleList getCircleList() {
 		return circleList;
 	}
 
 	/**
 	 * @param circleList the circleList to set
 	 */
-	public synchronized void setCircleList(ArrayList<BouncingCircle> circleList) {
+	public void setCircleList(CircleList circleList) {
 		this.circleList = circleList;
 	}
 

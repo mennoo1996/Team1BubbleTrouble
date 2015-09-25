@@ -14,12 +14,14 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import logic.BouncingCircle;
+import logic.CircleList;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
-import logic.Powerup;
 import logic.Player.Movement;
+import logic.Powerup;
 import logic.Powerup.PowerupType;
+import logic.Spiky;
 import logic.Weapon;
 
 /**
@@ -46,7 +48,7 @@ public class Client implements Runnable {
     private static final int THREE = 3;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
-	private static final int TIMEOUT_ATTEMPT = 10000;
+	private static final int TIMEOUT_ATTEMPT = 500000;
 	private static final int MENU_MULTIPLAYER_STATE = 4;
     /**
      * Create a new Client connection for LAN multiplayer.
@@ -328,7 +330,7 @@ public class Client implements Runnable {
     	this.circleList.add(new BouncingCircle(Float.parseFloat(stringList[0]),
 				Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]),
 				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
-				Float.parseFloat(stringList[FIVE])));
+				Float.parseFloat(stringList[FIVE]), gameState.getCircleList().getNewID()));
     	this.circleList.get(this.circleList.size() - 1).setLogger(logger);
     }
     
@@ -357,7 +359,7 @@ public class Client implements Runnable {
     	} else if (message2.equals("END") && this.editingCircleList) {
     		System.out.println("setting shit");
     		this.editingCircleList = false;
-    		gameState.setCircleList(circleList);
+    		gameState.setCircleList(new CircleList(circleList));
     	}
     }
     
@@ -384,9 +386,18 @@ public class Client implements Runnable {
     	
     	int id = Integer.parseInt(stringList[0]);
     //	System.out.println("PLAYERID" + id);
-    	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
-    			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
-    			Float.parseFloat(stringList[FOUR]));
+    	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
+    	Weapon weapon;
+    	
+    	if (!spikey) {
+    		weapon = new Weapon(Float.parseFloat(stringList[1]), 
+        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+        			Float.parseFloat(stringList[FOUR]));
+    	} else {
+    		weapon = new Spiky(Float.parseFloat(stringList[1]), 
+        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
+        			Float.parseFloat(stringList[FOUR]));
+    	}
     	
     	gameState.getWeaponList().setWeapon(id, weapon);
     	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
@@ -661,10 +672,12 @@ public class Client implements Runnable {
      * @param y the y location of the laser
      * @param laserSpeed the speed of the laser
      * @param laserWidth the width of the laser
+     * @param spikey if the laser is spikey or not
      */
-    public void updateLaser(int id, float x, float y, float laserSpeed, float laserWidth) {
+    public void updateLaser(int id, float x, float y, float laserSpeed, 
+    		float laserWidth, boolean spikey) {
     	sendMessageToHost("NEW LASER " 
-    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth);
+    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth + " " + spikey);
     }
     
     /**

@@ -30,6 +30,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	private GameState gameState;
 	private Input input;
 	
+	private Popup popup;
+	
 	private Textfield nameField;
 	private Textfield ipField;
 	
@@ -150,6 +152,7 @@ public class MenuMultiplayerState extends BasicGameState {
 				container.getWidth());
 		separatorMisc = new Separator(SEPARATOR_X, SEPARATOR_Y_4, false, separatorMiscTitle,
 				container.getWidth());
+		popup = new Popup("", mainGame.getxRes(), mainGame.getyRes());
 	}
 	
 	/**
@@ -210,16 +213,20 @@ public class MenuMultiplayerState extends BasicGameState {
 	 * @param input the keyboard/mouse input of the user
 	 */
 	private void processButtons(Input input) {
-		if (returnButton.isMouseOver(input)) {
-			mainGame.killMultiplayer();
-			mainGame.setSwitchState(mainGame.getStartState());
-		} 
-		if (hostButton.isMouseOver(input)) {
-			attemptHost();
-		} 
-		if (joinButton.isMouseOver(input)) {
-			attemptJoin();
-		} 
+		if (!popup.getActive()) {
+			if (returnButton.isMouseOver(input)) {
+				mainGame.killMultiplayer();
+				mainGame.setSwitchState(mainGame.getStartState());
+			} 
+			if (hostButton.isMouseOver(input)) {
+				attemptHost();
+			} 
+			if (joinButton.isMouseOver(input)) {
+				attemptJoin();
+			} 
+		} else {
+			popup.processButton(input);
+		}
 	}
 	
 	/**
@@ -285,7 +292,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.drawWaterMark();
 		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
 				LOGO_X, LOGO_Y, mainGame.getColor());
-
+		popup.drawColor(graphics, this.input, mainGame.getColor());
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
 	}
@@ -364,5 +371,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void addMessage(String message) {
 		System.out.println("Adding message: " + message);
 		this.message = message;
+		popup.setText(this.message);
+		popup.setActive(true);
 	}
 }

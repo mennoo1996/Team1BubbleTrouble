@@ -18,8 +18,16 @@ public class Popup {
 	private float screenHeight;
 	private static final float BUTTON_WIDTH = 129;
 	private static final float BUTTON_HEIGHT = 53;
+	private static final float PAUSE_OVERLAY_COLOR_FACTOR = 0.75f;
+	private static final int PAUSED_RECT_Y_DEVIATION = 150;
+	private static final int BUTTON_OFFSET_X = 9;
+	private static final int BUTTON_OFFSET_Y = 25;
+	private static final int SEPARATOR_OFFSET_X = -200;
+	private static final int TEXT_OFFSET_X = 10;
+	private static final int TEXT_OFFSET_Y = -40;
 	private boolean active = false;
 	private Button button;
+	private Separator separator;
 	
 	/**
 	 * Popup constructor method.
@@ -33,13 +41,15 @@ public class Popup {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		System.out.println(screenWidth);
-		button = new Button(screenWidth / 2f - BUTTON_WIDTH / 2f, 
-				screenHeight / 2f - BUTTON_HEIGHT / 2f, 
+		button = new Button(screenWidth / 2f - BUTTON_WIDTH / 2f + BUTTON_OFFSET_X, 
+				screenHeight / 2f + BUTTON_OFFSET_Y, 
 				BUTTON_WIDTH, BUTTON_HEIGHT, 
 				new Image("resources/images_UI/Menu_Button_OK_Norm.png"), 
 				new Image("resources/images_UI/Menu_Button_OK_Add.png"), 
 				new Image("resources/images_UI/Menu_Button_OK2_Norm.png"), 
 				new Image("resources/images_UI/Menu_Button_OK2_Add.png"));
+		separator = new Separator(screenWidth / 2 + SEPARATOR_OFFSET_X,
+				screenHeight / 2, false, "", screenWidth);
 	}
 	
 	/**
@@ -71,7 +81,16 @@ public class Popup {
 	 */
 	public void drawColor(Graphics graphics, Input input, Color color) {
 		if (active) {
+			Color overLay = new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR);
+			graphics.setColor(overLay);
+			graphics.fillRect(0, 0, screenWidth, screenHeight
+					- PAUSED_RECT_Y_DEVIATION);
 			button.drawColor(graphics, input, color);
+			RND.text(graphics, 
+					screenWidth / 2f - RND.getStringPixelWidth(warning) / 2f + TEXT_OFFSET_X, 
+					screenHeight / 2f + TEXT_OFFSET_Y,
+					warning, color);
+			separator.drawColor(graphics, color);
 		}
 	}
 	

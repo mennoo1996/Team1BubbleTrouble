@@ -94,8 +94,7 @@ public class MenuMainState extends BasicGameState {
 				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
 				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_Quit2_add.png"));
-		
-		popup = new Popup("DADA", mainGame.getDefaultXRes(), mainGame.getDefaultYRes());
+		popup = new Popup("ERROR: Please insert coffee.", mainGame.getDefaultXRes(), mainGame.getDefaultYRes());
 		popup.setActive(true);
 		
 	}
@@ -217,6 +216,7 @@ public class MenuMainState extends BasicGameState {
 		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
 				"The best scores of your predecessors!");
+		popup.drawColor(graphics, container.getInput(), mainGame.getColor());
 		// NO DRAWING AFTER THIS POINT. BOO.
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
@@ -235,7 +235,6 @@ public class MenuMainState extends BasicGameState {
 		lanButton.drawColor(graphics, input, mainGame.getColor());
 		optionsButton.drawColor(graphics, input, mainGame.getColor());
 		quitButton.drawColor(graphics, input, mainGame.getColor());
-		popup.drawColor(graphics, input, mainGame.getColor());
 	}
 
 	@Override

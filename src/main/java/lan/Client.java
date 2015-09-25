@@ -317,6 +317,7 @@ public class Client implements Runnable {
 				Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]),
 				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
 				Float.parseFloat(stringList[FIVE])));
+    	this.circleList.get(this.circleList.size() - 1).setLogger(logger);
     }
     
     /**

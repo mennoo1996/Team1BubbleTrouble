@@ -439,6 +439,7 @@ public class GameState extends BasicGameState {
 			} else if (menuButton.isMouseOver(input)) {
 				mainGame.setScore(0);
 				mainGame.setLevelCounter(0);
+				mainGame.killMultiplayer();
 				mainGame.setSwitchState(mainGame.getStartState());
 			} else if (exitButton.isMouseOver(input)) {
 				mainGame.setSwitchState(-1);

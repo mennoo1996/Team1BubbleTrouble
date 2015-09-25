@@ -152,6 +152,7 @@ public class MenuMainState extends BasicGameState {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			processButtons(input);
 		}
+		
 		exit(container, sbg, delta);
 	}
 	

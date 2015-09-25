@@ -149,4 +149,12 @@ public class Powerup {
     public boolean removePowerup() {
         return timeRemaining <= 0;
     }
+    
+    /**
+     * Set the time remaining.
+     * @param time the time
+     */
+    public void setTimeRemaining(long time) {
+    	timeRemaining = time;
+    }
 }

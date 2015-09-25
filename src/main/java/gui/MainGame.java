@@ -1,5 +1,7 @@
 package gui;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import lan.Client;
 import lan.Host;
@@ -122,6 +124,7 @@ public class MainGame extends StateBasedGame {
 	private Client client;
 	private boolean isHost;
 	private boolean isClient;
+	private ExecutorService multiplayerThreadManager;
 
 
 	/**
@@ -909,10 +912,13 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
+	 * Sets and starts the host.
 	 * @param host the host to set
 	 */
-	public void setHost(Host host) {
+	public void spawnHost(Host host) {
 		this.host = host;
+		multiplayerThreadManager = Executors.newFixedThreadPool(1);
+		multiplayerThreadManager.submit(this.host);
 	}
 
 	/**
@@ -965,12 +971,40 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
+	 * Sets and starts client.
 	 * @param client the client to set
 	 */
-	public void setClient(Client client) {
+	public void spawnClient(Client client) {
 		this.client = client;
+		this.multiplayerThreadManager = Executors.newFixedThreadPool(1);
+		this.multiplayerThreadManager.submit(this.client);
 	}
-	
+
+	/**
+	 * Kill any multiplayer socket connections running.
+	 */
+	public void killMultiplayer() {
+		System.out.println("Killing multiplayer");
+		if (this.lanMultiplayer) {
+			if (isHost) {
+				try {
+					host.shutdown();
+				} catch (InterruptedException e) {
+					System.out.println(e);
+				}
+				this.isHost = false;
+			} else {
+				try {
+					client.shutdown();
+				} catch (InterruptedException e) {
+					System.out.println(e);
+				}
+				this.isClient = false;
+			}
+			this.lanMultiplayer = false;
+			this.multiplayerThreadManager.shutdownNow();
+		}
+	}
 	
 }
 

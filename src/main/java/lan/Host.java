@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import gui.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
@@ -43,8 +44,10 @@ public class Host implements Runnable {
     private static final int THREE = 3;
     private boolean heartBeatCheck;
     private long timeLastInput;
+    private boolean running;
 
-    private static final int TIMEOUT_ATTEMPT = 500000;
+    private static final int TIMEOUT_ATTEMPT = 10000;
+    private static final String NO_CLIENT_CONNECTION = "No connection";
     private static final int FOUR = 4;
     private static final int FIVE = 5;
     private static final int SIX = 6;
@@ -61,6 +64,8 @@ public class Host implements Runnable {
         this.gameState = gameState;
         this.mainGame = mainGame;
         this.noClientYet = true;
+        this.running = true;
+        this.logger = mainGame.getLogger();
         this.messageQueue = new LinkedList<>();
         System.out.println("HOST INITIALIZED");
     }
@@ -81,7 +86,7 @@ public class Host implements Runnable {
             timeLastInput = System.currentTimeMillis();
 
             // This continues ad infinitum
-            while (true) {
+            while (running) {
                 manageHeartbeatCheck();
                 while (!messageQueue.isEmpty()) {
                     writer.println(this.messageQueue.poll());
@@ -89,8 +94,23 @@ public class Host implements Runnable {
                 readClientInputs();
             }
         } catch (IOException err) {
-            System.out.println(err);
-            System.out.println(err.getLocalizedMessage());
+            processConnectionException(err);
+        }
+    }
+
+    /**
+     * Process exceptions thrown.
+     * @param err Exception thrown.
+     */
+    private void processConnectionException(IOException err) {
+        System.out.println(err);
+        System.out.println(err.getLocalizedMessage());
+        MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
+                this.mainGame.getState(mainGame.getMultiplayerState());
+        if (!err.getMessage().equals("Socket closed")) {
+            if (err.getMessage().equals("No connection")) {
+                multiplayerState.addMessage("Client disconnected");
+            }
             this.mainGame.setSwitchState(mainGame.getMultiplayerState());
         }
     }
@@ -102,10 +122,11 @@ public class Host implements Runnable {
     private void manageHeartbeatCheck() throws IOException {
         if (heartBeatCheck
                 && (System.currentTimeMillis() - timeLastInput) >= 2 * TIMEOUT_ATTEMPT) {
-            throw new IOException("No connection");
+            throw new IOException(NO_CLIENT_CONNECTION);
         }
         if (!heartBeatCheck
                 && (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
+            System.out.println("Sending heartbeat check");
             heartBeatCheck = true;
             this.messageQueue.add("HEARTBEAT_CHECK");
         }
@@ -114,10 +135,11 @@ public class Host implements Runnable {
     /**
      * Process messages received from the client.
      */
-    private void readClientInputs() {
+    public void readClientInputs() {
     	try {
 			while (reader.ready()) {
 				String message = reader.readLine();
+
 				String message2 = message.trim();
 				if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
@@ -127,8 +149,6 @@ public class Host implements Runnable {
 					coinMessage(message2.replaceFirst("COIN", ""));
 				} else if (message2.startsWith("HEARTBEAT_CHECK")) {
                     this.sendMessageToClient("HEARTBEAT_ALIVE");
-                } else if (message2.startsWith("HEARTBEAT_ALIVE")) {
-                    heartBeatCheck = false;
                 } else if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
 				} else if (message2.startsWith("SYSTEM")) {
@@ -137,6 +157,7 @@ public class Host implements Runnable {
 					splitMessage(message2.replaceFirst("SPLIT", ""));
 				}
 				readClientInputs2(message2);
+                heartBeatCheck = false;
                 timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
@@ -151,7 +172,13 @@ public class Host implements Runnable {
     private void readClientInputs2(String message2) {
     	if (message2.startsWith("LASER")) {
 			laserMessage(message2.replaceFirst("LASER", ""));
-		}
+		} else if (message2.startsWith("SHUTDOWN")) {
+            MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
+                    this.mainGame.getState(mainGame.getMultiplayerState());
+            multiplayerState.addMessage("Client Quit.");
+            mainGame.setSwitchState(mainGame.getMultiplayerState());
+            mainGame.killMultiplayer();
+        }
     }
     
     /**
@@ -375,6 +402,10 @@ public class Host implements Runnable {
      */
     public void shutdown() throws InterruptedException {
         logger.log("Shutting down host server", Logger.PriorityLevels.LOW, "lan");
+        if (writer != null) {
+            writer.println("SHUTDOWN");
+            running = false;
+        }
         try {
             serverSocket.close();
         } catch (IOException er) {
@@ -397,6 +428,14 @@ public class Host implements Runnable {
      */
     public void setLogger(Logger logger) {
         this.logger = logger;
+    }
+    
+    /**
+     * 
+     * @return the logger
+     */
+    public Logger getLogger() {
+    	return logger;
     }
 
     /**
@@ -655,5 +694,37 @@ public class Host implements Runnable {
     public void updateLives(int lives) {
     	sendMessageToClient("SYSTEM LIVES " + lives);
     }
+
+	/**
+	 * @return the portNumber
+	 */
+	public int getPortNumber() {
+		return portNumber;
+	}
+
+	/**
+	 * @param portNumber the portNumber to set
+	 */
+	public void setPortNumber(int portNumber) {
+		this.portNumber = portNumber;
+	}
+
+	/**
+	 * @return the reader
+	 */
+	public BufferedReader getReader() {
+		return reader;
+	}
+
+	/**
+	 * @param reader the reader to set
+	 */
+	public void setReader(BufferedReader reader) {
+		this.reader = reader;
+	}
+	
+	
+    
+    
 }
 

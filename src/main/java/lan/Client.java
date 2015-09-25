@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import gui.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.CircleList;
 import logic.Coin;
@@ -47,15 +48,18 @@ public class Client implements Runnable {
     private ArrayList<BouncingCircle> circleList;
     private ArrayList<BouncingCircle> requiredList;
     private int gateNumber;
+	private boolean running;
     
     private static final int THREE = 3;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
+
     private static final int SIX = 6;
     private static final int SEVEN = 7;
-	private static final int TIMEOUT_ATTEMPT = 500000;
+	private static final int TIMEOUT_ATTEMPT = 10000;
 	private static final int MENU_MULTIPLAYER_STATE = 4;
-    /**
+
+	/**
      * Create a new Client connection for LAN multiplayer.
      * @param host Host server address
      * @param portNumber Port number for multiplayer
@@ -67,7 +71,11 @@ public class Client implements Runnable {
         this.mainGame = mainGame;
         this.gameState = gameState;
         this.portNumber = portNumber;
+		this.logger = mainGame.getLogger();
         this.isConnected = false;
+
+		this.running = true;
+
         this.messageQueue = new LinkedList<>();
         this.circleList = new ArrayList<BouncingCircle>();
         this.requiredList = new ArrayList<BouncingCircle>();
@@ -91,7 +99,7 @@ public class Client implements Runnable {
 			System.out.println("Connected to server");
 			timeLastInput = System.currentTimeMillis();
 			// This continues ad infinitum
-			while (true) {
+			while (running) {
 				manageHeartbeatCheck();
 				while (!this.messageQueue.isEmpty()) {
 					System.out.println("sending message: " + this.messageQueue.peek());
@@ -100,11 +108,27 @@ public class Client implements Runnable {
 				readServerCommands();
 			}
 		} catch (IOException err) {
-			System.out.println(err);
-			System.out.println(err.getLocalizedMessage());
-			this.mainGame.setSwitchState(mainGame.getMultiplayerState());
+			processConnectionException(err);
 		}
     }
+
+	/**
+	 * Process exceptions thrown.
+	 * @param err Exception thrown.
+	 */
+	private void processConnectionException(IOException err) {
+		System.out.println(err);
+		System.out.println(err.getLocalizedMessage());
+		MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
+				this.mainGame.getState(mainGame.getMultiplayerState());
+		if (err.getMessage().equals("Connection refused")) {
+			multiplayerState.addMessage("Connection Refused");
+		}
+		if (err.getMessage().equals("No connection")) {
+			multiplayerState.addMessage("Host disconnected");
+		}
+		this.mainGame.setSwitchState(mainGame.getMultiplayerState());
+	}
 
 	/**
 	 * Triggers/ends the heartbeat check for a possible missing connection.
@@ -113,7 +137,8 @@ public class Client implements Runnable {
 	private void manageHeartbeatCheck() throws IOException {
 		if (heartBeatCheck
 				&& (System.currentTimeMillis() - timeLastInput) >= 2 * TIMEOUT_ATTEMPT) {
-            throw new IOException("No connection");
+			System.out.println("Heartbeat gone");
+			throw new IOException("No connection");
         }
 		if (!heartBeatCheck
 				&& (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
@@ -125,7 +150,7 @@ public class Client implements Runnable {
 	/**
      * Process the commands given by the server.
      */
-    private void readServerCommands() {
+    public void readServerCommands() {
         try {
 			while (reader.ready()) {
 				String message = reader.readLine();
@@ -147,7 +172,6 @@ public class Client implements Runnable {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
 				}
 				readServerCommands2(message2);
-				timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -160,15 +184,25 @@ public class Client implements Runnable {
      * @param message2	the message to process
      */
     private void readServerCommands2(String message2) {
-    	if (message2.startsWith("HEARTBEAT_ALIVE")) {
-			heartBeatCheck = false;
+    	if (message2.startsWith("HEARTBEAT_CHECK")) {
+			this.sendMessageToHost("HEARTBEAT_ALIVE");
 		} else if (message2.startsWith("LASER")) {
 			laserMessage(message2.replaceFirst("LASER", ""));
 		} else if (message2.startsWith("FLOATINGSCORE")) {
 			floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
 		} else if (message2.startsWith("SPLIT")) {
 			splitMessage(message2.replaceFirst("SPLIT", ""));
+		} else if (message2.startsWith("SHUTDOWN")) {
+			MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
+					this.mainGame.getState(mainGame.getMultiplayerState());
+			multiplayerState.addMessage("Host Quit.");
+			mainGame.setSwitchState(mainGame.getMultiplayerState());
+			mainGame.killMultiplayer();
 		}
+		// heartBeat reset
+		System.out.println("Reset heartbeat");
+		heartBeatCheck = false;
+		timeLastInput = System.currentTimeMillis();
     }
     
     /**
@@ -558,6 +592,10 @@ public class Client implements Runnable {
      */
     public void shutdown() throws InterruptedException {
         logger.log("Shutting down client connection", Logger.PriorityLevels.LOW, "lan");
+		if (writer != null) {
+			writer.println("SHUTDOWN");
+			running = false;
+		}
         try {
             socket.close();
         } catch (IOException er) {
@@ -792,4 +830,20 @@ public class Client implements Runnable {
     public boolean connectedToServer() {
         return this.socket.isConnected();
     }
+
+	/**
+	 * @return the reader
+	 */
+	public BufferedReader getReader() {
+		return reader;
+	}
+
+	/**
+	 * @param reader the reader to set
+	 */
+	public void setReader(BufferedReader reader) {
+		this.reader = reader;
+	}
+    
+    
 }

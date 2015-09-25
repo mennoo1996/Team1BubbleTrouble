@@ -5,15 +5,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gui.GameState;
-import gui.MainGame;
 
 import java.util.ArrayList;
-
-import logic.BouncingCircle;
-import logic.Logger;
-import logic.Player;
-import logic.PlayerList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +14,15 @@ import org.mockito.Mockito;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.state.StateBasedGame;
+
+import gui.GameState;
+import gui.MainGame;
+import lan.Host;
+import logic.BouncingCircle;
+import logic.Logger;
+import logic.Player;
+import logic.PlayerList;
 
 public class PlayerListTest {
 
@@ -53,6 +55,143 @@ public class PlayerListTest {
 		pl.updatePlayers(1, 1000, 1600);
 		verify(p, times(2)).update(1, 1000, 1600, false);
 	}
+	
+	@Test
+	public void testUpdatePlayers2() {
+		Player p = mock(Player.class);
+		Mockito.doNothing().when(p).update(1,  1000, 1600,  false);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.isMultiplayer()).thenReturn(false);
+		when(mg.isLanMultiplayer()).thenReturn(false);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.add(p);
+		pl.updatePlayers(1, 1000, 1600);
+		verify(p, times(1)).update(1, 1000, 1600, false);
+	}
+	
+	@Test
+	public void testUpdatePlayers3() {
+		Player p = mock(Player.class);
+		Mockito.doNothing().when(p).update(1,  1000, 1600,  false);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.isMultiplayer()).thenReturn(false);
+		when(mg.isLanMultiplayer()).thenReturn(true);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.add(p);
+		pl.updatePlayers(1, 1000, 1600);
+		verify(p, times(2)).update(1, 1000, 1600, false);
+	}
+	
+	@Test
+	public void testAdd2() {
+		Player p1 = mock(Player.class);
+		Player p2 = mock(Player.class);
+		Player p3 = mock(Player.class);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		gs = mock(GameState.class);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.add(p1);
+		pl.add(p2);
+		pl.add(p3);
+		assertEquals(2, pl.getPlayers().size());
+	}
+	
+	@Test
+	public void testPlayerDeath() {
+		StateBasedGame sbg = mock(StateBasedGame.class);
+		p = mock(Player.class);
+		mg = mock(MainGame.class);
+		gs = mock(GameState.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.playerDeath(sbg);
+		verify(mg, times(2)).getLogger();
+		
+	}
+	
+	@Test
+	public void testPlayerDeath2() {
+		StateBasedGame sbg = mock(StateBasedGame.class);
+		p = mock(Player.class);
+		mg = mock(MainGame.class);
+		gs = mock(GameState.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.setDied(true);
+		pl.playerDeath(sbg);
+		verify(mg, times(0)).getLogger();
+		
+	}
+	
+	@Test
+	public void testPlayerDeath3() {
+		StateBasedGame sbg = mock(StateBasedGame.class);
+		p = mock(Player.class);
+		mg = mock(MainGame.class);
+		gs = mock(GameState.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.setDied(false);
+		when(mg.isLanMultiplayer()).thenReturn(true);
+		pl.playerDeath(sbg);
+		verify(mg, times(2)).getLogger();
+		
+	}
+	
+	@Test
+	public void testPlayerDeath4() {
+		StateBasedGame sbg = mock(StateBasedGame.class);
+		p = mock(Player.class);
+		mg = mock(MainGame.class);
+		gs = mock(GameState.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.setDied(false);
+		when(mg.isLanMultiplayer()).thenReturn(false);
+		when(mg.isMultiplayer()).thenReturn(true);
+		pl.playerDeath(sbg);
+		verify(mg, times(2)).getLogger();
+		
+	}
+	
+	@Test
+	public void testPlayerDeath5() {
+		StateBasedGame sbg = mock(StateBasedGame.class);
+		p = mock(Player.class);
+		mg = mock(MainGame.class);
+		gs = mock(GameState.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.setDied(false);
+		when(mg.isLanMultiplayer()).thenReturn(true);
+		when(mg.isMultiplayer()).thenReturn(true);
+		Host h = mock(Host.class);
+		when(mg.getLifeCount()).thenReturn(1);
+		when(mg.isHost()).thenReturn(true);
+		when(mg.getHost()).thenReturn(h);
+		pl.playerDeath(sbg);
+		verify(mg, times(1)).getLogger();
+	}
+	
+	@Test
+	public void testIsDied() {
+		p = mock(Player.class);
+		mg = mock(MainGame.class);
+		gs = mock(GameState.class);
+		PlayerList pl = new PlayerList(p, mg, gs);
+		pl.setDied(true);
+		assertTrue(pl.isDied());
+	}
+
+	
+
 	
 	@Test 
 	public void testIntersectPlayersWithCircle1() {

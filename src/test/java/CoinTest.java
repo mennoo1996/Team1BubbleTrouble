@@ -64,4 +64,47 @@ public class CoinTest {
 		assertEquals(c.getRectangle(), rect);
 	}
 	
+	@Test
+	public void testToString() {
+		Coin c = new Coin(100, 200, false);
+		assertEquals("COIN 100.0 200.0 false ", c.toString());
+	}
+	
+	@Test
+	public void testUpdate() {
+		Coin c = new Coin(100, 200, false);
+		c.update(new MyRectangle(1, 2, 3, 4), 1, 1600);
+		assertEquals(100, c.getX(), 0);
+	}
+	
+	@Test
+	public void testGetXId() {
+		Coin c = new Coin(100, 200, false);
+		c.setxId(600);
+		assertEquals(600, c.getxId(), 0);
+	}
+	
+
+	@Test
+	public void testSetXId() {
+		Coin c = new Coin(100, 200, false);
+		c.setxId(600);
+		assertEquals(600, c.getxId(), 0);
+	}
+	
+	@Test
+	public void testGetYId() {
+		Coin c = new Coin(100, 200, false);
+		c.setyId(600);
+		assertEquals(600, c.getyId(), 0);
+	}
+	
+
+	@Test
+	public void testSetYId() {
+		Coin c = new Coin(100, 200, false);
+		c.setyId(600);
+		assertEquals(600, c.getyId(), 0);
+	}
+	
 }

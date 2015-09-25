@@ -1,3 +1,4 @@
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -16,6 +17,7 @@ import logic.CircleList;
 import logic.Gate;
 import logic.Logger;
 import logic.MyRectangle;
+import logic.Logger.PriorityLevels;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -1,11 +1,14 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import gui.Button;
-import logic.MyRectangle;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;
+
+import gui.Button;
+import logic.MyRectangle;
 
 public class ButtonTest {
 	
@@ -262,6 +265,83 @@ public class ButtonTest {
 		p.setImageMouseOver(i, i3);
 		assertEquals(i, p.getImageMouseOverN());
 	}
+	
+	@Test
+	public void testGetImageA() {
+		p = new Button(1, 2, 3, 4, i3, i4);
+		p.setImage(i,i2);
+		assertEquals(i2, p.getImageA());
+	}
+	
+	@Test
+	public void testGetImageMouseOverA() {
+		p = new Button(1, 2, 3, 4, i3, i4);
+		p.setImageMouseOver(i, i2);
+		assertEquals(i2, p.getImageMouseOverA());
+	}
+	
+	@Test
+	public void testEquals() {
+		Button a = new Button(1, 2, 3, 4, i, i2);
+		Button b = new Button(1, 2, 3, 4, i, i2);
+		assertTrue(a.equals(b));
+	}
+	
+	@Test
+	public void testEquals2() {
+		Button a = new Button(2, 2, 3, 4, i, i2);
+		Button b = new Button(1, 2, 3, 4, i, i2);
+		assertFalse(a.equals(b));
+	}
+
+	@Test
+	public void testEquals3() {
+		Button a = new Button(1, 3, 3, 4, i, i2);
+		Button b = new Button(1, 2, 3, 4, i, i2);
+		assertFalse(a.equals(b));
+	}
+	
+	@Test
+	public void testEquals4() {
+		Button a = new Button(1, 2, 5, 4, i, i2);
+		Button b = new Button(1, 2, 3, 4, i, i2);
+		assertFalse(a.equals(b));
+	}
+	
+	@Test
+	public void testEquals5() {
+		Button a = new Button(1, 2, 3, 6, i, i2);
+		Button b = new Button(1, 2, 3, 4, i, i2);
+		assertFalse(a.equals(b));
+	}
+	
+	@Test
+	public void testEquals6() {
+		Button a = new Button(1, 2, 3, 4, i3, i2);
+		Button b = new Button(1, 2, 3, 4, i, i2);
+		assertFalse(a.equals(b));
+	}
+	
+	@Test
+	public void testEquals7() {
+		Button a = new Button(1, 2, 3, 4, i, i3);
+		Button b = new Button(1, 2, 3, 4, i, i2);
+		assertFalse(a.equals(b));
+	}
+	
+	@Test
+	public void testEquals8() {
+		Button a = new Button(1, 2, 3, 4, i, i2);
+		assertFalse(a.equals(1));
+	}
+	
+	@Test
+	public void testHashCode() {
+		Button a = new Button(1, 2, 3, 4, i, i2);
+		assertEquals(a.hashCode(), 0);
+	}
+	
+	
 
 
 }

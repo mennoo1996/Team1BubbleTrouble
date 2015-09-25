@@ -112,7 +112,7 @@ public class Host implements Runnable {
     /**
      * Process messages received from the client.
      */
-    private void readClientInputs() {
+    public void readClientInputs() {
     	try {
 			while (reader.ready()) {
 
@@ -334,6 +334,14 @@ public class Host implements Runnable {
      */
     public void setLogger(Logger logger) {
         this.logger = logger;
+    }
+    
+    /**
+     * 
+     * @return the logger
+     */
+    public Logger getLogger() {
+    	return logger;
     }
 
     /**
@@ -575,5 +583,37 @@ public class Host implements Runnable {
     public void updateLives(int lives) {
     	sendMessageToClient("SYSTEM LIVES " + lives);
     }
+
+	/**
+	 * @return the portNumber
+	 */
+	public int getPortNumber() {
+		return portNumber;
+	}
+
+	/**
+	 * @param portNumber the portNumber to set
+	 */
+	public void setPortNumber(int portNumber) {
+		this.portNumber = portNumber;
+	}
+
+	/**
+	 * @return the reader
+	 */
+	public BufferedReader getReader() {
+		return reader;
+	}
+
+	/**
+	 * @param reader the reader to set
+	 */
+	public void setReader(BufferedReader reader) {
+		this.reader = reader;
+	}
+	
+	
+    
+    
 }
 

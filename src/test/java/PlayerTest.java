@@ -436,7 +436,583 @@ public class PlayerTest {
 		assertEquals(5,p.getX(),0);
 		assertEquals(5,p.getY(),0);
 	}
+	
+	@Test
+	public void testUpdate4() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
 
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate5() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate6() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+		when(mg.isLanMultiplayer()).thenReturn(false);
+		when(mg.isMultiplayer()).thenReturn(false);
+		WeaponList wl2 = mock(WeaponList.class);
+		ArrayList<Weapon> wl3 = mock(ArrayList.class);
+		when(wl3.get(1)).thenReturn(new Weapon(1, 2, 3, 4));
+		when(wl2.getWeaponList()).thenReturn(wl3);
+		when(gs.getWeaponList()).thenReturn(wl2);
+		
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.setPlayerNumber(1);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate7() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+		when(mg.isLanMultiplayer()).thenReturn(false);
+		when(mg.isMultiplayer()).thenReturn(false);
+	
+		
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.setPlayerNumber(0);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate8() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+		when(mg.isLanMultiplayer()).thenReturn(false);
+		when(mg.isMultiplayer()).thenReturn(true);
+		WeaponList wl2 = mock(WeaponList.class);
+		ArrayList<Weapon> wl3 = mock(ArrayList.class);
+		when(wl3.get(1)).thenReturn(new Weapon(1, 2, 3, 4));
+		when(wl2.getWeaponList()).thenReturn(wl3);
+		when(gs.getWeaponList()).thenReturn(wl2);
+		
+		
+		
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.setPlayerNumber(1);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate9() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+		when(mg.isLanMultiplayer()).thenReturn(false);
+		when(mg.isMultiplayer()).thenReturn(true);
+
+		
+		
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.setPlayerNumber(0);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate10() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+		when(mg.isLanMultiplayer()).thenReturn(true);
+		when(mg.isMultiplayer()).thenReturn(false);
+		WeaponList wl2 = mock(WeaponList.class);
+		ArrayList<Weapon> wl3 = mock(ArrayList.class);
+		when(wl3.get(1)).thenReturn(new Weapon(1, 2, 3, 4));
+		when(wl2.getWeaponList()).thenReturn(wl3);
+		when(gs.getWeaponList()).thenReturn(wl2);
+		
+		
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.setPlayerNumber(1);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate11() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+		when(mg.isLanMultiplayer()).thenReturn(true);
+		when(mg.isMultiplayer()).thenReturn(false);
+		WeaponList wl2 = mock(WeaponList.class);
+		ArrayList<Weapon> wl3 = mock(ArrayList.class);
+		when(wl3.get(1)).thenReturn(new Weapon(1, 2, 3, 4));
+		when(wl2.getWeaponList()).thenReturn(wl3);
+		when(gs.getWeaponList()).thenReturn(wl2);
+		
+		
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.setPlayerNumber(0);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate12() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+		when(mg.isLanMultiplayer()).thenReturn(true);
+		when(mg.isMultiplayer()).thenReturn(true);
+		WeaponList wl2 = mock(WeaponList.class);
+		ArrayList<Weapon> wl3 = mock(ArrayList.class);
+		when(wl3.get(1)).thenReturn(new Weapon(1, 2, 3, 4));
+		when(wl2.getWeaponList()).thenReturn(wl3);
+		when(gs.getWeaponList()).thenReturn(wl2);
+		
+		
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.setPlayerNumber(1);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testUpdate13() {
+		GameState gs = mock(GameState.class);
+		Gate gate = new Gate(1,1,1,1);
+		ArrayList<Gate> gl = new ArrayList<Gate>();
+		gl.add(gate);
+		Powerup pow = new Powerup(10,10,Powerup.PowerupType.SHIELD);
+		ArrayList<Powerup> pl = new ArrayList<Powerup>();
+		pl.add(pow);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		FloatingScore fs = new FloatingScore(circle);
+		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
+		fsl.add(fs);
+		Weapon w = new Weapon(1,1,1,1);
+		WeaponList wl = new WeaponList(w, mg, gs, true);
+		mg = mock(MainGame.class);
+		when(mg.getLogger()).thenReturn(new Logger(true));
+		when(mg.getGameState()).thenReturn(1);
+		when(mg.getState(1)).thenReturn(gs);
+		Coin coin = new Coin(100,100,true);
+		ArrayList<Coin> cl = new ArrayList<Coin>();
+		cl.add(coin);
+		
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getGateList()).thenReturn(gl);
+		when(gs.getDroppedPowerups()).thenReturn(pl);
+		when(gs.getFloatingScores()).thenReturn(fsl);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		MyRectangle ceiling = new MyRectangle(1,1,1,1);
+		MyRectangle leftWall = new MyRectangle(1,1,1,1);
+		MyRectangle rightWall = new MyRectangle(1,1,1,1);
+		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLeftWall()).thenReturn(leftWall);
+		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getDroppedCoins()).thenReturn(cl);
+		when(mg.isLanMultiplayer()).thenReturn(true);
+		when(mg.isMultiplayer()).thenReturn(true);
+		WeaponList wl2 = mock(WeaponList.class);
+		ArrayList<Weapon> wl3 = mock(ArrayList.class);
+		when(wl3.get(1)).thenReturn(new Weapon(1, 2, 3, 4));
+		when(wl2.getWeaponList()).thenReturn(wl3);
+		when(gs.getWeaponList()).thenReturn(wl2);
+		
+		
+		p = new Player(5,5,1000,1000, i, i2, i3, i4, mg);
+		p.setShieldTimeRemaining(201);
+		p.setPlayerNumber(0);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		p.update(1,1000,1600, true);
+		assertEquals(5,p.getX(),0);
+		assertEquals(5,p.getY(),0);
+	}
+	
+	@Test
+	public void testIsMovingRight() {
+		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setMovingRight(true);
+		assertTrue(p.isMovingRight());
+	}
+
+	@Test
+	public void testSetMovingRight() {
+		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setMovingRight(false);
+		assertFalse(p.isMovingRight());
+	}
+	
+	@Test
+	public void testIsMovingLeft() {
+		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setMovingLeft(true);
+		assertTrue(p.isMovingLeft());
+	}
+
+	@Test
+	public void testSetMovingLeft() {
+		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setMovingLeft(false);
+		assertFalse(p.isMovingLeft());
+	}
+	
+	@Test
+	public void testSetPlayerName() {
+		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setPlayerName("Menno");
+		assertEquals("Menno", p.getPlayerName());
+	}
+
+	@Test
+	public void testGetPlayerName() {
+		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setPlayerName("Bart");
+		assertEquals("Bart", p.getPlayerName());
+	}
+	
+	@Test
+	public void testControls() {
+		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setControlsForPlayer1();
+		p.setControlsForPlayer2();
+		p.setControlsDisabled();
+		assertEquals(Integer.parseInt("5"), 5);
+	}
+	
+	
+	
 	@Test
 	public void testHasShieldFalse() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
@@ -553,5 +1129,7 @@ public class PlayerTest {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		assertEquals(0, p.shieldTimeRemaining(), 0);
 	}
+	
+	
 	
 }

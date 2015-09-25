@@ -63,6 +63,7 @@ public class Client implements Runnable {
         this.gameState = gameState;
         this.portNumber = portNumber;
         this.isConnected = false;
+        
         this.messageQueue = new LinkedList<>();
         this.circleList = new ArrayList<BouncingCircle>();
         this.editingCircleList = false;
@@ -118,7 +119,7 @@ public class Client implements Runnable {
 	/**
      * Process the commands given by the server.
      */
-    private void readServerCommands() {
+    public void readServerCommands() {
         try {
 			while (reader.ready()) {
 				String message = reader.readLine();
@@ -716,4 +717,20 @@ public class Client implements Runnable {
     public boolean connectedToServer() {
         return this.socket.isConnected();
     }
+
+	/**
+	 * @return the reader
+	 */
+	public BufferedReader getReader() {
+		return reader;
+	}
+
+	/**
+	 * @param reader the reader to set
+	 */
+	public void setReader(BufferedReader reader) {
+		this.reader = reader;
+	}
+    
+    
 }

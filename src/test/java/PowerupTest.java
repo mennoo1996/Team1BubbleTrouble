@@ -87,9 +87,59 @@ public class PowerupTest {
 	}
 	
 	@Test
+	public void testUpdate3() {
+		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
+		GameState gs = mock(GameState.class);
+		MyRectangle floor = new MyRectangle(1,1,1,1);
+		when(gs.isPaused()).thenReturn(true);
+		when(gs.getFloor()).thenReturn(floor);
+		p.update(gs, 1000, 100);
+	}
+	
+	@Test
 	public void testRemovePowerup() {
 		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
 		assertFalse(p.removePowerup());
 	}
 	
+	@Test
+	public void testToString() {
+		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
+		assertEquals("POWERUP 100.0 200.0 SHIELD ", p.toString());
+	}
+	
+	@Test
+	public void testSetxId() {
+		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
+		p.setxId(600);
+		assertEquals(600, p.getxId(), 0);
+	}
+	
+	@Test
+	public void testGetxId() {
+		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
+		p.setxId(600);
+		assertEquals(600, p.getxId(), 0);
+	}
+	
+	@Test
+	public void testSetyId() {
+		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
+		p.setyId(600);
+		assertEquals(600, p.getyId(), 0);
+	}
+	
+	@Test
+	public void testGetyId() {
+		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
+		p.setyId(600);
+		assertEquals(600, p.getyId(), 0);
+	}
+	
+	@Test
+	public void testRemovePowerup2() {
+		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
+		p.setTimeRemaining(-50);
+		assertTrue(p.removePowerup());
+	}
 }

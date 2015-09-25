@@ -78,6 +78,29 @@ public class BouncingCircle extends Circle {
 		this.id = id;
 		
 	}
+	
+	/**
+	 * 
+	 * @param centerPointX the X coordinate of the center point of the circle
+	 * @param centerPointY the Y coordinate of the center point of the circle
+	 * @param radius the radius of the circle
+	 * @param xSpeed the speed in horizontal direction
+	 * @param ySpeed the speed in vertical direction
+	 * @param gravity the gravity affecting this circle
+	 */
+	public BouncingCircle(float centerPointX, float centerPointY, 
+			float radius, float xSpeed, float ySpeed, float gravity) {
+		super(centerPointX, centerPointY, radius);
+		
+		this.xSpeed = xSpeed;
+		this.initSpeed = Math.abs(xSpeed);
+		this.ySpeed = ySpeed;
+		this.gravity = gravity;
+		this.done = false;
+		this.hitCeiling = false;
+		this.id = 0;
+		
+	}
 
 	/**
 	 * Update the circle in the given container.

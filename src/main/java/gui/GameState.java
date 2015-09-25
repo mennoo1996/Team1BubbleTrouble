@@ -184,7 +184,7 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
 	private static final int AMOUNT_OF_BALLS = 6;
-	private static final int POWERUP_CHANCE = 100;
+	private static final int POWERUP_CHANCE = 50;
 	private static final int COIN_CHANCE = 100;
 	private static final int POWERUP_IMAGE_OFFSET = 12;
 	private static final int COIN_IMAGE_OFFSET = 3;
@@ -716,7 +716,8 @@ public class GameState extends BasicGameState {
 			}
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
-					* COUNTER_BAR_X_FACTOR, height, "#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
+					* COUNTER_BAR_X_FACTOR, height,
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s", mainGame.getColor()); }
 		if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
 				&& mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
@@ -727,10 +728,10 @@ public class GameState extends BasicGameState {
 						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
 						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
 			}
-			RND.text(SHIELD_COUNTER_OFFSET_2_X 
+			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, 
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s", mainGame.getColor()); }
 	}
 	
 	/**

@@ -231,6 +231,9 @@ public class Player {
 			if (mainGame.isHost()) {
 				mainGame.getHost().updateLaser(playerNumber, weapon.getX(), 
 						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth());
+			} else if (mainGame.isClient()) {
+				mainGame.getClient().updateLaser(playerNumber, weapon.getX(), 
+						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth());
 			}
 			
 		}

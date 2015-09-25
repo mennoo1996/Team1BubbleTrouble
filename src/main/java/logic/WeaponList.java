@@ -75,10 +75,13 @@ public class WeaponList {
 		Weapon weapon = weaponList.get(weaponNumber);
 		Player player = mainGame.getPlayerList().getPlayers().get(weaponNumber);
 		
-		if (player.isShot() && weapon.getRectangle().intersects(circle)) {
+		if (player.isShot() && weapon.getRectangle().intersects(circle) && !mainGame.isClient()) {
 			gameState.getShotList().add(circle);
 			mainGame.getLogger().log("Circle shot", Logger.PriorityLevels.LOW, "weapon");
 			weapon.setVisible(false);
+			if (mainGame.isHost()) {
+				mainGame.getHost().laserDone(weaponNumber);
+			}
 		}
 	}
 	

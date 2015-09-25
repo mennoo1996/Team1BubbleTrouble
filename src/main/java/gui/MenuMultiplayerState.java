@@ -88,7 +88,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	/**
 	 * Construct a SettingsState.
 	 * @param mainGame the MainGame that uses this state.
-	 * @param gameState javadoc
+	 * @param gameState the GameState that uses this MenuMultiplayerState
 	 */
 	public MenuMultiplayerState(MainGame mainGame, GameState gameState) {
 		this.mainGame = mainGame;

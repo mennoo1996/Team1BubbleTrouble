@@ -193,17 +193,17 @@ public class Player {
 		for (Coin coin : gameState.getDroppedCoins()) {
 
 			if (coin.getRectangle().intersects(this.getRectangle())) {
-				if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+				if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
 					//Here is the claim
 					gameState.addToScore(coin.getPoints());
 					gameState.getFloatingScores().add(new FloatingScore(coin));
 					usedCoins.add(coin);
 					mainGame.getLogger().log("Picked up coin", 
 							Logger.PriorityLevels.MEDIUM, "powerups");
-					if (mainGame.isHost()) {
+					if (mainGame.isHost() && playerNumber == 0) {
 						mainGame.getHost().updateCoinsDictate(coin);
 					}
-				} else if (mainGame.isClient()) {
+				} else if (mainGame.isClient() && playerNumber == 1) {
 					mainGame.getClient().pleaCoin(coin);
 				}
 				

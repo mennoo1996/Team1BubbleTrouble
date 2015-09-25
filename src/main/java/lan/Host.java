@@ -387,7 +387,7 @@ public class Host implements Runnable {
      * @param toWrite The string to send
      */
     public void sendMessageToClient(String toWrite) {
-    	//System.out.println(toWrite);
+    	System.out.println(toWrite);
         this.messageQueue.add(toWrite);
     }
 
@@ -497,6 +497,15 @@ public class Host implements Runnable {
      */
     public void updateCircles(ArrayList<BouncingCircle> circleList) {
     	sendMessageToClient(BouncingCircle.circleListToString(circleList));
+    }
+    
+    /**
+     * Update the requiredforgates list on the client.
+     * @param circleList	the circles to update
+     * @param gateNumber	the number of the gate
+     */
+    public void updateRequiredForGateList(ArrayList<BouncingCircle> circleList, int gateNumber) {
+    	sendMessageToClient(BouncingCircle.requiredListToString(circleList, gateNumber));
     }
     
     /**

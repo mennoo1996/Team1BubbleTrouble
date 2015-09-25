@@ -21,6 +21,12 @@ public class CircleList {
 		this.circles = circles;
 		highestID = 0;
 		
+		for (BouncingCircle circle : circles) {
+			if (circle.getId() > highestID) {
+				highestID = circle.getId();
+			}
+		}
+		
 	}
 	
 	/**

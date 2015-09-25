@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import gui.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.CircleList;
 import logic.Coin;
@@ -62,6 +63,7 @@ public class Client implements Runnable {
         this.mainGame = mainGame;
         this.gameState = gameState;
         this.portNumber = portNumber;
+		this.logger = mainGame.getLogger();
         this.isConnected = false;
         this.messageQueue = new LinkedList<>();
         this.circleList = new ArrayList<BouncingCircle>();
@@ -93,11 +95,23 @@ public class Client implements Runnable {
 				readServerCommands();
 			}
 		} catch (IOException err) {
-			System.out.println(err);
-			System.out.println(err.getLocalizedMessage());
-			this.mainGame.setSwitchState(mainGame.getMultiplayerState());
+			processConnectionException(err);
 		}
     }
+
+	/**
+	 * Process exceptions thrown.
+	 * @param err Exception thrown.
+	 */
+	private void processConnectionException(IOException err) {
+		System.out.println(err);
+		System.out.println(err.getLocalizedMessage());
+		if (err.getMessage().equals("Connection refused")) {
+			((MenuMultiplayerState) this.mainGame.getState(mainGame.getMultiplayerState()))
+					.addMessage("Connection Refused");
+		}
+		this.mainGame.setSwitchState(mainGame.getMultiplayerState());
+	}
 
 	/**
 	 * Triggers/ends the heartbeat check for a possible missing connection.
@@ -139,14 +153,13 @@ public class Client implements Runnable {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
 				}
 				readServerCommands2(message2);
-				timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println(e);
 		}
     }
-    
+
     /**
      * Add a FloatingScore to the list.
      * @param message String containing the FloatingScore to add
@@ -163,13 +176,16 @@ public class Client implements Runnable {
      * @param message2	the message to process
      */
     private void readServerCommands2(String message2) {
-    	if (message2.startsWith("HEARTBEAT_ALIVE")) {
-			heartBeatCheck = false;
+    	if (message2.startsWith("HEARTBEAT_CHECK")) {
+			this.sendMessageToHost("HEARTBEAT_ALIVE");
 		} else if (message2.startsWith("LASER")) {
 			laserMessage(message2.replaceFirst("LASER", ""));
 		} else if (message2.startsWith("FLOATINGSCORE")) {
 			floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
 		}
+		// heartBeat reset
+		heartBeatCheck = false;
+		timeLastInput = System.currentTimeMillis();
     }
     
     /**

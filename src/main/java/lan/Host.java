@@ -44,7 +44,8 @@ public class Host implements Runnable {
     private boolean heartBeatCheck;
     private long timeLastInput;
 
-    private static final int TIMEOUT_ATTEMPT = 500000;
+    private static final int TIMEOUT_ATTEMPT = 10000;
+    private static final String NO_CLIENT_CONNECTION = "No connection";
     private static final int FOUR = 4;
     private static final int FIVE = 5;
 
@@ -59,6 +60,7 @@ public class Host implements Runnable {
         this.gameState = gameState;
         this.mainGame = mainGame;
         this.noClientYet = true;
+        this.logger = mainGame.getLogger();
         this.messageQueue = new LinkedList<>();
         System.out.println("HOST INITIALIZED");
     }
@@ -87,8 +89,18 @@ public class Host implements Runnable {
                 readClientInputs();
             }
         } catch (IOException err) {
-            System.out.println(err);
-            System.out.println(err.getLocalizedMessage());
+            processConnectionException(err);
+        }
+    }
+
+    /**
+     * Process exceptions thrown.
+     * @param err Exception thrown.
+     */
+    private void processConnectionException(IOException err) {
+        System.out.println(err);
+        System.out.println(err.getLocalizedMessage());
+        if (!err.getMessage().equals("Socket closed")) {
             this.mainGame.setSwitchState(mainGame.getMultiplayerState());
         }
     }
@@ -100,7 +112,7 @@ public class Host implements Runnable {
     private void manageHeartbeatCheck() throws IOException {
         if (heartBeatCheck
                 && (System.currentTimeMillis() - timeLastInput) >= 2 * TIMEOUT_ATTEMPT) {
-            throw new IOException("No connection");
+            throw new IOException(NO_CLIENT_CONNECTION);
         }
         if (!heartBeatCheck
                 && (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
@@ -129,13 +141,12 @@ public class Host implements Runnable {
 					coinMessage(message2.replaceFirst("COIN", ""));
 				} else if (message2.startsWith("HEARTBEAT_CHECK")) {
                     this.sendMessageToClient("HEARTBEAT_ALIVE");
-                } else if (message2.startsWith("HEARTBEAT_ALIVE")) {
-                    heartBeatCheck = false;
                 } else if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
 				} else if (message2.startsWith("SYSTEM")) {
 					systemMessage(message2.replaceFirst("SYSTEM", ""));
 				}
+                heartBeatCheck = false;
                 timeLastInput = System.currentTimeMillis();
 			}
 		} catch (IOException e) {

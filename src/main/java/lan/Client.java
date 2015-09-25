@@ -120,7 +120,6 @@ public class Client implements Runnable {
         try {
 			while (reader.ready()) {
 				String message = reader.readLine();
-				//System.out.println("received message: " + message);
 				String message2 = message.trim();
 				if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
@@ -136,7 +135,9 @@ public class Client implements Runnable {
 					coinMessage(message2.replaceFirst("COIN", ""));
 				} else if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
-				} 
+				} else if (message2.startsWith("FLOATINGSCORE")) {
+					floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
+				}
 				readServerCommands2(message2);
 				timeLastInput = System.currentTimeMillis();
 			}
@@ -147,6 +148,17 @@ public class Client implements Runnable {
     }
     
     /**
+     * Add a FloatingScore to the list.
+     * @param message the FloatingScore to add
+     */
+    private void floatingMessage(String message) {
+    	String message2 = message.trim();
+    	String[] stringList = message2.split(" ");
+		gameState.getFloatingScores().add(new FloatingScore(stringList[2],
+				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
+	}
+
+	/**
      * second part of the method that reads server commands.
      * @param message2	the message
      */

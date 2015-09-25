@@ -339,6 +339,14 @@ public class Host implements Runnable {
     }
     
     /**
+     * Sends a message to the client concerning a FloatingScore.
+     * @param floating the FloatingScore that it concerns
+     */
+    public void sendFloatingScore(FloatingScore floating) {
+    	sendMessageToClient(floating.toString());
+    }
+    
+    /**
      * Update the player location on the client.
      * @param id the id of the player.
      * @param x the new x position

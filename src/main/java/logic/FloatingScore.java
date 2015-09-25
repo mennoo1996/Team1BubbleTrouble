@@ -54,6 +54,30 @@ public class FloatingScore {
 		this.speed = MAX_SPEED;
 		this.life = MAX_LIFE;
 	}
+	
+	/**
+	 * Constructor class for a floating score.
+	 * @param score the score displayed by floating score
+	 * @param x the x location of where the floatingscore appears
+	 * @param y the y location of where the FloatingScore appears
+	 */
+	public FloatingScore(String score, float x, float y) {
+		this.score = score;
+		this.x = x;
+		this.y = y;
+		this.speed = MAX_SPEED;
+		this.life = MAX_LIFE;
+	}
+	
+	/**
+	 * Give the FloatingScore object back as a string.
+	 * @return the FloatingScore object as a string.
+	 */
+	@Override
+	public String toString() {
+		String res = "FLOATINGSCORE " + this.x + " " + this.y + " " + this.score + " ";
+		return res;
+	}
 
 	/**
 	 * Update function for floating score.

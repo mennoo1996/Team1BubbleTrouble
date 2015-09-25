@@ -140,10 +140,12 @@ public class Player {
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
-		for (Gate someGate :gameState.getGateList()) {
-			if (this.getRectangle().intersects(someGate.getRectangle())) {
-				freeToRoam = false;
-				intersectingGate = someGate;
+		synchronized (gameState.getGateList()) {
+			for (Gate someGate :gameState.getGateList()) {
+				if (this.getRectangle().intersects(someGate.getRectangle())) {
+					freeToRoam = false;
+					intersectingGate = someGate;
+				}
 			}
 		}
 		// Reset intersecting gate to none if there is no intersection
@@ -160,28 +162,24 @@ public class Player {
 	 */
 	private void processPowerups(float deltaFloat, float containerHeight,
 			float containerWidth) { // MARKED
-		ArrayList<Powerup> dummyList = new ArrayList<Powerup>();
-		
+
+		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		synchronized (gameState.getDroppedPowerups()) {
 			for (Powerup powerup : gameState.getDroppedPowerups()) {
-				dummyList.add(powerup.clone());
-			}
-		}
-		ArrayList<Powerup> usedPowerups = new ArrayList<>();
-		for (Powerup powerup : dummyList) {
-			powerup.update(gameState, containerHeight, deltaFloat);
+				powerup.update(gameState, containerHeight, deltaFloat);
 
-			if (powerup.getRectangle().intersects(this.getRectangle())) {
-				if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
-					this.addPowerup(powerup.getType());
-					gameState.getFloatingScores().add(new FloatingScore(powerup));
-					usedPowerups.add(powerup);
-					
-					if (mainGame.isHost() && playerNumber == 0) {
-						mainGame.getHost().updatePowerupsDictate(powerup);
+				if (powerup.getRectangle().intersects(this.getRectangle())) {
+					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
+						this.addPowerup(powerup.getType());
+						gameState.getFloatingScores().add(new FloatingScore(powerup));
+						usedPowerups.add(powerup);
+
+						if (mainGame.isHost() && playerNumber == 0) {
+							mainGame.getHost().updatePowerupsDictate(powerup);
+						}
+					} else if (mainGame.isClient() && playerNumber == 1) {
+						mainGame.getClient().pleaPowerup(powerup);
 					}
-				} else if (mainGame.isClient() && playerNumber == 1) {
-					mainGame.getClient().pleaPowerup(powerup);
 				}
 			}
 		}
@@ -197,23 +195,25 @@ public class Player {
 	 */
 	private void processCoins(float deltaFloat, float containerHeight) {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
-		for (Coin coin : gameState.getDroppedCoins()) {
+		synchronized (gameState.getDroppedCoins()) {
+			for (Coin coin : gameState.getDroppedCoins()) {
 
-			if (coin.getRectangle().intersects(this.getRectangle())) {
-				if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
-					//Here is the claim
-					gameState.addToScore(coin.getPoints());
-					gameState.getFloatingScores().add(new FloatingScore(coin));
-					usedCoins.add(coin);
-					mainGame.getLogger().log("Picked up coin", 
-							Logger.PriorityLevels.MEDIUM, "powerups");
-					if (mainGame.isHost() && playerNumber == 0) {
-						mainGame.getHost().updateCoinsDictate(coin);
+				if (coin.getRectangle().intersects(this.getRectangle())) {
+					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
+						//Here is the claim
+						gameState.addToScore(coin.getPoints());
+						gameState.getFloatingScores().add(new FloatingScore(coin));
+						usedCoins.add(coin);
+						mainGame.getLogger().log("Picked up coin", 
+								Logger.PriorityLevels.MEDIUM, "powerups");
+						if (mainGame.isHost() && playerNumber == 0) {
+							mainGame.getHost().updateCoinsDictate(coin);
+						}
+					} else if (mainGame.isClient() && playerNumber == 1) {
+						mainGame.getClient().pleaCoin(coin);
 					}
-				} else if (mainGame.isClient() && playerNumber == 1) {
-					mainGame.getClient().pleaCoin(coin);
+
 				}
-				
 			}
 		}
 		//If client no used coins

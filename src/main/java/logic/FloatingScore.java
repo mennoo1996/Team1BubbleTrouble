@@ -32,6 +32,22 @@ public class FloatingScore {
 	}
 	
 	/**
+	 * Constructor for a floating score.
+	 * @param score	the score of the flaoting score
+	 * @param x the x of the flaoting score
+	 * @param y the y of the flaoting score
+	 * @param speed the speed of the flaoting score
+	 * @param life the life of the flaoting score
+	 */
+	public FloatingScore(String score, float x, float y, float speed, float life) {
+		this.score = score;
+		this.x = x;
+		this.y = y;
+		this.speed = speed;
+		this.life = life;
+	}
+	
+	/**
 	 * Constructor class for a floating score.
 	 * @param coin the coin this score draws its information from
 	 */
@@ -131,6 +147,7 @@ public class FloatingScore {
 	 */
 	@Override
 	public FloatingScore clone() {
+		return new FloatingScore(score, x, y, speed, life);
 	}
 	
 }

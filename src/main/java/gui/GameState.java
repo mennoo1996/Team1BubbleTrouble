@@ -577,18 +577,20 @@ public class GameState extends BasicGameState {
 	 */
 	private void updateActiveCircles(GameContainer container, StateBasedGame sbg,
 			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
-		for (Iterator<BouncingCircle> iterator = 
-				circleList.getCircles().iterator(); iterator.hasNext();) {
-		    BouncingCircle circle = iterator.next();
-		    circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
+		synchronized (circleList.getCircles()) {
+			for (Iterator<BouncingCircle> iterator = 
+					circleList.getCircles().iterator(); iterator.hasNext();) {
+				BouncingCircle circle = iterator.next();
+				circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
 
-            mainGame.getPlayerList().intersectPlayersWithCircle(circle);
-            
-            weaponList.intersectWeaponsWithCircle(circle);
+				mainGame.getPlayerList().intersectPlayersWithCircle(circle);
 
-            if (circle.isHitCeiling()) {
-            	ceilingList.add(circle);
-            }
+				weaponList.intersectWeaponsWithCircle(circle);
+
+				if (circle.isHitCeiling()) {
+					ceilingList.add(circle);
+				}
+			}
 		}
 	}
 
@@ -598,12 +600,14 @@ public class GameState extends BasicGameState {
 	 */
 	private void updateFloatingScores(float deltaFloat) {
 		Iterator<FloatingScore> scoreListIterator = floatingScoreList.iterator();
-		while (scoreListIterator.hasNext()) {
-			FloatingScore score = scoreListIterator.next();
-			if (score.isDead()) {
-				scoreListIterator.remove();
-			} else {
-				score.update(deltaFloat, timeDelta);
+		synchronized (scoreListIterator) {
+			while (scoreListIterator.hasNext()) {
+				FloatingScore score = scoreListIterator.next();
+				if (score.isDead()) {
+					scoreListIterator.remove();
+				} else {
+					score.update(deltaFloat, timeDelta);
+				}
 			}
 		}
 	}
@@ -613,11 +617,14 @@ public class GameState extends BasicGameState {
 	 * @param deltaFloat the time in seconds since the last frame.
 	 */
 	private void updateGateExistence(float deltaFloat) {
+		
 		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
-		for (Gate gate : gateList) {
-			if (gate.getUnlockCircles().isEmpty()) {
-				tempGateList.add(gate);
-				gate.setFading(true);
+		synchronized (gateList) {
+			for (Gate gate : gateList) {
+				if (gate.getUnlockCircles().isEmpty()) {
+					tempGateList.add(gate);
+					gate.setFading(true);
+				}
 			}
 		}
 		for (Gate gate : tempGateList) {
@@ -828,20 +835,21 @@ public class GameState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawPowerups(Graphics graphics) {
-
-		for (Powerup pow : droppedPowerups) {
-			if (pow.getType() == Powerup.PowerupType.SHIELD) {
-				RND.drawColor(graphics, shieldImageN, shieldImageA, 
-						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-						mainGame.getColor());
-			} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
-				RND.drawColor(graphics, vineImageN, vineImageA, 
-						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-						mainGame.getColor());
-			} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
-				RND.drawColor(graphics, laserImageN, laserImageA, 
-						pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-						mainGame.getColor());
+		synchronized (droppedPowerups) {
+			for (Powerup pow : droppedPowerups) {
+				if (pow.getType() == Powerup.PowerupType.SHIELD) {
+					RND.drawColor(graphics, shieldImageN, shieldImageA, 
+							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
+							mainGame.getColor());
+				} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
+					RND.drawColor(graphics, vineImageN, vineImageA, 
+							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
+							mainGame.getColor());
+				} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
+					RND.drawColor(graphics, laserImageN, laserImageA, 
+							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
+							mainGame.getColor());
+				}
 			}
 		}
 	}
@@ -852,10 +860,12 @@ public class GameState extends BasicGameState {
 	 */
 	private void drawCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
-		for (Coin coin : droppedCoins) {
-			RND.drawColor(graphics, coinImageN, coinImageA, 
-					coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
-					mainGame.getColor());
+		synchronized (droppedCoins) {
+			for (Coin coin : droppedCoins) {
+				RND.drawColor(graphics, coinImageN, coinImageA, 
+						coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
+						mainGame.getColor());
+			}
 		}
 		graphics.setColor(Color.white);
 	}
@@ -880,33 +890,35 @@ public class GameState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
-		for (Gate gate : gateList) {
-			//upper
-			int left = GATE_LEFT, down = GATE_DOWN;
-			float x = gate.getMinX() - left, y = getCeiling().getHeight() - GATE_Y_DEVIATION;
-			float x2 = x + gateUpperN.getWidth();
-			float y2 = getCeiling().getHeight() + GATE_Y_FACTOR * gate.getHeightPercentage() 
-				+ down - GATE_Y_DEVIATION;
-			float srcx = 0;
-			float srcy = gateUpperN.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
-			float srcx2 = gateUpperN.getWidth();
-			float srcy2 = gateUpperN.getHeight();
-			RND.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
-					srcx, srcy, srcx2, srcy2, mainGame.getColor());
-			//lower
-			left = GATE_LEFT_LOWER;
-			float up = GATE_UP;
-			x = gate.getMinX() - left - 1;
-			y = container.getHeight() - getFloor().getHeight()
-					- GATE_Y_FACTOR_LOWER * gate.getHeightPercentage() - up;
-			x2 = x + gateLowerN.getWidth() - 1;
-			y2 = container.getHeight() - getFloor().getHeight();
-			srcx = 0;
-			srcy = 0;
-			srcx2 = gateLowerN.getWidth();
-			srcy2 = GATE_Y_FACTOR_LOWER * gate.getHeightPercentage();
-			RND.drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
-					srcx, srcy, srcx2, srcy2, mainGame.getColor());
+		synchronized (gateList) {
+			for (Gate gate : gateList) {
+				//upper
+				int left = GATE_LEFT, down = GATE_DOWN;
+				float x = gate.getMinX() - left, y = getCeiling().getHeight() - GATE_Y_DEVIATION;
+				float x2 = x + gateUpperN.getWidth();
+				float y2 = getCeiling().getHeight() + GATE_Y_FACTOR * gate.getHeightPercentage() 
+						+ down - GATE_Y_DEVIATION;
+				float srcx = 0;
+				float srcy = gateUpperN.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
+				float srcx2 = gateUpperN.getWidth();
+				float srcy2 = gateUpperN.getHeight();
+				RND.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
+						srcx, srcy, srcx2, srcy2, mainGame.getColor());
+				//lower
+				left = GATE_LEFT_LOWER;
+				float up = GATE_UP;
+				x = gate.getMinX() - left - 1;
+				y = container.getHeight() - getFloor().getHeight()
+						- GATE_Y_FACTOR_LOWER * gate.getHeightPercentage() - up;
+				x2 = x + gateLowerN.getWidth() - 1;
+				y2 = container.getHeight() - getFloor().getHeight();
+				srcx = 0;
+				srcy = 0;
+				srcx2 = gateLowerN.getWidth();
+				srcy2 = GATE_Y_FACTOR_LOWER * gate.getHeightPercentage();
+				RND.drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
+						srcx, srcy, srcx2, srcy2, mainGame.getColor());
+			}
 		}
 	}
 
@@ -963,7 +975,13 @@ public class GameState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawFloatingScores(Graphics graphics) {
-		for (FloatingScore score : floatingScoreList) {
+		ArrayList<FloatingScore> dummyList = new ArrayList<FloatingScore>();
+		synchronized (floatingScoreList) {
+			for (FloatingScore fs : floatingScoreList) {
+				dummyList.add(fs.clone());
+			}
+		}
+		for (FloatingScore score : dummyList) {
 			RND.text(graphics, score.getX(), score.getY(), score.getScore(),
 					new Color(mainGame.getColor().r, mainGame.getColor().g,
 							mainGame.getColor().b, score.getOpacity()));

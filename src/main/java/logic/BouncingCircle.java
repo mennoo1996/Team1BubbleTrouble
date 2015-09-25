@@ -407,4 +407,15 @@ public class BouncingCircle extends Circle {
 		return res;
 	}
 	
+	/**
+	 * Clone the bouncingCircle.
+	 */
+	@Override
+	public BouncingCircle clone() {
+		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
+				this.getRadius(), xSpeed, ySpeed, gravity);
+		
+		return res;
+	}
+	
 }

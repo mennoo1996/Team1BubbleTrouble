@@ -885,7 +885,14 @@ public class GameState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen.
 	 */
 	private void drawActiveCircles(Graphics graphics) {
-		for (BouncingCircle circle : circleList) {
+		ArrayList<BouncingCircle> dummyList = new ArrayList<BouncingCircle>();
+		synchronized (circleList) {
+			for (BouncingCircle bCircle : circleList) {
+				dummyList.add(bCircle.clone());
+			}
+		}
+		
+		for (BouncingCircle circle : dummyList) {
 			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
 			final float xPosition = circle.getMinX() - offset;
 			final float yPosition = circle.getMinY() - offset;

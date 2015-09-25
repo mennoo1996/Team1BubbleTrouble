@@ -525,6 +525,8 @@ public class GameState extends BasicGameState {
 		if (mainGame.isHost() && !fromPeer) {
 			//mainGame.getHost().updateCircles(getCircleList().getCircles());
 			mainGame.getHost().splittedCircle(circle);
+		} else if (mainGame.isClient() && !fromPeer) {
+			mainGame.getClient().splittedCircle(circle);
 		}
 	}
 

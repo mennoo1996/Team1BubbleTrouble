@@ -82,8 +82,10 @@ public class WeaponList {
 			gameState.getShotList().add(circle);
 			mainGame.getLogger().log("Circle shot", Logger.PriorityLevels.LOW, "weapon");
 			weapon.setVisible(false);
-			if (mainGame.isHost()) {
+			if (mainGame.isHost() && weaponNumber == 0) {
 				mainGame.getHost().laserDone(weaponNumber);
+			} else if (mainGame.isClient() && weaponNumber == 1) {
+				mainGame.getClient().laserDone(weaponNumber);
 			}
 		}
 	}

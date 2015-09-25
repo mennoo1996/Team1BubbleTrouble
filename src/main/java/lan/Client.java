@@ -171,11 +171,9 @@ public class Client implements Runnable {
      * @param message	the message to process
      */
     private void splitMessage(String message) {
-    	System.out.println("begin split message");
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	
-    	System.out.println("before circle");
     	
     	for (String s : stringList) {
     		System.out.println(s);
@@ -186,20 +184,13 @@ public class Client implements Runnable {
 				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
 				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[SEVEN]));
     	
-
-    	System.out.println("circle made");
-    	
     	int index = gameState.getCircleList().getIndexForCircleWithID(
     			Integer.parseInt(stringList[SEVEN]));
-
-
-    	System.out.println("index gotten");
     	
-    	gameState.getCircleList().getCircles().set(index, circle);    	
-    	System.out.println("circle set");
+    	gameState.getCircleList().getCircles().set(index, circle);    
     	circle.setLogger(logger);
+    	
     	gameState.updateShotCirles2(circle, true);
-    	System.out.println("end split message");
     }
     
     /**
@@ -514,6 +505,14 @@ public class Client implements Runnable {
     }
     
     /**
+     * notify client of splitted circle.
+     * @param circle the splitted circle
+     */
+    public void splittedCircle(BouncingCircle circle) {
+    	sendMessageToHost("SPLIT " + circle.toString());
+    }
+    
+    /**
      * Process a message about the level.
      * @param message the message to process
      */
@@ -719,6 +718,14 @@ public class Client implements Runnable {
     		float laserWidth, boolean spikey) {
     	sendMessageToHost("NEW LASER " 
     			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth + " " + spikey);
+    }
+    
+    /**
+     * Send to host when a laser/weapon is done.
+     * @param id	the id of the weapon
+     */
+    public void laserDone(int id) {
+    	sendMessageToHost("LASER DONE " + id);
     }
     
     /**

@@ -512,9 +512,9 @@ public class GameState extends BasicGameState {
 	 */
 	private void updateActiveCircles(GameContainer container, StateBasedGame sbg,
 			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
-		for (BouncingCircle circle : circleList) {
-            //update circles
-            circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
+		for (Iterator<BouncingCircle> iterator = circleList.iterator(); iterator.hasNext();) {
+		    BouncingCircle circle = iterator.next();
+		    circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
 
             mainGame.getPlayerList().intersectPlayersWithCircle(circle);
             
@@ -523,8 +523,7 @@ public class GameState extends BasicGameState {
             if (circle.isHitCeiling()) {
             	ceilingList.add(circle);
             }
-
-        }
+		}
 	}
 
 	/**

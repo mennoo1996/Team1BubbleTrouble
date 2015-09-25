@@ -42,12 +42,12 @@ public class MenuMainState extends BasicGameState {
 	private static final int OPTIONSBUTTON_Y = 375;
 	private static final int QUITBUTTON_Y = 425;
 	private static final int HIGHSCORES_X = 900;
-	private static final int HIGHSCORES_Y = 240;
+	private static final int HIGHSCORES_Y = 288;
 	private static final int HIGHSCORES_TITLE_X = 760;
-	private static final int HIGHSCORES_TITLE_Y = 140;
+	private static final int HIGHSCORES_TITLE_Y = 238;
 	
 	private Separator separatorTop;
-	private String separatorTopTitle = " Main Menu ";
+	private String separatorTopTitle = "";
 	
 	/**
 	 * constructor.

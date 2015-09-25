@@ -116,7 +116,7 @@ public class Client implements Runnable {
         try {
 			while (reader.ready()) {
 				String message = reader.readLine();
-				System.out.println("received message: " + message);
+				//System.out.println("received message: " + message);
 				String message2 = message.trim();
 				if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
@@ -349,7 +349,7 @@ public class Client implements Runnable {
     	String[] stringList = message2.split(" ");
     	
     	int id = Integer.parseInt(stringList[0]);
-    	System.out.println("PLAYERID" + id);
+    //	System.out.println("PLAYERID" + id);
     	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
     			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
     			Float.parseFloat(stringList[FOUR]));

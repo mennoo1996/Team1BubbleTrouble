@@ -117,11 +117,11 @@ public class Host implements Runnable {
     	try {
 			while (reader.ready()) {
 
-				System.out.println("in loop");
+				//System.out.println("in loop");
 				String message = reader.readLine();
-				System.out.println(message);
+				//System.out.println(message);
 				String message2 = message.trim();
-				System.out.println(message2);
+				//System.out.println(message2);
 				if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
 				} else if (message2.startsWith("POWERUP")) {
@@ -162,7 +162,7 @@ public class Host implements Runnable {
     	String[] stringList = message2.split(" ");
     	
     	int id = Integer.parseInt(stringList[0]);
-    	System.out.println("PLAYERID" + id);
+    	//System.out.println("PLAYERID" + id);
     	Weapon weapon = new Weapon(Float.parseFloat(stringList[1]), 
     			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
     			Float.parseFloat(stringList[FOUR]));
@@ -177,7 +177,7 @@ public class Host implements Runnable {
      */
     private void playerMessage(String message) {
     	String message2 = message.trim();
-    	System.out.println(message2);
+    	//System.out.println(message2);
     	
     	if (message2.startsWith("MOVEMENT")) {
     		movementMessage(message2.replaceFirst("MOVEMENT", ""));
@@ -262,7 +262,7 @@ public class Host implements Runnable {
      */
     private void deadMessage(String message) {
     	String message2 = message.trim();
-    	System.out.println(message2);
+    	//System.out.println(message2);
     	
     	if (message2.equals("CLIENT")) {
     		System.out.println("client dead");
@@ -288,7 +288,7 @@ public class Host implements Runnable {
      * @param toWrite The string to send
      */
     public void sendMessageToClient(String toWrite) {
-    	System.out.println(toWrite);
+    	//System.out.println(toWrite);
         this.messageQueue.add(toWrite);
     }
 

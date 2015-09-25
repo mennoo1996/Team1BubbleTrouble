@@ -1,3 +1,4 @@
+package logic;
 import static org.junit.Assert.*;
 import logic.InstantLaser;
 

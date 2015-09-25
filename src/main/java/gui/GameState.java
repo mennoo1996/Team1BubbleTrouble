@@ -323,7 +323,6 @@ public class GameState extends BasicGameState {
 		}
 		setSavedInput(container.getInput());
 		if (playingState && !mainGame.getShouldSwitchState()) {
-			// Timer logic
 			long curTime = System.currentTimeMillis();
 			timeDelta = curTime - prevTime;
 			boolean countingIn = (countIn && !mainGame.isClient()) || (mainGame.isClient()
@@ -333,6 +332,7 @@ public class GameState extends BasicGameState {
 					mainGame.getLogger().log("Starting level", 
 							Logger.PriorityLevels.MEDIUM, "levels");
 					countIn = false;
+					mainGame.getPlayerList().setDied(true);
 					if (mainGame.isHost()) {
 						mainGame.getHost().updateLevelStarted();
 					}

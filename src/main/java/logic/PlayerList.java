@@ -20,6 +20,7 @@ public class PlayerList {
 	private ArrayList<Player> playerList;
 	private MainGame mainGame;
 	private GameState gameState;
+	private boolean died;
 	
 	private boolean processCollisions;
 	
@@ -236,27 +237,28 @@ public class PlayerList {
 	 * @param sbg The stateBasedGame that uses this state.
 	 */
 	public void playerDeath(StateBasedGame sbg) {
-		mainGame.getLogger().log("Player died, reducing lives", 
-				Logger.PriorityLevels.MEDIUM, "players");
-		
-		if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
-			mainGame.decreaselifeCount();
-			if (mainGame.isHost()) {
-				mainGame.getHost().updateLives(mainGame.getLifeCount());
+		if (!died) {
+			died = true;
+			mainGame.getLogger().log("Player died, reducing lives", Logger.PriorityLevels.MEDIUM,
+					"players");
+			if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+				mainGame.decreaselifeCount();
+				if (mainGame.isHost()) {
+					mainGame.getHost().updateLives(mainGame.getLifeCount());
+				}
 			}
-		}
-		
-		if (mainGame.getLifeCount() <= 0) {
-			mainGame.setScore(mainGame.getScore() + gameState.getScore());
-			mainGame.setSwitchState(mainGame.getGameOverState());
-			mainGame.getLogger().log("Player lives reached 0, game over", 
-					Logger.PriorityLevels.HIGH, "players");
-			//sbg.enterState(mainGame.getGameOverState());
-		} else {
-			//sbg.enterState(mainGame.getGameState());
-			processCollisions = false;
-			mainGame.setSwitchState(mainGame.getGameState());
-			//mainGame.getPlayerList().
+			if (mainGame.getLifeCount() <= 0) {
+				mainGame.setScore(mainGame.getScore() + gameState.getScore());
+				mainGame.setSwitchState(mainGame.getGameOverState());
+				mainGame.getLogger().log("Player lives reached 0, game over",
+						Logger.PriorityLevels.HIGH, "players");
+				//sbg.enterState(mainGame.getGameOverState());
+			} else {
+				//sbg.enterState(mainGame.getGameState());
+				processCollisions = false;
+				mainGame.setSwitchState(mainGame.getGameState());
+				//mainGame.getPlayerList().
+			}
 		}
 	}
 	
@@ -306,4 +308,19 @@ public class PlayerList {
 		return processCollisions;
 	}
 
+	/**
+	 * @return the died
+	 */
+	public boolean isDied() {
+		return died;
+	}
+
+	/**
+	 * @param died the died to set
+	 */
+	public void setDied(boolean died) {
+		this.died = died;
+	}
+
+	
 }

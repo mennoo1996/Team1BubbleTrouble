@@ -150,6 +150,26 @@ public class Powerup {
         return timeRemaining <= 0;
     }
     
+    
+    /**
+	 * @return the timeRemaining
+	 */
+	public long getTimeRemaining() {
+		return timeRemaining;
+	}
+
+	/**
+	 * Clone the powerup.
+	 */
+	@Override
+	public Powerup clone() {
+		Powerup res = new Powerup(x, y, type);
+		res.setTimeRemaining(timeRemaining);
+		res.setxId(xId);
+		res.setyId(yId);
+		return res;
+	}
+
     /**
      * Set the time remaining.
      * @param time the time

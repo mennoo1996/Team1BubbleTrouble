@@ -149,6 +149,17 @@ public class LevelContainer {
 				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
 		level = new Level(LEVEL_3_TIME, circles3, gates3);
 		circles3.get(circles3.size() - 1).setLogger(logger); res.add(level);
+		
+		res.add(initializeLevels2b());
+		return res;
+	}
+	
+	/**
+	 * Initalize the 2nd 2nd batch of levels.
+	 * @return a list with the third batch of levels.
+	 */
+	private Level initializeLevels2b() {
+		Level level;
 		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates4 = new ArrayList<Gate>();
 		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_4,
@@ -157,18 +168,20 @@ public class LevelContainer {
 		circles4.add(new BouncingCircle(LEVEL_4_BALL_2_X, DEFAULT_BIGBALL_Y, RADIUS_5,
 				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
 		circles4.get(circles4.size() - 1).setLogger(logger);
-		Gate gate;
-		if (!testing) {
-			gate = new Gate((float) container.getWidth() / 2.0f
-					+ LEVEL_1_GATE_X_DEVIATION, 0, LEVEL_1_GATE_WIDTH,
-					container.getHeight());
-		} else {
-			gate = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION,
-					0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT); }
-		gate.addToRequirements(ball); gates4.add(gate);
+		if (!mainGame.isLanMultiplayer()) {
+			Gate gate;
+			if (!testing) {
+				gate = new Gate((float) container.getWidth() / 2.0f + LEVEL_1_GATE_X_DEVIATION, 0,
+						LEVEL_1_GATE_WIDTH, container.getHeight());
+			} else {
+				gate = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION, 0,
+						LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
+			}
+			gate.addToRequirements(ball);
+			gates4.add(gate);
+		}
 		level = new Level(LEVEL_4_TIME, circles4, gates4);
-		res.add(level);
-		return res;
+		return level;
 	}
 	
 	/**

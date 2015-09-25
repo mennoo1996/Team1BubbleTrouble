@@ -413,7 +413,7 @@ public class BouncingCircle extends Circle {
 		float gravity = this.gravity;
 		
 		String res = "CIRCLE " + centerPointX + " " + centerPointY 
-				+ " " + radius + " " + xSpeed + " " + ySpeed + " " + gravity + " ";
+				+ " " + radius + " " + xSpeed + " " + ySpeed + " " + gravity + " " + id;
 		return res;
 	}
 	

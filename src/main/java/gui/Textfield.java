@@ -82,6 +82,16 @@ public class Textfield {
 			textfield.setText("");
 			cursor = 0;
 		}
+		// process the bloody textfield input edgecase
+		if (textfield.hasFocus()) {
+			if (!focus) {
+				textfield.setText("");
+				cursor = 0;
+				focus = true;
+			}
+		} else {
+			focus = false;
+		}
 		// process keyboard input
 		if (textfield.hasFocus()) {
 			processTextInput(input);

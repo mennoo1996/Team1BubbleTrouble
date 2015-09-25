@@ -396,6 +396,7 @@ public class Host implements Runnable {
      */
 	private void powerupMessage(String message) {
 		String message2 = message.trim();
+		System.out.println("HOST RECEIVED: " + message2);
     	String[] stringList = message2.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
     		ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
@@ -427,6 +428,7 @@ public class Host implements Runnable {
      */
     public void updatePowerupsAdd(Powerup powerup) {
     	sendMessageToClient(powerup.toString() + "ADD ");
+		System.out.println("HOST SENT: " + powerup.toString() + "ADD ");
     }
     
     /**
@@ -435,6 +437,7 @@ public class Host implements Runnable {
      */
     public void updatePowerupsDictate(Powerup powerup) {
     	sendMessageToClient(powerup.toString() + "DICTATE ");
+		System.out.println("HOST SENT: " + powerup.toString() + "DICTATE ");
     }
     
     /**
@@ -443,6 +446,7 @@ public class Host implements Runnable {
 	 */
 	private void updatePowerupsGrant(Powerup powerup) {
 		sendMessageToClient(powerup.toString() + "GRANT ");
+		System.out.println("HOST SENT: " + powerup.toString() + "GRANT ");
 	}
     
     /**

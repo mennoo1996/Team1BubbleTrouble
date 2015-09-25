@@ -422,6 +422,7 @@ public class Client implements Runnable {
      */
     private void powerupMessage(String message) {
     	String message2 = message.trim();
+    	System.out.println("CLIENT RECEIVING:  " + message2);
     	String[] stringList = message2.split(" ");
     	if (stringList[THREE].equals("ADD")) {
     		addPowerup(stringList);
@@ -507,6 +508,7 @@ public class Client implements Runnable {
      */
     public void pleaPowerup(Powerup powerup) {
     	sendMessageToHost(powerup.toString() + "PLEA ");
+    	System.out.println("CLIENT SENDING:  " + powerup.toString() + "PLEA ");
     }
     
 	/**

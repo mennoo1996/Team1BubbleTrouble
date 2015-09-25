@@ -192,6 +192,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		}
 		
 		input = container.getInput();
+		nameField.update(input);
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			processButtons(input);
 		}

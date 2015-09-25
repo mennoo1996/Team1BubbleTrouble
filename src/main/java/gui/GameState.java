@@ -885,7 +885,7 @@ public class GameState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen.
 	 */
 	private void drawActiveCircles(Graphics graphics) {
-		for (BouncingCircle circle : circleList) {
+		for (BouncingCircle circle : this.getDummyList()) {
 			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
 			final float xPosition = circle.getMinX() - offset;
 			final float yPosition = circle.getMinY() - offset;
@@ -913,6 +913,20 @@ public class GameState extends BasicGameState {
 					}
 			}
 		}
+	}
+	
+	/**
+	 * Returns a deep copy of circlelist.
+	 * @return the dummyList
+	 */
+	private ArrayList<BouncingCircle> getDummyList() {
+		ArrayList<BouncingCircle> dummyList = new ArrayList<BouncingCircle>();
+		synchronized (circleList) {
+			for (BouncingCircle bCircle : circleList) {
+				dummyList.add(bCircle.clone());
+			} 
+		}
+		return dummyList;
 	}
 
 	/**
@@ -1384,14 +1398,14 @@ public class GameState extends BasicGameState {
 	/**
 	 * @return the circleList
 	 */
-	public ArrayList<BouncingCircle> getCircleList() {
+	public synchronized ArrayList<BouncingCircle> getCircleList() {
 		return circleList;
 	}
 
 	/**
 	 * @param circleList the circleList to set
 	 */
-	public void setCircleList(ArrayList<BouncingCircle> circleList) {
+	public synchronized void setCircleList(ArrayList<BouncingCircle> circleList) {
 		this.circleList = circleList;
 	}
 

@@ -38,14 +38,12 @@ public class Host implements Runnable {
     private BufferedReader reader;
     private MainGame mainGame;
     private GameState gameState;
-    private ArrayList<Client> clientList;
 
     private static final int THREE = 3;
     private boolean heartBeatCheck;
     private long timeLastInput;
 
     private static final int TIMEOUT_ATTEMPT = 10000;
-    private static final int MENU_MULTIPLAYER_STATE = 4;
     private static final int FOUR = 4;
 
     /**
@@ -60,7 +58,6 @@ public class Host implements Runnable {
         this.mainGame = mainGame;
         this.noClientYet = true;
         this.messageQueue = new LinkedList<>();
-        clientList = new ArrayList<Client>();
         System.out.println("HOST INITIALIZED");
     }
 

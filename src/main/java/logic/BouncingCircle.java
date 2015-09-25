@@ -396,11 +396,24 @@ public class BouncingCircle extends Circle {
 	 * @return				a string containing the representations
 	 */
 	public static String circleListToString(ArrayList<BouncingCircle> circleList) {
-		String res = "UPDATE CIRCLELIST";
+		String res = "UPDATE CIRCLELIST START";
 		
 		for (BouncingCircle bCircle : circleList) {
 			res += "\n" + bCircle.toString();
 		}
+		
+		res += "\nUPDATE CIRCLELIST END";
+		
+		return res;
+	}
+	
+	/**
+	 * Clone the bouncingCircle.
+	 */
+	@Override
+	public BouncingCircle clone() {
+		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
+				this.getRadius(), xSpeed, ySpeed, gravity);
 		
 		return res;
 	}

@@ -53,7 +53,32 @@ public class BouncingCircle extends Circle {
 	private boolean done;
 	private boolean hitCeiling;
 	private Logger logger;
+	private int id;
 
+	/**
+	 * 
+	 * @param centerPointX the X coordinate of the center point of the circle
+	 * @param centerPointY the Y coordinate of the center point of the circle
+	 * @param radius the radius of the circle
+	 * @param xSpeed the speed in horizontal direction
+	 * @param ySpeed the speed in vertical direction
+	 * @param gravity the gravity affecting this circle
+	 * @param id the id of this circle
+	 */
+	public BouncingCircle(float centerPointX, float centerPointY, 
+			float radius, float xSpeed, float ySpeed, float gravity, int id) {
+		super(centerPointX, centerPointY, radius);
+		
+		this.xSpeed = xSpeed;
+		this.initSpeed = Math.abs(xSpeed);
+		this.ySpeed = ySpeed;
+		this.gravity = gravity;
+		this.done = false;
+		this.hitCeiling = false;
+		this.id = id;
+		
+	}
+	
 	/**
 	 * 
 	 * @param centerPointX the X coordinate of the center point of the circle
@@ -73,6 +98,7 @@ public class BouncingCircle extends Circle {
 		this.gravity = gravity;
 		this.done = false;
 		this.hitCeiling = false;
+		this.id = 0;
 		
 	}
 
@@ -132,9 +158,10 @@ public class BouncingCircle extends Circle {
 	/**
 	 * Return splitted balls.
 	 * @param mainGame the maingame this bouncing circle is in.
+	 * @param gameState the gamestate his bouncing circle is in.
 	 * @return an arraylist with the splitted circles
 	 */
-	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mainGame) {
+	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mainGame, GameState gameState) {
 		logger = mainGame.getLogger();
 		logger.log("Circle with radius " + radius + " shot, two circles with radius " 
 				+ getNewRadius() + " entered the game", PriorityLevels.MEDIUM,
@@ -155,10 +182,10 @@ public class BouncingCircle extends Circle {
 		}
 		// add new balls to the active list
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed,
-				newYSpeed, mainGame.getGravity()));
+				newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID()));
 		res.get(res.size() - 1).setLogger(logger);
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed,
-				newYSpeed, mainGame.getGravity()));
+				newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID()));
 		res.get(res.size() - 1).setLogger(logger);
 		
 		return res;
@@ -413,10 +440,26 @@ public class BouncingCircle extends Circle {
 	@Override
 	public BouncingCircle clone() {
 		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
-				this.getRadius(), xSpeed, ySpeed, gravity);
+				this.getRadius(), xSpeed, ySpeed, gravity, id);
 		res.setLogger(logger);
 		
 		return res;
 	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	
 	
 }

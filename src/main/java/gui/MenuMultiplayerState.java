@@ -343,13 +343,15 @@ public class MenuMultiplayerState extends BasicGameState {
 	}
 
 	/**
-	 * @return the mainGame
+	 * Return the mainGame.
+	 * @return the mainGame to return
 	 */
 	public MainGame getmainGame() {
 		return mainGame;
 	}
 
 	/**
+	 * Set the mainGame.
 	 * @param mainGame the mainGame to set
 	 */
 	public void setmainGame(MainGame mainGame) {

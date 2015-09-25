@@ -223,28 +223,27 @@ public class Player {
 		// Shoot laser when spacebar is pressed and no laser is active
 		if (!testing && gameState.getSavedInput().isKeyPressed(shootKey)
 				&& !shot) {
-			
 			shot = true;
 			gameState.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
 			
 			Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
+			boolean spiky = (weapon instanceof Spiky);
 			if (mainGame.isHost()) {
 				mainGame.getHost().updateLaser(playerNumber, weapon.getX(), 
-						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth());
+						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth(), spiky);
 			} else if (mainGame.isClient()) {
 				mainGame.getClient().updateLaser(playerNumber, weapon.getX(), 
-						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth());
+						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth(), spiky);
 			}
 			
 		}
-		
 		Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
-
 		// Update laser
 		if (shot) {
 			weapon.update(gameState.getCeiling(), gameState.getFloor(), deltaFloat);
 			// Disable laser when it has reached the ceiling
 			if (!weapon.isVisible()) {
+				System.out.println("Setting shot of " + playerNumber + "to false");
 				shot = false;
 			}
 		}

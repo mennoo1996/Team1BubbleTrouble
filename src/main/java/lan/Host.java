@@ -190,9 +190,10 @@ public class Host implements Runnable {
     	int id = Integer.parseInt(stringList[0]);
     	//System.out.println("PLAYERID" + id);
     	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
+    	System.out.println("spiky = " + spikey);
     	Weapon weapon;
     	
-    	if (spikey) {
+    	if (!spikey) {
     		weapon = new Weapon(Float.parseFloat(stringList[1]), 
         			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
         			Float.parseFloat(stringList[FOUR]));
@@ -207,7 +208,7 @@ public class Host implements Runnable {
     }
 
 	/**
-     * Process a player message`
+     * Process a player message.
      * @param message the message to process
      */
     private void playerMessage(String message) {

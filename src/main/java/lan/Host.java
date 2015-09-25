@@ -44,7 +44,7 @@ public class Host implements Runnable {
     private boolean heartBeatCheck;
     private long timeLastInput;
 
-    private static final int TIMEOUT_ATTEMPT = 10000;
+    private static final int TIMEOUT_ATTEMPT = 500000;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
 

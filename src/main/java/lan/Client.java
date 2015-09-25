@@ -47,7 +47,7 @@ public class Client implements Runnable {
     private static final int THREE = 3;
     private static final int FOUR = 4;
     private static final int FIVE = 5;
-	private static final int TIMEOUT_ATTEMPT = 10000;
+	private static final int TIMEOUT_ATTEMPT = 500000;
 	private static final int MENU_MULTIPLAYER_STATE = 4;
     /**
      * Create a new Client connection for LAN multiplayer.
@@ -375,7 +375,7 @@ public class Client implements Runnable {
     	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
     	Weapon weapon;
     	
-    	if (spikey) {
+    	if (!spikey) {
     		weapon = new Weapon(Float.parseFloat(stringList[1]), 
         			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
         			Float.parseFloat(stringList[FOUR]));

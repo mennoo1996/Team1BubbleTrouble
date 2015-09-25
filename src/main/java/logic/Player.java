@@ -165,7 +165,7 @@ public class Player {
 			powerup.update(gameState, containerHeight, deltaFloat);
 
 			if (powerup.getRectangle().intersects(this.getRectangle())) {
-				if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
+				if (!mainGame.isLanMultiplayer() || mainGame.isHost() && playerNumber == 0) {
 					this.addPowerup(powerup.getType());
 					gameState.getFloatingScores().add(new FloatingScore(powerup));
 					usedPowerups.add(powerup);
@@ -173,7 +173,7 @@ public class Player {
 					if (mainGame.isHost()) {
 						mainGame.getHost().updatePowerupsDictate(powerup);
 					}
-				} else if (mainGame.isClient()) {
+				} else if (mainGame.isClient() && playerNumber == 1) {
 					mainGame.getClient().pleaPowerup(powerup);
 				}
 			}

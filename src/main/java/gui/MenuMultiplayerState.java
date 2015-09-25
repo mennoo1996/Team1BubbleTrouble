@@ -74,7 +74,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	
 	private static final int HOST_BUTTON_X = 150;
 	private static final int HOST_BUTTON_Y = 425;
-	private static final int TEXT_HOST_X = 350;
+	private static final int TEXT_HOST_X = 538;
 	private static final int TEXT_HOST_Y = 438;
 	
 	private static final int JOIN_BUTTON_X = 150;
@@ -193,6 +193,11 @@ public class MenuMultiplayerState extends BasicGameState {
 		
 		input = container.getInput();
 		nameField.update(input);
+		ipField.update(input);
+		if (input.isKeyPressed(Input.KEY_ENTER) && ipField.hasFocus()) {
+			attemptJoin();
+		}
+		
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			processButtons(input);
 		}
@@ -209,27 +214,41 @@ public class MenuMultiplayerState extends BasicGameState {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 
 		if (hostButton.isMouseOver(input)) {
-			mainGame.setLanMultiplayer(true);
-			mainGame.setHost(new Host(MainGame.getMultiplayerPort(), mainGame, gameState));
-			mainGame.setIsHost(true);
-			mainGame.setIsClient(false);
-			System.out.println(mainGame.isHost());
-			ExecutorService executor = Executors.newFixedThreadPool(1);
-			processPlayerHost();
-			executor.submit(mainGame.getHost());
-			mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
+			attemptHost();
 		} 
 		if (joinButton.isMouseOver(input)) {
-			mainGame.setLanMultiplayer(true);
-			Client client = new Client(ipField.getText(), 
-					mainGame.getMultiplayerPort(), mainGame, gameState);
-			mainGame.setClient(client);
-	        mainGame.setIsClient(true);
-	        mainGame.setIsHost(false);
-			ExecutorService executor = Executors.newFixedThreadPool(1);
-			processPlayerClient();
-			executor.submit(client);
+			attemptJoin();
 		} 
+	}
+	
+	/**
+	 * Attempt to host a game.
+	 */
+	private void attemptHost() {
+		mainGame.setLanMultiplayer(true);
+		mainGame.setHost(new Host(MainGame.getMultiplayerPort(), mainGame, gameState));
+		mainGame.setIsHost(true);
+		mainGame.setIsClient(false);
+		System.out.println(mainGame.isHost());
+		ExecutorService executor = Executors.newFixedThreadPool(1);
+		processPlayerHost();
+		executor.submit(mainGame.getHost());
+		mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
+	}
+	
+	/**
+	 * Attempt to join a game.
+	 */
+	private void attemptJoin() {
+		mainGame.setLanMultiplayer(true);
+		Client client = new Client(ipField.getText(), 
+				mainGame.getMultiplayerPort(), mainGame, gameState);
+		mainGame.setClient(client);
+        mainGame.setIsClient(true);
+        mainGame.setIsHost(false);
+		ExecutorService executor = Executors.newFixedThreadPool(1);
+		processPlayerClient();
+		executor.submit(client);
 	}
 
 	/**

@@ -8,7 +8,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -25,7 +24,6 @@ public class MenuGameoverState extends BasicGameState {
 	private Button exitButton;
 	
 	private MainGame mainGame;
-	private TextField textField;
 	private Image tfBackgroundN;
 	private Image tfBackgroundA;
 	private Image health0Image;
@@ -96,7 +94,7 @@ public class MenuGameoverState extends BasicGameState {
 		initButtons();
 		initHealthImages();
 		initTextFieldBackgroundImgs();
-		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player", container);
+		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player name", container);
 	}
 
 	/**
@@ -152,17 +150,11 @@ public class MenuGameoverState extends BasicGameState {
 		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 	}
 	
-	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
 		mainGame.getLogger().log("Entering MenuGameoverState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
-		textField = new TextField(container, RND.getFont_Normal(), TEXT_FIELD_X, TEXT_FIELD_Y,
-				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
-		textField.setBackgroundColor(null);
-		textField.setBorderColor(null);
-		textField.setFocus(true);
 		displayLives = mainGame.getLifeCount();
 		mainGame.setLifeCount(MainGame.getLives());
 		inputMessage = null;
@@ -212,6 +204,7 @@ public class MenuGameoverState extends BasicGameState {
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			processButtons(input);
 		}
+		nameField.update(input);
 		handleTextField(input);
 		exit(container, sbg, delta);
 	}
@@ -256,7 +249,6 @@ public class MenuGameoverState extends BasicGameState {
 	 * @param input the keyboard/mouse input user
 	 */
 	private void handleTextField(Input input) {
-		
 		if (nameField.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
 				|| inputMessage.equals("Maximum length is 34 characters")) 
 				&& !highScoreEntered) {

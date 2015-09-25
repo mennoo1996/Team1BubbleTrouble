@@ -24,7 +24,7 @@ public class Textfield {
 	private static final int TEXT_FIELD_HEIGHT = 60;
 	private static final int TF_BACKGROUND_DEVIATION = 27;
 	private static final int TC_X_DEVIATION = 15;
-	private static final int TC_Y_DEVIATION = 5;
+	private static final int TC_Y_DEVIATION = 7;
 	private static final int TF_MAX_LENGTH = 40;
 	
 	private String text;
@@ -38,6 +38,7 @@ public class Textfield {
 	
 	private int stringlength;
 	private int cursor;
+	private boolean focus;
 	
 	/**
 	 * Textfield constructor. Creates a drawable textfield element for our GUI.
@@ -77,13 +78,15 @@ public class Textfield {
 		// process mouse input
 		if (getRectangle().contains(input.getMouseX(), input.getMouseY())
 				&& input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-			textfield.setFocus(true);
+			this.setFocus(true);
 			textfield.setText("");
 			cursor = 0;
 		}
 		// process keyboard input
 		if (textfield.hasFocus()) {
 			processTextInput(input);
+		} else {
+			focus = false;
 		}
 	}
 	
@@ -107,10 +110,8 @@ public class Textfield {
 		}
 		// process arrow keys
 		if (input.isKeyPressed(Input.KEY_RIGHT) && cursor < text.length()) {
-			System.out.println("dadadada");
 			cursor++;
 		} else if (input.isKeyPressed(Input.KEY_LEFT) && cursor > 0) {
-			System.out.println("dadadada");
 			cursor--;
 		}
 		textfield.setCursorPos(cursor);
@@ -129,7 +130,8 @@ public class Textfield {
 	 * @param focus to set
 	 */
 	public void setFocus(boolean focus) {
-		textfield.setFocus(focus);
+		this.textfield.setFocus(focus);
+		this.focus = focus;
 	}
 	
 	/**
@@ -164,7 +166,6 @@ public class Textfield {
 		if (textfield.hasFocus()) {
 			RND.drawColor(graphics, fieldOnNorm, fieldOnAdd, 
 					x - TF_BACKGROUND_DEVIATION, y - TF_BACKGROUND_DEVIATION, color);
-
 			if (cursor > 0 && cursor <= text.length()) {
 				String s = text.substring(0, cursor);
 				float length = RND.getStringPixelWidth(s);

@@ -47,7 +47,7 @@ public class MenuMainState extends BasicGameState {
 	private static final int HIGHSCORES_TITLE_Y = 140;
 	
 	private Separator separatorTop;
-	private String separatorTopTitle = " Main Menu ";
+	private String separatorTopTitle = "";
 	
 	/**
 	 * constructor.

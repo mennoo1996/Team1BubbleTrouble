@@ -110,7 +110,7 @@ public class Host implements Runnable {
     }
 
     /**
-     * Process client inputs.
+     * Process messages received from the client.
      */
     private void readClientInputs() {
     	try {
@@ -169,8 +169,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message that starts with NEW.
+     * @param message String containing the message
      */
     private void newMessage(String message) {
     	String message2 = message.trim();
@@ -180,8 +180,8 @@ public class Host implements Runnable {
     }
     
     /**
-     * javadoc.
-     * @param message .
+     * Process a message regarding the weapon of the client.
+     * @param message String that contains the information of the message
      */
     private void newLaserMessage(String message) {
     	String message2 = message.trim();
@@ -348,6 +348,14 @@ public class Host implements Runnable {
      */
     public void updateHostDead() {
     	sendMessageToClient("PLAYER DEAD HOST");
+    }
+    
+    /**
+     * Sends a message to the client concerning a FloatingScore.
+     * @param floating the FloatingScore that it concerns
+     */
+    public void sendFloatingScore(FloatingScore floating) {
+    	sendMessageToClient(floating.toString());
     }
     
     /**

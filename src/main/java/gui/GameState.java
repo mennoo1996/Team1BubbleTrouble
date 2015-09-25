@@ -195,9 +195,9 @@ public class GameState extends BasicGameState {
 	private Random random;
 	
 	/**
-	 * constructor.
+	 * The constructor.
 	 * 
-	 * @param mainGame	- the maingame this state belongs to
+	 * @param mainGame the maingame this state belongs to
 	 */
 	public GameState(MainGame mainGame) {
 		this.mainGame = mainGame;
@@ -486,30 +486,44 @@ public class GameState extends BasicGameState {
 	private void updateShotCircles() {
 		for (BouncingCircle circle : shotList) {
             if (!circle.isDone()) { // if the circle hasn't been handled
-            	floatingScoreList.add(new FloatingScore(circle));
-                if (circleList.getCircles().contains(circle)) {
-                    circleList.getCircles().remove(circle);
-                    circle.setDone(true);
-                    score += circle.getScore();
-                } // if the ball has a radius of 20, split it u
-                ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
-                if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
-                	splits = circle.getSplittedCircles(mainGame, this);
-                    circleList.getCircles().addAll(splits);
-					checkItem(circle);
-                } else {
-                	mainGame.getLogger().log(
-							"Circle with radius 10 shot, no new balls entered the game",
-                			PriorityLevels.MEDIUM,
-							"BouncingCircles");
-                } // if it was part of the gate reqs, add to new gate reqs
-				processUnlockCirclesGates(circle, splits);
-				
-				if (mainGame.isHost()) {
-					mainGame.getHost().updateCircles(getCircleList().getCircles());
-				}
+
+            	FloatingScore floatingScore = new FloatingScore(circle);
+            	floatingScoreList.add(floatingScore);
+            	//Send to client
+            	if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
+            		mainGame.getHost().sendFloatingScore(floatingScore);
+            	}
+            	updateShotCirles2(circle);
 			}
         }
+	}
+
+	/**
+	 * Process the effects of a shooting a circle.
+	 * @param circle the circle shot
+	 */
+	private void updateShotCirles2(BouncingCircle circle) {
+		if (circleList.getCircles().contains(circle)) {
+            circleList.getCircles().remove(circle);
+            circle.setDone(true);
+            score += circle.getScore();
+        } // if the ball has a radius of 20, split it u
+        ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
+        if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
+        	splits = circle.getSplittedCircles(mainGame, this);
+            circleList.getCircles().addAll(splits);
+			checkItem(circle);
+        } else {
+        	mainGame.getLogger().log(
+					"Circle with radius 10 shot, no new balls entered the game",
+        			PriorityLevels.MEDIUM,
+					"BouncingCircles");
+        } // if it was part of the gate reqs, add to new gate reqs
+		processUnlockCirclesGates(circle, splits);
+		
+		if (mainGame.isHost()) {
+			mainGame.getHost().updateCircles(getCircleList().getCircles());
+		}
 	}
 
 	/**
@@ -1034,8 +1048,8 @@ public class GameState extends BasicGameState {
 
 
 	/**
-	 * return id of state.
-	 * @return the id of gamestate
+	 * Return the id of this gameState.
+	 * @return the id of gameState
 	 */
 	@Override
 	public int getID() {

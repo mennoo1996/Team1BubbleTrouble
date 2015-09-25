@@ -147,12 +147,10 @@ public class BouncingCircle extends Circle {
 			return null;
 		}
 		ArrayList<BouncingCircle> res = new ArrayList<BouncingCircle>();
-		
 		float newYSpeed = ySpeed;
 		if (newYSpeed > MINIMUM_SPEED) {
 			newYSpeed = MINIMUM_SPEED;
 		}
-		
 		// bonus speed when hit at the right moment
 		if (newYSpeed < BONUS_SPEED_FACTOR * radius) {
 			logger.log("New balls aquired bonus speed",
@@ -162,8 +160,10 @@ public class BouncingCircle extends Circle {
 		// add new balls to the active list
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed,
 				newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID()));
+		res.get(res.size() - 1).setLogger(logger);
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed,
 				newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID()));
+		res.get(res.size() - 1).setLogger(logger);
 		
 		return res;
 	}
@@ -418,6 +418,7 @@ public class BouncingCircle extends Circle {
 	public BouncingCircle clone() {
 		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
 				this.getRadius(), xSpeed, ySpeed, gravity, id);
+		res.setLogger(logger);
 		
 		return res;
 	}

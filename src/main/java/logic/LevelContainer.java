@@ -1,12 +1,8 @@
 package logic;
 import gui.MainGame;
-
 import java.util.ArrayList;
-
 import logic.Logger.PriorityLevels;
-
 import org.newdawn.slick.GameContainer;
-
 /**
  * This class is a container for all the levels in the game.
  * @author Menno
@@ -58,7 +54,6 @@ public class LevelContainer {
 	private static final int TESTING_CONTAINER_HEIGHT = 1000;
 	private static final int LEVEL_7_GATE_X = 900;
 	private static final int THREE = 3;
-	private static final int FOUR = 4;
 	
 	private static boolean testing = false;
 	
@@ -115,8 +110,8 @@ public class LevelContainer {
 				ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
 				BouncingCircle circle11 = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y,
 						RADIUS_3, mainGame.getStartingSpeed(),
-						DEFAULT_YSPEED, mainGame.getGravity(), 1);
-				
+						DEFAULT_YSPEED, mainGame.getGravity(), 0);
+				circle11.setLogger(logger);
 				circles.add(circle11);
 				ArrayList<Gate> gates = new ArrayList<Gate>();
 				/*if (!testing) {
@@ -126,8 +121,7 @@ public class LevelContainer {
 				} else {
 					gate11 = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION,
 							0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
-				}
-				gate11.addToRequirements(circle11);
+				} gate11.addToRequirements(circle11);
 				*/
 				Level level = new Level(LEVEL_1_TIME, circles, gates);
 				res.add(level); 
@@ -135,7 +129,8 @@ public class LevelContainer {
 				ArrayList<Gate> gates2 = new ArrayList<Gate>();
 				circles2.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, 
 						RADIUS_4, mainGame.getStartingSpeed(),
-						DEFAULT_YSPEED, mainGame.getGravity(), 1));
+						DEFAULT_YSPEED, mainGame.getGravity(), 0));
+				circles2.get(circles2.size() - 1).setLogger(logger);
 				level = new Level(LEVEL_2_TIME, circles2, gates2);
 				res.add(level);	
 				return res;
@@ -151,16 +146,17 @@ public class LevelContainer {
 		ArrayList<BouncingCircle> circles3 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates3 = new ArrayList<Gate>();
 		circles3.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_5,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
 		level = new Level(LEVEL_3_TIME, circles3, gates3);
-		res.add(level);
+		circles3.get(circles3.size() - 1).setLogger(logger); res.add(level);
 		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates4 = new ArrayList<Gate>();
 		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_4,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1);
-		circles4.add(ball);
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0);
+		ball.setLogger(logger); circles4.add(ball);
 		circles4.add(new BouncingCircle(LEVEL_4_BALL_2_X, DEFAULT_BIGBALL_Y, RADIUS_5,
-				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2));
+				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+		circles4.get(circles4.size() - 1).setLogger(logger);
 		Gate gate;
 		if (!testing) {
 			gate = new Gate((float) container.getWidth() / 2.0f
@@ -169,8 +165,7 @@ public class LevelContainer {
 		} else {
 			gate = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION,
 					0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT); }
-		gate.addToRequirements(ball);
-		gates4.add(gate);
+		gate.addToRequirements(ball); gates4.add(gate);
 		level = new Level(LEVEL_4_TIME, circles4, gates4);
 		res.add(level);
 		return res;
@@ -190,14 +185,16 @@ public class LevelContainer {
 		for (int i = 0; i < LEVEL_5_AMOUNT_OF_BALLS; i++) {
 			circles5.add(new BouncingCircle(LEVEL_5_BALL_FACTOR * i + DEFAULT_BALL_X, 
 					DEFAULT_BIGBALL_Y, MINIMUM_RADIUS, mainGame.getStartingSpeed(),
-					DEFAULT_YSPEED, mainGame.getGravity(), 1));
+					DEFAULT_YSPEED, mainGame.getGravity(), 0));
+			circles5.get(circles5.size() - 1).setLogger(logger);
 		}
 		level = new Level(LEVEL_5_TIME, circles5, gates5);
 		res.add(level);
 		ArrayList<BouncingCircle> circles6 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates6 = new ArrayList<Gate>();
 		circles6.add(new BouncingCircle(LEVEL_6_BALL_X, DEFAULT_BIGBALL_Y, RADIUS_6,
-				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
+		circles6.get(circles6.size() - 1).setLogger(logger);
 		level = new Level(LEVEL_6_TIME, circles6, gates6);
 		res.add(level);
 		
@@ -207,7 +204,7 @@ public class LevelContainer {
 	}
 	
 	/**
-	 * Initalize the fourth batch of levels.
+	 * Initalize the fourth batch of levels - part 1.
 	 * @return a list with the fourth batch of levels.
 	 */
 	private ArrayList<Level> initializeLevels4() {
@@ -215,13 +212,13 @@ public class LevelContainer {
 		ArrayList<BouncingCircle> circles7 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates7 = new ArrayList<Gate>();
 		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_3,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1);
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0);
 		BouncingCircle ball2 = new BouncingCircle(LEVEL_7_BALL_2_X, LEVEL_7_BALL_2_Y, RADIUS_3,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2);
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1);
 		BouncingCircle ball3 = new BouncingCircle(LEVEL_7_BALL_3_X, DEFAULT_BIGBALL_Y, RADIUS_5,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), THREE);
-		circles7.add(ball); circles7.add(ball2); circles7.add(ball3);
-		Gate gate2;
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2);
+		ball.setLogger(logger); ball2.setLogger(logger); ball3.setLogger(logger);
+		circles7.add(ball); circles7.add(ball2); circles7.add(ball3); Gate gate2;
 		if (!testing) {
 			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, container.getHeight());
 		} else { 
@@ -230,15 +227,27 @@ public class LevelContainer {
 		level = new Level(LEVEL_7_TIME, circles7, gates7); res.add(level);
 		ArrayList<BouncingCircle> circles8 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates8 = new ArrayList<Gate>();
-		circles8.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_2,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
-		circles8.add(new BouncingCircle(LEVEL_8_BALL_2_X, DEFAULT_BALL_Y, RADIUS_3,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2));
-		circles8.add(new BouncingCircle(LEVEL_8_BALL_3_X, DEFAULT_BALL_Y, RADIUS_4,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), THREE));
-		circles8.add(new BouncingCircle(LEVEL_8_BALL_4_X, DEFAULT_BALL_Y, RADIUS_5,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), FOUR));
+		initializeLevels4_2(circles8);
+		circles8.get(circles8.size() - 1).setLogger(logger);
 		level = new Level(LEVEL_8_TIME, circles8, gates8); res.add(level); return res;
+	}
+	
+	/**
+	 * Initalize the fourth batch of levels- part 2.
+	 * @param circles8 a necessary list for this.
+	 */
+	private void initializeLevels4_2(ArrayList<BouncingCircle> circles8) {
+		circles8.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_2,
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
+		circles8.get(circles8.size() - 1).setLogger(logger);
+		circles8.add(new BouncingCircle(LEVEL_8_BALL_2_X, DEFAULT_BALL_Y, RADIUS_3,
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+		circles8.get(circles8.size() - 1).setLogger(logger);
+		circles8.add(new BouncingCircle(LEVEL_8_BALL_3_X, DEFAULT_BALL_Y, RADIUS_4,
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2));
+		circles8.get(circles8.size() - 1).setLogger(logger);
+		circles8.add(new BouncingCircle(LEVEL_8_BALL_4_X, DEFAULT_BALL_Y, RADIUS_5,
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), THREE));
 	}
 	
 	/**
@@ -251,9 +260,11 @@ public class LevelContainer {
 		ArrayList<BouncingCircle> circles9 = new ArrayList<BouncingCircle>();
 		ArrayList<Gate> gates9 = new ArrayList<Gate>();
 		circles9.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BIGBALL_Y, RADIUS_6,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
+		circles9.get(circles9.size() - 1).setLogger(logger);
 		circles9.add(new BouncingCircle(LEVEL_9_BALL_2_X, DEFAULT_BIGBALL_Y, RADIUS_6,
-				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2));
+				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+		circles9.get(circles9.size() - 1).setLogger(logger);
 		level = new Level(LEVEL_9_TIME, circles9, gates9);
 		res.add(level);
 		
@@ -262,7 +273,8 @@ public class LevelContainer {
 		for (int i = 0; i < LEVEL_10_AMOUNT_OF_BALLS; i++) {
 			circles10.add(new BouncingCircle(DEFAULT_BALL_X, 
 					LEVEL_10_BALL_FACTOR * i + DEFAULT_BALL_Y,
-					MINIMUM_RADIUS, LEVEL_10_XSPEED, DEFAULT_YSPEED, mainGame.getGravity(), i));
+					MINIMUM_RADIUS, LEVEL_10_XSPEED, DEFAULT_YSPEED, mainGame.getGravity(), 0));
+			circles10.get(circles10.size() - 1).setLogger(logger);
 		}
 		level = new Level(LEVEL_10_TIME, circles10, gates10);
 		res.add(level);	
@@ -317,8 +329,4 @@ public class LevelContainer {
 		LevelContainer.testing = testing;
 	}
 
-	
-	
-
 }
-

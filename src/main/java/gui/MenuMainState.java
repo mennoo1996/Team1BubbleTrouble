@@ -46,8 +46,6 @@ public class MenuMainState extends BasicGameState {
 	private static final int HIGHSCORES_TITLE_X = 760;
 	private static final int HIGHSCORES_TITLE_Y = 238;
 	
-	private Popup popup;
-	
 	private Separator separatorTop;
 	private String separatorTopTitle = "";
 	
@@ -94,8 +92,6 @@ public class MenuMainState extends BasicGameState {
 				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
 				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
 				new Image("resources/images_UI/Menu_Button_Quit2_add.png"));
-		popup = new Popup("ERROR: Please insert coffee.", mainGame.getDefaultXRes(), mainGame.getDefaultYRes());
-		popup.setActive(true);
 		
 	}
 	
@@ -216,7 +212,6 @@ public class MenuMainState extends BasicGameState {
 		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
 				"The best scores of your predecessors!");
-		popup.drawColor(graphics, container.getInput(), mainGame.getColor());
 		// NO DRAWING AFTER THIS POINT. BOO.
 		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
 		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);

@@ -53,7 +53,14 @@ public class Popup {
 	}
 	
 	/**
-	 * Seet the popup's state.
+	 * @return whether or not the popup is active.
+	 */
+	public boolean getActive() {
+		return this.active;
+	}
+	
+	/**
+	 * Set the popup's state.
 	 * @param active whether or not it is active.
 	 */
 	public void setActive(boolean active) {
@@ -61,16 +68,21 @@ public class Popup {
 	}
 	
 	/**
+	 * Change the warning text in the popup.
+	 * @param text to set as warning.
+	 */
+	public void setText(String text) {
+		warning = text;
+	}
+	
+	/**
 	 * Checks if button is pressed.
 	 * @param input Input context used.
-	 * @return true once button is pressed.
 	 */
-	public boolean processButton(Input input) {
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && button.isMouseOver(input)) {
-			active = false;
-			return true;
+	public void processButton(Input input) {
+		if (button.isMouseOver(input)) {
+			this.active = false;
 		}
-		return false;
 	}
 	
 	/**

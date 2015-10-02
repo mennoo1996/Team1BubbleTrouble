@@ -103,7 +103,7 @@ public class MenuMainState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		mainGame.getLogger().log("Entering MenuMainState", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("Entering MenuMainState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
@@ -123,7 +123,7 @@ public class MenuMainState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
-				mainGame.getLogger().log("Exiting MenuMainState", 
+				Logger.getInstance().log("Exiting MenuMainState", 
 						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					System.exit(0);
@@ -165,7 +165,7 @@ public class MenuMainState extends BasicGameState {
 			mainGame.setMultiplayer(false);
 			mainGame.setSwitchState(mainGame.getGameState());
 			mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
-			mainGame.getLogger().log("Play button pressed", 
+			Logger.getInstance().log("Play button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} else if (play2Button.isMouseOver(input)) { // Go to gamestate in multiplayer
 			mainGame.setMultiplayer(true);
@@ -174,19 +174,19 @@ public class MenuMainState extends BasicGameState {
 			mainGame.getPlayerList().getPlayers().get(1).setPlayerName("PLayer_2");
 			mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
 			mainGame.getPlayerList().getPlayers().get(1).setControlsForPlayer2();
-			mainGame.getLogger().log("Play multiplayer button pressed", 
+			Logger.getInstance().log("Play multiplayer button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} else if (lanButton.isMouseOver(input)) { // Go to gamestate in multiplayer
 			mainGame.setSwitchState(mainGame.getMultiplayerState());
-			mainGame.getLogger().log("Play lan button pressed", 
+			Logger.getInstance().log("Play lan button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} else if (optionsButton.isMouseOver(input)) { // Go to settingsState
 			mainGame.setSwitchState(mainGame.getSettingsState());
-			mainGame.getLogger().log("options button pressed", 
+			Logger.getInstance().log("options button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} else if (quitButton.isMouseOver(input)) { // Quit game
 			mainGame.setSwitchState(-1);
-			mainGame.getLogger().log("quit button pressed", 
+			Logger.getInstance().log("quit button pressed", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
 	}

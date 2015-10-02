@@ -43,7 +43,7 @@ public class Player {
 	private SpriteSheet spritesheetA;
 	private boolean freeToRoam;
 	private MainGame mainGame;
-	private Logger logger;
+
 	private GameState gameState;
 	private Gate intersectingGate;
 	private boolean stoodStillOnLastUpdate = false;
@@ -70,6 +70,8 @@ public class Player {
 	
 	private static final int POWERUP_DURATION = 10;
 	private long shieldTimeRemaining;
+	
+	private Logger logger = Logger.getInstance();
 
 	/**
 	 * Constructor class.
@@ -100,7 +102,6 @@ public class Player {
 		this.spritesheetN = new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.spritesheetA = new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mainGame = mainGame;
-		this.logger = mainGame.getLogger();
 		this.gameState = (GameState) mainGame.getState(mainGame.getGameState());
 		moveLeftKey = Input.KEY_LEFT;
 		moveRightKey = Input.KEY_RIGHT;
@@ -204,7 +205,7 @@ public class Player {
 						gameState.addToScore(coin.getPoints());
 						gameState.getFloatingScores().add(new FloatingScore(coin));
 						usedCoins.add(coin);
-						mainGame.getLogger().log("Picked up coin", 
+						logger.log("Picked up coin", 
 								Logger.PriorityLevels.MEDIUM, "powerups");
 						if (mainGame.isHost() && playerNumber == 0) {
 							mainGame.getHost().updateCoinsDictate(coin);
@@ -566,17 +567,17 @@ public class Player {
 	public void addPowerup(Powerup.PowerupType type) {
 		if (type == Powerup.PowerupType.INSTANT) {
 			addWeapon(type);
-			mainGame.getLogger().log("Added powerup instant", 
+			logger.log("Added powerup instant", 
 					Logger.PriorityLevels.MEDIUM, "powerups");
 		}
 		if (type == Powerup.PowerupType.SHIELD) {
 			addShield();
-			mainGame.getLogger().log("Added powerup shield", 
+			logger.log("Added powerup shield", 
 					Logger.PriorityLevels.MEDIUM, "powerups");
 		}
 		if (type == Powerup.PowerupType.SPIKY) {
 			addWeapon(type);
-			mainGame.getLogger().log("Added powerup spiky", 
+			logger.log("Added powerup spiky", 
 					Logger.PriorityLevels.MEDIUM, "powerups");
 		}
 	}

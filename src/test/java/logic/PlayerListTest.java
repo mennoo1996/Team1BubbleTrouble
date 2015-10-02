@@ -49,7 +49,6 @@ public class PlayerListTest {
 		Player p = mock(Player.class);
 		Mockito.doNothing().when(p).update(1, 1000, 1600, false);
 		mg = mock(MainGame.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		when(mg.isMultiplayer()).thenReturn(true);
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.add(p);
@@ -62,7 +61,6 @@ public class PlayerListTest {
 		Player p = mock(Player.class);
 		Mockito.doNothing().when(p).update(1,  1000, 1600,  false);
 		mg = mock(MainGame.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		when(mg.isMultiplayer()).thenReturn(false);
 		when(mg.isLanMultiplayer()).thenReturn(false);
 		PlayerList pl = new PlayerList(p, mg, gs);
@@ -76,7 +74,6 @@ public class PlayerListTest {
 		Player p = mock(Player.class);
 		Mockito.doNothing().when(p).update(1,  1000, 1600,  false);
 		mg = mock(MainGame.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		when(mg.isMultiplayer()).thenReturn(false);
 		when(mg.isLanMultiplayer()).thenReturn(true);
 		PlayerList pl = new PlayerList(p, mg, gs);
@@ -91,7 +88,6 @@ public class PlayerListTest {
 		Player p2 = mock(Player.class);
 		Player p3 = mock(Player.class);
 		mg = mock(MainGame.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		gs = mock(GameState.class);
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.add(p1);
@@ -106,10 +102,8 @@ public class PlayerListTest {
 		p = mock(Player.class);
 		mg = mock(MainGame.class);
 		gs = mock(GameState.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.playerDeath(sbg);
-		verify(mg, times(2)).getLogger();
 		
 	}
 	
@@ -119,12 +113,10 @@ public class PlayerListTest {
 		p = mock(Player.class);
 		mg = mock(MainGame.class);
 		gs = mock(GameState.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.setDied(true);
 		pl.playerDeath(sbg);
-		verify(mg, times(0)).getLogger();
 		
 	}
 	
@@ -134,13 +126,11 @@ public class PlayerListTest {
 		p = mock(Player.class);
 		mg = mock(MainGame.class);
 		gs = mock(GameState.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.setDied(false);
 		when(mg.isLanMultiplayer()).thenReturn(true);
 		pl.playerDeath(sbg);
-		verify(mg, times(2)).getLogger();
 		
 	}
 	
@@ -150,14 +140,12 @@ public class PlayerListTest {
 		p = mock(Player.class);
 		mg = mock(MainGame.class);
 		gs = mock(GameState.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.setDied(false);
 		when(mg.isLanMultiplayer()).thenReturn(false);
 		when(mg.isMultiplayer()).thenReturn(true);
 		pl.playerDeath(sbg);
-		verify(mg, times(2)).getLogger();
 		
 	}
 	
@@ -167,7 +155,6 @@ public class PlayerListTest {
 		p = mock(Player.class);
 		mg = mock(MainGame.class);
 		gs = mock(GameState.class);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.setDied(false);
@@ -178,7 +165,6 @@ public class PlayerListTest {
 		when(mg.isHost()).thenReturn(true);
 		when(mg.getHost()).thenReturn(h);
 		pl.playerDeath(sbg);
-		verify(mg, times(1)).getLogger();
 	}
 	
 	@Test
@@ -199,7 +185,6 @@ public class PlayerListTest {
 		MainGame mg = mock(MainGame.class);
 		Mockito.doNothing().when(mg).enterState(1);
 		when(mg.getLifeCount()).thenReturn(1);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		when(mg.isMultiplayer()).thenReturn(true);
 		Player p = new Player(0,0,20,20,i,i,i,i,mg);
 		PlayerList pl = new PlayerList(p, mg, gs);
@@ -214,7 +199,6 @@ public class PlayerListTest {
 		MainGame mg = mock(MainGame.class);
 		Mockito.doNothing().when(mg).enterState(1);
 		when(mg.getLifeCount()).thenReturn(0);
-		when(mg.getLogger()).thenReturn(new Logger(true));
 		when(mg.isMultiplayer()).thenReturn(true);
 		Player p = new Player(0,0,20,20,i,i,i,i,mg);
 		PlayerList pl = new PlayerList(p, mg, gs);

@@ -21,7 +21,7 @@ public class LoggerTest {
 	
 	@Before
 	public void setUp() {
-		logger = new Logger(true);
+		logger = Logger.getInstance();
 		logger.setTesting(true);
 	}
 
@@ -49,6 +49,7 @@ public class LoggerTest {
 	
 	@Test
 	public void testLog() {
+		logger.resetLogBuffer();
 		logger.log("testLog", Logger.PriorityLevels.MEDIUM, "testing");
 		logger.setFilterFile(true);
 		logger.log("testLog", Logger.PriorityLevels.MEDIUM, "testing");

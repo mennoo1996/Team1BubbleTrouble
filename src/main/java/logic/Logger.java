@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Bart
  *
  */
-public class Logger {
+public final class Logger {
 
 	private boolean loggingOn;
 	private boolean consoleLoggingOn;
@@ -25,11 +25,13 @@ public class Logger {
 	private boolean testing;
 	private String testingFileName;
 	
+	private static Logger instance = new Logger(true);
+	
 	/**
 	 * Constructor of the logger.
 	 * @param loggingOn			- logging on or of
 	 */
-	public Logger(boolean loggingOn) {
+	private Logger(boolean loggingOn) {
 		super();
 		System.out.println("\nLOGGER INITIALIZED\nLogging On: " + loggingOn + "\n");
 		this.loggingOn = loggingOn;
@@ -42,6 +44,21 @@ public class Logger {
 		consoleLoggingOn = true;
 		testing = false;
 		testingFileName = "logs/testing.txt";
+	}
+	
+	/**
+	 * Reset the log buffer.
+	 */
+	public void resetLogBuffer() {
+		logBuffer = "";
+	}
+	
+	/**
+	 * Return the Logger instance.
+	 * @return the logger
+	 */
+	public static Logger getInstance() {
+		return instance;
 	}
 	
 	/**

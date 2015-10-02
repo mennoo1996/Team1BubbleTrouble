@@ -145,7 +145,7 @@ public class MenuGameoverState extends BasicGameState {
 	
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
-		mainGame.getLogger().log("Entering MenuGameoverState", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("Entering MenuGameoverState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 		displayLives = mainGame.getLifeCount();
@@ -169,7 +169,7 @@ public class MenuGameoverState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
-				mainGame.getLogger().log("Exiting MenuGameoverState", 
+				Logger.getInstance().log("Exiting MenuGameoverState", 
 						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					System.exit(0);
@@ -213,12 +213,12 @@ public class MenuGameoverState extends BasicGameState {
 			mainGame.resetLevelCount();
 			mainGame.setScore(0);
 			mainGame.setSwitchState(mainGame.getGameState());
-			mainGame.getLogger().log("play button clicked", 
+			Logger.getInstance().log("play button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} 
 		else if (saveButton.isMouseOver(input)) {
 			saveScore();
-			mainGame.getLogger().log("save button clicked", 
+			Logger.getInstance().log("save button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
 		else if (menuButton.isMouseOver(input)) {
@@ -227,12 +227,12 @@ public class MenuGameoverState extends BasicGameState {
 			mainGame.setLevelCounter(0);
 			mainGame.killMultiplayer();
 			mainGame.setSwitchState(mainGame.getStartState());
-			mainGame.getLogger().log("Menu Button clicked", 
+			Logger.getInstance().log("Menu Button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
 		else if (exitButton.isMouseOver(input)) {
 			mainGame.setSwitchState(-1);
-			mainGame.getLogger().log("exit button clicked", 
+			Logger.getInstance().log("exit button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
 	}
@@ -362,7 +362,7 @@ public class MenuGameoverState extends BasicGameState {
 		HighScoresParser.writeHighScores(mainGame.getHighscoresFile(), mainGame.getHighscores());
 		inputMessage = "# Your score of " + mainGame.getScore();
 		inputMessage += " points is saved!";
-		mainGame.getLogger().log("Score saved", Logger.PriorityLevels.MEDIUM, "highscores");
+		Logger.getInstance().log("Score saved", Logger.PriorityLevels.MEDIUM, "highscores");
 	}
 	
 	

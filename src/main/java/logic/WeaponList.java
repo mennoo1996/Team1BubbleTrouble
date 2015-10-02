@@ -30,6 +30,8 @@ public class WeaponList {
 	private Image laserbeamimageA;
 	private Image lasertipimageN;
 	private Image lasertipimageA;
+	
+	private Logger logger = Logger.getInstance();
 	 
 	/**
 	 * The constructor of weaponlist.
@@ -80,7 +82,7 @@ public class WeaponList {
 		
 		if (player.isShot() && weapon.getRectangle().intersects(circle) && canProcessLAN) {
 			gameState.getShotList().add(circle);
-			mainGame.getLogger().log("Circle shot", Logger.PriorityLevels.LOW, "weapon");
+			logger.log("Circle shot", Logger.PriorityLevels.LOW, "weapon");
 			weapon.setVisible(false);
 			if (mainGame.isHost() && weaponNumber == 0) {
 				mainGame.getHost().laserDone(weaponNumber);

@@ -33,6 +33,8 @@ public class PlayerList {
 	private static final int PLAYER_NAME_Y_DEVIATION = 100;
 	private static final int SHIELD_DRAW_X_DEVIATION = 43;
 	
+	private Logger logger = Logger.getInstance();
+	
 	/**
 	 * The constructor of playerlist.
 	 * @param player1	- the first player of the list
@@ -70,7 +72,7 @@ public class PlayerList {
 		if (playerList.size() < 2) {
 			playerList.add(player);
 		}
-		mainGame.getLogger().log("player added", Logger.PriorityLevels.MEDIUM, "players");
+		logger.log("player added", Logger.PriorityLevels.MEDIUM, "players");
 	}
 	
 	/**
@@ -241,7 +243,7 @@ public class PlayerList {
 		System.out.println("playerdeath");
 		System.out.println(died);
 		if (!died) {
-			mainGame.getLogger().log("Player died, reducing lives", Logger.PriorityLevels.MEDIUM,
+			logger.log("Player died, reducing lives", Logger.PriorityLevels.MEDIUM,
 					"players");
 			if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
 				mainGame.decreaselifeCount();
@@ -254,7 +256,7 @@ public class PlayerList {
 			if (mainGame.getLifeCount() <= 0) {
 				mainGame.setScore(mainGame.getScore() + gameState.getScore());
 				mainGame.setSwitchState(mainGame.getGameOverState());
-				mainGame.getLogger().log("Player lives reached 0, game over",
+				logger.log("Player lives reached 0, game over",
 						Logger.PriorityLevels.HIGH, "players");
 				//sbg.enterState(mainGame.getGameOverState());
 			} else {

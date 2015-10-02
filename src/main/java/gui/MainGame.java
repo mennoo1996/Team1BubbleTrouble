@@ -95,7 +95,6 @@ public class MainGame extends StateBasedGame {
 	private MenuMainState menuMainState;
 	private MenuGameoverState menuGameoverState;
 	private MenuMultiplayerState menuMultiplayerState;
-	private Logger logger;
 	
 	private boolean shouldSwitchState = false;
 	private int switchState = 0;
@@ -134,9 +133,8 @@ public class MainGame extends StateBasedGame {
 	 */
 	public MainGame(String name) {
 		super(name);
-		this.logger = new Logger(true);
-		logger.setConsoleLoggingOn(false);
-		HighScoresParser.setLogger(logger);
+		
+		Logger.getInstance().setConsoleLoggingOn(false);
 		this.player1ImageStringN = "Playersprite_Norm.png";
 		this.player1ImageStringA = "Playersprite_Add.png";
 		this.player2ImageStringN = "Player2sprite_Norm.png";
@@ -145,7 +143,6 @@ public class MainGame extends StateBasedGame {
 		this.setColor(COLOR_GREEN);
 		this.setNextColor(COLOR_GREEN);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
-		highscores.setLogger(logger);
 		this.multiplayer = false;
 		this.lanMultiplayer = false;
 		this.isHost = false;
@@ -277,7 +274,7 @@ public class MainGame extends StateBasedGame {
 			}
 		}
 		String logString = "Color changed to " + color.toString();
-		logger.log(logString, Logger.PriorityLevels.MEDIUM, "color");
+		Logger.getInstance().log(logString, Logger.PriorityLevels.MEDIUM, "color");
 		RND.setColor(color);
 	}
 	
@@ -315,30 +312,31 @@ public class MainGame extends StateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.container = container;
 		this.gameStateState = new GameState(this);
-		logger.log("GameState initialized", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("GameState initialized", Logger.PriorityLevels.LOW, "States");
 		this.menuSettingsState = new MenuSettingsState(this);
-		logger.log("MenuSettingsState initialized", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuSettingsState initialized",
+				Logger.PriorityLevels.LOW, "States");
 		this.menuMainState = new MenuMainState(this);
-		logger.log("MenuMainState initialized", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuMainState initialized", Logger.PriorityLevels.LOW, "States");
 		this.menuGameoverState = new MenuGameoverState(this);
-		logger.log("MenuGameoverState initialized", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuGameoverState initialized", 
+				Logger.PriorityLevels.LOW, "States");
 		this.menuMultiplayerState = new MenuMultiplayerState(this, gameStateState);
-		logger.log("MenuMultiplayerState initialized", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuMultiplayerState initialized", 
+				Logger.PriorityLevels.LOW, "States");
 		this.addState(menuMainState);
-		logger.log("MenuMainstate added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuMainstate added", Logger.PriorityLevels.LOW, "States");
 		this.addState(gameStateState);
-		logger.log("GameState added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("GameState added", Logger.PriorityLevels.LOW, "States");
 		this.addState(menuGameoverState);
-		logger.log("MenuGameoverState added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuGameoverState added", Logger.PriorityLevels.LOW, "States");
 		this.addState(menuSettingsState);
-		logger.log("MenuSettingsstate added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuSettingsstate added", Logger.PriorityLevels.LOW, "States");
 		this.addState(menuMultiplayerState);
-		logger.log("MenuMultiplayerState added", Logger.PriorityLevels.LOW, "States");
-		initImages();
-		initPlayers();
+		Logger.getInstance().log("MenuMultiplayerState added", Logger.PriorityLevels.LOW, "States");
+		initImages();	initPlayers();
 		Calendar cal = Calendar.getInstance();
-		this.currentDate = cal.get(Calendar.DATE) 
-				+ "/" + cal.get(Calendar.MONTH) 
+		this.currentDate = cal.get(Calendar.DATE) + "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
 	}
 	
@@ -819,19 +817,7 @@ public class MainGame extends StateBasedGame {
 		this.playerList = playerList;
 	}
 
-	/**
-	 * @return the logger
-	 */
-	public Logger getLogger() {
-		return logger;
-	}
-
-	/**
-	 * @param logger the logger to set
-	 */
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
+	
 	
 	/**
 	 * @return the opacity fade timer, which should be used for scene transitions.
@@ -869,7 +855,7 @@ public class MainGame extends StateBasedGame {
 			break;
 		}
 		
-		logger.log(stateString, Logger.PriorityLevels.VERYLOW, "GUI");
+		Logger.getInstance().log(stateString, Logger.PriorityLevels.VERYLOW, "GUI");
 		shouldSwitchState = true;
 		switchState = state;
 	}

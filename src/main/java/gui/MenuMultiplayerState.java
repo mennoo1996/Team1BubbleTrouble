@@ -105,7 +105,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		mainGame.getLogger().log("Entering MenuMultiplayerState", 
+		Logger.getInstance().log("Entering MenuMultiplayerState", 
 				Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
@@ -122,7 +122,7 @@ public class MenuMultiplayerState extends BasicGameState {
 			if (RND.getOpacity() > 0.0f) {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / mainGame.getOpacityFadeTimer());
 			} else {
-				mainGame.getLogger().log("Exiting MenuMultiplayerState", 
+				Logger.getInstance().log("Exiting MenuMultiplayerState", 
 						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					container.exit();
@@ -240,7 +240,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.setIsHost(true);
 		mainGame.setIsClient(false);
 		System.out.println(mainGame.isHost());
-		mainGame.getLogger().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
+		Logger.getInstance().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
 	}
 	
 	/**

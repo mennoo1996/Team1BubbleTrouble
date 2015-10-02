@@ -52,8 +52,8 @@ public class BouncingCircle extends Circle {
 	private float gravity;
 	private boolean done;
 	private boolean hitCeiling;
-	private Logger logger;
 	private int id;
+	private Logger logger = Logger.getInstance();
 
 	/**
 	 * 
@@ -162,7 +162,7 @@ public class BouncingCircle extends Circle {
 	 * @return an arraylist with the splitted circles
 	 */
 	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mainGame, GameState gameState) {
-		logger = mainGame.getLogger();
+
 		logger.log("Circle with radius " + radius + " shot, two circles with radius " 
 				+ getNewRadius() + " entered the game", PriorityLevels.MEDIUM,
 				"BouncingCircles");
@@ -183,10 +183,10 @@ public class BouncingCircle extends Circle {
 		// add new balls to the active list
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), xSpeed,
 				newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID()));
-		res.get(res.size() - 1).setLogger(logger);
+		
 		res.add(new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), -xSpeed,
 				newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID()));
-		res.get(res.size() - 1).setLogger(logger);
+	
 		
 		return res;
 	}
@@ -389,13 +389,6 @@ public class BouncingCircle extends Circle {
 		this.hitCeiling = hitCeiling;
 	}
 
-	/**
-	 * @param logger the logger to set
-	 */
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-//	
 //	float centerPointX, float centerPointY, 
 //	float radius, float xSpeed, float ySpeed, float gravity
 	
@@ -460,7 +453,7 @@ public class BouncingCircle extends Circle {
 	public BouncingCircle clone() {
 		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
 				this.getRadius(), xSpeed, ySpeed, gravity, id);
-		res.setLogger(logger);
+	
 		
 		return res;
 	}

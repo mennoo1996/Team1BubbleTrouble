@@ -213,7 +213,7 @@ public class GameState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		mainGame.getLogger().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 		random = new Random();
@@ -273,7 +273,7 @@ public class GameState extends BasicGameState {
 				}
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
 			} else {
-				mainGame.getLogger().log("Exiting GameState", Logger.PriorityLevels.LOW, "States");
+				Logger.getInstance().log("Exiting GameState", Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					System.exit(0);
 				} else {
@@ -333,7 +333,7 @@ public class GameState extends BasicGameState {
 					&& countinStarted);
 			if (countingIn) {
 				if (timeDelta >= COUNT_IN_TIME) {
-					mainGame.getLogger().log("Starting level", 
+					Logger.getInstance().log("Starting level", 
 							Logger.PriorityLevels.MEDIUM, "levels");
 					countIn = false;
 					mainGame.getPlayerList().setDied(false);
@@ -528,7 +528,7 @@ public class GameState extends BasicGameState {
             circleList.getCircles().addAll(splits);
 			checkItem(circle);
         } else {
-        	mainGame.getLogger().log(
+        	Logger.getInstance().log(
 					"Circle with radius 10 shot, no new balls entered the game",
         			PriorityLevels.MEDIUM,
 					"BouncingCircles");

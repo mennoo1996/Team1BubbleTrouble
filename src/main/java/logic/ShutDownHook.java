@@ -8,6 +8,7 @@ import gui.MainGame;
 public class ShutDownHook {
 	
 	private MainGame mainGame;
+	private Logger logger = Logger.getInstance();
 
 	/**
 	 * Create a new instance of ShutDownHook.
@@ -24,12 +25,12 @@ public class ShutDownHook {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				mainGame.getLogger().log("Shutdown requested", 
+				logger.log("Shutdown requested", 
 						Logger.PriorityLevels.HIGH, "shutdown");
-				mainGame.getLogger().writeToFile();
+				logger.writeToFile();
 			}
 		});
-		mainGame.getLogger().log("Shutdown hook attacked", 
+		logger.log("Shutdown hook attacked", 
 				Logger.PriorityLevels.MEDIUM, "shutdown");
 	}
 }

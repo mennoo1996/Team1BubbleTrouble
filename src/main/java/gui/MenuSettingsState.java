@@ -145,7 +145,7 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
-		mainGame.getLogger().log("Entering MenuSettingsState", 
+		Logger.getInstance().log("Entering MenuSettingsState", 
 				Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
@@ -162,7 +162,7 @@ public class MenuSettingsState extends BasicGameState {
 			if (RND.getOpacity() > 0.0f) {
 				RND.setOpacity(RND.getOpacity() - ((float) delta) / mainGame.getOpacityFadeTimer());
 			} else {
-				mainGame.getLogger().log("Exiting MenuSettingsState", 
+				Logger.getInstance().log("Exiting MenuSettingsState", 
 						Logger.PriorityLevels.LOW, "States");
 				if (mainGame.getSwitchState() == -1) {
 					container.exit();
@@ -319,25 +319,25 @@ public class MenuSettingsState extends BasicGameState {
 			mainGame.setPlayer1ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
-			mainGame.getLogger().log("Player 1 sprite changed to gameboy", 
+			Logger.getInstance().log("Player 1 sprite changed to gameboy", 
 					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (telefoon1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer1ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
-			mainGame.getLogger().log("Player 1 sprite changed to phone", 
+			Logger.getInstance().log("Player 1 sprite changed to phone", 
 					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (mannetje2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer2ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
-			mainGame.getLogger().log("Player 2 sprite changed to gameboy", 
+			Logger.getInstance().log("Player 2 sprite changed to gameboy", 
 					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (telefoon2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer2ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
-			mainGame.getLogger().log("Player 2 sprite changed to phone", 
+			Logger.getInstance().log("Player 2 sprite changed to phone", 
 					Logger.PriorityLevels.MEDIUM, "players");
 		} 
 		processButtons2(input);
@@ -352,13 +352,13 @@ public class MenuSettingsState extends BasicGameState {
 			mainGame.setPlayer1ImageString("arieSprite.png", "arieSprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
-			mainGame.getLogger().log("Player 1 sprite changed to arie", 
+			Logger.getInstance().log("Player 1 sprite changed to arie", 
 					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setPlayer2ImageString("arieSprite.png", "arieSprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
-			mainGame.getLogger().log("Player 2 sprite changed to arie", 
+			Logger.getInstance().log("Player 2 sprite changed to arie", 
 					Logger.PriorityLevels.MEDIUM, "players");
 		} else if (returnButton.isMouseOver(input)) {
 			mainGame.setSwitchState(mainGame.getStartState());

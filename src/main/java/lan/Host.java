@@ -32,7 +32,7 @@ public class Host implements Runnable {
 
     private int portNumber;
     private ServerSocket serverSocket;
-    private Logger logger;
+    
     private boolean noClientYet;
     private Socket client;
     private Queue<String> messageQueue;
@@ -52,6 +52,8 @@ public class Host implements Runnable {
     private static final int FIVE = 5;
     private static final int SIX = 6;
     private static final int SEVEN = 7;
+    
+    private Logger logger = Logger.getInstance();
 
     /**
      * Create a new Host server for LAN multiplayer.
@@ -65,7 +67,6 @@ public class Host implements Runnable {
         this.mainGame = mainGame;
         this.noClientYet = true;
         this.running = true;
-        this.logger = mainGame.getLogger();
         this.messageQueue = new LinkedList<>();
         System.out.println("HOST INITIALIZED");
     }
@@ -227,7 +228,7 @@ public class Host implements Runnable {
     	
     	if (index >= 0) {
     		gameState.getCircleList().getCircles().set(index, circle);    
-    		circle.setLogger(logger);
+    	
 
     		gameState.updateShotCirles2(circle, true);
     	}

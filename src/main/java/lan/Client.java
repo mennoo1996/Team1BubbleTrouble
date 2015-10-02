@@ -35,7 +35,7 @@ public class Client implements Runnable {
     private String host;
     private Socket socket;
     private boolean isConnected;
-    private Logger logger;
+    
     private Queue<String> messageQueue;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -58,6 +58,8 @@ public class Client implements Runnable {
     private static final int SEVEN = 7;
 	private static final int TIMEOUT_ATTEMPT = 10000;
 	private static final int MENU_MULTIPLAYER_STATE = 4;
+	
+	private Logger logger = Logger.getInstance();
 
 	/**
      * Create a new Client connection for LAN multiplayer.
@@ -71,7 +73,6 @@ public class Client implements Runnable {
         this.mainGame = mainGame;
         this.gameState = gameState;
         this.portNumber = portNumber;
-		this.logger = mainGame.getLogger();
         this.isConnected = false;
 
 		this.running = true;
@@ -228,7 +229,7 @@ public class Client implements Runnable {
     	
     	if (index >= 0) {
     		gameState.getCircleList().getCircles().set(index, circle);    
-    		circle.setLogger(logger);
+ 
 
     		gameState.updateShotCirles2(circle, true);
     	}
@@ -404,7 +405,7 @@ public class Client implements Runnable {
 				Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]),
 				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
 				Float.parseFloat(stringList[FIVE]), Integer.parseInt(stringList[SIX])));
-    	this.circleList.get(this.circleList.size() - 1).setLogger(logger);
+    	
     }
     
     /**

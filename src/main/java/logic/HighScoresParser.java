@@ -12,8 +12,10 @@ import logic.Logger.PriorityLevels;
  * @author Menno
  *
  */
+
+
 public final class HighScoresParser {
-	private static Logger logger;
+	private static Logger logger = Logger.getInstance();
 	
 	/**
 	 * Set the logger of this class.

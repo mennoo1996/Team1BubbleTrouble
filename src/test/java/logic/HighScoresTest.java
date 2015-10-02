@@ -22,7 +22,6 @@ public class HighScoresTest {
 	@Test
 	public void testToString() {
 		HighScores a = new HighScores();
-		a.setLogger(new Logger(true));
 		Score score = new Score(0, "bob");
 		a.add(score);
 		assertEquals("    0    |    bob\n",a.toString());
@@ -47,7 +46,6 @@ public class HighScoresTest {
 	@Test
 	public void testAdd() {
 		HighScores a = new HighScores();
-		a.setLogger(new Logger(true));
 		Score score = new Score(0, "bob");
 		a.add(score);
 		assertTrue(a.getScoreList().contains(score));
@@ -56,7 +54,6 @@ public class HighScoresTest {
 	@Test
 	public void testSort() {
 		HighScores a = new HighScores();
-		a.setLogger(new Logger(true));
 		Score score = new Score(0, "bob");
 		Score score2 = new Score(500,"henk");
 		a.add(score);
@@ -69,7 +66,6 @@ public class HighScoresTest {
 	@Test
 	public void tesSortToManyInputs() {
 		HighScores a = new HighScores();
-		a.setLogger(new Logger(true));
 		Score score = new Score(0, "bob");
 		Score score2 = new Score(500,"henk");
 		Score score3 = new Score(30, "bob");

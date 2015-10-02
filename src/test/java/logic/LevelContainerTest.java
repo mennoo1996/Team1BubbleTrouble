@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 
 public class LevelContainerTest {
 	private MainGame mg = mock(MainGame.class);
-	private Logger logger = mock(Logger.class);
 
 	@Test
 	public void testLevelContainer() {
@@ -82,9 +81,7 @@ public class LevelContainerTest {
 	@Test
 	public void testInitialize() {
 		LevelContainer.setTesting(true);
-		Mockito.when(mg.getLogger()).thenReturn(logger);
-		Mockito.doNothing().when(logger).log("Levels are initialized", PriorityLevels.HIGH, "LevelContainer");
-		LevelContainer lc = new LevelContainer(mg);
+	LevelContainer lc = new LevelContainer(mg);
 		
 		//Mockito.when(logger.log("Levels are initialized", PriorityLevels.HIGH.getValue(), "LevelContainer").then;
 		lc.initialize();

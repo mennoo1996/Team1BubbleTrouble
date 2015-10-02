@@ -13,7 +13,7 @@ public class HighScores {
 	
 	private ArrayList<Score> scoreList;
 	private static final int MAX_HIGHSCORES = 10;
-	private Logger logger;
+	private static Logger logger = Logger.getInstance();
 	
 	/**
 	 * Construct a new HighScores object. 

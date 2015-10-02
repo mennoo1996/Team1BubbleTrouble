@@ -47,6 +47,13 @@ public final class Logger {
 	}
 	
 	/**
+	 * Reset the log buffer.
+	 */
+	public void resetLogBuffer() {
+		logBuffer = "";
+	}
+	
+	/**
 	 * Return the Logger instance.
 	 * @return the logger
 	 */

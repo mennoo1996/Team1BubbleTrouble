@@ -108,6 +108,16 @@ public class Host extends Connector {
     }
 
     /**
+     * Work through the name message from the host.
+     * @param message containing their player name.
+     */
+    @Override
+    protected void nameMessage(String message) {
+    	String message2 = message.trim();
+    	mainGame.getPlayerList().getPlayers().get(1).setPlayerName(message2);
+    }
+    
+    /**
      * Process messages received from the client.
      */
     public void readClientInputs() {

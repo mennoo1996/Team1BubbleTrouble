@@ -268,11 +268,16 @@ public class Player {
 			return;
 		}
 		boolean didWalk = false;
-		// Walk left when left key pressed and not at left wall OR a gate
-		didWalk = processMoveLeft(deltaFloat, didWalk);
-		// Walk right when right key pressed and not at right wall OR a gate
-		didWalk = processMoveRight(deltaFloat, containerWidth, didWalk);
 
+		if (movement != Movement.RIGHT) {
+			didWalk = processMoveLeft(deltaFloat, didWalk);
+		}
+
+		if (movement != Movement.LEFT) {
+			didWalk = processMoveRight(deltaFloat, containerWidth, didWalk);
+		}
+		
+		
 		// didnt walk, stating still.
 		if (!didWalk && !stoodStillOnLastUpdate) {
 			stoodStillOnLastUpdate = true;
@@ -300,9 +305,9 @@ public class Player {
 		if (mainGame.isLanMultiplayer() && isOthersPlayer() && movingRight) {
 			isMovingRight = true;
 		}
-		
-		if ((gameState.getSavedInput().isKeyDown(moveRightKey) && this.getMaxX()
-				< (containerWidth - gameState.getRightWall().getWidth()))
+		if ((gameState.getSavedInput().isKeyDown(moveRightKey) 
+				&& !gameState.getSavedInput().isKeyDown(moveLeftKey)
+				&& this.getMaxX() < (containerWidth - gameState.getRightWall().getWidth()))
 				|| isMovingRight) {
            if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
         	   this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
@@ -338,9 +343,10 @@ public class Player {
 		if (mainGame.isLanMultiplayer() && isOthersPlayer() && movingLeft) {
 			isMovingLeft = true;
 		}
-
-		boolean isKeyLeft = gameState.getSavedInput().isKeyDown(moveLeftKey);
-		if ((isKeyLeft && this.getX() > gameState.getLeftWall().getWidth()) || isMovingLeft) {
+		if ((gameState.getSavedInput().isKeyDown(moveLeftKey) 
+				&& !gameState.getSavedInput().isKeyDown(moveRightKey)
+				&& this.getX() > gameState.getLeftWall().getWidth() && !movingRight) 
+				|| isMovingLeft) {
             if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
             	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
             	this.movement = Movement.LEFT;

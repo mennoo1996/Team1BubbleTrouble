@@ -189,8 +189,7 @@ public class Client extends Connector {
 		gameState.getFloatingScores().add(new FloatingScore(stringList[2],
 				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
 	}
-    
-    
+   
     
    
    
@@ -557,17 +556,7 @@ public class Client extends Connector {
         return this.socket.isConnected();
     }
 
-	/**
-	 * Add a FloatingScore to the list.
-	 * @param message String containing the FloatingScore to add
-	 */
-	private void floatingMessage(String message) {
-		String message2 = message.trim();
-		String[] stringList = message2.split(" ");
-		gameState.getFloatingScores().add(new FloatingScore(stringList[2],
-				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
-	}
-
+	
     
     
 }

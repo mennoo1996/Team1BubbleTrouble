@@ -79,10 +79,6 @@ public class GameState extends BasicGameState {
 	private Image ceilingImageA;
 	private Image counterBarImageN;
 	private Image counterBarImageA;
-	private Image gateUpperN;
-	private Image gateUpperA;
-	private Image gateLowerN;
-	private Image gateLowerA;
 	private Image coinImageN;
 	private Image coinImageA;
 	
@@ -140,13 +136,6 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_Y_DEVIATION = 60;
 	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
 	private static final int COUNTER_BAR_X_FACTOR = 10;
-	private static final int GATE_LEFT = 11;
-	private static final int GATE_DOWN = 9;
-	private static final int GATE_Y_DEVIATION = 15;
-	private static final int GATE_Y_FACTOR = 348;
-	private static final int GATE_UP = 9;
-	private static final int GATE_LEFT_LOWER = 9;
-	private static final int GATE_Y_FACTOR_LOWER = 347;
 	private static final int SHIELD_COUNTER_OFFSET_X = 120;
 	private static final int SHIELD_COUNTER_OFFSET_Y = 90;
 	private static final int SHIELD_COUNTER_OFFSET_1_Y = -6;
@@ -876,30 +865,7 @@ public class GameState extends BasicGameState {
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
 		synchronized (gateList) {
 			for (Gate gate : gateList) {
-				int left = GATE_LEFT, down = GATE_DOWN;
-				float x = gate.getMinX() - left, y = getCeiling().getHeight() - GATE_Y_DEVIATION;
-				float x2 = x + gateUpperN.getWidth();
-				float y2 = getCeiling().getHeight() + GATE_Y_FACTOR * gate.getHeightPercentage() 
-						+ down - GATE_Y_DEVIATION;
-				float srcx = 0;
-				float srcy = gateUpperN.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
-				float srcx2 = gateUpperN.getWidth();
-				float srcy2 = gateUpperN.getHeight();
-				RND.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
-						srcx, srcy, srcx2, srcy2, mainGame.getColor());
-				left = GATE_LEFT_LOWER;
-				float up = GATE_UP;
-				x = gate.getMinX() - left - 1;
-				y = container.getHeight() - getFloor().getHeight()
-						- GATE_Y_FACTOR_LOWER * gate.getHeightPercentage() - up;
-				x2 = x + gateLowerN.getWidth() - 1;
-				y2 = container.getHeight() - getFloor().getHeight();
-				srcx = 0;
-				srcy = 0;
-				srcx2 = gateLowerN.getWidth();
-				srcy2 = GATE_Y_FACTOR_LOWER * gate.getHeightPercentage();
-				RND.drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
-						srcx, srcy, srcx2, srcy2, mainGame.getColor());
+				gate.draw(graphics, mainGame, this, container);
 			}
 		}
 	}
@@ -1081,11 +1047,7 @@ public class GameState extends BasicGameState {
 		// countdown bar images
 		counterBarImageN = new Image("resources/images_UI/counter_Norm.png");
 		counterBarImageA = new Image("resources/images_UI/counter_Add.png");
-		// gate images
-		gateUpperN = new Image("resources//images_Level/gate_upper_Norm.png");
-		gateUpperA = new Image("resources/images_Level/gate_upper_Add.png");
-		gateLowerN = new Image("resources/images_Level/gate_lower_Norm.png");
-		gateLowerA = new Image("resources/images_Level/gate_lower_Add.png");
+		Gate.loadImages();
 		// walls image
 		wallsImageN = new Image("resources/images_Level/walls_Norm.png");
 		wallsImageA = new Image("resources/images_Level/walls_Add.png");

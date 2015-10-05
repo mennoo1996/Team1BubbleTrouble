@@ -1,8 +1,5 @@
 package lan;
 
-import gui.GameState;
-import gui.MainGame;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,20 +7,17 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
+import gui.GameState;
+import gui.MainGame;
 import gui.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.CircleList;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
-import logic.Player.Movement;
 import logic.Powerup;
 import logic.Powerup.PowerupType;
-import logic.Spiky;
-import logic.Weapon;
 
 /**
  * Client class which connects to server for LAN multiplayer.
@@ -163,7 +157,7 @@ public class Client extends Connector {
      */
     private void readServerCommands2(String message2) {
     	if (message2.startsWith("HEARTBEAT_CHECK")) {
-			this.sendMessageToHost("HEARTBEAT_ALIVE");
+			this.sendMessage("HEARTBEAT_ALIVE");
 		} else if (message2.startsWith("LASER")) {
 			laserMessage(message2.replaceFirst("LASER", ""));
 		} else if (message2.startsWith("FLOATINGSCORE")) {
@@ -183,34 +177,7 @@ public class Client extends Connector {
 		timeLastInput = System.currentTimeMillis();
     }
     
-    /**
-     * Process message about splitted circles.
-     * @param message	the message to process
-     */
-    private void splitMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-    	
-    	
-    	for (String s : stringList) {
-    		System.out.println(s);
-    	}
-    	
-    	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
-				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
-				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
-				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[SEVEN]));
-    	
-    	int index = gameState.getCircleList().getIndexForCircleWithID(
-    			Integer.parseInt(stringList[SEVEN]));
-    	
-    	if (index >= 0) {
-    		gameState.getCircleList().getCircles().set(index, circle);    
- 
-
-    		gameState.updateShotCirles2(circle, true);
-    	}
-    }
+    
     
     /**
      * Add a FloatingScore to the list.
@@ -223,153 +190,28 @@ public class Client extends Connector {
 				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
 	}
     
-    /**
-     * Message about lasers.
-     * @param message String containing information about lasers
-     */
-    private void laserMessage(String message) {
-    	String message2 = message.trim();
-    	
-    	if (message2.startsWith("DONE")) {
-    		laserDoneMessage(message2.replaceFirst("DONE", ""));
-    	}
-    }
     
-    /**
-     * Message about a laser that is done.
-     * @param message String containing information about the laser
-     */
-    private void laserDoneMessage(String message) {
-    	String message2 = message.trim();
-    	
-    	int id = Integer.parseInt(message2);
-    	gameState.getWeaponList().getWeaponList().get(id).setVisible(false);
-    }
     
-    /**
-     * Process a message about the player.
-     * @param message String containing information about the Player
-     */
-    private void playerMessage(String message) {
-    	String message2 = message.trim();
-    	
-    	if (message2.startsWith("MOVEMENT")) {
-    		movementMessage(message2.replaceFirst("MOVEMENT", ""));
-    	} else if (message2.startsWith("DEAD")) {
-    		deadMessage(message2.replaceFirst("DEAD", ""));
-    	} else if (message2.startsWith("NAME")) {
-    		nameMessage(message2.replaceFirst("NAME", ""));
-    	}
-    	
-    	
-    }
+   
+   
     
-    /**
-     * Work through the name message from the host.
-     * @param message containing their player name.
-     */
-    private void nameMessage(String message) {
-    	String message2 = message.trim();
-    	mainGame.getPlayerList().getPlayers().get(0).setPlayerName(message2);
-    }
+    
     
     /**
      * Process a message about a player death.
      * @param message the message to process
      */
-    private void deadMessage(String message) {
+    protected void deadMessage(String message) {
     	String message2 = message.trim();
     	
     	if (message2.equals("HOST")) {
     		mainGame.getPlayerList().playerDeath(mainGame);
     	}
     }
-    
-    /**
-     * Process a message about the movement of a player.
-     * @param message the message to process
-     */
-    private void movementMessage(String message) {
-    	String message2 = message.trim();
-    
-    	if (message2.startsWith("STARTED")) {
-    		movementStarted(message2.replaceFirst("STARTED", ""));
-    	} else if (message2.startsWith("STOPPED")) {
-    		movementStopped(message2.replaceFirst("STOPPED", ""));
-    	}
-    }
-    
-    /**
-     * Process a message about the start of a movement.
-     * @param message the message to process
-     */
-    private void movementStarted(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
 
-    	int playerNumber = Integer.parseInt(stringList[0]);
-    	float x = Float.parseFloat(stringList[1]);
-    	float y = Float.parseFloat(stringList[2]);
-        String direction = stringList[THREE];
     
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
-        
-        if (direction.equals("LEFT")) {
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.LEFT);
-        } else if (direction.equals("RIGHT")) {
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.RIGHT);
-        }
-    }
+   
     
-    /**
-     * Process a message about a movement that stopped.
-     * @param message the message
-     */
-    private void movementStopped(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-
-    	int playerNumber = Integer.parseInt(stringList[0]);
-    	float x = Float.parseFloat(stringList[1]);
-    	float y = Float.parseFloat(stringList[2]);
-    	
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
-        
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.NO_MOVEMENT);
-    }
-    
-    /**
-     * Process a message about a player that started moving.
-     * @param x the x position of the player
-     * @param y the y position of the player
-     * @param playerNumber the player number
-     * @param direction the direction in which the player started moving
-     */
-    public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
-    	String message = "PLAYER MOVEMENT STARTED ";
-    	message = message + playerNumber + " " + x + " " 
-    			+ y  + " " + direction;
-    	sendMessageToHost(message);
-    }
-    
-    /**
-     * Process a message about a player that stopped moving.
-     * @param x the new x position of the player
-     * @param y the new y position of the player
-     * @param playerNumber the player number
-     */
-    public void playerStoppedMoving(float x, float y, int playerNumber) {
-    	String message = "PLAYER MOVEMENT STOPPED ";
-    	message = message + playerNumber + " " + x + " " 
-    			+ y;
-    	sendMessageToHost(message);
-    }
     
     /**
      * Process a message about a circle.
@@ -448,32 +290,7 @@ public class Client extends Connector {
     	}
     }
     
-    /**
-     * Process a message about a laser.
-     * @param message the message to process
-     */
-    private void newLaserMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-    	
-    	int id = Integer.parseInt(stringList[0]);
-    //	System.out.println("PLAYERID" + id);
-    	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
-    	Weapon weapon;
-    	
-    	if (!spikey) {
-    		weapon = new Weapon(Float.parseFloat(stringList[1]), 
-        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
-        			Float.parseFloat(stringList[FOUR]));
-    	} else {
-    		weapon = new Spiky(Float.parseFloat(stringList[1]), 
-        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
-        			Float.parseFloat(stringList[FOUR]));
-    	}
-    	
-    	gameState.getWeaponList().setWeapon(id, weapon);
-    	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
-    }
+    
     
     /**
      * Process a message about the location of a player.
@@ -517,21 +334,7 @@ public class Client extends Connector {
     	int lives = Integer.parseInt(message2);
     	mainGame.setLifeCount(lives);
     }
-    
-    /**
-     * Process a message about pause.
-     * @param message	the message to process
-     */
-    private void pauseMessage(String message) {
-    	String message2 = message.trim();
-    	
-    	if (message2.equals("STARTED")) {
-    		gameState.pauseStarted(true);
-    	} else if (message2.equals("STOPPED")) {
-    		gameState.pauseStopped(true);
-    	}
-    }
-    
+   
     /**
      * Process a message about the coutnin.
      * @param message	the message to process
@@ -543,14 +346,7 @@ public class Client extends Connector {
     		gameState.setCountinStarted(true);
     	}
     }
-    
-    /**
-     * notify client of splitted circle.
-     * @param circle the splitted circle
-     */
-    public void splittedCircle(BouncingCircle circle) {
-    	sendMessageToHost("SPLIT " + circle.toString());
-    }
+   
     
     /**
      * Process a message about the level.
@@ -581,13 +377,7 @@ public class Client extends Connector {
         }
     }
 
-    /**
-     * Send a message to the host.
-     * @param toWrite The message to send
-     */ 
-    public void sendMessageToHost(String toWrite) {
-        this.messageQueue.add(toWrite);
-    }
+    
     
     /**
      * Process an incoming message about a powerup.
@@ -680,7 +470,7 @@ public class Client extends Connector {
      * @param powerup the powerup to confirm
      */
     public void pleaPowerup(Powerup powerup) {
-    	sendMessageToHost(powerup.toString() + "PLEA ");
+    	sendMessage(powerup.toString() + "PLEA ");
     	System.out.println("CLIENT SENDING:  " + powerup.toString() + "PLEA ");
     }
     
@@ -746,61 +536,19 @@ public class Client extends Connector {
      * @param coin the coin to confirm
      */
     public void pleaCoin(Coin coin) {
-    	sendMessageToHost(coin.toString() + "PLEA ");
+    	sendMessage(coin.toString() + "PLEA ");
     }
     
-    /**
-     * Send a message to the host in order for it to update the laser.
-     * @param id the player number
-     * @param x the x location of the laser
-     * @param y the y location of the laser
-     * @param laserSpeed the speed of the laser
-     * @param laserWidth the width of the laser
-     * @param spikey if the laser is spikey or not
-     */
-    public void updateLaser(int id, float x, float y, float laserSpeed, 
-    		float laserWidth, boolean spikey) {
-    	sendMessageToHost("NEW LASER " 
-    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth + " " + spikey);
-    }
-    
-    /**
-     * Send to host when a laser/weapon is done.
-     * @param id	the id of the weapon
-     */
-    public void laserDone(int id) {
-    	sendMessageToHost("LASER DONE " + id);
-    }
     
     /**
      * Tell the host that the client is dead.
      */
     public void updateClientDead() {
-    	sendMessageToHost("PLAYER DEAD CLIENT");
+    	sendMessage("PLAYER DEAD CLIENT");
     }
 
     
-    /**
-     * Notify the client that the game has been paused.
-     */
-    public void updatePauseStarted() {
-    	sendMessageToHost("SYSTEM PAUSE STARTED");
-    }
     
-    /**
-     * Notify the client that the game has been resumed.
-     */
-    public void updatePauseStopped() {
-    	sendMessageToHost("SYSTEM PAUSE STOPPED");
-    }
-
-    /**
-     * Set the logger for this host.
-     * @param logger the logger
-     */
-    public void setLogger(Logger logger) {
-        this.logger = logger;
-    }
 
     /**
      * @return Whether or not the client has connected to the remote server
@@ -809,19 +557,6 @@ public class Client extends Connector {
         return this.socket.isConnected();
     }
 
-	/**
-	 * @return the reader
-	 */
-	public BufferedReader getReader() {
-		return reader;
-	}
-
-	/**
-	 * @param reader the reader to set
-	 */
-	public void setReader(BufferedReader reader) {
-		this.reader = reader;
-	}
     
     
 }

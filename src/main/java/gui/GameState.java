@@ -72,12 +72,7 @@ public class GameState extends BasicGameState {
 	private Image nobuttonImage;
 	private Image wallsImageN;
 	private Image wallsImageA;
-	private Image laserImageN;
-	private Image laserImageA;
-	private Image shieldImageN;
-	private Image shieldImageA;
-	private Image vineImageN;
-	private Image vineImageA;
+	
 	private Image[] ballsImagesN;
 	private Image[] ballsImagesA;
 	private Image ceilingImageN;
@@ -837,19 +832,8 @@ public class GameState extends BasicGameState {
 	private void drawPowerups(Graphics graphics) {
 		synchronized (droppedPowerups) {
 			for (Powerup pow : droppedPowerups) {
-				if (pow.getType() == Powerup.PowerupType.SHIELD) {
-					RND.drawColor(graphics, shieldImageN, shieldImageA, 
-							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-							mainGame.getColor());
-				} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
-					RND.drawColor(graphics, vineImageN, vineImageA, 
-							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-							mainGame.getColor());
-				} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
-					RND.drawColor(graphics, laserImageN, laserImageA, 
-							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-							mainGame.getColor());
-				}
+				pow.draw(graphics, mainGame);
+				
 			}
 		}
 	}
@@ -1146,13 +1130,7 @@ public class GameState extends BasicGameState {
 	 * @throws SlickException if something goes wrong / file not found
 	 */
 	private void loadPowerupImages() throws SlickException {
-		// load powerup images
-		laserImageN = new Image("resources/images_Gameplay/laserPowerup_Norm.png");
-		laserImageA = new Image("resources/images_Gameplay/laserPowerup_Add.png");
-		shieldImageN = new Image("resources/images_Gameplay/shieldPowerup_Norm.png");
-		shieldImageA = new Image("resources/images_Gameplay/shieldPowerup_Add.png");
-		vineImageN = new Image("resources/images_Gameplay/vinePowerup_Norm.png");
-		vineImageA = new Image("resources/images_Gameplay/vinePowerup_Add.png");
+		Powerup.loadImages();
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import java.util.Queue;
 import gui.GameState;
 import gui.MainGame;
 import logic.BouncingCircle;
+import logic.FloatingScore;
 import logic.Logger;
 import logic.Player.Movement;
 import logic.Spiky;
@@ -61,23 +62,22 @@ public abstract class Connector implements Runnable {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	
-    	
-    	for (String s : stringList) {
-    		System.out.println(s);
-    	}
+//    	for (String s : stringList) {
+//    		System.out.println(s);
+//    	}
     	
     	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
 				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
 				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
 				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[SEVEN]));
     	
+    	gameState.getFloatingScores().add(new FloatingScore(circle));
+    	
     	int index = gameState.getCircleList().getIndexForCircleWithID(
     			Integer.parseInt(stringList[SEVEN]));
     	
     	if (index >= 0) {
     		gameState.getCircleList().getCircles().set(index, circle);    
- 
-
     		gameState.updateShotCirles2(circle, true);
     	}
     }
@@ -210,7 +210,7 @@ public abstract class Connector implements Runnable {
     }
     
     /**
-     * Process a message about a player that started moving.
+     * Send a message about a player that started moving.
      * @param x the x position of the player
      * @param y the y position of the player
      * @param playerNumber the player number
@@ -225,7 +225,7 @@ public abstract class Connector implements Runnable {
     
 
     /**
-     * Process a message about a player that stopped moving.
+     * Send a message about a player that stopped moving.
      * @param x the new x position of the player
      * @param y the new y position of the player
      * @param playerNumber the player number

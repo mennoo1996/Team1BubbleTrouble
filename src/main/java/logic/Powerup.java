@@ -1,17 +1,60 @@
 package logic;
 
-import gui.GameState;
-
 import java.util.concurrent.TimeUnit;
+
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import gui.GameState;
+import gui.MainGame;
+import gui.RND;
 /**
  * Created by alexandergeenen on 09/09/15.
  */
 public class Powerup {
+	
+	private static Image laserImageN;
+	private static Image laserImageA;
+	private static Image shieldImageN;
+	private static Image shieldImageA;
+	private static Image vineImageN;
+	private static Image vineImageA;
     /**
      * The different powerup types.
      */
     public enum PowerupType {
-        SHIELD, SPIKY, INSTANT
+    	
+    	
+    	SHIELD, SPIKY, INSTANT;
+    	
+    	private Image imageN;
+    	private Image imageA;
+    	
+    	static {
+    		SHIELD.imageA = shieldImageA;
+    		SHIELD.imageN = shieldImageN;
+    		SPIKY.imageA = vineImageA;
+    		SPIKY.imageN = vineImageN;
+    		INSTANT.imageA = laserImageA;
+    		INSTANT.imageN = laserImageN;
+    	}
+    	
+    	/**
+    	 * Get the image A.
+    	 * @return the imageA
+    	 */
+    	public Image getImageA() {
+    		return imageA;
+    	}
+    	
+    	/**
+    	 * Get the image N.
+    	 * @return the imageN
+    	 */
+    	public Image getImageN() {
+    		return imageN;
+    	}
     }
 
     private static final float POWERUP_WIDTH = 40;
@@ -19,6 +62,8 @@ public class Powerup {
     private static final float POWERUP_SPEED = 200f;
     private static final int POWERUP_TIME = 5;
     private static final int SECONDS_TO_MS = 1000;
+	private static final int POWERUP_IMAGE_OFFSET = 12;
+
 
     private float x, y, width, height, xId, yId;
     private long timeRemaining;
@@ -40,6 +85,30 @@ public class Powerup {
         this.type = power;
         this.timeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_TIME);
         //System.out.println("Poooooow: " + power);
+    }
+    
+    /**
+     * Draw this powerup.
+     * @param mainGame the mainGame that uses this powerup
+     * @param graphics the grapihcs object used to draw things on screen.
+     */
+    public void draw(Graphics graphics, MainGame mainGame) {
+    	RND.drawColor(graphics, type.getImageN(), type.getImageA(), x - POWERUP_IMAGE_OFFSET,
+    			y - POWERUP_IMAGE_OFFSET, mainGame.getColor());
+    }
+    
+    /**
+     * Load the powerup images.
+     * @throws SlickException if something goes wrong / file not found
+     */
+    public static void loadImages() throws SlickException {
+		laserImageN = new Image("resources/images_Gameplay/laserPowerup_Norm.png");
+		laserImageA = new Image("resources/images_Gameplay/laserPowerup_Add.png");
+		shieldImageN = new Image("resources/images_Gameplay/shieldPowerup_Norm.png");
+		shieldImageA = new Image("resources/images_Gameplay/shieldPowerup_Add.png");
+		vineImageN = new Image("resources/images_Gameplay/vinePowerup_Norm.png");
+		vineImageA = new Image("resources/images_Gameplay/vinePowerup_Add.png");
+    		
     }
     
     /**

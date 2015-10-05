@@ -1,5 +1,12 @@
 package logic;
 
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import gui.MainGame;
+import gui.RND;
+
 /**
  * Created by alexandergeenen on 09/09/15.
  */
@@ -9,10 +16,16 @@ public class Coin {
     private static final float COIN_SPEED = 200f;
     private static final int COIN_CHEAP = 200;
     private static final int COIN_EXPENSIVE = 400;
+	private static final int COIN_IMAGE_OFFSET = 3;
+
 
     private int points;
     private float x, y, width, height, xId, yId;
     private boolean largeAmount;
+    
+    private static Image coinImageN;
+	private static Image coinImageA;
+	
 
     /**
      * Create a coin.
@@ -35,6 +48,28 @@ public class Coin {
         	this.points = COIN_CHEAP;
         }
     }
+    
+    /**
+     * Draw this coin.
+     * @param graphics the graphics to draw things on screen
+     * @param mainGame the maingame that uses this coin
+     */
+    public void draw(Graphics graphics, MainGame mainGame) {
+    	RND.drawColor(graphics, coinImageN, coinImageA, 
+				x - COIN_IMAGE_OFFSET, y - COIN_IMAGE_OFFSET,
+				mainGame.getColor());
+	}
+    
+    /**
+     * Load the coin images.
+     * @throws SlickException if something goes wrong / file not found
+     */
+    public static void loadImages() throws SlickException {
+    	coinImageN = new Image("resources/images_Gameplay/coin_Norm.png");
+		coinImageA = new Image("resources/images_Gameplay/coin_Add.png");
+	
+    }
+    
 
     /**
     * Create a string out of a Coin.

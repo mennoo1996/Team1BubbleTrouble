@@ -210,7 +210,7 @@ public abstract class Connector implements Runnable {
     }
     
     /**
-     * Process a message about a player that started moving.
+     * Send a message about a player that started moving.
      * @param x the x position of the player
      * @param y the y position of the player
      * @param playerNumber the player number
@@ -225,7 +225,7 @@ public abstract class Connector implements Runnable {
     
 
     /**
-     * Process a message about a player that stopped moving.
+     * Send a message about a player that stopped moving.
      * @param x the new x position of the player
      * @param y the new y position of the player
      * @param playerNumber the player number

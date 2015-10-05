@@ -8,6 +8,7 @@ import java.util.Queue;
 import gui.GameState;
 import gui.MainGame;
 import logic.BouncingCircle;
+import logic.FloatingScore;
 import logic.Logger;
 import logic.Player.Movement;
 import logic.Spiky;
@@ -61,23 +62,22 @@ public abstract class Connector implements Runnable {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	
-    	
-    	for (String s : stringList) {
-    		System.out.println(s);
-    	}
+//    	for (String s : stringList) {
+//    		System.out.println(s);
+//    	}
     	
     	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
 				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
 				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
 				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[SEVEN]));
     	
+    	gameState.getFloatingScores().add(new FloatingScore(circle));
+    	
     	int index = gameState.getCircleList().getIndexForCircleWithID(
     			Integer.parseInt(stringList[SEVEN]));
     	
     	if (index >= 0) {
     		gameState.getCircleList().getCircles().set(index, circle);    
- 
-
     		gameState.updateShotCirles2(circle, true);
     	}
     }

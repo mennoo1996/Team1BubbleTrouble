@@ -1,8 +1,5 @@
 package lan;
 
-import gui.GameState;
-import gui.MainGame;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +10,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import gui.GameState;
+import gui.MainGame;
 import gui.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.Coin;
@@ -28,32 +27,16 @@ import logic.Weapon;
  * Host server for LAN multiplayer.
  * @author alexandergeenen
  */
-public class Host implements Runnable {
+public class Host extends Connector {
 
-    private int portNumber;
     private ServerSocket serverSocket;
     
     private boolean noClientYet;
     private Socket client;
-    private Queue<String> messageQueue;
-    private PrintWriter writer;
-    private BufferedReader reader;
-    private MainGame mainGame;
-    private GameState gameState;
-
-    private static final int THREE = 3;
-    private boolean heartBeatCheck;
-    private long timeLastInput;
-    private boolean running;
-
-    private static final int TIMEOUT_ATTEMPT = 10000;
-    private static final String NO_CLIENT_CONNECTION = "No connection";
-    private static final int FOUR = 4;
-    private static final int FIVE = 5;
-    private static final int SIX = 6;
-    private static final int SEVEN = 7;
     
-    private Logger logger = Logger.getInstance();
+    private static final String NO_CLIENT_CONNECTION = "No connection";
+
+    
 
     /**
      * Create a new Host server for LAN multiplayer.
@@ -62,12 +45,8 @@ public class Host implements Runnable {
      * @param gameState the GameState that synchronizes using this host.
      */
     public Host(int portNumber, MainGame mainGame, GameState gameState) {
-        this.portNumber = portNumber;
-        this.gameState = gameState;
-        this.mainGame = mainGame;
-        this.noClientYet = true;
-        this.running = true;
-        this.messageQueue = new LinkedList<>();
+        super(portNumber, mainGame, gameState);
+    	this.noClientYet = true;
         System.out.println("HOST INITIALIZED");
     }
 

@@ -29,37 +29,20 @@ import logic.Weapon;
  * Client class which connects to server for LAN multiplayer.
  * @author alexandergeenen
  */
-public class Client implements Runnable {
+public class Client extends Connector {
 
-    private int portNumber;
     private String host;
     private Socket socket;
     private boolean isConnected;
     
-    private Queue<String> messageQueue;
-    private PrintWriter writer;
-    private BufferedReader reader;
-    private MainGame mainGame;
-    private GameState gameState;
-	private long timeLastInput;
-	private boolean heartBeatCheck;
     private boolean editingCircleList;
     private boolean editingRequiredList;
     private ArrayList<BouncingCircle> circleList;
     private ArrayList<BouncingCircle> requiredList;
     private int gateNumber;
-	private boolean running;
     
-    private static final int THREE = 3;
-    private static final int FOUR = 4;
-    private static final int FIVE = 5;
-
-    private static final int SIX = 6;
-    private static final int SEVEN = 7;
-	private static final int TIMEOUT_ATTEMPT = 10000;
-	private static final int MENU_MULTIPLAYER_STATE = 4;
+   private static final int MENU_MULTIPLAYER_STATE = 4;
 	
-	private Logger logger = Logger.getInstance();
 
 	/**
      * Create a new Client connection for LAN multiplayer.
@@ -69,16 +52,10 @@ public class Client implements Runnable {
      * @param gameState the gameState that uses this client for messaging.
      */
     public Client(String host, int portNumber, MainGame mainGame, GameState gameState) {
+    	super(portNumber, mainGame, gameState);
         this.host = host;
-        this.mainGame = mainGame;
-        this.gameState = gameState;
-        this.portNumber = portNumber;
         this.isConnected = false;
-
-		this.running = true;
-
-        this.messageQueue = new LinkedList<>();
-        this.circleList = new ArrayList<BouncingCircle>();
+    	this.circleList = new ArrayList<BouncingCircle>();
         this.requiredList = new ArrayList<BouncingCircle>();
         this.editingCircleList = false;
         this.editingRequiredList = false;

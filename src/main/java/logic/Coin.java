@@ -49,12 +49,21 @@ public class Coin {
         }
     }
     
+    /**
+     * Draw this coin.
+     * @param graphics
+     * @param mainGame
+     */
     public void draw(Graphics graphics, MainGame mainGame) {
     	RND.drawColor(graphics, coinImageN, coinImageA, 
 				x - COIN_IMAGE_OFFSET, y - COIN_IMAGE_OFFSET,
 				mainGame.getColor());
 	}
     
+    /**
+     * Load the coin images.
+     * @throws SlickException if something goes wrong / file not found
+     */
     public static void loadImages() throws SlickException {
     	coinImageN = new Image("resources/images_Gameplay/coin_Norm.png");
 		coinImageA = new Image("resources/images_Gameplay/coin_Add.png");

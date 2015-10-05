@@ -479,14 +479,7 @@ public class HostTest {
 	
 
 
-	@Test
-	public void testSetLogger() {
-		h = new Host(100, mg, gs);
-		Logger l = Logger.getInstance();
-		h.setLogger(l);
-		assertEquals(h.getLogger(), l);
-	}
-
+	
 	@Test
 	public void testClientConnected() {
 		h = new Host(100, mg, gs);

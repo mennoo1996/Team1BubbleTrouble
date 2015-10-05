@@ -79,8 +79,6 @@ public class GameState extends BasicGameState {
 	private Image ceilingImageA;
 	private Image counterBarImageN;
 	private Image counterBarImageA;
-	private Image coinImageN;
-	private Image coinImageA;
 	
 	// pause game buttons
 	private Button returnButton;
@@ -172,8 +170,6 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int POWERUP_CHANCE = 20;
 	private static final int COIN_CHANCE = 30;
-	private static final int POWERUP_IMAGE_OFFSET = 12;
-	private static final int COIN_IMAGE_OFFSET = 3;
 	private static final int CIRCLES_UPDATE_RATE = 600;
 	private int lastCircleUpdate;
 	// Level ending, empty bar
@@ -835,10 +831,8 @@ public class GameState extends BasicGameState {
 		graphics.setColor(Color.blue);
 		synchronized (droppedCoins) {
 			for (Coin coin : droppedCoins) {
-				RND.drawColor(graphics, coinImageN, coinImageA, 
-						coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
-						mainGame.getColor());
-			}
+				coin.draw(graphics, mainGame);
+			}	
 		}
 		graphics.setColor(Color.white);
 	}
@@ -1058,8 +1052,7 @@ public class GameState extends BasicGameState {
 		
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		coinImageN = new Image("resources/images_Gameplay/coin_Norm.png");
-		coinImageA = new Image("resources/images_Gameplay/coin_Add.png");
+		Coin.loadImages();
 	}
 	
 	/**

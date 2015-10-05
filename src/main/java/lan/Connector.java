@@ -350,6 +350,10 @@ public abstract class Connector implements Runnable {
 		this.reader = reader;
 	}
 	
+	/**
+	 * Process a message about a dead player.
+	 * @param message the message to send
+	 */
     protected abstract void deadMessage(String message);
 	
 	

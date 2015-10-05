@@ -178,7 +178,6 @@ public class Client extends Connector {
     }
     
     
-    
     /**
      * Add a FloatingScore to the list.
      * @param message String containing the FloatingScore to add
@@ -189,11 +188,6 @@ public class Client extends Connector {
 		gameState.getFloatingScores().add(new FloatingScore(stringList[2],
 				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
 	}
-   
-    
-   
-   
-    
     
     
     /**
@@ -208,9 +202,6 @@ public class Client extends Connector {
     	}
     }
 
-    
-   
-    
     
     /**
      * Process a message about a circle.

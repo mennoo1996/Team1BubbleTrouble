@@ -51,8 +51,8 @@ public class Coin {
     
     /**
      * Draw this coin.
-     * @param graphics
-     * @param mainGame
+     * @param graphics the graphics to draw things on screen
+     * @param mainGame the maingame that uses this coin
      */
     public void draw(Graphics graphics, MainGame mainGame) {
     	RND.drawColor(graphics, coinImageN, coinImageA, 

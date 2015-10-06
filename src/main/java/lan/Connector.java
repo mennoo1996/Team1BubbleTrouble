@@ -37,7 +37,7 @@ public abstract class Connector implements Runnable {
 	protected static final int FIVE = 5;
 	protected static final int SIX = 6;
 	protected static final int SEVEN = 7;
-	protected static final int TIMEOUT_ATTEMPT = 10000;
+	protected static final int TIMEOUT_ATTEMPT = 500;
 
 	/**
 	 * Constructs a new Connector.

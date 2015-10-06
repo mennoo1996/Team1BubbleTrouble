@@ -219,8 +219,9 @@ public class MenuGameoverState extends BasicGameState {
 		}
 		else if (menuButton.isMouseOver(input)) {
 			// Go to startState
+			mainGame.resetLifeCount();
+			mainGame.resetLevelCount();
 			mainGame.setScore(0);
-			mainGame.setLevelCounter(0);
 			mainGame.killMultiplayer();
 			mainGame.setSwitchState(mainGame.getStartState());
 			Logger.getInstance().log("main menu button clicked", 
@@ -239,10 +240,8 @@ public class MenuGameoverState extends BasicGameState {
 	private void processStartOver() {
 		if (mainGame.isLanMultiplayer()) {
 			if (mainGame.isHost()) {
-	    		System.out.println("HOST FORCES RESTART");
 				mainGame.getHost().updateRestart();
 			} else if (mainGame.isClient()) {
-	    		System.out.println("CLIENT FORCES RESTART");
 				mainGame.getClient().updateRestart();
 			}
 		}

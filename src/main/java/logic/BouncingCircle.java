@@ -101,6 +101,32 @@ public class BouncingCircle extends Circle {
 		this.id = 0;
 		
 	}
+	
+	/**
+	 * Equals method for a BouncingCircle.
+	 * @other the BouncingCircle to compare
+	 * @return whether the two BouncingCircles are the same
+	 */
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof BouncingCircle) {
+			BouncingCircle that = (BouncingCircle) other;
+			if (this.getxSpeed() == that.getxSpeed() 
+					&& this.getySpeed() == that.getySpeed()
+					&& this.getGravity() == that.getGravity()
+					&& this.isDone() == that.isDone()
+					&& this.isHitCeiling() == that.isHitCeiling()
+					&& this.getId() == that.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return 0;
+	}
 
 	/**
 	 * Update the circle in the given container.

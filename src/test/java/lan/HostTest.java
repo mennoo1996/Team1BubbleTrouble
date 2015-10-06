@@ -489,7 +489,6 @@ public class HostTest {
 	@Test
 	public void testMiscellaneous() {
 		h = new Host(1, mg, gs);
-		h.updateHostDead();
 		h.sendFloatingScore(new FloatingScore(new Coin(1, 2, true)));
 		h.updatePlayerLocation(0, 1, 1);
 		h.updatePlayerName(0, "MENNO");

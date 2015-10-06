@@ -96,11 +96,12 @@ public class LevelContainer {
 	 */
 	private ArrayList<Level> initializeLevels() {
 		ArrayList<Level> res = new ArrayList<Level>();
-		res.addAll(initializeLevels1());
-		res.addAll(initializeLevels2());
-		res.addAll(initializeLevels3());
-		res.addAll(initializeLevels4());
-		res.addAll(initializeLevels5());
+		res.add(LevelFactory1.createLevel(1, this.mainGame));
+		//res.addAll(initializeLevels1());
+		//res.addAll(initializeLevels2());
+		//res.addAll(initializeLevels3());
+		//res.addAll(initializeLevels4());
+		//res.addAll(initializeLevels5());
 		logger.log("Levels are initialized", PriorityLevels.HIGH, "LevelContainer");
 		return res;
 	}
@@ -110,34 +111,14 @@ public class LevelContainer {
 	 * @return a list with the first batch of levels.
 	 */
 	private ArrayList<Level> initializeLevels1() {
-		ArrayList<Level> res = new ArrayList<Level>();
-				ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
-				BouncingCircle circle11 = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y,
-						RADIUS_3, mainGame.getStartingSpeed(),
-						DEFAULT_YSPEED, mainGame.getGravity(), 0);
-				
-				circles.add(circle11);
-				ArrayList<Gate> gates = new ArrayList<Gate>();
-				/*if (!testing) {
-					gate11 = new Gate((float) container.getWidth() / 2.0f 
-							+ LEVEL_1_GATE_X_DEVIATION, 0, LEVEL_1_GATE_WIDTH, 
-							container.getHeight());
-				} else {
-					gate11 = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION,
-							0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
-				} gate11.addToRequirements(circle11);
-				*/
-				Level level = new Level(LEVEL_1_TIME, circles, gates);
-				res.add(level); 
-				ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
-				ArrayList<Gate> gates2 = new ArrayList<Gate>();
-				circles2.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, 
-						RADIUS_4, mainGame.getStartingSpeed(),
-						DEFAULT_YSPEED, mainGame.getGravity(), 0));
-				
-				level = new Level(LEVEL_2_TIME, circles2, gates2);
-				res.add(level);	
-				return res;
+		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
+		ArrayList<Gate> gates2 = new ArrayList<Gate>();
+		circles2.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, 
+				RADIUS_4, mainGame.getStartingSpeed(),
+				DEFAULT_YSPEED, mainGame.getGravity(), 0));
+		level = new Level(LEVEL_2_TIME, circles2, gates2);
+		res.add(level);	
+		return res;
 	}
 	
 	/**

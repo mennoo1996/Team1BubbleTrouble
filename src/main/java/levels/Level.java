@@ -1,4 +1,6 @@
 package levels;
+import gui.MainGame;
+
 import java.util.ArrayList;
 
 import logic.BouncingCircle;
@@ -16,17 +18,23 @@ public abstract class Level {
 	private int time;
 	private ArrayList<BouncingCircle> circles;
 	private ArrayList<Gate> gates;
+	private MainGame maingame;
 	
 	/**
 	 * Construct a new level.
+	 * @param maingame the game in which the level will appear
 	 */
-	public Level() {
+	public Level(MainGame maingame) {
 		this.time = 0;
 		this.circles = new ArrayList<BouncingCircle>();
 		this.gates = new ArrayList<Gate>();
+		this.maingame = maingame;
 	}
 	
-	
+	/**
+	 * Create the correct level.
+	 */
+	public abstract void constructLevel();
 
 	/**
 	 * @return the time
@@ -71,4 +79,22 @@ public abstract class Level {
 	public void setGates(ArrayList<Gate> gates) {
 		this.gates = gates;
 	}
+
+	/**
+	 * Returns the game.
+	 * @return the game to return
+	 */
+	public MainGame getMaingame() {
+		return maingame;
+	}
+
+	/**
+	 * Sets the game.
+	 * @param maingame the game to set
+	 */
+	public void setMaingame(MainGame maingame) {
+		this.maingame = maingame;
+	}
+	
+	
 }

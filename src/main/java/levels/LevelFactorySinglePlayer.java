@@ -1,7 +1,5 @@
 package levels;
 
-import org.mockito.asm.Type;
-
 import gui.MainGame;
 
 /**

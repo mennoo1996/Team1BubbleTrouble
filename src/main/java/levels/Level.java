@@ -20,6 +20,8 @@ public abstract class Level {
 	private ArrayList<Gate> gates;
 	private MainGame maingame;
 	
+	private static boolean testing = false;
+	
 	/**
 	 * Construct a new level.
 	 * @param maingame the game in which the level will appear
@@ -94,6 +96,20 @@ public abstract class Level {
 	 */
 	public void setMaingame(MainGame maingame) {
 		this.maingame = maingame;
+	}
+
+	/**
+	 * @return the testing
+	 */
+	public static boolean isTesting() {
+		return testing;
+	}
+
+	/**
+	 * @param testing the testing to set
+	 */
+	public static void setTesting(boolean testing) {
+		Level.testing = testing;
 	}
 	
 	

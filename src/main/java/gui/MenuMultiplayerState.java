@@ -369,6 +369,9 @@ public class MenuMultiplayerState extends BasicGameState {
 	 * @param message Message to display
 	 */
 	public void addMessage(String message) {
+		mainGame.resetLifeCount();
+		mainGame.resetLevelCount();
+		mainGame.setScore(0);
 		System.out.println("Adding message: " + message);
 		this.message = message;
 		popup.setText(this.message);

@@ -6,9 +6,10 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
+import levels.Level;
+import levels.Level1;
 import logic.BouncingCircle;
 import logic.Gate;
-import logic.Level;
 import logic.LevelContainer;
 import logic.Logger;
 import logic.Logger.PriorityLevels;
@@ -35,7 +36,7 @@ public class LevelContainerTest {
 	@Test
 	public void testAdd() {
 		LevelContainer welp = new LevelContainer(mg);
-		Level level = new Level(2, new ArrayList<BouncingCircle>(), new ArrayList<Gate>());
+		Level level = new Level1(mg);
 		ArrayList<Level> first = new ArrayList<Level>();
 		first.add(level);
 		welp.add(level);
@@ -45,7 +46,7 @@ public class LevelContainerTest {
 	@Test
 	public void testGetLevel() {
 		LevelContainer welp = new LevelContainer(mg);
-		Level level = new Level(2, new ArrayList<BouncingCircle>(), new ArrayList<Gate>());
+		Level level = new Level1(mg);
 		welp.add(level);
 		assertEquals(welp.getLevel(0),level);
 	}
@@ -66,13 +67,8 @@ public class LevelContainerTest {
 	
 	@Test
 	public void testSetLevels() {
-		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates = new ArrayList<Gate>();
-		circles.add(new BouncingCircle(200, 200, 45, mg.getStartingSpeed(), -50, mg.getGravity()));
-		Level level = new Level(40, circles, gates);
-		
 		ArrayList<Level> result = new ArrayList<Level>();
-		result.add(level);
+		result.add(new Level1(mg));
 		LevelContainer welp = new LevelContainer(mg);
 		welp.setLevels(result);
 		assertEquals(welp.getLevels(),result);

@@ -1,30 +1,40 @@
-package logic;
+package levels;
+import gui.MainGame;
+
 import java.util.ArrayList;
+
+import logic.BouncingCircle;
+import logic.Gate;
 
 /**
  * This class represents a level, with a certain time to complete the level and a list 
- * of bouncing circles that are present in this level.
+ * of bouncing circles & gates that are present in this level.
  * @author Menno
  *
  */
-public class Level {
+public abstract class Level {
 	
 	
 	private int time;
 	private ArrayList<BouncingCircle> circles;
 	private ArrayList<Gate> gates;
+	private MainGame maingame;
 	
 	/**
 	 * Construct a new level.
-	 * @param time the time you get for completing this level
-	 * @param circles the circles present in this level
-	 * @param gates the Gates in this level
+	 * @param maingame the game in which the level will appear
 	 */
-	public Level(int time, ArrayList<BouncingCircle> circles, ArrayList<Gate> gates) {
-		this.time = time;
-		this.circles = circles;
-		this.gates = gates;
+	public Level(MainGame maingame) {
+		this.time = 0;
+		this.circles = new ArrayList<BouncingCircle>();
+		this.gates = new ArrayList<Gate>();
+		this.maingame = maingame;
 	}
+	
+	/**
+	 * Create the correct level.
+	 */
+	public abstract void constructLevel();
 
 	/**
 	 * @return the time
@@ -69,4 +79,22 @@ public class Level {
 	public void setGates(ArrayList<Gate> gates) {
 		this.gates = gates;
 	}
+
+	/**
+	 * Returns the game.
+	 * @return the game to return
+	 */
+	public MainGame getMaingame() {
+		return maingame;
+	}
+
+	/**
+	 * Sets the game.
+	 * @param maingame the game to set
+	 */
+	public void setMaingame(MainGame maingame) {
+		this.maingame = maingame;
+	}
+	
+	
 }

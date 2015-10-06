@@ -94,6 +94,23 @@ public class Button {
 	}
 	
 	/**
+	 * Draw function that draws a button, using graphics/input to determine its state and draw.
+	 * This method has a boolean to disable/enable mouse-over capabilities. 
+	 * @param graphics context the drawing is done in.
+	 * @param input used to determine the button's state (such as mouse-over)
+	 * @param color the color used to draw this button
+	 * @param enable whether mouse-over highlighting is enabled
+	 */
+	public void drawColor(Graphics graphics, Input input, Color color, boolean enable) {
+		if (isMouseOver(input) && enable) {
+			RND.drawColor(graphics, getImageMouseOverN(), 
+					getImageMouseOverA(), getX(), getY(), color);
+		} else {
+			RND.drawColor(graphics, getImageN(), getImageA(), getX(), getY(), color);
+		}
+	}
+	
+	/**
 	 * get bounding box rectangle of the button.
 	 * @return the Rectangle object of this button.
 	 */

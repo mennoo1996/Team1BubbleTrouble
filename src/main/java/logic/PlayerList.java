@@ -87,7 +87,7 @@ public class PlayerList {
 				if (!mainGame.isLanMultiplayer()) {
 					playerDeath(mainGame);
 				} else if (mainGame.isHost()) {
-					mainGame.getHost().updateHostDead();
+					mainGame.getHost().updateDead();
 					playerDeath(mainGame);
 				}
 			}
@@ -99,7 +99,7 @@ public class PlayerList {
 				if (!mainGame.isLanMultiplayer()) {
 					playerDeath(mainGame);
 				} else if (mainGame.isClient()) {
-					mainGame.getClient().updateClientDead();
+					mainGame.getClient().updateDead();
 					playerDeath(mainGame);
 				}
 			}
@@ -240,30 +240,27 @@ public class PlayerList {
 	 * @param sbg The stateBasedGame that uses this state.
 	 */
 	public void playerDeath(StateBasedGame sbg) {
-		System.out.println("playerdeath");
-		System.out.println(died);
+		if (mainGame.isClient()) {
+			System.out.println("DADADADA " + died);
+		}
 		if (!died) {
 			logger.log("Player died, reducing lives", Logger.PriorityLevels.MEDIUM,
 					"players");
-			if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
-				mainGame.decreaselifeCount();
-				if (mainGame.isHost()) {
-					mainGame.getHost().updateLives(mainGame.getLifeCount());
-
-					died = true;
-				}
+			died = true;
+			mainGame.decreaselifeCount();
+			
+			if (mainGame.isHost()) {
+				mainGame.getHost().updateLives(mainGame.getLifeCount());
 			}
+			
 			if (mainGame.getLifeCount() <= 0) {
 				mainGame.setScore(mainGame.getScore() + gameState.getScore());
 				mainGame.setSwitchState(mainGame.getGameOverState());
 				logger.log("Player lives reached 0, game over",
 						Logger.PriorityLevels.HIGH, "players");
-				//sbg.enterState(mainGame.getGameOverState());
 			} else {
-				//sbg.enterState(mainGame.getGameState());
 				processCollisions = false;
 				mainGame.setSwitchState(mainGame.getGameState());
-				//mainGame.getPlayerList().
 			}
 		}
 	}

@@ -4,6 +4,8 @@ import gui.MainGame;
 import java.util.ArrayList;
 
 import levels.Level;
+import levels.LevelFactory;
+import levels.LevelFactory1;
 import logic.Logger.PriorityLevels;
 
 import org.newdawn.slick.GameContainer;
@@ -18,6 +20,7 @@ public class LevelContainer {
 	private MainGame mainGame;
 	private GameContainer container;
 	
+	private static final int ELEVEN = 11;
 	private static final int DEFAULT_BALL_X = 200;
 	private static final int DEFAULT_BALL_Y = 200;
 	private static final int DEFAULT_BIGBALL_Y = 300;
@@ -96,189 +99,189 @@ public class LevelContainer {
 	 */
 	private ArrayList<Level> initializeLevels() {
 		ArrayList<Level> res = new ArrayList<Level>();
-		res.add(LevelFactory1.createLevel(1, this.mainGame));
-		//res.addAll(initializeLevels1());
-		//res.addAll(initializeLevels2());
-		//res.addAll(initializeLevels3());
-		//res.addAll(initializeLevels4());
-		//res.addAll(initializeLevels5());
+		LevelFactory levelfactory = new LevelFactory1();
+		
+		for (int i = 1; i < ELEVEN; i++) {
+			res.add(levelfactory.orderLevel(i, this.mainGame));
+		}
+		
 		logger.log("Levels are initialized", PriorityLevels.HIGH, "LevelContainer");
 		return res;
 	}
 	
-	/**
-	 * Initalize the first batch of levels.
-	 * @return a list with the first batch of levels.
-	 */
-	private ArrayList<Level> initializeLevels1() {
-		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates2 = new ArrayList<Gate>();
-		circles2.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, 
-				RADIUS_4, mainGame.getStartingSpeed(),
-				DEFAULT_YSPEED, mainGame.getGravity(), 0));
-		level = new Level(LEVEL_2_TIME, circles2, gates2);
-		res.add(level);	
-		return res;
-	}
-	
-	/**
-	 * Initalize the second batch of levels.
-	 * @return a list with the second batch of levels.
-	 */
-	private ArrayList<Level> initializeLevels2() {
-		Level level;
-		ArrayList<Level> res = new ArrayList<Level>();
-		ArrayList<BouncingCircle> circles3 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates3 = new ArrayList<Gate>();
-		circles3.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_5,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
-		level = new Level(LEVEL_3_TIME, circles3, gates3);
-		 res.add(level);
-		
-		res.add(initializeLevels2b());
-		return res;
-	}
-	
-	/**
-	 * Initalize the 2nd 2nd batch of levels.
-	 * @return a list with the third batch of levels.
-	 */
-	private Level initializeLevels2b() {
-		Level level;
-		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates4 = new ArrayList<Gate>();
-		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_4,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0);
-		 circles4.add(ball);
-		circles4.add(new BouncingCircle(LEVEL_4_BALL_2_X, DEFAULT_BIGBALL_Y, RADIUS_5,
-				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
-	
-		if (!mainGame.isLanMultiplayer()) {
-			Gate gate;
-			if (!testing) {
-				gate = new Gate((float) container.getWidth() / 2.0f + LEVEL_1_GATE_X_DEVIATION, 0,
-						LEVEL_1_GATE_WIDTH, container.getHeight());
-			} else {
-				gate = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION, 0,
-						LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
-			}
-			gate.addToRequirements(ball);
-			gates4.add(gate);
-		}
-		level = new Level(LEVEL_4_TIME, circles4, gates4);
-		return level;
-	}
-	
-	/**
-	 * Initalize the third batch of levels.
-	 * @return a list with the third batch of levels.
-	 */
-	private ArrayList<Level> initializeLevels3() {
-		
-		Level level;
-		ArrayList<Level> res = new ArrayList<Level>();
-		
-		ArrayList<BouncingCircle> circles5 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates5 = new ArrayList<Gate>();
-		for (int i = 0; i < LEVEL_5_AMOUNT_OF_BALLS; i++) {
-			circles5.add(new BouncingCircle(LEVEL_5_BALL_FACTOR * i + DEFAULT_BALL_X, 
-					DEFAULT_BIGBALL_Y, MINIMUM_RADIUS, mainGame.getStartingSpeed(),
-					DEFAULT_YSPEED, mainGame.getGravity(), 0));
-			
-		}
-		level = new Level(LEVEL_5_TIME, circles5, gates5);
-		res.add(level);
-		ArrayList<BouncingCircle> circles6 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates6 = new ArrayList<Gate>();
-		circles6.add(new BouncingCircle(LEVEL_6_BALL_X, DEFAULT_BIGBALL_Y, RADIUS_6,
-				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
-		
-		level = new Level(LEVEL_6_TIME, circles6, gates6);
-		res.add(level);
-		
-		
-		
-		return res;
-	}
-	
-	/**
-	 * Initalize the fourth batch of levels - part 1.
-	 * @return a list with the fourth batch of levels.
-	 */
-	private ArrayList<Level> initializeLevels4() {
-		Level level; ArrayList<Level> res = new ArrayList<Level>();
-		ArrayList<BouncingCircle> circles7 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates7 = new ArrayList<Gate>();
-		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_3,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0);
-		BouncingCircle ball2 = new BouncingCircle(LEVEL_7_BALL_2_X, LEVEL_7_BALL_2_Y, RADIUS_3,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1);
-		BouncingCircle ball3 = new BouncingCircle(LEVEL_7_BALL_3_X, DEFAULT_BIGBALL_Y, RADIUS_5,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2);
-		
-		circles7.add(ball); circles7.add(ball2); circles7.add(ball3); Gate gate2;
-		if (!testing) {
-			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, container.getHeight());
-		} else { 
-			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT); }
-		gate2.addToRequirements(ball); gate2.addToRequirements(ball2); gates7.add(gate2);
-		level = new Level(LEVEL_7_TIME, circles7, gates7); res.add(level);
-		ArrayList<BouncingCircle> circles8 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates8 = new ArrayList<Gate>();
-		initializeLevels4_2(circles8);
-		
-		level = new Level(LEVEL_8_TIME, circles8, gates8); res.add(level); return res;
-	}
-	
-	/**
-	 * Initalize the fourth batch of levels- part 2.
-	 * @param circles8 a necessary list for this.
-	 */
-	private void initializeLevels4_2(ArrayList<BouncingCircle> circles8) {
-		circles8.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_2,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
-		
-		circles8.add(new BouncingCircle(LEVEL_8_BALL_2_X, DEFAULT_BALL_Y, RADIUS_3,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
-		
-		circles8.add(new BouncingCircle(LEVEL_8_BALL_3_X, DEFAULT_BALL_Y, RADIUS_4,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2));
-		
-		circles8.add(new BouncingCircle(LEVEL_8_BALL_4_X, DEFAULT_BALL_Y, RADIUS_5,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), THREE));
-	}
-	
-	/**
-	 * Initalize the fifth batch of levels.
-	 * @return a list with the fifth batch of levels.
-	 */
-	private ArrayList<Level> initializeLevels5() {
-		Level level;
-		ArrayList<Level> res = new ArrayList<Level>();
-		ArrayList<BouncingCircle> circles9 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates9 = new ArrayList<Gate>();
-		circles9.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BIGBALL_Y, RADIUS_6,
-				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
-		
-		circles9.add(new BouncingCircle(LEVEL_9_BALL_2_X, DEFAULT_BIGBALL_Y, RADIUS_6,
-				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
-		
-		level = new Level(LEVEL_9_TIME, circles9, gates9);
-		res.add(level);
-		
-		ArrayList<BouncingCircle> circles10 = new ArrayList<BouncingCircle>();
-		ArrayList<Gate> gates10 = new ArrayList<Gate>();
-		for (int i = 0; i < LEVEL_10_AMOUNT_OF_BALLS; i++) {
-			circles10.add(new BouncingCircle(DEFAULT_BALL_X, 
-					LEVEL_10_BALL_FACTOR * i + DEFAULT_BALL_Y,
-					MINIMUM_RADIUS, LEVEL_10_XSPEED, DEFAULT_YSPEED, mainGame.getGravity(), 0));
-			
-		}
-		level = new Level(LEVEL_10_TIME, circles10, gates10);
-		res.add(level);	
-		return res;
-		
-	}
+//	/**
+//	 * Initalize the first batch of levels.
+//	 * @return a list with the first batch of levels.
+//	 */
+//	private ArrayList<Level> initializeLevels1() {
+//		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates2 = new ArrayList<Gate>();
+//		circles2.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, 
+//				RADIUS_4, mainGame.getStartingSpeed(),
+//				DEFAULT_YSPEED, mainGame.getGravity(), 0));
+//		level = new Level(LEVEL_2_TIME, circles2, gates2);
+//		res.add(level);	
+//		return res;
+//	}
+//	
+//	/**
+//	 * Initalize the second batch of levels.
+//	 * @return a list with the second batch of levels.
+//	 */
+//	private ArrayList<Level> initializeLevels2() {
+//		Level level;
+//		ArrayList<Level> res = new ArrayList<Level>();
+//		ArrayList<BouncingCircle> circles3 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates3 = new ArrayList<Gate>();
+//		circles3.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_5,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
+//		level = new Level(LEVEL_3_TIME, circles3, gates3);
+//		 res.add(level);
+//		
+//		res.add(initializeLevels2b());
+//		return res;
+//	}
+//	
+//	/**
+//	 * Initalize the 2nd 2nd batch of levels.
+//	 * @return a list with the third batch of levels.
+//	 */
+//	private Level initializeLevels2b() {
+//		Level level;
+//		ArrayList<BouncingCircle> circles4 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates4 = new ArrayList<Gate>();
+//		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_4,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0);
+//		 circles4.add(ball);
+//		circles4.add(new BouncingCircle(LEVEL_4_BALL_2_X, DEFAULT_BIGBALL_Y, RADIUS_5,
+//				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+//	
+//		if (!mainGame.isLanMultiplayer()) {
+//			Gate gate;
+//			if (!testing) {
+//				gate = new Gate((float) container.getWidth() / 2.0f + LEVEL_1_GATE_X_DEVIATION, 0,
+//						LEVEL_1_GATE_WIDTH, container.getHeight());
+//			} else {
+//				gate = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION, 0,
+//						LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
+//			}
+//			gate.addToRequirements(ball);
+//			gates4.add(gate);
+//		}
+//		level = new Level(LEVEL_4_TIME, circles4, gates4);
+//		return level;
+//	}
+//	
+//	/**
+//	 * Initalize the third batch of levels.
+//	 * @return a list with the third batch of levels.
+//	 */
+//	private ArrayList<Level> initializeLevels3() {
+//		
+//		Level level;
+//		ArrayList<Level> res = new ArrayList<Level>();
+//		
+//		ArrayList<BouncingCircle> circles5 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates5 = new ArrayList<Gate>();
+//		for (int i = 0; i < LEVEL_5_AMOUNT_OF_BALLS; i++) {
+//			circles5.add(new BouncingCircle(LEVEL_5_BALL_FACTOR * i + DEFAULT_BALL_X, 
+//					DEFAULT_BIGBALL_Y, MINIMUM_RADIUS, mainGame.getStartingSpeed(),
+//					DEFAULT_YSPEED, mainGame.getGravity(), 0));
+//			
+//		}
+//		level = new Level(LEVEL_5_TIME, circles5, gates5);
+//		res.add(level);
+//		ArrayList<BouncingCircle> circles6 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates6 = new ArrayList<Gate>();
+//		circles6.add(new BouncingCircle(LEVEL_6_BALL_X, DEFAULT_BIGBALL_Y, RADIUS_6,
+//				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
+//		
+//		level = new Level(LEVEL_6_TIME, circles6, gates6);
+//		res.add(level);
+//		
+//		
+//		
+//		return res;
+//	}
+//	
+//	/**
+//	 * Initalize the fourth batch of levels - part 1.
+//	 * @return a list with the fourth batch of levels.
+//	 */
+//	private ArrayList<Level> initializeLevels4() {
+//		Level level; ArrayList<Level> res = new ArrayList<Level>();
+//		ArrayList<BouncingCircle> circles7 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates7 = new ArrayList<Gate>();
+//		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_3,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0);
+//		BouncingCircle ball2 = new BouncingCircle(LEVEL_7_BALL_2_X, LEVEL_7_BALL_2_Y, RADIUS_3,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1);
+//		BouncingCircle ball3 = new BouncingCircle(LEVEL_7_BALL_3_X, DEFAULT_BIGBALL_Y, RADIUS_5,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2);
+//		
+//		circles7.add(ball); circles7.add(ball2); circles7.add(ball3); Gate gate2;
+//		if (!testing) {
+//			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, container.getHeight());
+//		} else { 
+//			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT); }
+//		gate2.addToRequirements(ball); gate2.addToRequirements(ball2); gates7.add(gate2);
+//		level = new Level(LEVEL_7_TIME, circles7, gates7); res.add(level);
+//		ArrayList<BouncingCircle> circles8 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates8 = new ArrayList<Gate>();
+//		initializeLevels4_2(circles8);
+//		
+//		level = new Level(LEVEL_8_TIME, circles8, gates8); res.add(level); return res;
+//	}
+//	
+//	/**
+//	 * Initalize the fourth batch of levels- part 2.
+//	 * @param circles8 a necessary list for this.
+//	 */
+//	private void initializeLevels4_2(ArrayList<BouncingCircle> circles8) {
+//		circles8.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_2,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
+//		
+//		circles8.add(new BouncingCircle(LEVEL_8_BALL_2_X, DEFAULT_BALL_Y, RADIUS_3,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+//		
+//		circles8.add(new BouncingCircle(LEVEL_8_BALL_3_X, DEFAULT_BALL_Y, RADIUS_4,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 2));
+//		
+//		circles8.add(new BouncingCircle(LEVEL_8_BALL_4_X, DEFAULT_BALL_Y, RADIUS_5,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), THREE));
+//	}
+//	
+//	/**
+//	 * Initalize the fifth batch of levels.
+//	 * @return a list with the fifth batch of levels.
+//	 */
+//	private ArrayList<Level> initializeLevels5() {
+//		Level level;
+//		ArrayList<Level> res = new ArrayList<Level>();
+//		ArrayList<BouncingCircle> circles9 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates9 = new ArrayList<Gate>();
+//		circles9.add(new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BIGBALL_Y, RADIUS_6,
+//				mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 0));
+//		
+//		circles9.add(new BouncingCircle(LEVEL_9_BALL_2_X, DEFAULT_BIGBALL_Y, RADIUS_6,
+//				-mainGame.getStartingSpeed(), DEFAULT_YSPEED, mainGame.getGravity(), 1));
+//		
+//		level = new Level(LEVEL_9_TIME, circles9, gates9);
+//		res.add(level);
+//		
+//		ArrayList<BouncingCircle> circles10 = new ArrayList<BouncingCircle>();
+//		ArrayList<Gate> gates10 = new ArrayList<Gate>();
+//		for (int i = 0; i < LEVEL_10_AMOUNT_OF_BALLS; i++) {
+//			circles10.add(new BouncingCircle(DEFAULT_BALL_X, 
+//					LEVEL_10_BALL_FACTOR * i + DEFAULT_BALL_Y,
+//					MINIMUM_RADIUS, LEVEL_10_XSPEED, DEFAULT_YSPEED, mainGame.getGravity(), 0));
+//			
+//		}
+//		level = new Level(LEVEL_10_TIME, circles10, gates10);
+//		res.add(level);	
+//		return res;
+//		
+//	}
 	
 	/**
 	 * Set the levels.

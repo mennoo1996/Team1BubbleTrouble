@@ -124,7 +124,6 @@ public class Host extends Connector {
     	try {
 			while (reader.ready()) {
 				String message = reader.readLine();
-
 				String message2 = message.trim();
 				if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
@@ -165,11 +164,6 @@ public class Host extends Connector {
             mainGame.killMultiplayer();
         }
     }
-    
-    
-    
-    
-    
    
     
     /**
@@ -180,10 +174,26 @@ public class Host extends Connector {
     	String message2 = message.trim();
     	if (message2.startsWith("PAUSE")) {
     		pauseMessage(message2.replaceFirst("PAUSE", ""));
+    	} else if (message2.startsWith("LEVEL")) {
+    		levelMessage(message2.replaceFirst("LEVEL", ""));
     	}
     }
     
-    
+    /**
+     * Process a message about the level.
+     * @param message the message to process
+     */
+    private void levelMessage(String message) {
+    	String message2 = message.trim();
+    	if (message2.equals("RESTART")) { 
+    		System.out.println("HOST IS NOW RESTARTING");
+    		// force override life, level, score etc. Just. In. Case. someone forgets.
+    		mainGame.resetLifeCount();
+    		mainGame.resetLevelCount();
+    		mainGame.setScore(0);
+    		mainGame.setSwitchState(mainGame.getGameState());
+    	}
+    }
     
     /**
      * Process a message that starts with NEW.
@@ -197,21 +207,17 @@ public class Host extends Connector {
     }
     
     
-    
-    
-    /**
-     * Process a dead message.
-     * @param message the message to process
-     */
-    protected void deadMessage(String message) {
-    	String message2 = message.trim();
-    	//System.out.println(message2);
-    	
-    	if (message2.equals("CLIENT")) {
-    		System.out.println("client dead");
-    		mainGame.getPlayerList().playerDeath(mainGame);
-    	}
-    }
+//    /**
+//     * Process a dead message.
+//     * @param message the message to process
+//     */
+//    protected void deadMessage(String message) {
+//    	String message2 = message.trim();
+//    	
+//    	if (message2.equals("CLIENT")) {
+//    		mainGame.getPlayerList().playerDeath(mainGame);
+//    	}
+//    }
     
     /**
      * Attempt to gracefully shut down the LAN threads.
@@ -240,12 +246,12 @@ public class Host extends Connector {
         return !noClientYet;
     }
     
-    /**
-     *	Notify the client that the host is dead.
-     */
-    public void updateHostDead() {
-    	sendMessage("PLAYER DEAD HOST");
-    }
+//    /**
+//     *	Notify the client that the host is dead.
+//     */
+//    public void updateHostDead() {
+//    	sendMessage("PLAYER DEAD HOST");
+//    }
     
     /**
      * Sends a message to the client concerning a FloatingScore.

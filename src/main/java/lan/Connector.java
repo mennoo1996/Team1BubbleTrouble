@@ -62,10 +62,6 @@ public abstract class Connector implements Runnable {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	
-//    	for (String s : stringList) {
-//    		System.out.println(s);
-//    	}
-    	
     	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
 				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
 				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
@@ -161,7 +157,6 @@ public abstract class Connector implements Runnable {
     		gameState.pauseStopped(true);
     	}
     }
-    
 
     /**
      * Process a message about a movement that stopped.
@@ -288,21 +283,26 @@ public abstract class Connector implements Runnable {
     public void splittedCircle(BouncingCircle circle) {
     	sendMessage("SPLIT " + circle.toString());
     }
-    
-    
 
     /**
-     * Notify the client that the game has been paused.
+     * Notify the client/host that the game has been paused.
      */
     public void updatePauseStarted() {
     	sendMessage("SYSTEM PAUSE STARTED");
     }
     
     /**
-     * Notify the client that the game has been resumed.
+     * Notify the client/host that the game has been resumed.
      */
     public void updatePauseStopped() {
     	sendMessage("SYSTEM PAUSE STOPPED");
+    }
+    
+    /**
+     * Notify the client/host that the game will be restarted.
+     */
+    public void updateRestart() {
+    	sendMessage("SYSTEM LEVEL RESTART");
     }
     
     /**
@@ -350,13 +350,26 @@ public abstract class Connector implements Runnable {
 		this.reader = reader;
 	}
 	
-	/**
-	 * Process a message about a dead player.
-	 * @param message the message to send
-	 */
-    protected abstract void deadMessage(String message);
+//	/**
+//	 * Process a message about a dead player.
+//	 * @param message the message to send
+//	 */
+//    protected abstract void deadMessage(String message);
 	
-	
+    /**
+     * Process a dead message.
+     * @param message the message to process
+     */
+    public void deadMessage(String message) {
+    	mainGame.getPlayerList().playerDeath(mainGame);
+    }
+    
+    /**
+     * Inform the other client/host that a death has occurred.
+     */
+    public void updateDead() {
+    	sendMessage("PLAYER DEAD");
+    }
 
 	/**
 	 * Run method for thread.

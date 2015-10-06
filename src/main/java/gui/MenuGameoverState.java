@@ -208,12 +208,8 @@ public class MenuGameoverState extends BasicGameState {
 	 */
 	private void processButtons(Input input) {
 		if (playButton.isMouseOver(input)) {
-			// Start over
-			mainGame.resetLifeCount();
-			mainGame.resetLevelCount();
-			mainGame.setScore(0);
-			mainGame.setSwitchState(mainGame.getGameState());
-			Logger.getInstance().log("play button clicked", 
+			processStartOver();
+			Logger.getInstance().log("play again button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		} 
 		else if (saveButton.isMouseOver(input)) {
@@ -227,7 +223,7 @@ public class MenuGameoverState extends BasicGameState {
 			mainGame.setLevelCounter(0);
 			mainGame.killMultiplayer();
 			mainGame.setSwitchState(mainGame.getStartState());
-			Logger.getInstance().log("Menu Button clicked", 
+			Logger.getInstance().log("main menu button clicked", 
 					Logger.PriorityLevels.MEDIUM, "user-input");
 		}
 		else if (exitButton.isMouseOver(input)) {
@@ -237,6 +233,25 @@ public class MenuGameoverState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Process how to start a new game from this state.
+	 */
+	private void processStartOver() {
+		if (mainGame.isLanMultiplayer()) {
+			if (mainGame.isHost()) {
+	    		System.out.println("HOST FORCES RESTART");
+				mainGame.getHost().updateRestart();
+			} else if (mainGame.isClient()) {
+	    		System.out.println("CLIENT FORCES RESTART");
+				mainGame.getClient().updateRestart();
+			}
+		}
+		mainGame.resetLifeCount();
+		mainGame.resetLevelCount();
+		mainGame.setScore(0);
+		mainGame.setSwitchState(mainGame.getGameState());
+	}
+	
 	/**
 	 * Handle the text field input.
 	 * @param input the keyboard/mouse input user

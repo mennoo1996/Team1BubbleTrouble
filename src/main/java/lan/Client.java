@@ -190,17 +190,17 @@ public class Client extends Connector {
 	}
     
     
-    /**
-     * Process a message about a player death.
-     * @param message the message to process
-     */
-    protected void deadMessage(String message) {
-    	String message2 = message.trim();
-    	
-    	if (message2.equals("HOST")) {
-    		mainGame.getPlayerList().playerDeath(mainGame);
-    	}
-    }
+//    /**
+//     * Process a message about a player death.
+//     * @param message the message to process
+//     */
+//    protected void deadMessage(String message) {
+//    	String message2 = message.trim();
+//    	
+//    	if (message2.equals("HOST")) {
+//    		mainGame.getPlayerList().playerDeath(mainGame);
+//    	}
+//    }
 
     
     /**
@@ -323,6 +323,7 @@ public class Client extends Connector {
     	
     	int lives = Integer.parseInt(message2);
     	mainGame.setLifeCount(lives);
+    	mainGame.getPlayerList().setDied(false);
     }
    
     /**
@@ -347,6 +348,13 @@ public class Client extends Connector {
     	if (message2.equals("STARTED")) {
     		gameState.setLevelStarted(true);
     		gameState.setCountinStarted(false);
+    	} else if (message2.equals("RESTART")) { 
+    		System.out.println("CLIENT IS NOW RESTARTING");
+    		// force override life, level, score etc. Just. In. Case. someone forgets.
+    		mainGame.resetLifeCount();
+    		mainGame.resetLevelCount();
+    		mainGame.setScore(0);
+    		mainGame.setSwitchState(mainGame.getGameState());
     	}
     }
 
@@ -530,12 +538,12 @@ public class Client extends Connector {
     }
     
     
-    /**
-     * Tell the host that the client is dead.
-     */
-    public void updateClientDead() {
-    	sendMessage("PLAYER DEAD CLIENT");
-    }
+//    /**
+//     * Tell the host that the client is dead.
+//     */
+//    public void updateClientDead() {
+//    	sendMessage("PLAYER DEAD CLIENT");
+//    }
 
     
     

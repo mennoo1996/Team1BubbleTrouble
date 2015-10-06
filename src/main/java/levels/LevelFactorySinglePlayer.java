@@ -9,14 +9,14 @@ import gui.MainGame;
  */
 public class LevelFactorySinglePlayer extends LevelFactory {
 
-	private static final int THREE = 3;
-	private static final int FOUR = 4;
-	private static final int FIVE = 5;
-	private static final int SIX = 6;
-	private static final int SEVEN = 7;
-	private static final int EIGHT = 8;
-	private static final int NINE = 9;
-	private static final int TEN = 10;
+	private static final int LEVEL_3_ID = 3;
+	private static final int LEVEL_4_ID = 4;
+	private static final int LEVEL_5_ID = 5;
+	private static final int LEVEL_6_ID = 6;
+	private static final int LEVEL_7_ID = 7;
+	private static final int LEVEL_8_ID = 8;
+	private static final int LEVEL_9_ID = 9;
+	private static final int LEVEL_10_ID = 10;
 	
 	@Override
 	Level createLevel(int i, MainGame mainGame) {
@@ -29,23 +29,23 @@ public class LevelFactorySinglePlayer extends LevelFactory {
 		if (i == 1) {
 			level = new Level1(mainGame);
 		} else if (i == 2) {
-			level = new Level1(mainGame);
-		} else if (i == THREE) {
-			level = new Level1(mainGame);
-		} else if (i == FOUR) {
-			level = new Level1(mainGame);
-		} else if (i == FIVE) {
-			level = new Level1(mainGame);
-		} else if (i == SIX) {
-			level = new Level1(mainGame);
-		} else if (i == SEVEN) {
-			level = new Level1(mainGame);
-		} else if (i == EIGHT) {
-			level = new Level1(mainGame);
-		} else if (i == NINE) {
-			level = new Level1(mainGame);
-		} else if (i == TEN) {
-			level = new Level1(mainGame);
+			level = new Level2(mainGame);
+		} else if (i == LEVEL_3_ID) {
+			level = new Level3(mainGame);
+		} else if (i == LEVEL_4_ID) {
+			level = new Level4(mainGame);
+		} else if (i == LEVEL_5_ID) {
+			level = new Level5(mainGame);
+		} else if (i == LEVEL_6_ID) {
+			level = new Level6(mainGame);
+		} else if (i == LEVEL_7_ID) {
+			level = new Level7(mainGame);
+		} else if (i == LEVEL_8_ID) {
+			level = new Level8(mainGame);
+		} else if (i == LEVEL_9_ID) {
+			level = new Level9(mainGame);
+		} else if (i == LEVEL_10_ID) {
+			level = new Level10(mainGame);
 		}
 		return level;
 	}

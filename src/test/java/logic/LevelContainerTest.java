@@ -76,8 +76,9 @@ public class LevelContainerTest {
 	
 	@Test
 	public void testInitialize() {
-		LevelContainer.setTesting(true);
+		Level.setTesting(true);
 	LevelContainer lc = new LevelContainer(mg);
+	
 		
 		//Mockito.when(logger.log("Levels are initialized", PriorityLevels.HIGH.getValue(), "LevelContainer").then;
 		lc.initialize();

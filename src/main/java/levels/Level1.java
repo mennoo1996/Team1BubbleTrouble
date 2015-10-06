@@ -39,15 +39,6 @@ public class Level1 extends Level {
 		
 		//The gate list
 		ArrayList<Gate> gates = new ArrayList<Gate>();
-		/*if (!testing) {
-			gate11 = new Gate((float) container.getWidth() / 2.0f 
-					+ LEVEL_1_GATE_X_DEVIATION, 0, LEVEL_1_GATE_WIDTH, 
-					container.getHeight());
-		} else {
-			gate11 = new Gate(TESTING_CONTAINER_WIDTH_HALF + LEVEL_1_GATE_X_DEVIATION,
-					0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
-		} gate11.addToRequirements(circle11);
-		*/
 		
 		//Set the correct attributes
 		this.setCircles(circles);

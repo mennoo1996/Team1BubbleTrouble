@@ -1,8 +1,5 @@
 package lan;
 
-import gui.GameState;
-import gui.MainGame;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,50 +7,31 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
+import gui.GameState;
+import gui.MainGame;
 import gui.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
-import logic.Player.Movement;
 import logic.Powerup;
 import logic.Powerup.PowerupType;
-import logic.Spiky;
-import logic.Weapon;
 
 /**
  * Host server for LAN multiplayer.
  * @author alexandergeenen
  */
-public class Host implements Runnable {
+public class Host extends Connector {
 
-    private int portNumber;
     private ServerSocket serverSocket;
     
     private boolean noClientYet;
     private Socket client;
-    private Queue<String> messageQueue;
-    private PrintWriter writer;
-    private BufferedReader reader;
-    private MainGame mainGame;
-    private GameState gameState;
-
-    private static final int THREE = 3;
-    private boolean heartBeatCheck;
-    private long timeLastInput;
-    private boolean running;
-
-    private static final int TIMEOUT_ATTEMPT = 10000;
-    private static final String NO_CLIENT_CONNECTION = "No connection";
-    private static final int FOUR = 4;
-    private static final int FIVE = 5;
-    private static final int SIX = 6;
-    private static final int SEVEN = 7;
     
-    private Logger logger = Logger.getInstance();
+    private static final String NO_CLIENT_CONNECTION = "No connection";
+
+    
 
     /**
      * Create a new Host server for LAN multiplayer.
@@ -62,12 +40,8 @@ public class Host implements Runnable {
      * @param gameState the GameState that synchronizes using this host.
      */
     public Host(int portNumber, MainGame mainGame, GameState gameState) {
-        this.portNumber = portNumber;
-        this.gameState = gameState;
-        this.mainGame = mainGame;
-        this.noClientYet = true;
-        this.running = true;
-        this.messageQueue = new LinkedList<>();
+        super(portNumber, mainGame, gameState);
+    	this.noClientYet = true;
         System.out.println("HOST INITIALIZED");
     }
 
@@ -134,6 +108,16 @@ public class Host implements Runnable {
     }
 
     /**
+     * Work through the name message from the host.
+     * @param message containing their player name.
+     */
+    @Override
+    protected void nameMessage(String message) {
+    	String message2 = message.trim();
+    	mainGame.getPlayerList().getPlayers().get(1).setPlayerName(message2);
+    }
+    
+    /**
      * Process messages received from the client.
      */
     public void readClientInputs() {
@@ -149,7 +133,7 @@ public class Host implements Runnable {
 				} else if (message2.startsWith("COIN")) {
 					coinMessage(message2.replaceFirst("COIN", ""));
 				} else if (message2.startsWith("HEARTBEAT_CHECK")) {
-                    this.sendMessageToClient("HEARTBEAT_ALIVE");
+                    this.sendMessage("HEARTBEAT_ALIVE");
                 } else if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
 				} else if (message2.startsWith("SYSTEM")) {
@@ -182,57 +166,11 @@ public class Host implements Runnable {
         }
     }
     
-    /**
-     * Message about lasers.
-     * @param message String containing information about lasers
-     */
-    private void laserMessage(String message) {
-    	String message2 = message.trim();
-    	
-    	if (message2.startsWith("DONE")) {
-    		laserDoneMessage(message2.replaceFirst("DONE", ""));
-    	}
-    }
     
-    /**
-     * Message about a laser that is done.
-     * @param message String containing information about the laser
-     */
-    private void laserDoneMessage(String message) {
-    	String message2 = message.trim();
-    	
-    	int id = Integer.parseInt(message2);
-    	gameState.getWeaponList().getWeaponList().get(id).setVisible(false);
-    }
     
-    /**
-     * Process message about splitted circles.
-     * @param message	the message to process
-     */
-    private void splitMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-    	
-    	
-    	for (String s : stringList) {
-    		System.out.println(s);
-    	}
-    	
-    	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
-				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
-				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
-				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[SEVEN]));
-    	
-    	int index = gameState.getCircleList().getIndexForCircleWithID(
-    			Integer.parseInt(stringList[SEVEN]));
-    	
-    	if (index >= 0) {
-    		gameState.getCircleList().getCircles().set(index, circle);    
-    	
-
-    		gameState.updateShotCirles2(circle, true);
-    	}
-    }
+    
+    
+   
     
     /**
      * Process a message about the system.
@@ -245,19 +183,7 @@ public class Host implements Runnable {
     	}
     }
     
-    /**
-     * Process a message about pause.
-     * @param message	the message to process
-     */
-    private void pauseMessage(String message) {
-    	String message2 = message.trim();
-    	
-    	if (message2.equals("STARTED")) {
-    		gameState.pauseStarted(true);
-    	} else if (message2.equals("STOPPED")) {
-    		gameState.pauseStopped(true);
-    	}
-    }
+    
     
     /**
      * Process a message that starts with NEW.
@@ -270,124 +196,14 @@ public class Host implements Runnable {
     	}
     }
     
-    /**
-     * Process a message regarding the weapon of the client.
-     * @param message String that contains the information of the message
-     */
-    private void newLaserMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-    	
-    	int id = Integer.parseInt(stringList[0]);
-    	//System.out.println("PLAYERID" + id);
-    	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
-    	System.out.println("spiky = " + spikey);
-    	Weapon weapon;
-    	
-    	if (!spikey) {
-    		weapon = new Weapon(Float.parseFloat(stringList[1]), 
-        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
-        			Float.parseFloat(stringList[FOUR]));
-    	} else {
-    		weapon = new Spiky(Float.parseFloat(stringList[1]), 
-        			Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]), 
-        			Float.parseFloat(stringList[FOUR]));
-    	}
-    	
-    	gameState.getWeaponList().setWeapon(id, weapon);
-    	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
-    }
-
-	/**
-     * Process a player message.
-     * @param message the message to process
-     */
-    private void playerMessage(String message) {
-    	String message2 = message.trim();
-    	//System.out.println(message2);
-    	
-    	if (message2.startsWith("MOVEMENT")) {
-    		movementMessage(message2.replaceFirst("MOVEMENT", ""));
-    	} else if (message2.startsWith("DEAD")) {
-    		deadMessage(message2.replaceFirst("DEAD", ""));
-    	} else if (message2.startsWith("NAME")) {
-    		nameMessage(message2.replaceFirst("NAME", ""));
-    	}
-    }
     
-    /**
-     * Process a movement message.
-     * @param message the message to process
-     */
-    private void movementMessage(String message) {
-    	String message2 = message.trim();
     
-    	if (message2.startsWith("STARTED")) {
-    		movementStarted(message2.replaceFirst("STARTED", ""));
-    	} else if (message2.startsWith("STOPPED")) {
-    		movementStopped(message2.replaceFirst("STOPPED", ""));
-    	}
-    }
-    
-    /**
-     * Process a started movement.
-     * @param message the message to process
-     */
-    private void movementStarted(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-
-    	int playerNumber = Integer.parseInt(stringList[0]);
-    	float x = Float.parseFloat(stringList[1]);
-    	float y = Float.parseFloat(stringList[2]);
-        String direction = stringList[THREE];
-    
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
-        
-        if (direction.equals("LEFT")) {
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.LEFT);
-        } else if (direction.equals("RIGHT")) {
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.RIGHT);
-        }
-    }
-    
-    /**
-     * Process a stopped movement.
-     * @param message the message to process
-     */
-    private void movementStopped(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
-
-    	int playerNumber = Integer.parseInt(stringList[0]);
-    	float x = Float.parseFloat(stringList[1]);
-    	float y = Float.parseFloat(stringList[2]);
-    	
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
-        
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.NO_MOVEMENT);
-    }
-    
-    /**
-     * Work through the name message from the host.
-     * @param message containing their player name.
-     */
-    private void nameMessage(String message) {
-    	String message2 = message.trim();
-    	mainGame.getPlayerList().getPlayers().get(1).setPlayerName(message2);
-    }
     
     /**
      * Process a dead message.
      * @param message the message to process
      */
-    private void deadMessage(String message) {
+    protected void deadMessage(String message) {
     	String message2 = message.trim();
     	//System.out.println(message2);
     	
@@ -414,30 +230,8 @@ public class Host implements Runnable {
         }
     }
 
-    /**
-     * Send a message to the client.
-     * @param toWrite The string to send
-     */
-    public void sendMessageToClient(String toWrite) {
-    	System.out.println(toWrite);
-        this.messageQueue.add(toWrite);
-    }
-
-    /**
-     * Set the logger for this host.
-     * @param logger the logger
-     */
-    public void setLogger(Logger logger) {
-        this.logger = logger;
-    }
     
-    /**
-     * 
-     * @return the logger
-     */
-    public Logger getLogger() {
-    	return logger;
-    }
+
 
     /**
      * @return Whether or not the client has connected
@@ -450,7 +244,7 @@ public class Host implements Runnable {
      *	Notify the client that the host is dead.
      */
     public void updateHostDead() {
-    	sendMessageToClient("PLAYER DEAD HOST");
+    	sendMessage("PLAYER DEAD HOST");
     }
     
     /**
@@ -458,7 +252,7 @@ public class Host implements Runnable {
      * @param floating the FloatingScore that it concerns
      */
     public void sendFloatingScore(FloatingScore floating) {
-    	sendMessageToClient(floating.toString());
+    	sendMessage(floating.toString());
     }
     
     /**
@@ -468,7 +262,7 @@ public class Host implements Runnable {
      * @param y the new y position
      */
     public void updatePlayerLocation(int id, float x, float y) {
-    	sendMessageToClient("NEW PLAYERLOCATION " + id + " " + x + " " + y);
+    	sendMessage("NEW PLAYERLOCATION " + id + " " + x + " " + y);
     }
     
     /**
@@ -477,66 +271,17 @@ public class Host implements Runnable {
      * @param name of the player
      */
     public void updatePlayerName(int id, String name) {
-    	sendMessageToClient("PLAYER NAME " + id + " " + name);
-    }
-    
-    /**
-     * Start a player movement on the client.
-     * @param x the x position of the player
-     * @param y the y position of the player
-     * @param playerNumber the player number
-     * @param direction the direction that the player started to move in
-     */
-    public void playerStartedMoving(float x, float y, int playerNumber, String direction) {
-    	String message = "PLAYER MOVEMENT STARTED ";
-    	message = message + playerNumber + " " + x + " " 
-    			+ y  + " " + direction;
-    	sendMessageToClient(message);
-    }
-    
-    /**
-     * Stop a player movement on the client.
-     * @param x the new x position of the player
-     * @param y the new y position of the player
-     * @param playerNumber the player number
-     */
-    public void playerStoppedMoving(float x, float y, int playerNumber) {
-    	String message = "PLAYER MOVEMENT STOPPED ";
-    	message = message + playerNumber + " " + x + " " 
-    			+ y;
-    	sendMessageToClient(message);
-    }
-    
-    /**
-     * Update the laser on the client.
-     * @param id the id of the laser
-     * @param x the new x position
-     * @param y the new y position
-     * @param laserSpeed the new speed
-     * @param laserWidth the new width
-     * @param spikey .
-     */
-    public void updateLaser(int id, float x, float y, float laserSpeed, 
-    		float laserWidth, boolean spikey) {
-    	sendMessageToClient("NEW LASER " 
-    			+ id + " " + x + " " + y + " " + laserSpeed + " " + laserWidth + " " + spikey);
+    	sendMessage("PLAYER NAME " + id + " " + name);
     }
     
 
-    /**
-     * Send to client when a laser/weapon is done.
-     * @param id	the id of the weapon
-     */
-    public void laserDone(int id) {
-    	sendMessageToClient("LASER DONE " + id);
-    }
     
 	/**
 	 * Update the circles on the client.
 	 * @param circleList the list with new circles
      */
     public void updateCircles(ArrayList<BouncingCircle> circleList) {
-    	sendMessageToClient(BouncingCircle.circleListToString(circleList));
+    	sendMessage(BouncingCircle.circleListToString(circleList));
     }
     
     /**
@@ -545,16 +290,9 @@ public class Host implements Runnable {
      * @param gateNumber	the number of the gate
      */
     public void updateRequiredForGateList(ArrayList<BouncingCircle> circleList, int gateNumber) {
-    	sendMessageToClient(BouncingCircle.requiredListToString(circleList, gateNumber));
+    	sendMessage(BouncingCircle.requiredListToString(circleList, gateNumber));
     }
     
-    /**
-     * notify client of splitted circle.
-     * @param circle the splitted circle
-     */
-    public void splittedCircle(BouncingCircle circle) {
-    	sendMessageToClient("SPLIT " + circle.toString());
-    }
     
     /**
      * Process an incoming powerup message.
@@ -593,7 +331,7 @@ public class Host implements Runnable {
      * @param powerup the powerup to sent
      */
     public void updatePowerupsAdd(Powerup powerup) {
-    	sendMessageToClient(powerup.toString() + "ADD ");
+    	sendMessage(powerup.toString() + "ADD ");
 		System.out.println("HOST SENT: " + powerup.toString() + "ADD ");
     }
     
@@ -602,7 +340,7 @@ public class Host implements Runnable {
      * @param powerup the powerup to dictate on
      */
     public void updatePowerupsDictate(Powerup powerup) {
-    	sendMessageToClient(powerup.toString() + "DICTATE ");
+    	sendMessage(powerup.toString() + "DICTATE ");
 		System.out.println("HOST SENT: " + powerup.toString() + "DICTATE ");
     }
     
@@ -611,7 +349,7 @@ public class Host implements Runnable {
 	 * @param powerup the powerup to grant
 	 */
 	private void updatePowerupsGrant(Powerup powerup) {
-		sendMessageToClient(powerup.toString() + "GRANT ");
+		sendMessage(powerup.toString() + "GRANT ");
 		System.out.println("HOST SENT: " + powerup.toString() + "GRANT ");
 	}
     
@@ -641,7 +379,7 @@ public class Host implements Runnable {
      * @param coin the coin to send
      */
     public void updateCoinsAdd(Coin coin) {
-    	sendMessageToClient(coin.toString() + "ADD ");
+    	sendMessage(coin.toString() + "ADD ");
     }
     
     /**
@@ -649,7 +387,7 @@ public class Host implements Runnable {
      * @param coin the coin to dictate on.
      */
     public void updateCoinsDictate(Coin coin) {
-    	sendMessageToClient(coin.toString() + "DICTATE ");
+    	sendMessage(coin.toString() + "DICTATE ");
     }
     
     /**
@@ -657,72 +395,32 @@ public class Host implements Runnable {
      * @param coin the coin to grant.
      */
     private void updateCoinsGrant(Coin coin) {
-    	sendMessageToClient(coin.toString() + "GRANT ");
+    	sendMessage(coin.toString() + "GRANT ");
 	}
     
     /**
      * Notify the client that the level has started.
      */
     public void updateLevelStarted() {
-    	sendMessageToClient("SYSTEM LEVEL STARTED");
+    	sendMessage("SYSTEM LEVEL STARTED");
     }
     
     /**
      * Notify the client that the countin has started.
      */
     public void updateCountinStarted() {
-    	sendMessageToClient("SYSTEM COUNTIN STARTED");
+    	sendMessage("SYSTEM COUNTIN STARTED");
     }
-    
-    /**
-     * Notify the client that the game has been paused.
-     */
-    public void updatePauseStarted() {
-    	sendMessageToClient("SYSTEM PAUSE STARTED");
-    }
-    
-    /**
-     * Notify the client that the game has been resumed.
-     */
-    public void updatePauseStopped() {
-    	sendMessageToClient("SYSTEM PAUSE STOPPED");
-    }
-    
+   
     /**
      * Notify the client with new lives.
      * @param lives the lives to update
      */
     public void updateLives(int lives) {
-    	sendMessageToClient("SYSTEM LIVES " + lives);
+    	sendMessage("SYSTEM LIVES " + lives);
     }
 
-	/**
-	 * @return the portNumber
-	 */
-	public int getPortNumber() {
-		return portNumber;
-	}
-
-	/**
-	 * @param portNumber the portNumber to set
-	 */
-	public void setPortNumber(int portNumber) {
-		this.portNumber = portNumber;
-	}
-
-	/**
-	 * @return the reader
-	 */
-	public BufferedReader getReader() {
-		return reader;
-	}
-
-	/**
-	 * @param reader the reader to set
-	 */
-	public void setReader(BufferedReader reader) {
-		this.reader = reader;
-	}
+	
 	
 	
     

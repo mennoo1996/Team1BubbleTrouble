@@ -72,24 +72,13 @@ public class GameState extends BasicGameState {
 	private Image nobuttonImage;
 	private Image wallsImageN;
 	private Image wallsImageA;
-	private Image laserImageN;
-	private Image laserImageA;
-	private Image shieldImageN;
-	private Image shieldImageA;
-	private Image vineImageN;
-	private Image vineImageA;
+	
 	private Image[] ballsImagesN;
 	private Image[] ballsImagesA;
 	private Image ceilingImageN;
 	private Image ceilingImageA;
 	private Image counterBarImageN;
 	private Image counterBarImageA;
-	private Image gateUpperN;
-	private Image gateUpperA;
-	private Image gateLowerN;
-	private Image gateLowerA;
-	private Image coinImageN;
-	private Image coinImageA;
 	
 	// pause game buttons
 	private Button returnButton;
@@ -145,13 +134,6 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_Y_DEVIATION = 60;
 	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
 	private static final int COUNTER_BAR_X_FACTOR = 10;
-	private static final int GATE_LEFT = 11;
-	private static final int GATE_DOWN = 9;
-	private static final int GATE_Y_DEVIATION = 15;
-	private static final int GATE_Y_FACTOR = 348;
-	private static final int GATE_UP = 9;
-	private static final int GATE_LEFT_LOWER = 9;
-	private static final int GATE_Y_FACTOR_LOWER = 347;
 	private static final int SHIELD_COUNTER_OFFSET_X = 120;
 	private static final int SHIELD_COUNTER_OFFSET_Y = 90;
 	private static final int SHIELD_COUNTER_OFFSET_1_Y = -6;
@@ -188,8 +170,6 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int POWERUP_CHANCE = 20;
 	private static final int COIN_CHANCE = 30;
-	private static final int POWERUP_IMAGE_OFFSET = 12;
-	private static final int COIN_IMAGE_OFFSET = 3;
 	private static final int CIRCLES_UPDATE_RATE = 600;
 	private int lastCircleUpdate;
 	// Level ending, empty bar
@@ -837,19 +817,8 @@ public class GameState extends BasicGameState {
 	private void drawPowerups(Graphics graphics) {
 		synchronized (droppedPowerups) {
 			for (Powerup pow : droppedPowerups) {
-				if (pow.getType() == Powerup.PowerupType.SHIELD) {
-					RND.drawColor(graphics, shieldImageN, shieldImageA, 
-							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-							mainGame.getColor());
-				} else if (pow.getType() == Powerup.PowerupType.SPIKY) {
-					RND.drawColor(graphics, vineImageN, vineImageA, 
-							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-							mainGame.getColor());
-				} else if (pow.getType() == Powerup.PowerupType.INSTANT) {
-					RND.drawColor(graphics, laserImageN, laserImageA, 
-							pow.getX() - POWERUP_IMAGE_OFFSET, pow.getY() - POWERUP_IMAGE_OFFSET, 
-							mainGame.getColor());
-				}
+				pow.draw(graphics, mainGame);
+				
 			}
 		}
 	}
@@ -862,10 +831,8 @@ public class GameState extends BasicGameState {
 		graphics.setColor(Color.blue);
 		synchronized (droppedCoins) {
 			for (Coin coin : droppedCoins) {
-				RND.drawColor(graphics, coinImageN, coinImageA, 
-						coin.getX() - COIN_IMAGE_OFFSET, coin.getY() - COIN_IMAGE_OFFSET,
-						mainGame.getColor());
-			}
+				coin.draw(graphics, mainGame);
+			}	
 		}
 		graphics.setColor(Color.white);
 	}
@@ -892,30 +859,7 @@ public class GameState extends BasicGameState {
 	private void drawActiveGates(GameContainer container, Graphics graphics) {
 		synchronized (gateList) {
 			for (Gate gate : gateList) {
-				int left = GATE_LEFT, down = GATE_DOWN;
-				float x = gate.getMinX() - left, y = getCeiling().getHeight() - GATE_Y_DEVIATION;
-				float x2 = x + gateUpperN.getWidth();
-				float y2 = getCeiling().getHeight() + GATE_Y_FACTOR * gate.getHeightPercentage() 
-						+ down - GATE_Y_DEVIATION;
-				float srcx = 0;
-				float srcy = gateUpperN.getHeight() - GATE_Y_FACTOR * gate.getHeightPercentage();
-				float srcx2 = gateUpperN.getWidth();
-				float srcy2 = gateUpperN.getHeight();
-				RND.drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
-						srcx, srcy, srcx2, srcy2, mainGame.getColor());
-				left = GATE_LEFT_LOWER;
-				float up = GATE_UP;
-				x = gate.getMinX() - left - 1;
-				y = container.getHeight() - getFloor().getHeight()
-						- GATE_Y_FACTOR_LOWER * gate.getHeightPercentage() - up;
-				x2 = x + gateLowerN.getWidth() - 1;
-				y2 = container.getHeight() - getFloor().getHeight();
-				srcx = 0;
-				srcy = 0;
-				srcx2 = gateLowerN.getWidth();
-				srcy2 = GATE_Y_FACTOR_LOWER * gate.getHeightPercentage();
-				RND.drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
-						srcx, srcy, srcx2, srcy2, mainGame.getColor());
+				gate.draw(graphics, mainGame, this, container);
 			}
 		}
 	}
@@ -1097,11 +1041,7 @@ public class GameState extends BasicGameState {
 		// countdown bar images
 		counterBarImageN = new Image("resources/images_UI/counter_Norm.png");
 		counterBarImageA = new Image("resources/images_UI/counter_Add.png");
-		// gate images
-		gateUpperN = new Image("resources//images_Level/gate_upper_Norm.png");
-		gateUpperA = new Image("resources/images_Level/gate_upper_Add.png");
-		gateLowerN = new Image("resources/images_Level/gate_lower_Norm.png");
-		gateLowerA = new Image("resources/images_Level/gate_lower_Add.png");
+		Gate.loadImages();
 		// walls image
 		wallsImageN = new Image("resources/images_Level/walls_Norm.png");
 		wallsImageA = new Image("resources/images_Level/walls_Add.png");
@@ -1112,8 +1052,7 @@ public class GameState extends BasicGameState {
 		
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		coinImageN = new Image("resources/images_Gameplay/coin_Norm.png");
-		coinImageA = new Image("resources/images_Gameplay/coin_Add.png");
+		Coin.loadImages();
 	}
 	
 	/**
@@ -1146,13 +1085,7 @@ public class GameState extends BasicGameState {
 	 * @throws SlickException if something goes wrong / file not found
 	 */
 	private void loadPowerupImages() throws SlickException {
-		// load powerup images
-		laserImageN = new Image("resources/images_Gameplay/laserPowerup_Norm.png");
-		laserImageA = new Image("resources/images_Gameplay/laserPowerup_Add.png");
-		shieldImageN = new Image("resources/images_Gameplay/shieldPowerup_Norm.png");
-		shieldImageA = new Image("resources/images_Gameplay/shieldPowerup_Add.png");
-		vineImageN = new Image("resources/images_Gameplay/vinePowerup_Norm.png");
-		vineImageA = new Image("resources/images_Gameplay/vinePowerup_Add.png");
+		Powerup.loadImages();
 	}
 	
 	/**

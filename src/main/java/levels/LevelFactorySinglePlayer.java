@@ -1,5 +1,7 @@
 package levels;
 
+import org.mockito.asm.Type;
+
 import gui.MainGame;
 
 /**
@@ -7,7 +9,7 @@ import gui.MainGame;
  * @author Stefan
  *
  */
-public class LevelFactory1 extends LevelFactory {
+public class LevelFactorySinglePlayer extends LevelFactory {
 
 	private static final int THREE = 3;
 	private static final int FOUR = 4;
@@ -21,6 +23,11 @@ public class LevelFactory1 extends LevelFactory {
 	@Override
 	Level createLevel(int i, MainGame mainGame) {
 		Level level = null;
+		
+		@SuppressWarnings("rawtypes")
+		Class[] types = {Double.TYPE, this.getClass()};
+		System.out.println("Hello: " + types);
+		
 		if (i == 1) {
 			level = new Level1(mainGame);
 		} else if (i == 2) {

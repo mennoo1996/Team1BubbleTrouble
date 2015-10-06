@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import levels.Level;
 import levels.LevelFactory;
-import levels.LevelFactory1;
+import levels.LevelFactorySinglePlayer;
 import logic.Logger.PriorityLevels;
 
 import org.newdawn.slick.GameContainer;
@@ -99,7 +99,7 @@ public class LevelContainer {
 	 */
 	private ArrayList<Level> initializeLevels() {
 		ArrayList<Level> res = new ArrayList<Level>();
-		LevelFactory levelfactory = new LevelFactory1();
+		LevelFactory levelfactory = new LevelFactorySinglePlayer();
 		
 		for (int i = 1; i < ELEVEN; i++) {
 			res.add(levelfactory.orderLevel(i, this.mainGame));

@@ -41,7 +41,7 @@ public class Popup {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		System.out.println(screenWidth);
-		button = new Button(screenWidth / 2f - BUTTON_WIDTH / 2f + BUTTON_OFFSET_X, 
+		button = new Button(screenWidth / 2f - BUTTON_WIDTH / 2f, 
 				screenHeight / 2f + BUTTON_OFFSET_Y, 
 				BUTTON_WIDTH, BUTTON_HEIGHT, 
 				new Image("resources/images_UI/Menu_Button_OK_Norm.png"), 

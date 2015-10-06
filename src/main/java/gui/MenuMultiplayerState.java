@@ -239,7 +239,6 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.spawnHost(new Host(MainGame.getMultiplayerPort(), mainGame, gameState));
 		mainGame.setIsHost(true);
 		mainGame.setIsClient(false);
-		System.out.println(mainGame.isHost());
 		Logger.getInstance().log("Host started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
 	}
 	
@@ -255,6 +254,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.spawnClient(client);
 		mainGame.setIsClient(true);
 		mainGame.setIsHost(false);
+		Logger.getInstance().log("Client started", Logger.PriorityLevels.VERYHIGH, "multiplayer");
 	}
 
 	/**
@@ -331,9 +331,9 @@ public class MenuMultiplayerState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawSprites(Graphics graphics) {
-		returnButton.drawColor(graphics, input, mainGame.getColor());
-		hostButton.drawColor(graphics, input, mainGame.getColor());
-		joinButton.drawColor(graphics, input, mainGame.getColor());
+		returnButton.drawColor(graphics, input, mainGame.getColor(), !popup.getActive());
+		hostButton.drawColor(graphics, input, mainGame.getColor(), !popup.getActive());
+		joinButton.drawColor(graphics, input, mainGame.getColor(), !popup.getActive());
 		separatorTop.drawColor(graphics, mainGame.getColor());
 		separatorHost.drawColor(graphics, mainGame.getColor());
 		separatorJoin.drawColor(graphics, mainGame.getColor());

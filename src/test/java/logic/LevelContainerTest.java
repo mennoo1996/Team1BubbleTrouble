@@ -6,9 +6,9 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
+import levels.Level;
 import logic.BouncingCircle;
 import logic.Gate;
-import logic.Level;
 import logic.LevelContainer;
 import logic.Logger;
 import logic.Logger.PriorityLevels;

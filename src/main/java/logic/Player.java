@@ -171,6 +171,8 @@ public class Player {
 
 				if (powerup.getRectangle().intersects(this.getRectangle())) {
 					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
+						
+						//Add a powerup to the player
 						this.addPowerup(powerup.getType());
 						gameState.getFloatingScores().add(new FloatingScore(powerup));
 						usedPowerups.add(powerup);

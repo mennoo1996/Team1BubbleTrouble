@@ -1,7 +1,11 @@
 package logic;
 import gui.MainGame;
+
 import java.util.ArrayList;
+
+import levels.Level;
 import logic.Logger.PriorityLevels;
+
 import org.newdawn.slick.GameContainer;
 /**
  * This class is a container for all the levels in the game.

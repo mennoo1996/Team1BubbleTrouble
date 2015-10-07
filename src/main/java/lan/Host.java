@@ -247,13 +247,6 @@ public class Host extends Connector {
         return !noClientYet;
     }
     
-//    /**
-//     *	Notify the client that the host is dead.
-//     */
-//    public void updateHostDead() {
-//    	sendMessage("PLAYER DEAD HOST");
-//    }
-    
     /**
      * Sends a message to the client concerning a FloatingScore.
      * @param floating the FloatingScore that it concerns
@@ -316,22 +309,36 @@ public class Host extends Connector {
     				poweruplist.add(powerup);
     				this.updatePowerupsGrant(powerup);
     				gameState.getFloatingScores().add(new FloatingScore(powerup));
-    				if (stringList[2].equals("SHIELD")) {
-    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
-    				} else if (stringList[2].equals("SPIKY")) {
-    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SPIKY);
-    				} else if (stringList[2].equals("INSTANT")) {
-    					mainGame.getPlayerList().getPlayers()
-    					.get(1).addPowerup(PowerupType.INSTANT);
-    				} else if (stringList[2].equals("HEALTH")) {
-    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.HEALTH);
-    				} else if (stringList[2].equals("RANDOM")) {
-    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.RANDOM);
-    				}
+    				powerupMessage2(stringList);
     			}
     		} //end of loop
     		gameState.getDroppedPowerups().removeAll(poweruplist);
     	}
+	}
+	
+	/**
+	 * Extension of powerupMessage() to circumvent checkstyle.
+	 * @param stringList given in powerupMessage().
+	 */
+	private void powerupMessage2(String[] stringList) {
+		if (stringList[2].equals("SHIELD")) {
+			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
+		} else if (stringList[2].equals("SPIKY")) {
+			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SPIKY);
+		} else if (stringList[2].equals("INSTANT")) {
+			mainGame.getPlayerList().getPlayers()
+			.get(1).addPowerup(PowerupType.INSTANT);
+		} else if (stringList[2].equals("HEALTH")) {
+			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.HEALTH);
+		} else if (stringList[2].equals("FREEZE")) {
+			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.FREEZE);
+		} else if (stringList[2].equals("SLOW")) {
+			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SLOW);
+		} else if (stringList[2].equals("FAST")) {
+			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.FAST);
+		} else if (stringList[2].equals("RANDOM")) {
+			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.RANDOM);
+		}
 	}
     
     /**

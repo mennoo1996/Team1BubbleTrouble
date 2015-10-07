@@ -570,46 +570,57 @@ public class Player {
 	 * @param type powerup type
 	 */
 	public void addPowerup(Powerup.PowerupType type) {
+		logger.log("Adding powerup " + Powerup.PowerupType.FAST.toString(),
+				Logger.PriorityLevels.MEDIUM, POWERUPS);
 		if (type == Powerup.PowerupType.INSTANT) {
 			addWeapon(type);
-			logger.log("Added powerup instant", 
-					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		} else if (type == Powerup.PowerupType.SHIELD) {
 			addShield();
-			logger.log("Added powerup shield", 
-					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		} else if (type == Powerup.PowerupType.SPIKY) {
 			addWeapon(type);
-			logger.log("Added powerup spiky", 
-					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		} else if (type == Powerup.PowerupType.FREEZE) {
-			FreezePowerup fp = new FreezePowerup();
-			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-			gs.getSpeedPowerupList().add(fp);
-			fp.updateCircles(gs.getCircleList());
+			addFreeze();
 		} else if (type == Powerup.PowerupType.SLOW) {
-			SlowPowerup sp = new SlowPowerup();
-			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-			gs.getSpeedPowerupList().add(sp);
-			sp.updateCircles(gs.getCircleList());
+			addSlow();
 		} else if (type == Powerup.PowerupType.FAST) {
-			FastPowerup fp = new FastPowerup();
-			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-			gs.getSpeedPowerupList().add(fp);
-			fp.updateCircles(gs.getCircleList());
-		}
-		if (type == Powerup.PowerupType.HEALTH) {
+			addFast();
+		} else if (type == Powerup.PowerupType.HEALTH) {
 			addHealth();
-			logger.log("Added powerup health", 
-					Logger.PriorityLevels.MEDIUM, POWERUPS);
-		}
-		if (type == Powerup.PowerupType.RANDOM) {
+		} else if (type == Powerup.PowerupType.RANDOM) {
 			addRandom();
-			logger.log("Added powerup random", 
-					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		}
 	}
 
+	/**
+	 * Add a freeze powerup to the player.
+	 */
+	private void addFreeze() {
+		FreezePowerup fp = new FreezePowerup();
+		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+		gs.getSpeedPowerupList().add(fp);
+		fp.updateCircles(gs.getCircleList());
+	}
+	
+	/**
+	 * Add a slow powerup to the player.
+	 */
+	private void addSlow() {
+		SlowPowerup sp = new SlowPowerup();
+		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+		gs.getSpeedPowerupList().add(sp);
+		sp.updateCircles(gs.getCircleList());
+	}
+	
+	/**
+	 * Add a fast powerup to the player.
+	 */
+	private void addFast() {
+		FastPowerup fp = new FastPowerup();
+		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+		gs.getSpeedPowerupList().add(fp);
+		fp.updateCircles(gs.getCircleList());
+	}
+	
 	/**
 	 * Add a random powerup to the player.
 	 */

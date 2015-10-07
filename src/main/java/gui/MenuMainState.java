@@ -46,6 +46,8 @@ public class MenuMainState extends BasicGameState {
 	private static final int HIGHSCORES_TITLE_X = 760;
 	private static final int HIGHSCORES_TITLE_Y = 238;
 	
+	private static final String USER_INPUT = "user-input";
+	
 	private Separator separatorTop;
 	private String separatorTopTitle = "";
 	
@@ -166,7 +168,7 @@ public class MenuMainState extends BasicGameState {
 			mainGame.setSwitchState(mainGame.getGameState());
 			mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
 			Logger.getInstance().log("Play button pressed", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		} else if (play2Button.isMouseOver(input)) { // Go to gamestate in multiplayer
 			mainGame.setMultiplayer(true);
 			mainGame.setSwitchState(mainGame.getGameState());
@@ -175,19 +177,19 @@ public class MenuMainState extends BasicGameState {
 			mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
 			mainGame.getPlayerList().getPlayers().get(1).setControlsForPlayer2();
 			Logger.getInstance().log("Play multiplayer button pressed", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		} else if (lanButton.isMouseOver(input)) { // Go to gamestate in multiplayer
 			mainGame.setSwitchState(mainGame.getMultiplayerState());
 			Logger.getInstance().log("Play lan button pressed", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		} else if (optionsButton.isMouseOver(input)) { // Go to settingsState
 			mainGame.setSwitchState(mainGame.getSettingsState());
 			Logger.getInstance().log("options button pressed", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		} else if (quitButton.isMouseOver(input)) { // Quit game
 			mainGame.setSwitchState(-1);
 			Logger.getInstance().log("quit button pressed", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
 	}
 

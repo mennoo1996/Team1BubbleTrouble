@@ -27,15 +27,13 @@ public class Client extends Connector {
 
     private String host;
     private Socket socket;
-    private boolean isConnected;
     
     private boolean editingCircleList;
-    private boolean editingRequiredList;
     private ArrayList<BouncingCircle> circleList;
     private ArrayList<BouncingCircle> requiredList;
     private int gateNumber;
     
-   private static final int MENU_MULTIPLAYER_STATE = 4;
+    private static final String LASER = "LASER";
 	
 
 	/**
@@ -48,11 +46,9 @@ public class Client extends Connector {
     public Client(String host, int portNumber, MainGame mainGame, GameState gameState) {
     	super(portNumber, mainGame, gameState);
         this.host = host;
-        this.isConnected = false;
     	this.circleList = new ArrayList<BouncingCircle>();
         this.requiredList = new ArrayList<BouncingCircle>();
         this.editingCircleList = false;
-        this.editingRequiredList = false;
     }
 
     @Override
@@ -158,8 +154,8 @@ public class Client extends Connector {
     private void readServerCommands2(String message2) {
     	if (message2.startsWith("HEARTBEAT_CHECK")) {
 			this.sendMessage("HEARTBEAT_ALIVE");
-		} else if (message2.startsWith("LASER")) {
-			laserMessage(message2.replaceFirst("LASER", ""));
+		} else if (message2.startsWith(LASER)) {
+			laserMessage(message2.replaceFirst(LASER, ""));
 		} else if (message2.startsWith("FLOATINGSCORE")) {
 			floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
 		} else if (message2.startsWith("SPLIT")) {
@@ -242,10 +238,10 @@ public class Client extends Connector {
     	
     	if (stringList[0].equals("START") && !this.editingCircleList) {
     		this.requiredList = new ArrayList<BouncingCircle>();
-    		this.editingRequiredList = true;
+    		
     	} else if (stringList[0].equals("END") && this.editingCircleList) {
     		System.out.println("setting shit");
-    		this.editingRequiredList = false;
+    		
     		gameState.getGateList().get(gateNumber).setRequired(requiredList);
     	}
     }
@@ -275,8 +271,8 @@ public class Client extends Connector {
     	String message2 = message.trim();
     	if (message2.startsWith("PLAYERLOCATION")) {
     		playerLocation(message2.replaceFirst("PLAYERLOCATION", ""));
-    	} else if (message2.startsWith("LASER")) {
-    		newLaserMessage(message2.replaceFirst("LASER", ""));
+    	} else if (message2.startsWith(LASER)) {
+    		newLaserMessage(message2.replaceFirst(LASER, ""));
     	}
     }
     

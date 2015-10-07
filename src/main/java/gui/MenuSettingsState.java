@@ -129,6 +129,11 @@ public class MenuSettingsState extends BasicGameState {
 	private static final int ARIE_2_X = 630;
 	private static final int ARIE_2_Y = 660;
 	
+	private static final String PLAYERSPRITE_NORM = "Playersprite_Norm.png";
+	private static final String PLAYERS = "players";
+	private static final String PLAYER2SPRITE_NORM = "Player2sprite_Norm.png";
+	private static final String ARIESPRITE = "arieSprite.png";
+	
 	/**
 	 * Construct a SettingsState.
 	 * @param mainGame the MainGame that uses this state.
@@ -316,29 +321,29 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	private void processButtons(Input input) {
 		if (mannetje1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer1ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
+			mainGame.setPlayer1ImageString(PLAYERSPRITE_NORM, "Playersprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
 			Logger.getInstance().log("Player 1 sprite changed to gameboy", 
-					Logger.PriorityLevels.MEDIUM, "players");
+					Logger.PriorityLevels.MEDIUM, PLAYERS);
 		} else if (telefoon1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer1ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
+			mainGame.setPlayer1ImageString(PLAYER2SPRITE_NORM, "Player2sprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
 			Logger.getInstance().log("Player 1 sprite changed to phone", 
-					Logger.PriorityLevels.MEDIUM, "players");
+					Logger.PriorityLevels.MEDIUM, PLAYERS);
 		} else if (mannetje2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer2ImageString("Playersprite_Norm.png", "Playersprite_Add.png");
+			mainGame.setPlayer2ImageString(PLAYERSPRITE_NORM, "Playersprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
 			Logger.getInstance().log("Player 2 sprite changed to gameboy", 
-					Logger.PriorityLevels.MEDIUM, "players");
+					Logger.PriorityLevels.MEDIUM, PLAYERS);
 		} else if (telefoon2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer2ImageString("Player2sprite_Norm.png", "Player2sprite_Add.png");
+			mainGame.setPlayer2ImageString(PLAYER2SPRITE_NORM, "Player2sprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
 			Logger.getInstance().log("Player 2 sprite changed to phone", 
-					Logger.PriorityLevels.MEDIUM, "players");
+					Logger.PriorityLevels.MEDIUM, PLAYERS);
 		} 
 		processButtons2(input);
 	}
@@ -349,17 +354,17 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	private void processButtons2(Input input) {
 		if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer1ImageString("arieSprite.png", "arieSprite_Add.png");
+			mainGame.setPlayer1ImageString(ARIESPRITE, "arieSprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
 					mainGame.getPlayer1ImageStringA());
 			Logger.getInstance().log("Player 1 sprite changed to arie", 
-					Logger.PriorityLevels.MEDIUM, "players");
+					Logger.PriorityLevels.MEDIUM, PLAYERS);
 		} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer2ImageString("arieSprite.png", "arieSprite_Add.png");
+			mainGame.setPlayer2ImageString(ARIESPRITE, "arieSprite_Add.png");
 			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
 					mainGame.getPlayer2ImageStringA());
 			Logger.getInstance().log("Player 2 sprite changed to arie", 
-					Logger.PriorityLevels.MEDIUM, "players");
+					Logger.PriorityLevels.MEDIUM, PLAYERS);
 		} else if (returnButton.isMouseOver(input)) {
 			mainGame.setSwitchState(mainGame.getStartState());
 		} 
@@ -459,22 +464,22 @@ public class MenuSettingsState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawSprites(Graphics graphics) {
-		if (mainGame.getPlayer1ImageStringN().equals("Playersprite_Norm.png")) {
+		if (mainGame.getPlayer1ImageStringN().equals(PLAYERSPRITE_NORM)) {
 			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_1_X, MANNETJE_1_Y, 
 					mainGame.getColor());
-		} else if (mainGame.getPlayer1ImageStringN().equals("Player2sprite_Norm.png")) {
+		} else if (mainGame.getPlayer1ImageStringN().equals(PLAYER2SPRITE_NORM)) {
 			RND.drawColor(graphics, highLightN, highLightA, 
 					TELEFOON_1_X, TELEFOON_1_Y, mainGame.getColor());
-		} else if (mainGame.getPlayer1ImageStringN().equals("arieSprite.png")) {
+		} else if (mainGame.getPlayer1ImageStringN().equals(ARIESPRITE)) {
 			RND.drawColor(graphics, highLightN, highLightA, 
 					ARIE_1_X, ARIE_1_Y, mainGame.getColor()); }
-		if (mainGame.getPlayer2ImageStringN().equals("Playersprite_Norm.png")) {
+		if (mainGame.getPlayer2ImageStringN().equals(PLAYERSPRITE_NORM)) {
 			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_2_X, MANNETJE_2_Y, 
 					mainGame.getColor());
-		} else if (mainGame.getPlayer2ImageStringN().equals("Player2sprite_Norm.png")) {
+		} else if (mainGame.getPlayer2ImageStringN().equals(PLAYER2SPRITE_NORM)) {
 			RND.drawColor(graphics, highLightN, highLightA, 
 					TELEFOON_2_X, TELEFOON_2_Y, mainGame.getColor());
-		} else if (mainGame.getPlayer2ImageStringN().equals("arieSprite.png")) {
+		} else if (mainGame.getPlayer2ImageStringN().equals(ARIESPRITE)) {
 			RND.drawColor(graphics, highLightN, highLightA, 
 					ARIE_2_X, ARIE_2_Y, mainGame.getColor()); }
 		returnButton.drawColor(graphics, input, mainGame.getColor());

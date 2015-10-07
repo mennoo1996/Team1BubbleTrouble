@@ -72,6 +72,9 @@ public class Player {
 	private long shieldTimeRemaining;
 	
 	private Logger logger = Logger.getInstance();
+	
+	private static final String POWERUPS = "powerups";
+	private static final String PLAYER = "Player";
 
 	/**
 	 * Constructor class.
@@ -130,8 +133,8 @@ public class Player {
 		processGates();
 		processWeapon(deltaFloat, containerHeight, testing);
 		processPlayerMovement(deltaFloat, containerWidth, testing);
-		processPowerups(deltaFloat, containerHeight, containerWidth);
-		processCoins(deltaFloat, containerHeight);
+		processPowerups(deltaFloat, containerHeight);
+		processCoins();
 		
 	}
 	
@@ -159,10 +162,8 @@ public class Player {
 	 * Process the intersection of a player with the powerups.
 	 * @param deltaFloat the time in seconds since the last frame.
 	 * @param containerHeight the height of the current GameContainer
-	 * @param containerWidth the width of the current GameContainer
 	 */
-	private void processPowerups(float deltaFloat, float containerHeight,
-			float containerWidth) { // MARKED
+	private void processPowerups(float deltaFloat, float containerHeight) { // MARKED
 
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		synchronized (gameState.getDroppedPowerups()) {
@@ -193,10 +194,8 @@ public class Player {
 
 	/**
 	 * Process the intersection of a player with the coins.
-	 * @param deltaFloat the time in seconds since the last frame.
-	 * @param containerHeight the height of the current GameContainer.
 	 */
-	private void processCoins(float deltaFloat, float containerHeight) {
+	private void processCoins() {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		synchronized (gameState.getDroppedCoins()) {
 			for (Coin coin : gameState.getDroppedCoins()) {
@@ -208,7 +207,7 @@ public class Player {
 						gameState.getFloatingScores().add(new FloatingScore(coin));
 						usedCoins.add(coin);
 						logger.log("Picked up coin", 
-								Logger.PriorityLevels.MEDIUM, "powerups");
+								Logger.PriorityLevels.MEDIUM, POWERUPS);
 						if (mainGame.isHost() && playerNumber == 0) {
 							mainGame.getHost().updateCoinsDictate(coin);
 						}
@@ -283,7 +282,7 @@ public class Player {
 		// didnt walk, stating still.
 		if (!didWalk && !stoodStillOnLastUpdate) {
 			stoodStillOnLastUpdate = true;
-			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, "Player");
+			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, PLAYER);
 			if (mainGame.isLanMultiplayer()) {
 				if (mainGame.isHost() && playerNumber == 0) {
 					mainGame.getHost().playerStoppedMoving(x, y, playerNumber);
@@ -315,16 +314,16 @@ public class Player {
         	   this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
         	   this.movement = Movement.RIGHT;
         	   didWalk = true;
-        	   if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate) {
-        		   if (mainGame.isHost() && playerNumber == 0) {
-        			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
-        		   } else if (mainGame.isClient() && playerNumber == 1) {
-        			   mainGame.getClient().playerStartedMoving(x, y, playerNumber, "RIGHT");
-        		   }
-        	   } 
+        	   if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate 
+        			   && mainGame.isHost() && playerNumber == 0) {
+        		   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
+        	   } else if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate
+        			   && mainGame.isClient() && playerNumber == 1) {
+        		   mainGame.getClient().playerStartedMoving(x, y, playerNumber, "RIGHT");
+        	   }
         	   if (!lastLogMove.equals("right")) {
         		   logger.log("Moving right from position " + this.getCenterX(),
-        				   PriorityLevels.VERYLOW, "Player");
+        				   PriorityLevels.VERYLOW, PLAYER);
         		   lastLogMove = "right";
         	   }
         	   stoodStillOnLastUpdate = false;
@@ -362,7 +361,7 @@ public class Player {
          	   }
             	if (!lastLogMove.equals("left")) {
             		logger.log("Moving left from position " + this.getCenterX(),
-            				PriorityLevels.VERYLOW, "Player");
+            				PriorityLevels.VERYLOW, PLAYER);
             		lastLogMove = "left";
             	}
             	stoodStillOnLastUpdate = false;
@@ -390,20 +389,20 @@ public class Player {
 	private Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
 			logger.log("Shot regular laser from position " + this.getCenterX(),
-					PriorityLevels.MEDIUM, "Player");
+					PriorityLevels.MEDIUM, PLAYER);
 			return new Weapon(this.getCenterX(), containerHeight - gameState.getFloor().getHeight(),
 					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
 			logger.log("Shot spiky laser from position " + this.getCenterX(), 
-					PriorityLevels.HIGH, "Player");
+					PriorityLevels.HIGH, PLAYER);
 			return new Spiky(this.getCenterX(), containerHeight - gameState.getFloor().getHeight(),
 					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
 			logger.log("Shot instant laser from position " + this.getCenterX(), 
-					PriorityLevels.HIGH, "Player");
+					PriorityLevels.HIGH, PLAYER);
 			return new InstantLaser(this.getCenterX(),
 					containerHeight - gameState.getFloor().getHeight(), mainGame.getLaserWidth());
 		}
@@ -576,17 +575,17 @@ public class Player {
 		if (type == Powerup.PowerupType.INSTANT) {
 			addWeapon(type);
 			logger.log("Added powerup instant", 
-					Logger.PriorityLevels.MEDIUM, "powerups");
+					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		}
 		if (type == Powerup.PowerupType.SHIELD) {
 			addShield();
 			logger.log("Added powerup shield", 
-					Logger.PriorityLevels.MEDIUM, "powerups");
+					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		}
 		if (type == Powerup.PowerupType.SPIKY) {
 			addWeapon(type);
 			logger.log("Added powerup spiky", 
-					Logger.PriorityLevels.MEDIUM, "powerups");
+					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		}
 	}
 

@@ -20,7 +20,6 @@ public class Popup {
 	private static final float BUTTON_HEIGHT = 53;
 	private static final float PAUSE_OVERLAY_COLOR_FACTOR = 0.75f;
 	private static final int PAUSED_RECT_Y_DEVIATION = 150;
-	private static final int BUTTON_OFFSET_X = 9;
 	private static final int BUTTON_OFFSET_Y = 25;
 	private static final int SEPARATOR_OFFSET_X = -200;
 	private static final int TEXT_OFFSET_X = 10;

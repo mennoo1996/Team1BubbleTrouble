@@ -7,7 +7,7 @@ package logic;
  */
 public class SlowPowerup extends SpeedPowerup {
 	
-	private static final int MULTIPLIER = 0;
+	private static final float MULTIPLIER = 0.5f;
 	
 	/**
 	 * constructor.

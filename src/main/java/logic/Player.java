@@ -589,7 +589,16 @@ public class Player {
 			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
 			gs.getSpeedPowerupList().add(fp);
 			fp.updateCircles(gs.getCircleList());
-			
+		} else if (type == Powerup.PowerupType.SLOW) {
+			SlowPowerup sp = new SlowPowerup();
+			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+			gs.getSpeedPowerupList().add(sp);
+			sp.updateCircles(gs.getCircleList());
+		} else if (type == Powerup.PowerupType.FAST) {
+			FastPowerup fp = new FastPowerup();
+			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+			gs.getSpeedPowerupList().add(fp);
+			fp.updateCircles(gs.getCircleList());
 		}
 	}
 

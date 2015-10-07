@@ -4,6 +4,7 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -69,6 +70,7 @@ public class Player {
     private boolean movingLeft;
 	
 	private static final int POWERUP_DURATION = 10;
+	private static final int RANDOM_DURATION = 1;
 	private long shieldTimeRemaining;
 	
 	private Logger logger = Logger.getInstance();
@@ -172,7 +174,6 @@ public class Player {
 
 				if (powerup.getRectangle().intersects(this.getRectangle())) {
 					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
-						
 						//Add a powerup to the player
 						this.addPowerup(powerup.getType());
 						gameState.getFloatingScores().add(new FloatingScore(powerup));
@@ -463,9 +464,6 @@ public class Player {
 		return y + height;
 	}
 	
-	
-	
-	
 	/**
 	 * @return the x
 	 */
@@ -592,8 +590,28 @@ public class Player {
 			logger.log("Added powerup health", 
 					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		}
+		if (type == Powerup.PowerupType.RANDOM) {
+			addRandom();
+			logger.log("Added powerup random", 
+					Logger.PriorityLevels.MEDIUM, POWERUPS);
+		}
 	}
 
+	/**
+	 * Add a random powerup to the player.
+	 */
+	private void addRandom() {
+		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
+		.nextInt(Powerup.PowerupType.values().length - 1)];
+		shieldTimeRemaining = TimeUnit.SECONDS.toMillis(RANDOM_DURATION);
+        Executors.newScheduledThreadPool(1).schedule(() -> {
+        			addPowerup(newPowerup);
+        			gameState.getFloatingScores().add(
+        					new FloatingScore(new Powerup(x - width, y + height, newPowerup)));
+                },
+                RANDOM_DURATION, TimeUnit.SECONDS);
+	}
+	
 	/**
 	 * Add health to the player.
 	 */

@@ -307,7 +307,6 @@ public class Host extends Connector {
      */
 	private void powerupMessage(String message) {
 		String message2 = message.trim();
-		System.out.println("HOST RECEIVED: " + message2);
     	String[] stringList = message2.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
     		ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
@@ -318,17 +317,16 @@ public class Host extends Connector {
     				this.updatePowerupsGrant(powerup);
     				gameState.getFloatingScores().add(new FloatingScore(powerup));
     				if (stringList[2].equals("SHIELD")) {
-    					mainGame.getPlayerList().getPlayers()
-    					.get(1).addPowerup(PowerupType.SHIELD);
+    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
     				} else if (stringList[2].equals("SPIKY")) {
-    					mainGame.getPlayerList().getPlayers()
-    					.get(1).addPowerup(PowerupType.SPIKY);
+    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SPIKY);
     				} else if (stringList[2].equals("INSTANT")) {
     					mainGame.getPlayerList().getPlayers()
     					.get(1).addPowerup(PowerupType.INSTANT);
     				} else if (stringList[2].equals("HEALTH")) {
-    					mainGame.getPlayerList().getPlayers()
-    					.get(1).addPowerup(PowerupType.HEALTH);
+    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.HEALTH);
+    				} else if (stringList[2].equals("RANDOM")) {
+    					mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.RANDOM);
     				}
     			}
     		} //end of loop

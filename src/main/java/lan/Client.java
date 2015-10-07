@@ -406,7 +406,10 @@ public class Client extends Connector {
     				Float.parseFloat(stringList[1]), PowerupType.INSTANT)); // inst added to level
     	} else if (stringList[2].equals("HEALTH")) {
     		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.HEALTH)); // inst added to level
+    				Float.parseFloat(stringList[1]), PowerupType.HEALTH)); // health added to level
+    	} else if (stringList[2].equals("RANDOM")) {
+    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), PowerupType.RANDOM)); // random added to level
     	}
 	}
 
@@ -432,7 +435,10 @@ public class Client extends Connector {
 					.get(0).addPowerup(PowerupType.INSTANT); // host player given instant
 				} else if (stringList[2].equals("HEALTH")) {
 					mainGame.getPlayerList().getPlayers()
-					.get(0).addPowerup(PowerupType.HEALTH); // host player given instant
+					.get(0).addPowerup(PowerupType.HEALTH); // host player given health
+				} else if (stringList[2].equals("RANDOM")) {
+					mainGame.getPlayerList().getPlayers()
+					.get(0).addPowerup(PowerupType.RANDOM); // host player given random
 				}
 			}
 		}
@@ -455,7 +461,10 @@ public class Client extends Connector {
     		.get(1).addPowerup(PowerupType.INSTANT); // client player given instant
     	} else if (stringList[2].equals("HEALTH")) {
     		mainGame.getPlayerList().getPlayers()
-    		.get(1).addPowerup(PowerupType.HEALTH); // client player given instant
+    		.get(1).addPowerup(PowerupType.HEALTH); // client player given health
+    	} else if (stringList[2].equals("RANDOM")) {
+    		mainGame.getPlayerList().getPlayers()
+    		.get(1).addPowerup(PowerupType.RANDOM); // client player given random
     	}
     	ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
 		for (Powerup powerup : gameState.getDroppedPowerups()) {

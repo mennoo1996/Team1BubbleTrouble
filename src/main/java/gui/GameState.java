@@ -328,21 +328,20 @@ public class GameState extends BasicGameState {
 				}
 			}
 		} else {
-			processEscape(container, sbg);
+			processEscape(container);
 		} exit(container, sbg, delta);
 	}
 	
 	/**
 	 * Process the "press escape" event.
 	 * @param container the GameContainer we are playing in.
-	 * @param sbg the StateBasedGame that calls this method.
 	 */
-	private void processEscape(GameContainer container, StateBasedGame sbg) {
+	private void processEscape(GameContainer container) {
 		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
 			// Reset time countdown
 			pauseStopped(false);
 		}
-		processPauseButtons(container, sbg);
+		processPauseButtons(container);
 	}
 
 	/**
@@ -372,14 +371,14 @@ public class GameState extends BasicGameState {
 				container.getHeight(),
 				container.getWidth());
 		processPause();
-		processCircles(container, sbg, deltaFloat);
+		processCircles(container, deltaFloat);
 		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate
 		updateGateExistence(deltaFloat);
 		// if there are no active circles, process to gameover screen
 		processCoins(container, deltaFloat);
 		if (circleList.getCircles().isEmpty()) {
-			endLevel(sbg);
+			endLevel();
 		}
 	}
 
@@ -409,9 +408,8 @@ public class GameState extends BasicGameState {
 	/**
 	 * Process the buttons if you are in the pause menu.
 	 * @param container the GameContainer we are playing in
-	 * @param sbg the StateBasedGame we are playing
 	 */
-	private void processPauseButtons(GameContainer container, StateBasedGame sbg) {
+	private void processPauseButtons(GameContainer container) {
 		Input input = container.getInput();
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
 			if (returnButton.isMouseOver(input) && !waitEsc) {
@@ -463,12 +461,11 @@ public class GameState extends BasicGameState {
 	/**
 	 * Process the circles in the game.
 	 * @param container the GameContainer we are playing the game in
-	 * @param sbg the StateBasedGame we are playing
 	 * @param deltaFloat the time in seconds since the last frame
 	 */
-	private void processCircles(GameContainer container, StateBasedGame sbg, float deltaFloat) {
+	private void processCircles(GameContainer container, float deltaFloat) {
 		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
-		updateActiveCircles(container, sbg, deltaFloat, ceilingList);
+		updateActiveCircles(container, deltaFloat, ceilingList);
 		removeCeilingCircles(ceilingList);
 		updateShotCircles();
 	}
@@ -551,11 +548,10 @@ public class GameState extends BasicGameState {
 	/**
 	 * Update the circles that are still in the game, after all the other process methods.
 	 * @param container the GameContainer you are playing in
-	 * @param sbg the StateBasedGame you are playing
 	 * @param deltaFloat the time ins seconds since the last frame
 	 * @param ceilingList the circles that have hit the ceiling
 	 */
-	private void updateActiveCircles(GameContainer container, StateBasedGame sbg,
+	private void updateActiveCircles(GameContainer container,
 			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
 		synchronized (circleList.getCircles()) {
 			for (Iterator<BouncingCircle> iterator = 
@@ -618,9 +614,8 @@ public class GameState extends BasicGameState {
 
 	/**
 	 * End the level if needed.
-	 * @param sbg the StateBasedGame we are playing
 	 */
-	private void endLevel(StateBasedGame sbg) {
+	private void endLevel() {
 		if (!waitForLevelEnd) {
             waitForLevelEnd = true;
         }
@@ -906,7 +901,11 @@ public class GameState extends BasicGameState {
 		ArrayList<BouncingCircle> dummyList = new ArrayList<BouncingCircle>();
 		synchronized (circleList) {
 			for (BouncingCircle bCircle : circleList.getCircles()) {
-				dummyList.add(bCircle.clone());
+				try {
+					dummyList.add(bCircle.clone());
+				} catch (CloneNotSupportedException e) {
+					System.out.println("Clone was not supported");
+				}
 			} 
 		}
 		return dummyList;

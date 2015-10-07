@@ -13,7 +13,7 @@ import org.newdawn.slick.geom.Circle;
  * @author Menno
  *
  */
-public class BouncingCircle extends Circle {
+public class BouncingCircle extends Circle implements Cloneable {
 	
 	
 	private static final int MINIMUM_SPEED = -200;
@@ -476,7 +476,8 @@ public class BouncingCircle extends Circle {
 	 * Clone the bouncingCircle.
 	 */
 	@Override
-	public BouncingCircle clone() {
+	public BouncingCircle clone() throws CloneNotSupportedException {
+		super.clone();
 		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
 				this.getRadius(), xSpeed, ySpeed, gravity, id);
 	

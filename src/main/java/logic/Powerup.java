@@ -12,7 +12,7 @@ import gui.RND;
 /**
  * Created by alexandergeenen on 09/09/15.
  */
-public class Powerup {
+public class Powerup implements Cloneable {
 	
 	private static Image laserImageN;
 	private static Image laserImageA;
@@ -260,7 +260,7 @@ public class Powerup {
 	 * Clone the powerup.
 	 */
 	@Override
-	public Powerup clone() {
+	public Powerup clone() throws CloneNotSupportedException {
 		Powerup res = new Powerup(x, y, type);
 		res.setTimeRemaining(timeRemaining);
 		res.setxId(xId);

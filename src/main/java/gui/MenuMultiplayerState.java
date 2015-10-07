@@ -46,11 +46,6 @@ public class MenuMultiplayerState extends BasicGameState {
 
 	private String message;
 	
-	private static final int NUM_3 = 3;
-	private static final int NUM_4 = 4;
-	private static final int NUM_5 = 5;
-	private static final int NUM_6 = 6;
-	private static final int NUM_7 = 7;
 	
 	private static final int LOGO_X = 160;
 	private static final int LOGO_Y = 110;

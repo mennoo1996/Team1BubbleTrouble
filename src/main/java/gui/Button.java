@@ -3,7 +3,6 @@ import logic.MyRectangle;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
 /**
@@ -16,10 +15,7 @@ public class Button {
 	private float y;
 	private float width;
 	private float height;
-	private Image imageN;
-	private Image imageA;
-	private Image imageMouseoverN;
-	private Image imageMouseoverA;
+	private String text;
 
 	private static final float HALF = 0.5f;
 	
@@ -29,41 +25,15 @@ public class Button {
 	 * @param y coordinate
 	 * @param width of the button
 	 * @param height of the button
-	 * @param imageN normal image
-	 * @param imageA additive image
+	 * @param text the text to show in the button
 	 */
-	public Button(float x, float y, float width, float height, Image imageN, Image imageA) {
+	public Button(float x, float y, float width, float height, String text) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.imageN = imageN;
-		this.imageA = imageA;
-	}
-	
-	/**
-	 * Button constructor class.
-	 * @param x coordinate
-	 * @param y coordinate
-	 * @param width of button
-	 * @param height of button
-	 * @param imageN normal image
-	 * @param imageA additive image
-	 * @param imageMouseoverN normal image
-	 * @param imageMouseroverA additive image
-	 */
-	public Button(float x, float y, float width, float height, Image imageN, Image imageA,
-			Image imageMouseoverN, Image imageMouseroverA) {
-		super();
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.imageN = imageN;
-		this.imageA = imageA;
-		this.imageMouseoverN = imageMouseoverN;
-		this.imageMouseoverA = imageMouseroverA;
+		this.text = text;
 	}
 	
 	/**
@@ -86,10 +56,9 @@ public class Button {
 	 */
 	public void drawColor(Graphics graphics, Input input, Color color) {
 		if (isMouseOver(input)) {
-			RND.drawColor(graphics, getImageMouseOverN(), 
-					getImageMouseOverA(), getX(), getY(), color);
+			RND.drawButtonHighlight(graphics, this);
 		} else {
-			RND.drawColor(graphics, getImageN(), getImageA(), getX(), getY(), color);
+			RND.text(graphics, x, y, text);
 		}
 	}
 	
@@ -103,10 +72,9 @@ public class Button {
 	 */
 	public void drawColor(Graphics graphics, Input input, Color color, boolean enable) {
 		if (isMouseOver(input) && enable) {
-			RND.drawColor(graphics, getImageMouseOverN(), 
-					getImageMouseOverA(), getX(), getY(), color);
+			RND.drawButtonHighlight(graphics, this);
 		} else {
-			RND.drawColor(graphics, getImageN(), getImageA(), getX(), getY(), color);
+			RND.text(graphics, x, y, text);
 		}
 	}
 	
@@ -205,49 +173,18 @@ public class Button {
 	}
 
 	/**
-	 * @return image_norm for this button
+	 * Set the text this button displays.
+	 * @param text the text to set.
 	 */
-	public Image getImageN() {
-		return imageN;
+	public void setText(String text) {
+		this.text = text;
 	}
 	
 	/**
-	 * @return image_add for this button
+	 * @return the text in this button.
 	 */
-	public Image getImageA() {
-		return imageA;
-	}
-	
-	/**
-	 * @return image_norm for this button
-	 */
-	public Image getImageMouseOverN() {
-		return imageMouseoverN;
-	}
-	 
-	/**
-	 * @return image_add for this button
-	 */
-	public Image getImageMouseOverA() {
-		return imageMouseoverA;
-	}
-	
-	/**
-	 * @param imageN the image_norm to set
-	 * @param imageA the image_add to set
-	 */
-	public void setImage(Image imageN, Image imageA) {
-		this.imageN = imageN;
-		this.imageA = imageA;
-	}
-	
-	/**
-	 * @param imageN the image_norm to set
-	 * @param imageA the image_add to set
-	 */
-	public void setImageMouseOver(Image imageN, Image imageA) {
-		this.imageMouseoverN = imageN;
-		this.imageMouseoverA = imageA;
+	public String getText() {
+		return text;
 	}
 
 	@Override
@@ -258,8 +195,7 @@ public class Button {
 					&& this.getY() == that.getY()
 					&& this.getWidth() == that.getWidth()
 					&& this.getHeight() == that.getHeight()
-					&& this.getImageN() == that.getImageN()
-					&& this.getImageA() == that.getImageA()) {
+					&& this.text == that.getText()) {
 				return true;
 			}
 		}

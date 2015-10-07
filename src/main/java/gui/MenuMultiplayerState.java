@@ -9,7 +9,6 @@ import logic.Logger;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -58,8 +57,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
 	
-	private static final int RETURN_BUTTON_X = 150;
-	private static final int RETURN_BUTTON_Y = 175;
+	private static final int RETURN_BUTTON_X = 164;
+	private static final int RETURN_BUTTON_Y = 188;
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
 	
@@ -69,13 +68,13 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int TEXT_HELP_Y_3 = 338;
 	private static final int TEXT_HELP_Y_4 = 738;
 	
-	private static final int HOST_BUTTON_X = 150;
-	private static final int HOST_BUTTON_Y = 425;
+	private static final int HOST_BUTTON_X = 164;
+	private static final int HOST_BUTTON_Y = 438;
 	private static final int TEXT_HOST_X = 538;
 	private static final int TEXT_HOST_Y = 438;
 	
-	private static final int JOIN_BUTTON_X = 150;
-	private static final int JOIN_BUTTON_Y = 525;
+	private static final int JOIN_BUTTON_X = 164;
+	private static final int JOIN_BUTTON_Y = 538;
 	private static final int TEXT_JOIN_Y = 588;
 	
 	private static final int TEXT_FIELD_X = 564;
@@ -157,22 +156,13 @@ public class MenuMultiplayerState extends BasicGameState {
 	private void initButtons() throws SlickException {
 		returnButton = new Button(RETURN_BUTTON_X, RETURN_BUTTON_Y, RETURN_BUTTON_WIDTH,
 				RETURN_BUTTON_HEIGHT, 
-				new Image("resources/images_UI/Menu_Button_Return_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Return_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Return2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Return2_Add.png"));
+				"< Return");
 		hostButton = new Button(HOST_BUTTON_X, HOST_BUTTON_Y, RETURN_BUTTON_WIDTH,
 				RETURN_BUTTON_HEIGHT, 
-				new Image("resources/images_UI/Menu_Button_Host_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Host_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Host2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Host2_Add.png"));
+				"> Host Game");
 		joinButton = new Button(JOIN_BUTTON_X, JOIN_BUTTON_Y, RETURN_BUTTON_WIDTH,
 				RETURN_BUTTON_HEIGHT, 
-				new Image("resources/images_UI/Menu_Button_Join_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Join_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Join2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Join2_Add.png"));
+				"> Join Game");
 	}
 	
 	/**
@@ -280,16 +270,14 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		this.input = container.getInput();
-		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
+		RND.drawBackground(graphics);
 		
 		drawText(graphics, container);
 		drawSprites(graphics);
 		mainGame.drawWaterMark();
-		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
-				LOGO_X, LOGO_Y, mainGame.getColor());
+		RND.drawLogo(graphics, LOGO_X, LOGO_Y);
 		popup.drawColor(graphics, this.input, mainGame.getColor());
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		RND.drawForeGround(graphics);
 	}
 	
 	/**
@@ -299,24 +287,22 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	private void drawText(Graphics graphics, GameContainer container) {
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_1,
-				"# You can play a game together with another player, over LAN.",
-				mainGame.getColor());
+				"# You can play a game together with another player, over LAN.");
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_2,
-				"# If you are the host, you will have to wait until another player joins you.",
-				mainGame.getColor());
+				"# If you are the host, you will have to wait until another player joins you.");
 		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_3,
 				"# If you wish to join another player,"
-						+ " please enter their IP-address below.", mainGame.getColor());
-		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_4, "# Your player name:", mainGame.getColor());
+						+ " please enter their IP-address below.");
+		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_4, "# Your player name:");
 		if (mainGame.isHost()) {
 			try {
 				RND.text(graphics, TEXT_HOST_X, TEXT_HOST_Y, "# Hosting game on IP: " 
-						+ InetAddress.getLocalHost().getHostAddress(), mainGame.getColor());
+						+ InetAddress.getLocalHost().getHostAddress());
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
 		}
-		RND.text(graphics, TEXT_HELP_X, TEXT_JOIN_Y, "# Join this IP: ", mainGame.getColor());
+		RND.text(graphics, TEXT_HELP_X, TEXT_JOIN_Y, "# Join this IP: ");
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 	}

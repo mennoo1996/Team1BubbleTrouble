@@ -80,8 +80,8 @@ public class MenuSettingsState extends BasicGameState {
 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
 	
-	private static final int RETURN_BUTTON_X = 150;
-	private static final int RETURN_BUTTON_Y = 175;
+	private static final int RETURN_BUTTON_X = 164;
+	private static final int RETURN_BUTTON_Y = 188;
 	private static final int RETURN_BUTTON_WIDTH = 1000;
 	private static final int RETURN_BUTTON_HEIGHT = 50;
 	
@@ -99,17 +99,17 @@ public class MenuSettingsState extends BasicGameState {
 	private static final int COLOR_TEXT_X = 800;
 	private static final int COLOR_TEXT_1_Y = 550;
 	private static final int COLOR_TEXT_2_Y = 600;
-	private static final int COLOR_BUTTON_1_X = 786;
-	private static final int COLOR_BUTTON_2_X = 1000;
-	private static final int COLOR_BUTTON_3_X = 1186;
+	private static final int COLOR_BUTTON_1_X = 800;
+	private static final int COLOR_BUTTON_2_X = 1014;
+	private static final int COLOR_BUTTON_3_X = 1200;
 	private static final int COLOR_BUTTON_WIDTH = 200;
-	private static final int COLOR_BUTTON_SHUFFLE_Y = 640;
-	private static final int COLOR_BUTTON_RED_Y = 690;
-	private static final int COLOR_BUTTON_ORANGE_Y = 740;
-	private static final int COLOR_BUTTON_WHITE_Y = 640;
-	private static final int COLOR_BUTTON_BLUE_Y = 690;
-	private static final int COLOR_BUTTON_PINK_Y = 740;
-	private static final int COLOR_BUTTON_GREEN_Y = 640;
+	private static final int COLOR_BUTTON_SHUFFLE_Y = 653;
+	private static final int COLOR_BUTTON_RED_Y = 703;
+	private static final int COLOR_BUTTON_ORANGE_Y = 753;
+	private static final int COLOR_BUTTON_WHITE_Y = 653;
+	private static final int COLOR_BUTTON_BLUE_Y = 703;
+	private static final int COLOR_BUTTON_PINK_Y = 753;
+	private static final int COLOR_BUTTON_GREEN_Y = 653;
 	
 	
 	private static final int PLAYER_SPRITE_WIDTH = 120;
@@ -236,60 +236,28 @@ public class MenuSettingsState extends BasicGameState {
 	private void initButtons() throws SlickException {
 		returnButton = new Button(RETURN_BUTTON_X, RETURN_BUTTON_Y, RETURN_BUTTON_WIDTH,
 				RETURN_BUTTON_HEIGHT, 
-				new Image("resources/images_UI/Menu_Button_Return_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Return_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Return2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Return2_Add.png"));
+				"< Return");
 		shuffleButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_SHUFFLE_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
-				new Image("resources/images_UI/images_Colors/Menu_Color_Shuffle1_Normal.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Shuffle1_Add.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Shuffle2_Normal.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Shuffle2_Add.png"));
+				"> Shuffle");
 		redButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_RED_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
-				new Image("resources/images_UI/images_Colors/Menu_Color_Red1_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Red1_Add.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Red2_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Red2_Add.png"));
+				"> Red");
 		orangeButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_ORANGE_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
-				new Image("resources/images_UI/images_Colors/Menu_Color_Orange1_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Orange1_Add.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Orange2_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Orange2_Add.png"));
-		initButtons2();
-	}
-	
-	/**
-	 * Initialize the second batch of buttons.
-	 * @throws SlickException if something goes wrong / file not found
-	 */
-	private void initButtons2() throws SlickException {
+				"> Orange");
 		greenButton = new Button(COLOR_BUTTON_3_X, COLOR_BUTTON_GREEN_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
-				new Image("resources/images_UI/images_Colors/Menu_Color_Green1_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Green1_Add.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Green2_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Green2_Add.png"));
+				"> Green");
 		blueButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_BLUE_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
-				new Image("resources/images_UI/images_Colors/Menu_Color_Blue1_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Blue1_Add.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Blue2_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Blue2_Add.png"));
+				"> Blue");
 		whiteButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_WHITE_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
-				new Image("resources/images_UI/images_Colors/Menu_Color_White1_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_White1_Add.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_White2_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_White2_Add.png"));
+				"> White");
 		pinkButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_PINK_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
-				new Image("resources/images_UI/images_Colors/Menu_Color_Pink1_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Pink1_Add.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Pink2_Norm.png"),
-				new Image("resources/images_UI/images_Colors/Menu_Color_Pink2_Add.png"));
+				"> Pink");
 	}
 	
 	/**
@@ -416,7 +384,7 @@ public class MenuSettingsState extends BasicGameState {
 			throws SlickException {
 		this.input = container.getInput();
 		
-		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
+		RND.drawBackground(graphics);
 		RND.text(graphics, TEXT_X, TEXT_1_Y, 
 				"# You can choose a player skin per player by clicking on it below.");
 		RND.text(graphics, TEXT_X, TEXT_2_Y, 
@@ -430,17 +398,15 @@ public class MenuSettingsState extends BasicGameState {
 		drawSprites(graphics);
 
 		mainGame.drawWaterMark();
-		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
-				LOGO_X, LOGO_Y, mainGame.getColor());
+		RND.drawLogo(graphics, LOGO_X, LOGO_Y);
 		separatorTop.drawColor(graphics, mainGame.getColor());
 		separatorMiddle.drawColor(graphics, mainGame.getColor());
 		separatorBottom.drawColor(graphics, mainGame.getColor());
 		drawControls(graphics);
 		drawColorControls(graphics);
 		// any and all drawing is done BEFORE THESE TWO FOR THE 1000TH TIME
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
-		// NO DRAWING HERE. BAD. BOO. 
+		RND.drawForeGround(graphics);
+		// NO DRAWING HERE. BAD. BOO. SHOO. BEGONE.
 	}
 	
 	/**
@@ -513,32 +479,31 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	private void drawColorControls(Graphics graphics) {
 		RND.text(graphics, COLOR_TEXT_X, COLOR_TEXT_1_Y,
-				"# Change game color manually,", mainGame.getColor());
+				"# Change game color manually,");
 		RND.text(graphics, COLOR_TEXT_X, COLOR_TEXT_2_Y,
-				"# or let it shuffle!.", mainGame.getColor());
-		
-		for (int i = 0; i < NUM_7; i++) {
-			Button button;
-			switch (i) {
-			case 0: button = shuffleButton; break;
-			case 1: button = redButton; break;
-			case 2: button = blueButton; break;
-			case NUM_3: button = orangeButton; break;
-			case NUM_4: button = whiteButton; break;
-			case NUM_5: button = pinkButton; break;
-			case NUM_6: button = greenButton; break;
-			default: button = shuffleButton; break;
-			}
-			
-			if (button.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-				RND.drawColor(graphics, button.getImageMouseOverN(), 
-						button.getImageMouseOverA(), 
-						button.getX(), button.getY(), mainGame.getColor());
-			} else {
-				RND.drawColor(graphics, button.getImageN(), button.getImageA(), 
-						button.getX(), button.getY(), mainGame.getColor());
-			}
-		}
+				"# or let it shuffle!.");
+//		
+//		for (int i = 0; i < NUM_7; i++) {
+//			Button button;
+//			switch (i) {
+//				case 0: button = shuffleButton; break;
+//				case 1: button = redButton; break;
+//				case 2: button = blueButton; break;
+//				case NUM_3: button = orangeButton; break;
+//				case NUM_4: button = whiteButton; break;
+//				case NUM_5: button = pinkButton; break;
+//				case NUM_6: button = greenButton; break;
+//				default: button = shuffleButton; break;
+//			}
+//			button.drawColor(graphics, input, mainGame.getColor());
+//		}
+		shuffleButton.drawColor(graphics, input, mainGame.getColor());
+		redButton.drawColor(graphics, input, mainGame.getColor());
+		blueButton.drawColor(graphics, input, mainGame.getColor());
+		orangeButton.drawColor(graphics, input, mainGame.getColor());
+		whiteButton.drawColor(graphics, input, mainGame.getColor());
+		pinkButton.drawColor(graphics, input, mainGame.getColor());
+		greenButton.drawColor(graphics, input, mainGame.getColor());
 		
 	}
 	

@@ -587,8 +587,22 @@ public class Player {
 			logger.log("Added powerup spiky", 
 					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		}
+		if (type == Powerup.PowerupType.HEALTH) {
+			addHealth();
+			logger.log("Added powerup health", 
+					Logger.PriorityLevels.MEDIUM, POWERUPS);
+		}
 	}
 
+	/**
+	 * Add health to the player.
+	 */
+	private void addHealth() {
+		if (mainGame.getLifeCount() < MainGame.getLives()) {
+			mainGame.setLifeCount(mainGame.getLifeCount() + 1);
+		}
+	}
+	
 	/**
 	 * Add a shield for this player.
 	 */

@@ -326,6 +326,9 @@ public class Host extends Connector {
     				} else if (stringList[2].equals("INSTANT")) {
     					mainGame.getPlayerList().getPlayers()
     					.get(1).addPowerup(PowerupType.INSTANT);
+    				} else if (stringList[2].equals("HEALTH")) {
+    					mainGame.getPlayerList().getPlayers()
+    					.get(1).addPowerup(PowerupType.HEALTH);
     				}
     			}
     		} //end of loop

@@ -404,6 +404,9 @@ public class Client extends Connector {
     	} else if (stringList[2].equals("INSTANT")) {
     		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
     				Float.parseFloat(stringList[1]), PowerupType.INSTANT)); // inst added to level
+    	} else if (stringList[2].equals("HEALTH")) {
+    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), PowerupType.HEALTH)); // inst added to level
     	}
 	}
 
@@ -427,6 +430,9 @@ public class Client extends Connector {
 				} else if (stringList[2].equals("INSTANT")) {
 					mainGame.getPlayerList().getPlayers()
 					.get(0).addPowerup(PowerupType.INSTANT); // host player given instant
+				} else if (stringList[2].equals("HEALTH")) {
+					mainGame.getPlayerList().getPlayers()
+					.get(0).addPowerup(PowerupType.HEALTH); // host player given instant
 				}
 			}
 		}
@@ -447,6 +453,9 @@ public class Client extends Connector {
     	} else if (stringList[2].equals("INSTANT")) {
     		mainGame.getPlayerList().getPlayers()
     		.get(1).addPowerup(PowerupType.INSTANT); // client player given instant
+    	} else if (stringList[2].equals("HEALTH")) {
+    		mainGame.getPlayerList().getPlayers()
+    		.get(1).addPowerup(PowerupType.HEALTH); // client player given instant
     	}
     	ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
 		for (Powerup powerup : gameState.getDroppedPowerups()) {

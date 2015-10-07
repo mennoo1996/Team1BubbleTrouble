@@ -70,6 +70,8 @@ public class MenuGameoverState extends BasicGameState {
 	private static final int HIGHSCORES_Y = 288;
 	private static final int HIGHSCORES_TITLE_X = 760;
 	private static final int HIGHSCORES_TITLE_Y = 238;
+	
+	private static final String USER_INPUT = "user-input";
 
 	private Separator separatorTop;
 	private String separatorTopTitle = "";
@@ -210,12 +212,12 @@ public class MenuGameoverState extends BasicGameState {
 		if (playButton.isMouseOver(input)) {
 			processStartOver();
 			Logger.getInstance().log("play again button clicked", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		} 
 		else if (saveButton.isMouseOver(input)) {
 			saveScore();
 			Logger.getInstance().log("save button clicked", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
 		else if (menuButton.isMouseOver(input)) {
 			// Go to startState
@@ -225,12 +227,12 @@ public class MenuGameoverState extends BasicGameState {
 			mainGame.killMultiplayer();
 			mainGame.setSwitchState(mainGame.getStartState());
 			Logger.getInstance().log("main menu button clicked", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
 		else if (exitButton.isMouseOver(input)) {
 			mainGame.setSwitchState(-1);
 			Logger.getInstance().log("exit button clicked", 
-					Logger.PriorityLevels.MEDIUM, "user-input");
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
 	}
 

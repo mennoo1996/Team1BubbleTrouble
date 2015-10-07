@@ -33,6 +33,8 @@ public class PlayerList {
 	private static final int PLAYER_NAME_Y_DEVIATION = 100;
 	private static final int SHIELD_DRAW_X_DEVIATION = 43;
 	
+	private static final String PLAYER_IMAGES = "resources/images_Player/";
+	
 	private Logger logger = Logger.getInstance();
 	
 	/**
@@ -141,8 +143,8 @@ public class PlayerList {
 	 */
 	public void setPlayerImage(int playerNumber, String imageStringN, String imageStringA) {
 		try {
-			Image imageN = new Image("resources/images_Player/" + imageStringN);
-			Image imageA = new Image("resources/images_Player/" + imageStringA);
+			Image imageN = new Image(PLAYER_IMAGES + imageStringN);
+			Image imageA = new Image(PLAYER_IMAGES + imageStringA);
 			playerList.get(playerNumber).setImage(imageN, imageA);
 		} catch (SlickException e) {
 			e.printStackTrace();
@@ -157,8 +159,8 @@ public class PlayerList {
 	 */
 	public void setPlayerImages(int playerNumber, String imageStringN, String imageStringA) {
 		try {
-			Image imageN = new Image("resources/images_Player/" + imageStringN);
-			Image imageA = new Image("resources/images_Player/" + imageStringA);
+			Image imageN = new Image(PLAYER_IMAGES + imageStringN);
+			Image imageA = new Image(PLAYER_IMAGES + imageStringA);
 			playerList.get(playerNumber).setImage(imageN, imageA);
 		} catch (SlickException e) {
 			e.printStackTrace();

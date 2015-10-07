@@ -118,6 +118,8 @@ public class MainGame extends StateBasedGame {
 	private static final int VERSION_STRING_X = 164;
 	private static final int VERSION_STRING_Y_DEVIATION = 190;
 	private static final int MULTIPLAYER_PORT = 4455;
+	private static final String STATES = "States";
+	private static final String PLAYER_IMAGE_PATH = "resources/images_Player/";
 	private boolean lanMultiplayer;
 	private Host host;
 	private Client client;
@@ -149,7 +151,7 @@ public class MainGame extends StateBasedGame {
 		this.isClient = false;
 		
 
-		ShutDownHook shutDownHook = new ShutDownHook(this);
+		ShutDownHook shutDownHook = new ShutDownHook();
 		shutDownHook.attachShutDownHook();
 	}
 
@@ -312,28 +314,28 @@ public class MainGame extends StateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.container = container;
 		this.gameStateState = new GameState(this);
-		Logger.getInstance().log("GameState initialized", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("GameState initialized", Logger.PriorityLevels.LOW, STATES);
 		this.menuSettingsState = new MenuSettingsState(this);
 		Logger.getInstance().log("MenuSettingsState initialized",
-				Logger.PriorityLevels.LOW, "States");
+				Logger.PriorityLevels.LOW, STATES);
 		this.menuMainState = new MenuMainState(this);
-		Logger.getInstance().log("MenuMainState initialized", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuMainState initialized", Logger.PriorityLevels.LOW, STATES);
 		this.menuGameoverState = new MenuGameoverState(this);
 		Logger.getInstance().log("MenuGameoverState initialized", 
-				Logger.PriorityLevels.LOW, "States");
+				Logger.PriorityLevels.LOW, STATES);
 		this.menuMultiplayerState = new MenuMultiplayerState(this, gameStateState);
 		Logger.getInstance().log("MenuMultiplayerState initialized", 
-				Logger.PriorityLevels.LOW, "States");
+				Logger.PriorityLevels.LOW, STATES);
 		this.addState(menuMainState);
-		Logger.getInstance().log("MenuMainstate added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuMainstate added", Logger.PriorityLevels.LOW, STATES);
 		this.addState(gameStateState);
-		Logger.getInstance().log("GameState added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("GameState added", Logger.PriorityLevels.LOW, STATES);
 		this.addState(menuGameoverState);
-		Logger.getInstance().log("MenuGameoverState added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuGameoverState added", Logger.PriorityLevels.LOW, STATES);
 		this.addState(menuSettingsState);
-		Logger.getInstance().log("MenuSettingsstate added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuSettingsstate added", Logger.PriorityLevels.LOW, STATES);
 		this.addState(menuMultiplayerState);
-		Logger.getInstance().log("MenuMultiplayerState added", Logger.PriorityLevels.LOW, "States");
+		Logger.getInstance().log("MenuMultiplayerState added", Logger.PriorityLevels.LOW, STATES);
 		initImages();	initPlayers();
 		Calendar cal = Calendar.getInstance();
 		this.currentDate = cal.get(Calendar.DATE) + "/" + cal.get(Calendar.MONTH) 
@@ -362,10 +364,10 @@ public class MainGame extends StateBasedGame {
 	 */
 	private void initPlayers() throws SlickException {
 
-		Image player1ImageN = new Image("resources/images_Player/" + player1ImageStringN);
-		Image player1ImageA = new Image("resources/images_Player/" + player1ImageStringA);
-		Image player2ImageN = new Image("resources/images_Player/" + player2ImageStringN);
-		Image player2ImageA = new Image("resources/images_Player/" + player2ImageStringA);
+		Image player1ImageN = new Image(PLAYER_IMAGE_PATH + player1ImageStringN);
+		Image player1ImageA = new Image(PLAYER_IMAGE_PATH + player1ImageStringA);
+		Image player2ImageN = new Image(PLAYER_IMAGE_PATH + player2ImageStringN);
+		Image player2ImageA = new Image(PLAYER_IMAGE_PATH + player2ImageStringA);
 		Image shieldImageN = new Image("resources/images_Gameplay/shield_Norm.png");
 		Image shieldImageA = new Image("resources/images_Gameplay/shield_Add.png");
 		

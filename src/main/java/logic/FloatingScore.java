@@ -3,7 +3,7 @@ package logic;
  * Class that represents a floating score element.
  * @author Mark
  */
-public class FloatingScore {
+public class FloatingScore implements Cloneable {
 	
 	private static final float MAX_SPEED = 100f;
 	private static final float MAX_LIFE = 1000;
@@ -146,7 +146,7 @@ public class FloatingScore {
 	 * Clone the powerup.
 	 */
 	@Override
-	public FloatingScore clone() {
+	public FloatingScore clone() throws CloneNotSupportedException {
 		return new FloatingScore(score, x, y, speed, life);
 	}
 	

@@ -227,7 +227,7 @@
       <configuration>
         <targetJdk>1.8</targetJdk>
         <rulesets>
-          <ruleset>pmd_rules.xml</ruleset>
+          <ruleset>${basedir}/pmd_rules.xml</ruleset>
         </rulesets>
       </configuration>
     </plugin>

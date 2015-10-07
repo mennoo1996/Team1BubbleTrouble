@@ -30,6 +30,7 @@ public class Host extends Connector {
     private Socket client;
     
     private static final String NO_CLIENT_CONNECTION = "No connection";
+    private static final String LASER = "LASER";
 
     
 
@@ -154,8 +155,8 @@ public class Host extends Connector {
      * @param message2 the message to process
      */
     private void readClientInputs2(String message2) {
-    	if (message2.startsWith("LASER")) {
-			laserMessage(message2.replaceFirst("LASER", ""));
+    	if (message2.startsWith(LASER)) {
+			laserMessage(message2.replaceFirst(LASER, ""));
 		} else if (message2.startsWith("SHUTDOWN")) {
             MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
                     this.mainGame.getState(mainGame.getMultiplayerState());
@@ -201,8 +202,8 @@ public class Host extends Connector {
      */
     private void newMessage(String message) {
     	String message2 = message.trim();
-    	if (message2.startsWith("LASER")) {
-    		newLaserMessage(message2.replaceFirst("LASER", ""));
+    	if (message2.startsWith(LASER)) {
+    		newLaserMessage(message2.replaceFirst(LASER, ""));
     	}
     }
     

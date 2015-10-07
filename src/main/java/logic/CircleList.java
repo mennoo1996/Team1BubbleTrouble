@@ -30,6 +30,16 @@ public class CircleList {
 	}
 	
 	/**
+	 * Set the multiplier of all circles.
+	 * @param multiplier - the multiplier to set
+	 */
+	public void setAllMultipliers(float multiplier) {
+		for (BouncingCircle circle : circles) {
+			circle.setMultiplier(multiplier);
+		}
+	}
+	
+	/**
 	 * Method to add a new circle to the list.
 	 * @param circle	the circle to add
 	 */

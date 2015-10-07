@@ -140,13 +140,13 @@ public class BouncingCircle extends Circle implements Cloneable {
 	public void update(GameState gameState, float containerHeight, float containerWidth,
 			float deltaFloat) {
 		// Calculations for Y coordinates
-		this.setY(this.getY() + ySpeed * deltaFloat);
+		this.setY(this.getY() + ySpeed * deltaFloat * multiplier);
 		// When the ball hit the floor reverse it's speed
 		if (this.getMaxY() > containerHeight - gameState.getFloor().getHeight()) {
 			ySpeed = -getSpeedForRadius();
-		} else {
+		} else if (multiplier != 0) {
 			// Else increase the speed
-			ySpeed += gravity * deltaFloat * multiplier;
+			ySpeed += gravity * deltaFloat;
 		}
 		// When ball hits ceiling
 		if (this.getMinY() <= gameState.getCeiling().getHeight()) {

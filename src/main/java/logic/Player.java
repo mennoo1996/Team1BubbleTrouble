@@ -574,16 +574,29 @@ public class Player {
 			addWeapon(type);
 			logger.log("Added powerup instant", 
 					Logger.PriorityLevels.MEDIUM, POWERUPS);
-		}
-		if (type == Powerup.PowerupType.SHIELD) {
+		} else if (type == Powerup.PowerupType.SHIELD) {
 			addShield();
 			logger.log("Added powerup shield", 
 					Logger.PriorityLevels.MEDIUM, POWERUPS);
-		}
-		if (type == Powerup.PowerupType.SPIKY) {
+		} else if (type == Powerup.PowerupType.SPIKY) {
 			addWeapon(type);
 			logger.log("Added powerup spiky", 
 					Logger.PriorityLevels.MEDIUM, POWERUPS);
+		} else if (type == Powerup.PowerupType.FREEZE) {
+			FreezePowerup fp = new FreezePowerup();
+			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+			gs.getSpeedPowerupList().add(fp);
+			fp.updateCircles(gs.getCircleList());
+		} else if (type == Powerup.PowerupType.SLOW) {
+			SlowPowerup sp = new SlowPowerup();
+			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+			gs.getSpeedPowerupList().add(sp);
+			sp.updateCircles(gs.getCircleList());
+		} else if (type == Powerup.PowerupType.FAST) {
+			FastPowerup fp = new FastPowerup();
+			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+			gs.getSpeedPowerupList().add(fp);
+			fp.updateCircles(gs.getCircleList());
 		}
 		if (type == Powerup.PowerupType.HEALTH) {
 			addHealth();

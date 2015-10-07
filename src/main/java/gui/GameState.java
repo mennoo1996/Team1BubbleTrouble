@@ -16,6 +16,7 @@ import logic.Logger.PriorityLevels;
 import logic.MyRectangle;
 import logic.Player;
 import logic.Powerup;
+import logic.SpeedPowerup;
 import logic.Weapon;
 import logic.WeaponList;
 
@@ -48,6 +49,7 @@ public class GameState extends BasicGameState {
 	private ArrayList<BouncingCircle> shotList;
 	private ArrayList<Powerup> droppedPowerups = new ArrayList<>();
 	private ArrayList<Coin> droppedCoins = new ArrayList<>();
+	private ArrayList<SpeedPowerup> speedPowerupList = new ArrayList<SpeedPowerup>();
 	private ArrayList<FloatingScore> floatingScoreList;
 	private ArrayList<Gate> gateList;
 
@@ -371,14 +373,35 @@ public class GameState extends BasicGameState {
 				container.getHeight(),
 				container.getWidth());
 		processPause();
+		processSpeedPowerups(deltaFloat);
 		processCircles(container, deltaFloat);
 		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate
 		updateGateExistence(deltaFloat);
-		// if there are no active circles, process to gameover screen
 		processCoins(container, deltaFloat);
 		if (circleList.getCircles().isEmpty()) {
 			endLevel();
+		}
+	}
+
+	/**
+	 * Process all speedPowerups.
+	 * @param deltaFloat time since last update
+	 */
+	private void processSpeedPowerups(float deltaFloat) {
+		ArrayList<SpeedPowerup> doneList = new ArrayList<SpeedPowerup>();
+		synchronized (speedPowerupList) {
+			for (SpeedPowerup speedPowerup : speedPowerupList) {
+				speedPowerup.update(deltaFloat, 
+						((GameState) mainGame.getState(mainGame.getGameState())).getCircleList());
+
+				if (speedPowerup.isDone()) {
+					doneList.add(speedPowerup);
+				}
+			}
+		}
+		for (SpeedPowerup speedPowerup : doneList) {
+			speedPowerupList.remove(speedPowerup);
 		}
 	}
 
@@ -1387,6 +1410,20 @@ public class GameState extends BasicGameState {
 	 */
 	public void setCountinStarted(boolean countinStarted) {
 		this.countinStarted = countinStarted;
+	}
+
+	/**
+	 * @return the speedPowerupList
+	 */
+	public ArrayList<SpeedPowerup> getSpeedPowerupList() {
+		return speedPowerupList;
+	}
+
+	/**
+	 * @param speedPowerupList the speedPowerupList to set
+	 */
+	public void setSpeedPowerupList(ArrayList<SpeedPowerup> speedPowerupList) {
+		this.speedPowerupList = speedPowerupList;
 	}
 	
 	

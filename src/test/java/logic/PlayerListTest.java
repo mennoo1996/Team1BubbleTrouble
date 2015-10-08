@@ -6,8 +6,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import gui.GameState;
+import gui.MainGame;
 
 import java.util.ArrayList;
+
+import lan.Host;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,14 +20,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.StateBasedGame;
-
-import gui.GameState;
-import gui.MainGame;
-import lan.Host;
-import logic.BouncingCircle;
-import logic.Logger;
-import logic.Player;
-import logic.PlayerList;
 
 public class PlayerListTest {
 

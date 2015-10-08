@@ -221,6 +221,9 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.killMultiplayer();
 		mainGame.setLanMultiplayer(true);
 		processPlayerHost();
+		mainGame.resetLifeCount();
+		mainGame.resetLevelCount();
+		mainGame.setScore(0);
 		mainGame.spawnHost(new Host(MainGame.getMultiplayerPort(), mainGame, gameState));
 		mainGame.setIsHost(true);
 		mainGame.setIsClient(false);
@@ -234,6 +237,9 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.killMultiplayer();
 		mainGame.setLanMultiplayer(true);
 		processPlayerClient();
+		mainGame.resetLifeCount();
+		mainGame.resetLevelCount();
+		mainGame.setScore(0);
 		Client client = new Client(ipField.getText(),
 				mainGame.getMultiplayerPort(), mainGame, gameState);
 		mainGame.spawnClient(client);

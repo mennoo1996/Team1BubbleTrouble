@@ -9,13 +9,6 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
-import logic.BouncingCircle;
-import logic.Logger;
-import logic.Player;
-import logic.PlayerList;
-import logic.Weapon;
-import logic.WeaponList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

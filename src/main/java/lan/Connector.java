@@ -37,6 +37,7 @@ public abstract class Connector implements Runnable {
 	protected static final int FIVE = 5;
 	protected static final int SIX = 6;
 	protected static final int SEVEN = 7;
+	protected static final int EIGHT = 8;
 	protected static final int TIMEOUT_ATTEMPT = 3000;
 
 	/**
@@ -65,12 +66,13 @@ public abstract class Connector implements Runnable {
     	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
 				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
 				Float.parseFloat(stringList[FOUR]), Float.parseFloat(stringList[FIVE]),
-				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[SEVEN]));
+				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[EIGHT]));
+    	circle.setMultiplier(Float.parseFloat(stringList[SEVEN]));
     	
     	gameState.getFloatingScores().add(new FloatingScore(circle));
     	
     	int index = gameState.getCircleList().getIndexForCircleWithID(
-    			Integer.parseInt(stringList[SEVEN]));
+    			Integer.parseInt(stringList[EIGHT]));
     	
     	if (index >= 0) {
     		gameState.getCircleList().getCircles().set(index, circle);    

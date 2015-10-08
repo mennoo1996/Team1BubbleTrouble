@@ -8,14 +8,8 @@ import java.util.ArrayList;
 
 import levels.Level;
 import levels.Level1;
-import logic.BouncingCircle;
-import logic.Gate;
-import logic.LevelContainer;
-import logic.Logger;
-import logic.Logger.PriorityLevels;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 
 public class LevelContainerTest {

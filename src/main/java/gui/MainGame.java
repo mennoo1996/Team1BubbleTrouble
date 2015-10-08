@@ -145,7 +145,7 @@ public class MainGame extends StateBasedGame {
 		this.isClient = false;
 		
 
-		ShutDownHook shutDownHook = new ShutDownHook();
+		ShutDownHook shutDownHook = new ShutDownHook(this);
 		shutDownHook.attachShutDownHook();
 	}
 

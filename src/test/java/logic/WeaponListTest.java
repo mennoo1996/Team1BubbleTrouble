@@ -4,13 +4,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.anyObject;
 import gui.GameState;
 import gui.MainGame;
 
 import java.util.ArrayList;
-
-import lan.Host;
 
 import org.junit.Before;
 import org.junit.Test;

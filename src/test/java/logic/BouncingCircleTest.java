@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 //import edu.umd.cs.findbugs.gui.Logger;
@@ -13,17 +12,9 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
-import logic.BouncingCircle;
-import logic.CircleList;
-import logic.Gate;
-import logic.Logger;
-import logic.MyRectangle;
-import logic.Logger.PriorityLevels;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.geom.Circle;

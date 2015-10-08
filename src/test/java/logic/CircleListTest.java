@@ -1,18 +1,13 @@
 package logic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import logic.BouncingCircle;
-import logic.CircleList;
 
 public class CircleListTest {
 

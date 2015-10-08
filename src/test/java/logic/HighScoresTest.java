@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import logic.HighScores;
-import logic.Logger;
 import logic.Score;
 
 

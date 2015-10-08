@@ -2,14 +2,11 @@ package gui;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
+import logic.MyRectangle;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;
-
-import gui.Button;
-import logic.MyRectangle;
 
 public class ButtonTest {
 	

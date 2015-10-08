@@ -1,26 +1,22 @@
 package lan;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gui.GameState;
+import gui.MainGame;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.newdawn.slick.Image;
-
-import gui.GameState;
-import gui.MainGame;
-import lan.Client;
-import logic.BouncingCircle;
 import logic.CircleList;
-import logic.Logger;
 import logic.Player;
 import logic.PlayerList;
 import logic.WeaponList;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.newdawn.slick.Image;
 
 public class ClientTest {
 	Client c;
@@ -360,7 +356,7 @@ public class ClientTest {
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
 		when(gs.getWeaponList()).thenReturn(wl);
 		
-		ArrayList<BouncingCircle> clist = new ArrayList<BouncingCircle>();
+		//ArrayList<BouncingCircle> clist = new ArrayList<BouncingCircle>();
 		CircleList clmock = mock(CircleList.class);
 		when(gs.getCircleList()).thenReturn(clmock);
 		

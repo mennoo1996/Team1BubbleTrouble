@@ -9,16 +9,6 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 
-import logic.BouncingCircle;
-import logic.Coin;
-import logic.FloatingScore;
-import logic.Gate;
-import logic.Logger;
-import logic.MyRectangle;
-import logic.Player;
-import logic.Weapon;
-import logic.WeaponList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;

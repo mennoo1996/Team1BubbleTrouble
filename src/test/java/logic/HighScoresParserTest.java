@@ -4,10 +4,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import logic.HighScores;
-import logic.HighScoresParser;
-import logic.Logger;
-import logic.Score;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 

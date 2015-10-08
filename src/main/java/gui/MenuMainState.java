@@ -69,7 +69,7 @@ public class MenuMainState extends BasicGameState {
 		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, false, separatorTopTitle,
 				container.getWidth());
 		playButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, 
-				"> HURPERDURPERDURP");
+				"> Play 1-player game");
 		play2Button = new Button(BUTTON_X, PLAYBUTTON2_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
 				"> Play 2-player game");
 		lanButton = new Button(BUTTON_X, PLAYBUTTONLAN_Y, BUTTON_WIDTH, BUTTON_HEIGHT,

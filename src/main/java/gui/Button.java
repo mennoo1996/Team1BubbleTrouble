@@ -195,7 +195,7 @@ public class Button {
 					&& this.getY() == that.getY()
 					&& this.getWidth() == that.getWidth()
 					&& this.getHeight() == that.getHeight()
-					&& this.text == that.getText()) {
+					&& this.text.equals(that.getText())) {
 				return true;
 			}
 		}

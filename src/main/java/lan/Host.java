@@ -124,8 +124,10 @@ public class Host extends Connector {
     public void readClientInputs() {
     	try {
 			while (reader.ready()) {
-				String message = reader.readLine();
-				String message2 = message.trim();
+				String message = reader.readLine(), message2 = "";
+				if (message != null) {
+					message2 = message.trim();
+				}
 				if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
 				} else if (message2.startsWith("POWERUP")) {

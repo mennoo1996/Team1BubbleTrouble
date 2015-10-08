@@ -263,6 +263,7 @@ public class Powerup implements Cloneable {
 	 */
 	@Override
 	public Powerup clone() throws CloneNotSupportedException {
+		super.clone();
 		Powerup res = new Powerup(x, y, type);
 		res.setTimeRemaining(timeRemaining);
 		res.setxId(xId);

@@ -121,9 +121,10 @@ public class Client extends Connector {
     public void readServerCommands() {
         try {
 			while (reader.ready()) {
-				String message = reader.readLine();
-				String message2 = message.trim();
-				System.out.println(message2);
+				String message = reader.readLine(), message2 = "";
+				if (message != null) {
+					message2 = message.trim();
+				}
 				if (message2.startsWith("NEW")) {
 					newMessage(message2.replaceFirst("NEW", ""));
 				} else if (message2.startsWith("SYSTEM")) {

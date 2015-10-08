@@ -52,7 +52,7 @@ public class Separator {
 	 */
 	private void recalculate() {
 
-		String secondHalf = "", firstHalf = "";
+		StringBuffer firstHalf = new StringBuffer(), secondHalf = new StringBuffer();
 		// lengths
 		int titleLength = RND.getStringPixelWidth(title);
 		int secondLength = (int) (screenWidth / 2 - x) - titleLength / 2;
@@ -61,23 +61,23 @@ public class Separator {
 		// if there's a return button in front!
 		if (hasButton) {
 			for (int i  = 0; i < RETURN_BUTTON_WIDTH; i++) {
-				firstHalf += " ";
+				firstHalf.append(' ');
 			}
 		}
-
+		
 		// fill with characters
-		while (RND.getStringPixelWidth(firstHalf) < firstLength) {
-			firstHalf += "=";
+		while (RND.getStringPixelWidth(firstHalf.toString()) < firstLength) {
+			firstHalf.append('=');
 		}
-		while (RND.getStringPixelWidth(secondHalf) < firstLength) {
-			secondHalf += "=";
+		while (RND.getStringPixelWidth(secondHalf.toString()) < firstLength) {
+			secondHalf.append('=');
 		}
 
 		// add together
-		this.text = firstHalf + title + secondHalf;
+		this.text = firstHalf.toString() + title + secondHalf.toString();
 		
 		if (titleLength == 0) {
-			this.text += "=";
+			this.text = this.text.concat("=");
 		}
 	}
 	

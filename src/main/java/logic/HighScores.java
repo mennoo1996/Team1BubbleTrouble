@@ -32,7 +32,8 @@ public class HighScores {
 		StringBuffer buf = new StringBuffer();
 		
 		for (Score score : scoreList) {
-			buf.append(score.toString() + "\n");
+			buf.append(score.toString());
+			buf.append('\n');
 		}
 		
 		String res = buf.toString();

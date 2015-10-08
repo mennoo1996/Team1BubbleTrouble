@@ -81,6 +81,8 @@ public class MenuMultiplayerState extends BasicGameState {
 	private static final int TEXT_FIELD_Y = 738;
 	private static final int TEXT_FIELD_Y_2 = 588;
 	
+	private static final String START_IP = "localhost";
+	
 	/**
 	 * Construct a SettingsState.
 	 * @param mainGame the MainGame that uses this state.
@@ -137,7 +139,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		initButtons();
 		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player", container);
-		ipField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y_2, "127.0.0.1", container);
+		ipField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y_2, START_IP, container);
 		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, true, separatorTopTitle,
 				container.getWidth());
 		separatorHost = new Separator(SEPARATOR_X, SEPARATOR_Y_2, false, separatorHostTitle,
@@ -146,7 +148,7 @@ public class MenuMultiplayerState extends BasicGameState {
 				container.getWidth());
 		separatorMisc = new Separator(SEPARATOR_X, SEPARATOR_Y_4, false, separatorMiscTitle,
 				container.getWidth());
-		popup = new Popup("", mainGame.getxRes(), mainGame.getyRes());
+		popup = new Popup("", MainGame.getxRes(), MainGame.getyRes());
 	}
 	
 	/**

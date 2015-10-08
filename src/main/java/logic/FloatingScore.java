@@ -1,4 +1,7 @@
 package logic;
+
+import powerups.Powerup;
+
 /**
  * Class that represents a floating score element.
  * @author Mark

@@ -5,13 +5,13 @@ import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import powerups.Spiky;
 import gui.GameState;
 import gui.MainGame;
 import logic.BouncingCircle;
 import logic.FloatingScore;
 import logic.Logger;
 import logic.Player.Movement;
-import logic.Spiky;
 import logic.Weapon;
 
 /**

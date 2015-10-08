@@ -6,11 +6,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gui.GameState;
 import logic.MyRectangle;
-import logic.Powerup;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import powerups.Powerup;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PowerupTest {

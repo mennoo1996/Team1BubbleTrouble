@@ -8,6 +8,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import powerups.Powerup;
+import powerups.Powerup.PowerupType;
 import gui.GameState;
 import gui.MainGame;
 import gui.MenuMultiplayerState;
@@ -16,8 +18,6 @@ import logic.CircleList;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
-import logic.Powerup;
-import logic.Powerup.PowerupType;
 
 /**
  * Client class which connects to server for LAN multiplayer.

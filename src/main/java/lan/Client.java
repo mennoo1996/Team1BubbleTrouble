@@ -428,7 +428,9 @@ public class Client extends Connector {
 			if (powerup.getxId() == Float.parseFloat(stringList[0])
 					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
 				poweruplist.add(powerup);
-				gameState.getFloatingScores().add(new FloatingScore(powerup));
+				synchronized (gameState.getFloatingScores()) {
+					gameState.getFloatingScores().add(new FloatingScore(powerup));
+				}
 				if (stringList[2].equals("SHIELD")) {
 					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.SHIELD);
 				} else if (stringList[2].equals("SPIKY")) {
@@ -478,7 +480,9 @@ public class Client extends Connector {
 			if (powerup.getxId() == Float.parseFloat(stringList[0])
 					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
 				poweruplist.add(powerup);
-				gameState.getFloatingScores().add(new FloatingScore(powerup));
+				synchronized (gameState.getFloatingScores()) {
+					gameState.getFloatingScores().add(new FloatingScore(powerup));
+				}
 			}
 		}
 		gameState.getDroppedPowerups().removeAll(poweruplist);
@@ -514,8 +518,10 @@ public class Client extends Connector {
      * @param stringList description of the coin
      */
     private void addCoin(String[] stringList) {
-    	gameState.getDroppedCoins().add(new Coin(Float.parseFloat(stringList[0]),
-				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
+    	synchronized (gameState.getDroppedCoins()) {
+        	gameState.getDroppedCoins().add(new Coin(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
+    	}
     }
     
     /**
@@ -524,14 +530,18 @@ public class Client extends Connector {
      */
     private void dictateCoin(String[] stringList) {
     	ArrayList<Coin> coinlist = new ArrayList<Coin>();
-		for (Coin coin : gameState.getDroppedCoins()) {
-			if (coin.getxId() == Float.parseFloat(stringList[0])
-					&& coin.getyId() == Float.parseFloat(stringList[1])) {
-				coinlist.add(coin);
-				gameState.getFloatingScores().add(new FloatingScore(coin));
-			}
-		}
-		gameState.getDroppedCoins().removeAll(coinlist);
+    	synchronized (gameState.getDroppedCoins()) {
+    		for (Coin coin : gameState.getDroppedCoins()) {
+    			if (coin.getxId() == Float.parseFloat(stringList[0])
+    					&& coin.getyId() == Float.parseFloat(stringList[1])) {
+    				coinlist.add(coin);
+    				synchronized (gameState.getFloatingScores()) {
+    					gameState.getFloatingScores().add(new FloatingScore(coin));
+    				}
+    			}
+    		}
+    		gameState.getDroppedCoins().removeAll(coinlist);
+    	}
     }
     
     /**
@@ -540,15 +550,19 @@ public class Client extends Connector {
      */
     private void grantCoin(String[] stringList) {
     	ArrayList<Coin> coinlist = new ArrayList<Coin>();
-		for (Coin coin : gameState.getDroppedCoins()) {
-			if (coin.getxId() == Float.parseFloat(stringList[0])
-					&& coin.getyId() == Float.parseFloat(stringList[1])) {
-				coinlist.add(coin);
-				gameState.getFloatingScores().add(new FloatingScore(coin));
-			}
-		}
-		gameState.getDroppedCoins().removeAll(coinlist);
-	}
+    	synchronized (gameState.getDroppedCoins()) {
+    		for (Coin coin : gameState.getDroppedCoins()) {
+    			if (coin.getxId() == Float.parseFloat(stringList[0])
+    					&& coin.getyId() == Float.parseFloat(stringList[1])) {
+    				coinlist.add(coin);
+    				synchronized (gameState.getFloatingScores()) {
+    					gameState.getFloatingScores().add(new FloatingScore(coin));
+    				}
+    			}
+    		}
+    		gameState.getDroppedCoins().removeAll(coinlist);
+    	}
+    }
     
     /**
      * Confirm a coin to the host.

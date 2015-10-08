@@ -307,7 +307,9 @@ public class Host extends Connector {
     					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
     				poweruplist.add(powerup);
     				this.updatePowerupsGrant(powerup);
-    				gameState.getFloatingScores().add(new FloatingScore(powerup));
+    				synchronized (gameState.getFloatingScores()) {
+    					gameState.getFloatingScores().add(new FloatingScore(powerup));
+    				}
     				powerupMessage2(stringList);
     			}
     		} //end of loop
@@ -346,12 +348,10 @@ public class Host extends Connector {
     				Float.parseFloat(stringList[1]), PowerupType.FAST); // fast added to level
     	} else {
     		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.RANDOM);
-    	}
+    				Float.parseFloat(stringList[1]), PowerupType.RANDOM); }
     	synchronized (gameState.getDroppedPowerups()) {
         	gameState.getDroppedPowerups().add(powerup);
-    		updatePowerupsAdd(powerup);
-    	}
+    		updatePowerupsAdd(powerup); }
 	}
     
 	/**
@@ -414,16 +414,20 @@ public class Host extends Connector {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
-    		ArrayList<Coin> coinlist = new ArrayList<Coin>();
-    		for (Coin coin : gameState.getDroppedCoins()) {
-    			if (coin.getxId() == Float.parseFloat(stringList[0])
-    					&& coin.getyId() == Float.parseFloat(stringList[1])) {
-    				coinlist.add(coin);
-    				this.updateCoinsGrant(coin);
-    				gameState.getFloatingScores().add(new FloatingScore(coin));
-    			}
+    		synchronized (gameState.getDroppedCoins()) {
+    			ArrayList<Coin> coinlist = new ArrayList<Coin>();
+        		for (Coin coin : gameState.getDroppedCoins()) {
+        			if (coin.getxId() == Float.parseFloat(stringList[0])
+        					&& coin.getyId() == Float.parseFloat(stringList[1])) {
+        				coinlist.add(coin);
+        				this.updateCoinsGrant(coin);
+        				synchronized (gameState.getFloatingScores()) {
+        					gameState.getFloatingScores().add(new FloatingScore(coin));
+        				}
+        			}
+        		}
+        		gameState.getDroppedCoins().removeAll(coinlist);
     		}
-    		gameState.getDroppedCoins().removeAll(coinlist);
     	}
 	}
 	

@@ -1195,7 +1195,9 @@ public class GameState extends BasicGameState {
 	private void dropCoin(BouncingCircle circle) {
 		boolean bigMoney = random.nextBoolean();
 		Coin someCoin = new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney);
-		droppedCoins.add(someCoin);
+		synchronized (droppedCoins) {
+			droppedCoins.add(someCoin);
+		}
 		if (mainGame.isLanMultiplayer()) {
 			mainGame.getHost().updateCoinsAdd(someCoin);
 		}
@@ -1210,7 +1212,8 @@ public class GameState extends BasicGameState {
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
 				.nextInt(Powerup.PowerupType.values().length)];
 		Powerup somePowerup = new Powerup(circle.getCenterX(), circle.getCenterY(), newPowerup);
-		//somePowerup = new Powerup(circle.getCenterX(), circle.getCenterY(), Powerup.PowerupType.RANDOM);
+		//somePowerup = new Powerup(circle.getCenterX(), 
+		//circle.getCenterY(), Powerup.PowerupType.RANDOM);
 		droppedPowerups.add(somePowerup);
 		if (mainGame.isLanMultiplayer()) {
 			mainGame.getHost().updatePowerupsAdd(somePowerup);

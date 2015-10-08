@@ -29,7 +29,7 @@ public class Client extends Connector {
     private Socket socket;
     
     private boolean editingCircleList;
-    private ArrayList<BouncingCircle> circleList;
+	private ArrayList<BouncingCircle> circleList;
     private ArrayList<BouncingCircle> requiredList;
     private int gateNumber;
     
@@ -200,7 +200,6 @@ public class Client extends Connector {
     				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
     				Float.parseFloat(stringList[FIVE]), Integer.parseInt(stringList[SEVEN]));
     		circle.setMultiplier(Float.parseFloat(stringList[SIX]));
-    		System.out.println(message2);
         	this.circleList.add(circle);
     	}
     }
@@ -230,10 +229,7 @@ public class Client extends Connector {
     	
     	if (stringList[0].equals("START") && !this.editingCircleList) {
     		this.requiredList = new ArrayList<BouncingCircle>();
-    		
     	} else if (stringList[0].equals("END") && this.editingCircleList) {
-    		System.out.println("setting shit");
-    		
     		gameState.getGateList().get(gateNumber).setRequired(requiredList);
     	}
     }
@@ -397,30 +393,27 @@ public class Client extends Connector {
      */
     private void addPowerup(String[] stringList) {
     	synchronized (gameState.getDroppedPowerups()) {
+    		PowerupType type = PowerupType.SHIELD;
     		if (stringList[2].equals("SHIELD")) {
-    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    					Float.parseFloat(stringList[1]), PowerupType.SHIELD)); // shield added
+    			type = PowerupType.SHIELD; // shield added
     		} else if (stringList[2].equals("SPIKY")) {
-    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    					Float.parseFloat(stringList[1]), PowerupType.SPIKY)); // spiky added
+    			type = PowerupType.SPIKY; // spiky added
     		} else if (stringList[2].equals("INSTANT")) {
-    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    					Float.parseFloat(stringList[1]), PowerupType.INSTANT)); // inst added
+    			type = PowerupType.INSTANT; // inst added
     		} else if (stringList[2].equals("HEALTH")) {
-    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    					Float.parseFloat(stringList[1]), PowerupType.HEALTH)); // health added
+    			type = PowerupType.HEALTH; // health added
     		} else if (stringList[2].equals("FREEZE")) {
-    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    					Float.parseFloat(stringList[1]), PowerupType.FREEZE)); // freeze added 
+    			type = PowerupType.FREEZE; // freeze added 
     		} else if (stringList[2].equals("SLOW")) {
-    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    					Float.parseFloat(stringList[1]), PowerupType.SLOW)); // slow added 
+    			type = PowerupType.SLOW; // slow added 
     		} else if (stringList[2].equals("FAST")) {
-    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    					Float.parseFloat(stringList[1]), PowerupType.FAST)); // fast added 
+    			type = PowerupType.FAST; // fast added 
     		} else if (stringList[2].equals("RANDOM")) {
-    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    					Float.parseFloat(stringList[1]), PowerupType.RANDOM)); // random added
+    			type = PowerupType.RANDOM; // random added
+    		}
+    		if (type != null) {
+        		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), type));
     		}
     	}
     }
@@ -430,6 +423,23 @@ public class Client extends Connector {
      * @param stringList information on powerup
      */
     private void dictatePowerup(String[] stringList) {
+    	PowerupType type = PowerupType.SHIELD;
+    	if (stringList[2].equals("SHIELD")) {
+    		type = PowerupType.SHIELD;
+		} else if (stringList[2].equals("SPIKY")) {
+			type = PowerupType.SPIKY;
+		} else if (stringList[2].equals("INSTANT")) {
+			type = PowerupType.INSTANT;
+		} else if (stringList[2].equals("HEALTH")) {
+			type = PowerupType.HEALTH;
+		} else if (stringList[2].equals("FREEZE")) {
+			type = PowerupType.FREEZE;
+		} else if (stringList[2].equals("SLOW")) {
+			type = PowerupType.SLOW;
+		} else if (stringList[2].equals("FAST")) {
+			type = PowerupType.FAST;
+		} else if (stringList[2].equals("RANDOM")) {
+			type = PowerupType.RANDOM; }
     	ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
 		for (Powerup powerup : gameState.getDroppedPowerups()) {
 			if (powerup.getxId() == Float.parseFloat(stringList[0])
@@ -438,26 +448,9 @@ public class Client extends Connector {
 				synchronized (gameState.getFloatingScores()) {
 					gameState.getFloatingScores().add(new FloatingScore(powerup));
 				}
-				if (stringList[2].equals("SHIELD")) {
-					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.SHIELD);
-				} else if (stringList[2].equals("SPIKY")) {
-					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.SPIKY);
-				} else if (stringList[2].equals("INSTANT")) {
-					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.INSTANT);
-				} else if (stringList[2].equals("HEALTH")) {
-					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.HEALTH);
-				} else if (stringList[2].equals("FREEZE")) {
-					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.FREEZE);
-				} else if (stringList[2].equals("SLOW")) {
-					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.SLOW);
-				} else if (stringList[2].equals("FAST")) {
-					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.FAST);
-				} else if (stringList[2].equals("RANDOM")) {
-					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.RANDOM);
-				}
+				mainGame.getPlayerList().getPlayers().get(0).addPowerup(type);
 			}
-		}
-		gameState.getDroppedPowerups().removeAll(poweruplist);
+		} gameState.getDroppedPowerups().removeAll(poweruplist);
 	}
     
     /**
@@ -585,8 +578,6 @@ public class Client extends Connector {
     public boolean connectedToServer() {
         return this.socket.isConnected();
     }
-
-	
     
     
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.anyFloat;
 import gui.GameState;
 import gui.MainGame;
 
@@ -11,11 +12,13 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
 import powerups.Powerup;
+import powerups.SpeedPowerup;
 
 public class PlayerTest {
 	
@@ -31,6 +34,7 @@ public class PlayerTest {
 
 	@Before
 	public void setUp() throws Exception {
+		Logger.getInstance().setLoggingOn(false);
 		i = mock(Image.class);
 		i2 = mock(Image.class);
 		i3 = mock(Image.class);
@@ -1110,6 +1114,104 @@ public class PlayerTest {
 		assertEquals(0, p.shieldTimeRemaining(), 0);
 	}
 	
+	@Test
+	public void testIsOtherPlayers1() {
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setPlayerNumber(0);
+		assertTrue(p.isOthersPlayer());
+	}
 	
+	@Test
+	public void testIsOtherPlayers2() {
+		MainGame mg = mock(MainGame.class);
+		when(mg.isHost()).thenReturn(true);
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.setPlayerNumber(1);
+		assertTrue(p.isOthersPlayer());
+	}
+
+	@Test
+	public void testGetWeapon1() {
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
+		p.setgameState(gs);
+		p.getWeapon(100);
+	}
 	
+	@Test
+	public void testGetWeapon2() {
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.addPowerup(Powerup.PowerupType.SPIKY);
+		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
+		p.setgameState(gs);
+		p.getWeapon(100);
+	}
+	
+	@Test
+	public void testGetWeapon3() {
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		p.addPowerup(Powerup.PowerupType.INSTANT);
+		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
+		p.setgameState(gs);
+		p.getWeapon(100);
+	}
+	
+	@Test
+	public void testAddPowerup1() {
+		ArrayList<SpeedPowerup> plist = new ArrayList<SpeedPowerup>();
+		when(gs.getSpeedPowerupList()).thenReturn(plist);
+		MainGame mg = mock(MainGame.class);
+		when(mg.getState(1)).thenReturn(gs);
+		when(mg.getGameState()).thenReturn(1);
+		CircleList cl = mock(CircleList.class);
+		Mockito.doNothing().when(cl).setAllMultipliers(anyFloat());
+		when(gs.getCircleList()).thenReturn(cl);
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		gs.getSpeedPowerupList();
+		assertEquals(0, plist.size());
+		p.addPowerup(Powerup.PowerupType.SLOW);
+		assertEquals(1, plist.size());
+	}
+	
+	@Test
+	public void testAddPowerup2() {
+		ArrayList<SpeedPowerup> plist = new ArrayList<SpeedPowerup>();
+		when(gs.getSpeedPowerupList()).thenReturn(plist);
+		MainGame mg = mock(MainGame.class);
+		when(mg.getState(1)).thenReturn(gs);
+		when(mg.getGameState()).thenReturn(1);
+		CircleList cl = mock(CircleList.class);
+		Mockito.doNothing().when(cl).setAllMultipliers(anyFloat());
+		when(gs.getCircleList()).thenReturn(cl);
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		gs.getSpeedPowerupList();
+		assertEquals(0, plist.size());
+		p.addPowerup(Powerup.PowerupType.FREEZE);
+		assertEquals(1, plist.size());
+	}
+	
+	@Test
+	public void testAddPowerup3() {
+		ArrayList<SpeedPowerup> plist = new ArrayList<SpeedPowerup>();
+		when(gs.getSpeedPowerupList()).thenReturn(plist);
+		MainGame mg = mock(MainGame.class);
+		when(mg.getState(1)).thenReturn(gs);
+		when(mg.getGameState()).thenReturn(1);
+		CircleList cl = mock(CircleList.class);
+		Mockito.doNothing().when(cl).setAllMultipliers(anyFloat());
+		when(gs.getCircleList()).thenReturn(cl);
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		gs.getSpeedPowerupList();
+		assertEquals(0, plist.size());
+		p.addPowerup(Powerup.PowerupType.FAST);
+		assertEquals(1, plist.size());
+	}
+	
+	@Test
+	public void testAddPowerup4() {
+		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
+		mg.setLifeCount(3);
+		p.addPowerup(Powerup.PowerupType.HEALTH);
+		assertEquals(4, mg.getLifeCount());
+	}
 }

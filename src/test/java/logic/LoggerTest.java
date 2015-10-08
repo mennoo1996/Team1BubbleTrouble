@@ -95,6 +95,7 @@ public class LoggerTest {
 	
 	@Test
 	public void testIsLoggingOnAndSetLoggingOn() {
+		logger.setLoggingOn(true);
 		assertTrue(logger.isLoggingOn());
 		logger.setLoggingOn(false);
 		assertFalse(logger.isLoggingOn());

@@ -32,6 +32,20 @@ public class floatingScoreTest {
 	}
 	
 	@Test
+	public void updateTest_c2() {
+		s = new FloatingScore("dada",0,0,100,1000);
+		s.update(0.1f, 10);
+		assertFalse(s.getY() == c.getCenterY());
+	}
+	
+	@Test
+	public void updateTest_c3() {
+		s = new FloatingScore("dada",0,0);
+		s.update(0.1f, 10);
+		assertFalse(s.getY() == c.getCenterY());
+	}
+	
+	@Test
 	public void updateTest_p() {
 		s = new FloatingScore(p);
 		s.update(0.1f, 10);
@@ -82,6 +96,20 @@ public class floatingScoreTest {
 	public void getYTest_c() {
 		s = new FloatingScore(c);
 		assertTrue(s.getY() == c.getCenterY());
+	}
+	
+	@Test
+	public void cloneTest() throws CloneNotSupportedException {
+		s = new FloatingScore(c);
+		FloatingScore z = s.clone();
+		assertTrue(s.getX() == z.getX() && s.getY() == z.getY()
+				&& s.getScore().equals(z.getScore()));
+	}
+	
+	@Test
+	public void toStringTest() {
+		s = new FloatingScore(c);
+		assertEquals(s.toString(), "FLOATINGSCORE " + c.getCenterX() + " " + c.getCenterY() + " " + c.getScore() + " ");
 	}
 	
 }

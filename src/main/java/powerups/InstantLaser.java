@@ -1,4 +1,7 @@
-package logic;
+package powerups;
+
+import logic.Weapon;
+
 /**
  * Created by alexandergeenen on 09/09/15.
  */

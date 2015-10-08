@@ -1,6 +1,8 @@
-package logic;
+package powerups;
 
 import java.util.concurrent.TimeUnit;
+
+import logic.MyRectangle;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;

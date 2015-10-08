@@ -10,6 +10,7 @@ import static org.mockito.Mockito.anyString;
 
 
 
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;
 
+import powerups.Powerup;
 import gui.GameState;
 import gui.MainGame;
 import lan.Host;
@@ -28,7 +30,6 @@ import logic.FloatingScore;
 import logic.Logger;
 import logic.Player;
 import logic.PlayerList;
-import logic.Powerup;
 import logic.WeaponList;
 
 public class HostTest {

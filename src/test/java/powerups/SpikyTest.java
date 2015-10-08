@@ -1,9 +1,10 @@
-package logic;
+package powerups;
 import static org.junit.Assert.assertNotNull;
-import logic.Spiky;
 
 import org.junit.Test;
 import org.newdawn.slick.geom.Rectangle;
+
+import powerups.Spiky;
 
 
 public class SpikyTest {

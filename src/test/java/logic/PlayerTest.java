@@ -16,7 +16,6 @@ import logic.Gate;
 import logic.Logger;
 import logic.MyRectangle;
 import logic.Player;
-import logic.Powerup;
 import logic.Weapon;
 import logic.WeaponList;
 
@@ -25,6 +24,8 @@ import org.junit.Test;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
+
+import powerups.Powerup;
 
 public class PlayerTest {
 	

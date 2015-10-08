@@ -56,7 +56,6 @@ public class GameState extends BasicGameState {
 	private int score;
 	private long startTime;
 	private long timeDelta;
-	private float deltafloat;
 	private long timeRemaining;
 	private long prevTime;
 	private boolean countIn;
@@ -443,6 +442,7 @@ public class GameState extends BasicGameState {
 				mainGame.killMultiplayer();
 				mainGame.setSwitchState(mainGame.getStartState());
 			} else if (exitButton.isMouseOver(input)) {
+				mainGame.killMultiplayer();
 				mainGame.setSwitchState(-1);
 			}
 		}

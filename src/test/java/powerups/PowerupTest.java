@@ -1,6 +1,7 @@
 package powerups;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -143,5 +144,35 @@ public class PowerupTest {
 		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
 		p.setTimeRemaining(-50);
 		assertTrue(p.removePowerup());
+	}
+	
+	@Test
+	public void testGetTimeRemaining() {
+		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
+		assertEquals(5000, p.getTimeRemaining());
+	}
+	
+	@Test
+	public void testGetImageA() {
+		assertNull(Powerup.PowerupType.SHIELD.getImageA());
+	}
+	
+	@Test
+	public void testGetImageN() {
+		assertNull(Powerup.PowerupType.SHIELD.getImageN());
+	}
+	
+	@Test
+	public void testClone() {
+		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
+		Powerup p2 = null;
+		try {
+			p2 = p.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		assertEquals(p.getCenterX(), p2.getCenterX(), 0);
+		assertEquals(p.getCenterY(), p2.getCenterY(), 0);
+		assertEquals(p.getType(), p2.getType());
 	}
 }

@@ -54,6 +54,8 @@ public class HighScoresParserTest {
 		ExpectedException exception = ExpectedException.none();
 		exception.expect(FileNotFoundException.class);
 		HighScoresParser.readHighScores("no valid filename");
+		HighScoresParser.setLogger(Logger.getInstance());
 	}
+	
 	
 }

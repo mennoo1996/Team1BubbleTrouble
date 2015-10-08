@@ -11,7 +11,7 @@ import org.newdawn.slick.SlickException;
  * @author Mark
  *
  */
-public final class RND {
+public class RND {
 	
 	// Fonts used globally
 	

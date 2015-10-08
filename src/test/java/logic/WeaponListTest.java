@@ -4,17 +4,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.anyObject;
 import gui.GameState;
 import gui.MainGame;
 
 import java.util.ArrayList;
 
-import logic.BouncingCircle;
-import logic.Logger;
-import logic.Player;
-import logic.PlayerList;
-import logic.Weapon;
-import logic.WeaponList;
+import lan.Host;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -136,5 +132,15 @@ public class WeaponListTest {
 	@Test
 	public void testGetLaserTipImage() {
 		assertEquals(img, wl.getLasertipimageN());
+	}
+	
+	@Test
+	public void testGetLaserBeamImageA() {
+		assertEquals(imgA, wl.getLaserbeamimageA());
+	}
+	
+	@Test
+	public void testGetLaserTipImageA() {
+		assertEquals(imgA, wl.getLasertipimageA());
 	}
 }

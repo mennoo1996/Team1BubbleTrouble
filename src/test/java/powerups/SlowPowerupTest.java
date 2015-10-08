@@ -14,74 +14,74 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.anyFloat;
 
-public class FreezePowerupTest {
+public class SlowPowerupTest {
 
-	private FreezePowerup fp;
+	private SlowPowerup sp;
 	
 	@Before
 	public void setUp() {
-		fp = new FreezePowerup();
+		sp = new SlowPowerup();
 	}
 	
 	@Test
 	public void testFreezePowerup() {
-		assertNotNull(fp);
+		assertNotNull(sp);
 	}
 
 	@Test
 	public void testUpdateCircles() {
 		CircleList cl = mock(CircleList.class);
-		fp.updateCircles(cl);
+		sp.updateCircles(cl);
 		verify(cl, times(1)).setAllMultipliers(anyFloat());
 	}
 
 	@Test
 	public void testUpdate1() {
 		CircleList cl = mock(CircleList.class);
-		fp.update(2, cl);
+		sp.update(2, cl);
 		verify(cl, times(0)).setAllMultipliers(anyFloat());
 	}
 	
 	@Test
 	public void testUpdate2() {
 		CircleList cl = mock(CircleList.class);
-		fp.update(6, cl);
+		sp.update(6, cl);
 		verify(cl, times(1)).setAllMultipliers(anyFloat());
 	}
 
 	@Test
 	public void testGetMultiplier() {
-		assertEquals(0, fp.getMultiplier(), 0);
+		assertEquals(0.5, sp.getMultiplier(), 0);
 	}
 
 	@Test
 	public void testSetMultiplier() {
-		fp.setMultiplier(5);
-		assertEquals(5, fp.getMultiplier(), 0);
+		sp.setMultiplier(5);
+		assertEquals(5, sp.getMultiplier(), 0);
 	}
 
 	@Test
 	public void testGetTimeRemaining1() {
-		assertEquals(5, fp.getTimeRemaining(), 0);
+		assertEquals(5, sp.getTimeRemaining(), 0);
 	}
 	
 	@Test
 	public void testGetTimeRemaining2() {
 		CircleList cl = mock(CircleList.class);
-		fp.update(3, cl);
-		assertEquals(2, fp.getTimeRemaining(), 0);
+		sp.update(3, cl);
+		assertEquals(2, sp.getTimeRemaining(), 0);
 	}
 
 	@Test
 	public void testIsDone1() {
-		assertFalse(fp.isDone());
+		assertFalse(sp.isDone());
 	}
 	
 	@Test
 	public void testIsDone2() {
 		CircleList cl = mock(CircleList.class);
-		fp.update(6, cl);
-		assertTrue(fp.isDone());
+		sp.update(6, cl);
+		assertTrue(sp.isDone());
 	}
 
 }

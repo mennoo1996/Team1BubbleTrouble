@@ -14,13 +14,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.anyFloat;
 
-public class FreezePowerupTest {
+public class FastPowerupTest {
 
-	private FreezePowerup fp;
+	private FastPowerup fp;
 	
 	@Before
 	public void setUp() {
-		fp = new FreezePowerup();
+		fp = new FastPowerup();
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class FreezePowerupTest {
 
 	@Test
 	public void testGetMultiplier() {
-		assertEquals(0, fp.getMultiplier(), 0);
+		assertEquals(1.5, fp.getMultiplier(), 0);
 	}
 
 	@Test

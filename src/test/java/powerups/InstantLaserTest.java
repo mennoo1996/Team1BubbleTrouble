@@ -1,8 +1,9 @@
-package logic;
+package powerups;
 import static org.junit.Assert.*;
-import logic.InstantLaser;
 
 import org.junit.Test;
+
+import powerups.InstantLaser;
 
 
 public class InstantLaserTest {

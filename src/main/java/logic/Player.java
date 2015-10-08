@@ -14,6 +14,13 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
+import powerups.FastPowerup;
+import powerups.FreezePowerup;
+import powerups.InstantLaser;
+import powerups.Powerup;
+import powerups.SlowPowerup;
+import powerups.Spiky;
+
 /**
  * This class represents a Player.
  * @author Menno

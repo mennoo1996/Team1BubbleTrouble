@@ -15,8 +15,6 @@ import logic.Logger;
 import logic.Logger.PriorityLevels;
 import logic.MyRectangle;
 import logic.Player;
-import logic.Powerup;
-import logic.SpeedPowerup;
 import logic.Weapon;
 import logic.WeaponList;
 
@@ -28,6 +26,9 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import powerups.Powerup;
+import powerups.SpeedPowerup;
 
 /**
  * This class is the state that we are in during gameplay.

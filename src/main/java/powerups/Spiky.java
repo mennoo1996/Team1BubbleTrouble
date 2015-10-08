@@ -1,4 +1,6 @@
-package logic;
+package powerups;
+import logic.Weapon;
+
 import org.newdawn.slick.geom.Rectangle;
 
 /**

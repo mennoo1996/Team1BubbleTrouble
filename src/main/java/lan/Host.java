@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import powerups.Powerup;
+import powerups.Powerup.PowerupType;
 import gui.GameState;
 import gui.MainGame;
 import gui.MenuMultiplayerState;
@@ -15,8 +17,6 @@ import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
 import logic.Logger;
-import logic.Powerup;
-import logic.Powerup.PowerupType;
 
 /**
  * Host server for LAN multiplayer.

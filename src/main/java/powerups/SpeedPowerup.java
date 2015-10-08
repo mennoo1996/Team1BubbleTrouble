@@ -1,4 +1,6 @@
-package logic;
+package powerups;
+
+import logic.CircleList;
 
 
 /**

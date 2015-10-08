@@ -3,10 +3,11 @@ import static org.junit.Assert.*;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
-import logic.Powerup;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import powerups.Powerup;
 
 
 public class floatingScoreTest {

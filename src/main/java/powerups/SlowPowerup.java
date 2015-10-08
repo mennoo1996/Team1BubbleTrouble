@@ -1,18 +1,18 @@
-package logic;
+package powerups;
 
 /**
  * A powerup which will let all circles stand still.
  * @author Bart
  *
  */
-public class FreezePowerup extends SpeedPowerup {
+public class SlowPowerup extends SpeedPowerup {
 	
-	private static final int MULTIPLIER = 0;
+	private static final float MULTIPLIER = 0.5f;
 	
 	/**
 	 * constructor.
 	 */
-	public FreezePowerup() {
+	public SlowPowerup() {
 		super(MULTIPLIER);
 	}
 

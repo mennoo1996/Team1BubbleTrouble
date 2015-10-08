@@ -1,4 +1,4 @@
-package logic;
+package powerups;
 
 /**
  * A powerup which will let all circles stand still.

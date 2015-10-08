@@ -62,9 +62,9 @@ public class Level4 extends Level {
 			gate.addToRequirements(ball);
 			gates.add(gate);
 			// Set the correct attributes
-			this.setCircles(circles);
 			this.setGates(gates);	this.setTime(LEVEL_4_TIME);
 		}
+		this.setCircles(circles);
 
 	}
 }

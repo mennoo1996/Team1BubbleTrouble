@@ -172,7 +172,7 @@ public class GameState extends BasicGameState {
 	private static final int AMOUNT_OF_BALLS = 6;
 	private static final int POWERUP_CHANCE = 20;
 	private static final int COIN_CHANCE = 30;
-	private static final int CIRCLES_UPDATE_RATE = 600;
+	private static final int CIRCLES_UPDATE_RATE = 100; // rate is in frames
 	private int lastCircleUpdate;
 	// Level ending, empty bar
 	
@@ -394,7 +394,6 @@ public class GameState extends BasicGameState {
 			for (SpeedPowerup speedPowerup : speedPowerupList) {
 				speedPowerup.update(deltaFloat, 
 						((GameState) mainGame.getState(mainGame.getGameState())).getCircleList());
-
 				if (speedPowerup.isDone()) {
 					doneList.add(speedPowerup);
 				}

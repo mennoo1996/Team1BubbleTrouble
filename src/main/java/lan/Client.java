@@ -193,11 +193,15 @@ public class Client extends Connector {
     private void circleMessage(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
-    	this.circleList.add(new BouncingCircle(Float.parseFloat(stringList[0]),
-				Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]),
-				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
-				Float.parseFloat(stringList[FIVE]), Integer.parseInt(stringList[SIX])));
-    	
+    	synchronized (this.circleList) {
+    		BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), Float.parseFloat(stringList[2]),
+    				Float.parseFloat(stringList[THREE]), Float.parseFloat(stringList[FOUR]),
+    				Float.parseFloat(stringList[FIVE]), Integer.parseInt(stringList[SEVEN]));
+    		circle.setMultiplier(Float.parseFloat(stringList[SIX]));
+    		System.out.println(message2);
+        	this.circleList.add(circle);
+    	}
     }
     
     /**
@@ -246,7 +250,9 @@ public class Client extends Connector {
     	} else if (message2.equals("END") && this.editingCircleList) {
     		System.out.println("setting shit");
     		this.editingCircleList = false;
-    		gameState.setCircleList(new CircleList(circleList));
+    		synchronized (gameState.getCircleList()) {
+        		gameState.setCircleList(new CircleList(circleList));
+    		}
     	}
     }
     
@@ -473,19 +479,19 @@ public class Client extends Connector {
     	} else if (stringList[2].equals("FAST")) {
     		mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.FAST);
     	} else if (stringList[2].equals("RANDOM")) {
-    		mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.RANDOM);
-    	}
-    	ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
-		for (Powerup powerup : gameState.getDroppedPowerups()) {
-			if (powerup.getxId() == Float.parseFloat(stringList[0])
-					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
-				poweruplist.add(powerup);
-				synchronized (gameState.getFloatingScores()) {
-					gameState.getFloatingScores().add(new FloatingScore(powerup));
-				}
-			}
-		}
-		gameState.getDroppedPowerups().removeAll(poweruplist);
+    		mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.RANDOM); }
+    	synchronized (gameState.getDroppedPowerups()) {
+    		ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
+    		for (Powerup powerup : gameState.getDroppedPowerups()) {
+    			if (powerup.getxId() == Float.parseFloat(stringList[0])
+    					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
+    				poweruplist.add(powerup);
+    				synchronized (gameState.getFloatingScores()) {
+    					gameState.getFloatingScores().add(new FloatingScore(powerup));
+    				}
+    			}
+    		}
+    		gameState.getDroppedPowerups().removeAll(poweruplist); }
 	}
     
     /**

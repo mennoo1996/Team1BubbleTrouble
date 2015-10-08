@@ -301,19 +301,21 @@ public class Host extends Connector {
 		String message2 = message.trim();
     	String[] stringList = message2.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
-    		ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
-    		for (Powerup powerup : gameState.getDroppedPowerups()) {
-    			if (powerup.getxId() == Float.parseFloat(stringList[0])
-    					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
-    				poweruplist.add(powerup);
-    				this.updatePowerupsGrant(powerup);
-    				synchronized (gameState.getFloatingScores()) {
-    					gameState.getFloatingScores().add(new FloatingScore(powerup));
-    				}
-    				powerupMessage2(stringList);
-    			}
-    		} //end of loop
-    		gameState.getDroppedPowerups().removeAll(poweruplist);
+    		synchronized (gameState.getDroppedPowerups()) {
+    			ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
+        		for (Powerup powerup : gameState.getDroppedPowerups()) {
+        			if (powerup.getxId() == Float.parseFloat(stringList[0])
+        					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
+        				poweruplist.add(powerup);
+        				this.updatePowerupsGrant(powerup);
+        				synchronized (gameState.getFloatingScores()) {
+        					gameState.getFloatingScores().add(new FloatingScore(powerup));
+        				}
+        				powerupMessage2(stringList);
+        			}
+        		} //end of loop
+        		gameState.getDroppedPowerups().removeAll(poweruplist);
+    		}
     	} else if (stringList[THREE].equals("ADD")) {
     		addPowerup(stringList);
     	}

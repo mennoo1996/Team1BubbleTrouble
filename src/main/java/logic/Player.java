@@ -70,7 +70,7 @@ public class Player {
     private boolean movingLeft;
 	
 	private static final int POWERUP_DURATION = 10;
-	private static final int RANDOM_DURATION = 1;
+	private static final int RANDOM_DURATION = 100;
 	private long shieldTimeRemaining;
 	
 	private Logger logger = Logger.getInstance();
@@ -131,7 +131,6 @@ public class Player {
 		if (!gameState.isPaused() && shieldTimeRemaining > 0) {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
-		//System.out.println(deltaFloat);
 		processGates();
 		processWeapon(deltaFloat, containerHeight, testing);
 		processPlayerMovement(deltaFloat, containerWidth, testing);
@@ -570,7 +569,7 @@ public class Player {
 	 * @param type powerup type
 	 */
 	public void addPowerup(Powerup.PowerupType type) {
-		logger.log("Adding powerup " + Powerup.PowerupType.FAST.toString(),
+		logger.log("Adding powerup " + type.toString(),
 				Logger.PriorityLevels.MEDIUM, POWERUPS);
 		if (type == Powerup.PowerupType.INSTANT) {
 			addWeapon(type);
@@ -628,7 +627,6 @@ public class Player {
 	private void addRandom() {
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
 		.nextInt(Powerup.PowerupType.values().length - 1)];
-		shieldTimeRemaining = TimeUnit.SECONDS.toMillis(RANDOM_DURATION);
 		Executors.newScheduledThreadPool(1).schedule(() -> {
 			Powerup powerup = new Powerup(x, y, newPowerup);
 			synchronized (gameState.getDroppedPowerups()) {
@@ -641,7 +639,7 @@ public class Player {
 					mainGame.getClient().updatePowerupsAdd(powerup);
 				}
 			}
-		}, RANDOM_DURATION, TimeUnit.SECONDS);
+		}, RANDOM_DURATION, TimeUnit.MILLISECONDS);
 
 	}
 	

@@ -33,7 +33,6 @@ public final class Logger {
 	 */
 	private Logger(boolean loggingOn) {
 		super();
-		System.out.println("\nLOGGER INITIALIZED\nLogging On: " + loggingOn + "\n");
 		this.loggingOn = loggingOn;
 		logBuffer = "";
 		tagFilters = new ArrayList<String>();

@@ -16,7 +16,7 @@ public class Button {
 	private float width;
 	private float height;
 	private String text;
-
+	
 	private static final float HALF = 0.5f;
 	
 	/**

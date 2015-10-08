@@ -43,7 +43,6 @@ public class GameState extends BasicGameState {
 	
 	private  int totaltime;
 	
-	
 	private MainGame mainGame;
 	private CircleList circleList;
 	private ArrayList<BouncingCircle> shotList;
@@ -56,6 +55,7 @@ public class GameState extends BasicGameState {
 	private int score;
 	private long startTime;
 	private long timeDelta;
+	private float deltafloat;
 	private long timeRemaining;
 	private long prevTime;
 	private boolean countIn;

@@ -622,18 +622,27 @@ public class Player {
 	}
 	
 	/**
-	 * Add a random powerup to the player.
+	 * Add a random powerup to the player. We do this by spawning another powerup 
+	 * (only for the playing player!!!) so multiplayer code can handle this by itself.
 	 */
 	private void addRandom() {
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
 		.nextInt(Powerup.PowerupType.values().length - 1)];
 		shieldTimeRemaining = TimeUnit.SECONDS.toMillis(RANDOM_DURATION);
-        Executors.newScheduledThreadPool(1).schedule(() -> {
-        			addPowerup(newPowerup);
-        			gameState.getFloatingScores().add(
-        					new FloatingScore(new Powerup(x - width, y + height, newPowerup)));
-                },
-                RANDOM_DURATION, TimeUnit.SECONDS);
+		Executors.newScheduledThreadPool(1).schedule(() -> {
+			Powerup powerup = new Powerup(x, y, newPowerup);
+			synchronized (gameState.getDroppedPowerups()) {
+				if (!mainGame.isLanMultiplayer()) {
+					gameState.getDroppedPowerups().add(powerup);
+				} else if (mainGame.isHost() && playerNumber == 0) {
+					gameState.getDroppedPowerups().add(powerup);
+					mainGame.getHost().updatePowerupsAdd(powerup);
+				} else if (mainGame.isClient() && playerNumber == 1) {
+					mainGame.getClient().updatePowerupsAdd(powerup);
+				}
+			}
+		}, RANDOM_DURATION, TimeUnit.SECONDS);
+
 	}
 	
 	/**

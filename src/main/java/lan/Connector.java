@@ -37,7 +37,7 @@ public abstract class Connector implements Runnable {
 	protected static final int FIVE = 5;
 	protected static final int SIX = 6;
 	protected static final int SEVEN = 7;
-	protected static final int TIMEOUT_ATTEMPT = 500;
+	protected static final int TIMEOUT_ATTEMPT = 3000;
 
 	/**
 	 * Constructs a new Connector.
@@ -242,7 +242,6 @@ public abstract class Connector implements Runnable {
     	String[] stringList = message2.split(" ");
     	
     	int id = Integer.parseInt(stringList[0]);
-    	//System.out.println("PLAYERID" + id);
     	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
     	System.out.println("spiky = " + spikey);
     	Weapon weapon;
@@ -350,14 +349,8 @@ public abstract class Connector implements Runnable {
 		this.reader = reader;
 	}
 	
-//	/**
-//	 * Process a message about a dead player.
-//	 * @param message the message to send
-//	 */
-//    protected abstract void deadMessage(String message);
-	
     /**
-     * Process a dead message.
+     * Process a death message.
      * @param message the message to process
      */
     public void deadMessage(String message) {

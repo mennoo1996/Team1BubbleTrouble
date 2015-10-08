@@ -263,7 +263,14 @@ public class Client extends Connector {
     	}
     }
     
-    
+    /**
+     * Send a powerup to the host.
+     * @param powerup the powerup to send
+     */
+    public void updatePowerupsAdd(Powerup powerup) {
+    	sendMessage(powerup.toString() + "ADD ");
+		System.out.println("CLIENT SENT: " + powerup.toString() + "ADD ");
+    }
     
     /**
      * Process a message about the location of a player.
@@ -377,37 +384,39 @@ public class Client extends Connector {
     	}
     }
 
-	/**
+    /**
      * Add a powerup to the level on the client side.
      * @param stringList information on powerup
      */
     private void addPowerup(String[] stringList) {
-    	if (stringList[2].equals("SHIELD")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SHIELD)); // shield added to level
-    	} else if (stringList[2].equals("SPIKY")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SPIKY)); // spiky added to level
-    	} else if (stringList[2].equals("INSTANT")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.INSTANT)); // inst added to level
-    	} else if (stringList[2].equals("HEALTH")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.HEALTH)); // health added to level
-    	} else if (stringList[2].equals("FREEZE")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.FREEZE)); // freeze added to level
-    	} else if (stringList[2].equals("SLOW")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SLOW)); // slow added to level
-    	} else if (stringList[2].equals("FAST")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.FAST)); // fast added to level
-    	} else if (stringList[2].equals("RANDOM")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.RANDOM)); // random added to level
+    	synchronized (gameState.getDroppedPowerups()) {
+    		if (stringList[2].equals("SHIELD")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.SHIELD)); // shield added
+    		} else if (stringList[2].equals("SPIKY")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.SPIKY)); // spiky added
+    		} else if (stringList[2].equals("INSTANT")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.INSTANT)); // inst added
+    		} else if (stringList[2].equals("HEALTH")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.HEALTH)); // health added
+    		} else if (stringList[2].equals("FREEZE")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.FREEZE)); // freeze added 
+    		} else if (stringList[2].equals("SLOW")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.SLOW)); // slow added 
+    		} else if (stringList[2].equals("FAST")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.FAST)); // fast added 
+    		} else if (stringList[2].equals("RANDOM")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.RANDOM)); // random added
+    		}
     	}
-	}
+    }
 
 	/**
      * Remove a powerup from the level, and give it to the host player.
@@ -419,7 +428,9 @@ public class Client extends Connector {
 			if (powerup.getxId() == Float.parseFloat(stringList[0])
 					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
 				poweruplist.add(powerup);
-				gameState.getFloatingScores().add(new FloatingScore(powerup));
+				synchronized (gameState.getFloatingScores()) {
+					gameState.getFloatingScores().add(new FloatingScore(powerup));
+				}
 				if (stringList[2].equals("SHIELD")) {
 					mainGame.getPlayerList().getPlayers().get(0).addPowerup(PowerupType.SHIELD);
 				} else if (stringList[2].equals("SPIKY")) {
@@ -469,7 +480,9 @@ public class Client extends Connector {
 			if (powerup.getxId() == Float.parseFloat(stringList[0])
 					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
 				poweruplist.add(powerup);
-				gameState.getFloatingScores().add(new FloatingScore(powerup));
+				synchronized (gameState.getFloatingScores()) {
+					gameState.getFloatingScores().add(new FloatingScore(powerup));
+				}
 			}
 		}
 		gameState.getDroppedPowerups().removeAll(poweruplist);
@@ -505,8 +518,10 @@ public class Client extends Connector {
      * @param stringList description of the coin
      */
     private void addCoin(String[] stringList) {
-    	gameState.getDroppedCoins().add(new Coin(Float.parseFloat(stringList[0]),
-				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
+    	synchronized (gameState.getDroppedCoins()) {
+        	gameState.getDroppedCoins().add(new Coin(Float.parseFloat(stringList[0]),
+    				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
+    	}
     }
     
     /**
@@ -515,14 +530,18 @@ public class Client extends Connector {
      */
     private void dictateCoin(String[] stringList) {
     	ArrayList<Coin> coinlist = new ArrayList<Coin>();
-		for (Coin coin : gameState.getDroppedCoins()) {
-			if (coin.getxId() == Float.parseFloat(stringList[0])
-					&& coin.getyId() == Float.parseFloat(stringList[1])) {
-				coinlist.add(coin);
-				gameState.getFloatingScores().add(new FloatingScore(coin));
-			}
-		}
-		gameState.getDroppedCoins().removeAll(coinlist);
+    	synchronized (gameState.getDroppedCoins()) {
+    		for (Coin coin : gameState.getDroppedCoins()) {
+    			if (coin.getxId() == Float.parseFloat(stringList[0])
+    					&& coin.getyId() == Float.parseFloat(stringList[1])) {
+    				coinlist.add(coin);
+    				synchronized (gameState.getFloatingScores()) {
+    					gameState.getFloatingScores().add(new FloatingScore(coin));
+    				}
+    			}
+    		}
+    		gameState.getDroppedCoins().removeAll(coinlist);
+    	}
     }
     
     /**
@@ -531,15 +550,19 @@ public class Client extends Connector {
      */
     private void grantCoin(String[] stringList) {
     	ArrayList<Coin> coinlist = new ArrayList<Coin>();
-		for (Coin coin : gameState.getDroppedCoins()) {
-			if (coin.getxId() == Float.parseFloat(stringList[0])
-					&& coin.getyId() == Float.parseFloat(stringList[1])) {
-				coinlist.add(coin);
-				gameState.getFloatingScores().add(new FloatingScore(coin));
-			}
-		}
-		gameState.getDroppedCoins().removeAll(coinlist);
-	}
+    	synchronized (gameState.getDroppedCoins()) {
+    		for (Coin coin : gameState.getDroppedCoins()) {
+    			if (coin.getxId() == Float.parseFloat(stringList[0])
+    					&& coin.getyId() == Float.parseFloat(stringList[1])) {
+    				coinlist.add(coin);
+    				synchronized (gameState.getFloatingScores()) {
+    					gameState.getFloatingScores().add(new FloatingScore(coin));
+    				}
+    			}
+    		}
+    		gameState.getDroppedCoins().removeAll(coinlist);
+    	}
+    }
     
     /**
      * Confirm a coin to the host.

@@ -17,9 +17,10 @@ public class Level1 extends Level {
 	/**
 	 * Creates a level.
 	 * @param maingame the game in which the level is created
+	 * @param isMultiplayer whether or not the level will be used in multiplayer
 	 */
-	public Level1(MainGame maingame) {
-		super(maingame);
+	public Level1(MainGame maingame, boolean isMultiplayer) {
+		super(maingame, isMultiplayer);
 	}
 
 	private static final int DEFAULT_BALL_X = 200;

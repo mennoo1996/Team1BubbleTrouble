@@ -2,9 +2,8 @@ package levels;
 
 import gui.MainGame;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,16 +12,18 @@ import org.mockito.Mock;
 
 import java.util.Arrays;
 
+import static org.mockito.Mockito.mock;
+
 /**
  * Created by alexandergeenen on 08/10/15.
  */
 
 @RunWith(Parameterized.class)
-public class LevelFactorySinglePlayerTest {
+public class LevelFactoryMultiPlayerTest {
 
-    @Mock private MainGame mainGame = mock(MainGame.class, RETURNS_MOCKS);
+    @Mock private MainGame mainGame = mock(MainGame.class);
     private int levelNum;
-    private LevelFactorySinglePlayer levelFactorySinglePlayer;
+    private LevelFactoryMultiPlayer levelFactoryMultiPlayer;
     private Level level;
 
     private static final String classPrefix = "levels.Level";
@@ -43,16 +44,15 @@ public class LevelFactorySinglePlayerTest {
         });
     }
 
-    public LevelFactorySinglePlayerTest(int levelNum) {
-        Level.setTesting(true);
+    public LevelFactoryMultiPlayerTest(int levelNum) {
         this.levelNum = levelNum;
-        this.levelFactorySinglePlayer = new LevelFactorySinglePlayer();
+        this.levelFactoryMultiPlayer = new LevelFactoryMultiPlayer();
     }
 
     @Test
     public void createLevelTest() throws ClassNotFoundException {
-        this.level = levelFactorySinglePlayer.orderLevel(levelNum, mainGame);
+        this.level = levelFactoryMultiPlayer.orderLevel(levelNum, mainGame);
         assertEquals(Class.forName(classPrefix + levelNum), level.getClass());
-        assertFalse(this.level.getMultiplayer());
+        assertTrue(this.level.getMultiplayer());
     }
 }

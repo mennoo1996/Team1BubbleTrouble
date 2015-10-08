@@ -41,7 +41,7 @@ public class LevelTest {
 
 	@Test
 	public void testLevelTime() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		assertEquals(time, l.getTime());
 		
@@ -49,7 +49,7 @@ public class LevelTest {
 	
 	@Test
 	public void testLevelCircles() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		assertEquals(circles, l.getCircles());
 		
@@ -57,21 +57,21 @@ public class LevelTest {
 	
 	@Test
 	public void testLevelGates(){
-		l = new Level1 (mg);
+		l = new Level1 (mg, false);
 		l.constructLevel();
 		assertEquals(gates, l.getGates());
 	}
 
 	@Test
 	public void testGetTime() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		assertEquals(LEVEL_1_TIME, l.getTime());
 	}
 	
 	@Test
 	public void testGetTimeNoConstantValue() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		l.setTime(10);
 		assertEquals(10, l.getTime());
@@ -79,7 +79,7 @@ public class LevelTest {
 
 	@Test
 	public void testSetTime() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		l.setTime(5);
 		assertEquals(5, l.getTime());
@@ -87,7 +87,7 @@ public class LevelTest {
 	
 	@Test
 	public void testSetTimeNoConstantValue() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		l.setTime(20);
 		assertEquals(20, l.getTime());
@@ -96,7 +96,7 @@ public class LevelTest {
 
 	@Test
 	public void testGetCircles() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		assertEquals(circles, l.getCircles());
 	}
@@ -104,7 +104,7 @@ public class LevelTest {
 	@Test
 	public void testGetCirclesNoConstantValue() {
 		circles.add(bc);
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		l.setCircles(circles);
 		assertEquals(circles, l.getCircles());
@@ -113,7 +113,7 @@ public class LevelTest {
 
 	@Test
 	public void testSetCircles() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
 		l.setCircles(circles2);
@@ -122,7 +122,7 @@ public class LevelTest {
 	
 	@Test
 	public void testSetCirclesNoConstantValue() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		ArrayList<BouncingCircle> circles2 = new ArrayList<BouncingCircle>();
 		circles2.add(bc);
@@ -133,7 +133,7 @@ public class LevelTest {
 
 	@Test
 	public void testGetGates() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		assertEquals(gates, l.getGates());
 	}
@@ -141,7 +141,7 @@ public class LevelTest {
 	@Test
 	public void testGetGatesNoConstantValue() {
 		gates.add(g);
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		l.setGates(gates);
 		assertEquals(gates, l.getGates());
@@ -149,7 +149,7 @@ public class LevelTest {
 
 	@Test
 	public void testSetGates() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		ArrayList<Gate> gates2 = new ArrayList<Gate>();
 		l.setGates(gates2);
@@ -158,7 +158,7 @@ public class LevelTest {
 	
 	@Test
 	public void testSetGatesNoConstantValue() {
-		l = new Level1(mg);
+		l = new Level1(mg, false);
 		l.constructLevel();
 		ArrayList<Gate> gates2 = new ArrayList<Gate>();
 		gates2.add(g);

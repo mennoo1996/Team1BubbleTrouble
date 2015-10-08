@@ -31,9 +31,10 @@ public class Level4 extends Level {
 	/**
 	 * Construct a new Level4.
 	 * @param mainGame the mainGame that uses this level
+	 * @param isMultiplayer whether or not the level will be used in multiplayer
 	 */
-	public Level4(MainGame mainGame) {
-		super(mainGame);
+	public Level4(MainGame mainGame, boolean isMultiplayer) {
+		super(mainGame, isMultiplayer);
 	}
 	
 	@Override
@@ -49,7 +50,7 @@ public class Level4 extends Level {
 				this.getMaingame().getGravity(), 1));
 		// The gate list
 		ArrayList<Gate> gates = new ArrayList<Gate>();
-		if (!this.getMaingame().isLanMultiplayer()) {
+		if (!this.getMultiplayer()) {
 			Gate gate;
 			if (!isTesting()) {
 				gate = new Gate((float) this.getMaingame().getContainer().getWidth() / 2.0f 

@@ -34,14 +34,14 @@ public class Level7 extends Level {
 	/**
 	 * Construct a new Level7.
 	 * @param mainGame the mainGame that uses this level
+	 * @param isMultiplayer whether or not the level will be used in multiplayer
 	 */
-	public Level7(MainGame mainGame) {
-		super(mainGame);
+	public Level7(MainGame mainGame, boolean isMultiplayer) {
+		super(mainGame, isMultiplayer);
 	}
 	
 	@Override
 	public void constructLevel() {
-		// The circle list
 		ArrayList<BouncingCircle> circles = new ArrayList<BouncingCircle>();
 		BouncingCircle ball = new BouncingCircle(DEFAULT_BALL_X, DEFAULT_BALL_Y, RADIUS_3,
 				this.getMaingame().getStartingSpeed(), DEFAULT_YSPEED,
@@ -54,18 +54,18 @@ public class Level7 extends Level {
 				this.getMaingame().getGravity(), 2);
 		
 		circles.add(ball); circles.add(ball2); circles.add(ball3); Gate gate2;
-		// The gate list
 		ArrayList<Gate> gates = new ArrayList<Gate>();
-		if (!isTesting()) {
-			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH,
-					this.getMaingame().getContainer().getHeight());
-		} else { 
-			gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT); }
-		gate2.addToRequirements(ball);
-		gate2.addToRequirements(ball2);
-		gates.add(gate2);
-		
-		// Set up correct attributes
+		if (!this.getMultiplayer()) {
+			if (!isTesting()) {
+				gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH,
+						this.getMaingame().getContainer().getHeight());
+			} else {
+				gate2 = new Gate(LEVEL_7_GATE_X, 0, LEVEL_1_GATE_WIDTH, TESTING_CONTAINER_HEIGHT);
+			}
+			gate2.addToRequirements(ball);
+			gate2.addToRequirements(ball2);
+			gates.add(gate2);
+		}
 		this.setCircles(circles);
 		this.setGates(gates);
 		this.setTime(LEVEL_7_TIME);

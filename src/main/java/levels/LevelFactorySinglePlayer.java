@@ -18,8 +18,9 @@ public class LevelFactorySinglePlayer extends LevelFactory {
 		try {
 			String classString = "levels.Level" + levelNumber;
 			@SuppressWarnings("rawtypes")
-			Constructor constructor = Class.forName(classString).getConstructor(MainGame.class);
-			level = (Level) constructor.newInstance(mainGame);
+			Constructor constructor = Class.forName(classString).getConstructor(MainGame.class,
+					boolean.class);
+			level = (Level) constructor.newInstance(mainGame, false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 

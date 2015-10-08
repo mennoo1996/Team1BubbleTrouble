@@ -19,18 +19,21 @@ public abstract class Level {
 	private ArrayList<BouncingCircle> circles;
 	private ArrayList<Gate> gates;
 	private MainGame maingame;
+	private boolean isMultiplayer;
 	
 	private static boolean testing = false;
 	
 	/**
 	 * Construct a new level.
 	 * @param maingame the game in which the level will appear
+	 * @param isMultiplayer whether or not the level will be used in multiplayer
 	 */
-	public Level(MainGame maingame) {
+	public Level(MainGame maingame, boolean isMultiplayer) {
 		this.time = 0;
 		this.circles = new ArrayList<BouncingCircle>();
 		this.gates = new ArrayList<Gate>();
 		this.maingame = maingame;
+		this.isMultiplayer = isMultiplayer;
 	}
 	
 	/**
@@ -111,6 +114,12 @@ public abstract class Level {
 	public static void setTesting(boolean testing) {
 		Level.testing = testing;
 	}
-	
+
+	/**
+	 * @return whether or not the level will be used in multiplayer
+	 */
+	public boolean getMultiplayer() {
+		return this.isMultiplayer;
+	}
 	
 }

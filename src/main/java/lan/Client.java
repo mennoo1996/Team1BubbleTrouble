@@ -263,7 +263,14 @@ public class Client extends Connector {
     	}
     }
     
-    
+    /**
+     * Send a powerup to the host.
+     * @param powerup the powerup to send
+     */
+    public void updatePowerupsAdd(Powerup powerup) {
+    	sendMessage(powerup.toString() + "ADD ");
+		System.out.println("CLIENT SENT: " + powerup.toString() + "ADD ");
+    }
     
     /**
      * Process a message about the location of a player.
@@ -377,37 +384,39 @@ public class Client extends Connector {
     	}
     }
 
-	/**
+    /**
      * Add a powerup to the level on the client side.
      * @param stringList information on powerup
      */
     private void addPowerup(String[] stringList) {
-    	if (stringList[2].equals("SHIELD")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SHIELD)); // shield added to level
-    	} else if (stringList[2].equals("SPIKY")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SPIKY)); // spiky added to level
-    	} else if (stringList[2].equals("INSTANT")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.INSTANT)); // inst added to level
-    	} else if (stringList[2].equals("HEALTH")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.HEALTH)); // health added to level
-    	} else if (stringList[2].equals("FREEZE")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.FREEZE)); // freeze added to level
-    	} else if (stringList[2].equals("SLOW")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SLOW)); // slow added to level
-    	} else if (stringList[2].equals("FAST")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.FAST)); // fast added to level
-    	} else if (stringList[2].equals("RANDOM")) {
-    		gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.RANDOM)); // random added to level
+    	synchronized (gameState.getDroppedPowerups()) {
+    		if (stringList[2].equals("SHIELD")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.SHIELD)); // shield added
+    		} else if (stringList[2].equals("SPIKY")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.SPIKY)); // spiky added
+    		} else if (stringList[2].equals("INSTANT")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.INSTANT)); // inst added
+    		} else if (stringList[2].equals("HEALTH")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.HEALTH)); // health added
+    		} else if (stringList[2].equals("FREEZE")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.FREEZE)); // freeze added 
+    		} else if (stringList[2].equals("SLOW")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.SLOW)); // slow added 
+    		} else if (stringList[2].equals("FAST")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.FAST)); // fast added 
+    		} else if (stringList[2].equals("RANDOM")) {
+    			gameState.getDroppedPowerups().add(new Powerup(Float.parseFloat(stringList[0]),
+    					Float.parseFloat(stringList[1]), PowerupType.RANDOM)); // random added
+    		}
     	}
-	}
+    }
 
 	/**
      * Remove a powerup from the level, and give it to the host player.

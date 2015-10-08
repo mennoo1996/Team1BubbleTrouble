@@ -3,7 +3,6 @@ import logic.Logger;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -35,12 +34,12 @@ public class MenuMainState extends BasicGameState {
 	
 	private static final int BUTTON_WIDTH = 1000;
 	private static final int BUTTON_HEIGHT = 50;
-	private static final int BUTTON_X = 150;
-	private static final int PLAYBUTTON_Y = 225;
-	private static final int PLAYBUTTON2_Y = 275;
-	private static final int PLAYBUTTONLAN_Y = 325;
-	private static final int OPTIONSBUTTON_Y = 375;
-	private static final int QUITBUTTON_Y = 425;
+	private static final int BUTTON_X = 164;
+	private static final int PLAYBUTTON_Y = 238;
+	private static final int PLAYBUTTON2_Y = 288;
+	private static final int PLAYBUTTONLAN_Y = 338;
+	private static final int OPTIONSBUTTON_Y = 388;
+	private static final int QUITBUTTON_Y = 438;
 	private static final int HIGHSCORES_X = 900;
 	private static final int HIGHSCORES_Y = 288;
 	private static final int HIGHSCORES_TITLE_X = 760;
@@ -54,7 +53,7 @@ public class MenuMainState extends BasicGameState {
 	/**
 	 * constructor.
 	 * 
-	 * @param mainGame	- the maingame this state belongs to
+	 * @param mainGame - the maingame this state belongs to
 	 */
 	public MenuMainState(MainGame mainGame) {
 		this.mainGame = mainGame;
@@ -69,31 +68,16 @@ public class MenuMainState extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame arg1) throws SlickException {
 		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, false, separatorTopTitle,
 				container.getWidth());
-		playButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_1Player_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_1Player_Add.png"),
-				new Image("resources/images_UI/Menu_Button_1Player2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_1Player2_Add.png"));
+		playButton = new Button(BUTTON_X, PLAYBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, 
+				"> HURPERDURPERDURP");
 		play2Button = new Button(BUTTON_X, PLAYBUTTON2_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_2Player_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_2Player_Add.png"),
-				new Image("resources/images_UI/Menu_Button_2Player2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_2Player2_Add.png"));
+				"> Play 2-player game");
 		lanButton = new Button(BUTTON_X, PLAYBUTTONLAN_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_LAN_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_LAN_Add.png"),
-				new Image("resources/images_UI/Menu_Button_LAN2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_LAN2_Add.png"));
+				"> Play LAN game");
 		optionsButton = new Button(BUTTON_X, OPTIONSBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_Options_Norm.png"), 
-				new Image("resources/images_UI/Menu_Button_Options_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Options2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Options2_Add.png"));
+				"> Options");
 		quitButton = new Button(BUTTON_X, QUITBUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_Quit_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Quit2_add.png"));
+				"> Quit");
 		
 	}
 	
@@ -202,21 +186,20 @@ public class MenuMainState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) 
 			throws SlickException {
-		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
+		RND.drawBackground(graphics);
 		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		renderButtons(container, graphics);
 		mainGame.drawWaterMark();
-		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
-				LOGO_X, LOGO_Y, mainGame.getColor());
+		RND.drawLogo(graphics, LOGO_X, LOGO_Y);
 		separatorTop.drawColor(graphics, mainGame.getColor());
 		String highScoresString = mainGame.getHighscores().toString();
 		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
 				"The best scores of your predecessors!");
+		
 		// NO DRAWING AFTER THIS POINT. BOO.
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		RND.drawForeGround(graphics);
 		// NO DRAWING HERE. BAD PROGRAMMER. BAD.
 	}
 

@@ -152,30 +152,6 @@ public class MainGameTest {
 	}
 	
 	@Test
-	public void testBackGroundImage() {
-		Image i = mock(Image.class);
-		MainGame game = new MainGame("hello");
-		game.setBackgroundImage(i);
-		assertEquals(i, game.getBackgroundImage());
-	}
-	
-	@Test
-	public void testForeGroundImage() {
-		Image i = mock(Image.class);
-		MainGame game = new MainGame("hello");
-		game.setForeGroundImage(i);
-		assertEquals(i, game.getForeGroundImage());
-	}
-	
-	@Test
-	public void testTerminalImage() {
-		Image i = mock(Image.class);
-		MainGame game = new MainGame("hello");
-		game.setTerminalImage(i);
-		assertEquals(i, game.getTerminalImage());
-	}
-	
-	@Test
 	public void testScore() {
 		MainGame game = new MainGame("hello");
 		game.setScore(90);

@@ -21,7 +21,7 @@ public class MenuGameoverState extends BasicGameState {
 	private Button playButton;
 	private Button menuButton;
 	private Button saveButton;
-	private Button exitButton;
+	private Button quitButton;
 	
 	private MainGame mainGame;
 	private Image health0Image;
@@ -42,11 +42,11 @@ public class MenuGameoverState extends BasicGameState {
 	private static final int TEXT_3_Y = 338;
 	private static final int TEXT_4_Y = 538;
 
-	private static final int BUTTON_X = 150;
-	private static final int SAVE_BUTTON_Y = 525;
-	private static final int PLAY_BUTTON_Y = 575;
-	private static final int MENU_BUTTON_Y = 625;
-	private static final int EXIT_BUTTON_Y = 675;
+	private static final int BUTTON_X = 164;
+	private static final int SAVE_BUTTON_Y = 538;
+	private static final int PLAY_BUTTON_Y = 588;
+	private static final int MENU_BUTTON_Y = 638;
+	private static final int EXIT_BUTTON_Y = 688;
 	
 	private static final int BUTTON_WIDTH = 1000;
 	private static final int BUTTON_HEIGHT = 50;
@@ -108,28 +108,16 @@ public class MenuGameoverState extends BasicGameState {
 	private void initButtons() throws SlickException {
 		saveButton = new Button(BUTTON_X, SAVE_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_SaveHighscore_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_SaveHighscore_Add.png"),
-				new Image("resources/images_UI/Menu_Button_SaveHighscore2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_SaveHighscore2_Add.png"));
+				"> Save Highscore");
 		playButton = new Button(BUTTON_X, PLAY_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_PlayAgain_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_PlayAgain_Add.png"),
-				new Image("resources/images_UI/Menu_Button_PlayAgain2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_PlayAgain2_Add.png"));
+				"> Play Again");
 		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_MainMenu_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_MainMenu_Add.png"),
-				new Image("resources/images_UI/Menu_Button_MainMenu2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_MainMenu2_Add.png"));
-		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
+				"> Main Menu");
+		quitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_Quit_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Quit2_Add.png"));
+				"> Quit");
 	}
 
 	/**
@@ -229,7 +217,7 @@ public class MenuGameoverState extends BasicGameState {
 			Logger.getInstance().log("main menu button clicked", 
 					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
-		else if (exitButton.isMouseOver(input)) {
+		else if (quitButton.isMouseOver(input)) {
 			mainGame.setSwitchState(-1);
 			Logger.getInstance().log("exit button clicked", 
 					Logger.PriorityLevels.MEDIUM, USER_INPUT);
@@ -279,7 +267,7 @@ public class MenuGameoverState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		graphics.drawImage(mainGame.getBackgroundImage(), 0, 0);
+		RND.drawBackground(graphics);
 		renderEndText(container, graphics);
 
 		nameField.drawColor(graphics, mainGame.getColor());
@@ -288,16 +276,14 @@ public class MenuGameoverState extends BasicGameState {
 		}
 		renderButtons(container, graphics);
 		mainGame.drawWaterMark();
-		RND.drawColor(graphics, mainGame.getGameLogoN(), mainGame.getGameLogoA(),
-				LOGO_X, LOGO_Y, mainGame.getColor());
+		RND.drawLogo(graphics, LOGO_X, LOGO_Y);
 		separatorTop.drawColor(graphics, mainGame.getColor());
 		mainGame.getHighscores().sort();
 		String highScoresString = mainGame.getHighscores().toString();
 		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
 		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
 				"The best scores of your predecessors!");
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		RND.drawForeGround(graphics);
 		renderLives(graphics);
 	}
 
@@ -365,7 +351,7 @@ public class MenuGameoverState extends BasicGameState {
 		if (inputMessage == null) {
 			saveButton.drawColor(graphics, input, mainGame.getColor());
 		}
-		exitButton.drawColor(graphics, input, mainGame.getColor());
+		quitButton.drawColor(graphics, input, mainGame.getColor());
 	}
 
 	/**

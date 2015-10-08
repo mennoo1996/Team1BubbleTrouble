@@ -44,7 +44,7 @@ public class Separator {
 	 * @param color to draw in
 	 */
 	public void drawColor(Graphics graphics, Color color) {
-		RND.text(graphics, x, y, text, color);
+		RND.textSpecifiedColor(graphics, x, y, text, color);
 	}
 	
 	/**

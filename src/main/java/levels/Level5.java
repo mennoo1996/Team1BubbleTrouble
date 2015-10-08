@@ -36,7 +36,7 @@ public class Level5 extends Level {
 		for (int i = 0; i < LEVEL_5_AMOUNT_OF_BALLS; i++) {
 			circles.add(new BouncingCircle(LEVEL_5_BALL_FACTOR * i + DEFAULT_BALL_X, 
 					DEFAULT_BIGBALL_Y, MINIMUM_RADIUS, this.getMaingame().getStartingSpeed(),
-					DEFAULT_YSPEED, this.getMaingame().getGravity(), 0));
+					DEFAULT_YSPEED, this.getMaingame().getGravity(), i));
 		}
 		
 		// The gate list

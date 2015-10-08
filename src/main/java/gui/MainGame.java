@@ -12,7 +12,6 @@ import logic.Player;
 import logic.PlayerList;
 import logic.ShutDownHook;
 
-import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -61,11 +60,6 @@ public class MainGame extends StateBasedGame {
 	private static int yRes = DEFAULT_Y_RES;
 	
 	// Some often-used images
-	private Image backgroundImage;
-	private Image foreGroundImage;
-	private Image terminalImage;
-	private Image gameLogoN;
-	private Image gameLogoA;
 	private String player1ImageStringN;
 	private String player1ImageStringA;
 	private String player2ImageStringN;
@@ -336,26 +330,10 @@ public class MainGame extends StateBasedGame {
 		Logger.getInstance().log("MenuSettingsstate added", Logger.PriorityLevels.LOW, STATES);
 		this.addState(menuMultiplayerState);
 		Logger.getInstance().log("MenuMultiplayerState added", Logger.PriorityLevels.LOW, STATES);
-		initImages();	initPlayers();
+		RND.init();		initPlayers();
 		Calendar cal = Calendar.getInstance();
 		this.currentDate = cal.get(Calendar.DATE) + "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
-	}
-	
-	/**
-	 * Initialize the images.
-	 * @throws SlickException if something goes wrong / file not found
-	 */
-	private void initImages() throws SlickException {
-		this.backgroundImage = new Image("resources/terminal/Screen_Underlayer.png");
-		this.foreGroundImage = new Image("resources/terminal/Screen_Overlayer.png");
-		this.terminalImage = new Image("resources/terminal/Terminal_Base.png");
-		this.gameLogoN = new Image("resources/images_UI/Menu_Logo_Norm.png");
-		this.gameLogoA = new Image("resources/images_UI/Menu_Logo_Add.png");
-		RND.setFont_Normal(new AngelCodeFont("resources/images_Font/dosfont.fnt",
-				"resources/images_Font/dosfont_Norm.png"));
-		RND.setFont_Additive(new AngelCodeFont("resources/images_Font/dosfont.fnt",
-				"resources/images_Font/dosfont_Add.png"));
 	}
 	
 	/**
@@ -543,62 +521,6 @@ public class MainGame extends StateBasedGame {
 	}
 
 	/**
-	 * @return the backgroundImage
-	 */
-	public Image getBackgroundImage() {
-		return backgroundImage;
-	}
-	
-	/**
-	 * @return the game logo normal image
-	 */
-	public Image getGameLogoN() {
-		return gameLogoN;
-	}
-	
-	/**
-	 * @return the game logo add image
-	 */
-	public Image getGameLogoA() {
-		return gameLogoA;
-	}
-
-	/**
-	 * @param backgroundImage the backgroundImage to set
-	 */
-	public void setBackgroundImage(Image backgroundImage) {
-		this.backgroundImage = backgroundImage;
-	}
-
-	/**
-	 * @return the foreGroundImage
-	 */
-	public Image getForeGroundImage() {
-		return foreGroundImage;
-	}
-
-	/**
-	 * @param foreGroundImage the foreGroundImage to set
-	 */
-	public void setForeGroundImage(Image foreGroundImage) {
-		this.foreGroundImage = foreGroundImage;
-	}
-
-	/**
-	 * @return the terminalImage
-	 */
-	public Image getTerminalImage() {
-		return terminalImage;
-	}
-
-	/**
-	 * @param terminalImage the terminalImage to set
-	 */
-	public void setTerminalImage(Image terminalImage) {
-		this.terminalImage = terminalImage;
-	}
-
-	/**
 	 * @return the score
 	 */
 	public int getScore() {
@@ -774,7 +696,6 @@ public class MainGame extends StateBasedGame {
 		RND.text(app.getGraphics(), VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION,
 				"#Version 1.0" + " #Date: " + currentDate 
 				+ " #fps: " + Integer.toString(getFpsInGame()));
-		
 	}
 	
 	/**

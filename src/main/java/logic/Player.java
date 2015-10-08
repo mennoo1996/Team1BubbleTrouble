@@ -4,6 +4,7 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -69,6 +70,7 @@ public class Player {
     private boolean movingLeft;
 	
 	private static final int POWERUP_DURATION = 10;
+	private static final int RANDOM_DURATION = 1;
 	private long shieldTimeRemaining;
 	
 	private Logger logger = Logger.getInstance();
@@ -172,7 +174,6 @@ public class Player {
 
 				if (powerup.getRectangle().intersects(this.getRectangle())) {
 					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
-						
 						//Add a powerup to the player
 						this.addPowerup(powerup.getType());
 						gameState.getFloatingScores().add(new FloatingScore(powerup));
@@ -463,9 +464,6 @@ public class Player {
 		return y + height;
 	}
 	
-	
-	
-	
 	/**
 	 * @return the x
 	 */
@@ -572,36 +570,81 @@ public class Player {
 	 * @param type powerup type
 	 */
 	public void addPowerup(Powerup.PowerupType type) {
+		logger.log("Adding powerup " + Powerup.PowerupType.FAST.toString(),
+				Logger.PriorityLevels.MEDIUM, POWERUPS);
 		if (type == Powerup.PowerupType.INSTANT) {
 			addWeapon(type);
-			logger.log("Added powerup instant", 
-					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		} else if (type == Powerup.PowerupType.SHIELD) {
 			addShield();
-			logger.log("Added powerup shield", 
-					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		} else if (type == Powerup.PowerupType.SPIKY) {
 			addWeapon(type);
-			logger.log("Added powerup spiky", 
-					Logger.PriorityLevels.MEDIUM, POWERUPS);
 		} else if (type == Powerup.PowerupType.FREEZE) {
-			FreezePowerup fp = new FreezePowerup();
-			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-			gs.getSpeedPowerupList().add(fp);
-			fp.updateCircles(gs.getCircleList());
+			addFreeze();
 		} else if (type == Powerup.PowerupType.SLOW) {
-			SlowPowerup sp = new SlowPowerup();
-			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-			gs.getSpeedPowerupList().add(sp);
-			sp.updateCircles(gs.getCircleList());
+			addSlow();
 		} else if (type == Powerup.PowerupType.FAST) {
-			FastPowerup fp = new FastPowerup();
-			GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-			gs.getSpeedPowerupList().add(fp);
-			fp.updateCircles(gs.getCircleList());
+			addFast();
+		} else if (type == Powerup.PowerupType.HEALTH) {
+			addHealth();
+		} else if (type == Powerup.PowerupType.RANDOM) {
+			addRandom();
 		}
 	}
 
+	/**
+	 * Add a freeze powerup to the player.
+	 */
+	private void addFreeze() {
+		FreezePowerup fp = new FreezePowerup();
+		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+		gs.getSpeedPowerupList().add(fp);
+		fp.updateCircles(gs.getCircleList());
+	}
+	
+	/**
+	 * Add a slow powerup to the player.
+	 */
+	private void addSlow() {
+		SlowPowerup sp = new SlowPowerup();
+		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+		gs.getSpeedPowerupList().add(sp);
+		sp.updateCircles(gs.getCircleList());
+	}
+	
+	/**
+	 * Add a fast powerup to the player.
+	 */
+	private void addFast() {
+		FastPowerup fp = new FastPowerup();
+		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
+		gs.getSpeedPowerupList().add(fp);
+		fp.updateCircles(gs.getCircleList());
+	}
+	
+	/**
+	 * Add a random powerup to the player.
+	 */
+	private void addRandom() {
+		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
+		.nextInt(Powerup.PowerupType.values().length - 1)];
+		shieldTimeRemaining = TimeUnit.SECONDS.toMillis(RANDOM_DURATION);
+        Executors.newScheduledThreadPool(1).schedule(() -> {
+        			addPowerup(newPowerup);
+        			gameState.getFloatingScores().add(
+        					new FloatingScore(new Powerup(x - width, y + height, newPowerup)));
+                },
+                RANDOM_DURATION, TimeUnit.SECONDS);
+	}
+	
+	/**
+	 * Add health to the player.
+	 */
+	private void addHealth() {
+		if (mainGame.getLifeCount() < MainGame.getLives()) {
+			mainGame.setLifeCount(mainGame.getLifeCount() + 1);
+		}
+	}
+	
 	/**
 	 * Add a shield for this player.
 	 */

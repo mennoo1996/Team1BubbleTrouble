@@ -49,7 +49,7 @@ public class Textfield {
 	 * @throws SlickException probably the images cant be found
 	 */
 	public Textfield(float x, float y, String text, GameContainer container) throws SlickException {
-		textfield = new TextField(container, RND.getFont_Normal(), (int) x, (int) y,
+		textfield = new TextField(container, null, (int) x, (int) y,
 				TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
 		textfield.setBackgroundColor(null);
 		textfield.setBorderColor(null);
@@ -189,7 +189,7 @@ public class Textfield {
 			RND.drawColor(graphics, fieldNorm, fieldAdd, 
 					x - TF_BACKGROUND_DEVIATION, y - TF_BACKGROUND_DEVIATION, color);
 		}
-		RND.text(graphics, x, y, text, color);
+		RND.textSpecifiedColor(graphics, x, y, text, color);
 	}
 	
 }

@@ -43,7 +43,6 @@ public class GameState extends BasicGameState {
 	
 	private  int totaltime;
 	
-	
 	private MainGame mainGame;
 	private CircleList circleList;
 	private ArrayList<BouncingCircle> shotList;
@@ -56,6 +55,7 @@ public class GameState extends BasicGameState {
 	private int score;
 	private long startTime;
 	private long timeDelta;
+	private float deltafloat;
 	private long timeRemaining;
 	private long prevTime;
 	private boolean countIn;
@@ -103,10 +103,10 @@ public class GameState extends BasicGameState {
 	private LevelContainer levels;
 	
 	// PAUSE MENU
-	private static final int BUTTON_X = 150;
-	private static final int RETURN_BUTTON_Y = 225;
-	private static final int MENU_BUTTON_Y = 275;
-	private static final int EXIT_BUTTON_Y = 325;
+	private static final int BUTTON_X = 164;
+	private static final int RETURN_BUTTON_Y = 238;
+	private static final int MENU_BUTTON_Y = 288;
+	private static final int EXIT_BUTTON_Y = 338;
 	private static final int TEXT_X = 164;
 	private static final int TEXT_1_Y = 142;
 	private static final int TEXT_2_Y = 190;
@@ -707,7 +707,7 @@ public class GameState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		// draw background layer
-		RND.draw(graphics, mainGame.getBackgroundImage(), 0, 0);
+		RND.drawBackground(graphics);
 		graphics.setColor(Color.white);
 		drawActiveCircles(graphics);
 		drawFloatingScores(graphics);
@@ -727,9 +727,6 @@ public class GameState extends BasicGameState {
 						+ Integer.toString(mainGame.getLevelCounter() + 1));
 		drawScore(container, graphics);
 		// Pause overlay and counter
-		if (playingState && (countIn || (mainGame.isClient() && countinStarted))) {
-			drawCountIn(container, graphics);
-		}
 		drawMiscellaneous(container, graphics);
 	}
 
@@ -767,15 +764,18 @@ public class GameState extends BasicGameState {
 	private void drawMiscellaneous(GameContainer container, Graphics graphics) {
 		// draw shield timers
 		drawShieldTimer(graphics);
+		// draw version number
+		mainGame.drawWaterMark();
+		// draw count-in over everything thats UI
+		if (playingState && (countIn || (mainGame.isClient() && countinStarted))) {
+			drawCountIn(container, graphics);
+		}
+		// draw pause screen over everything thats UI
 		if (!playingState) {
 			drawPausedScreen(container, graphics);
 		}
-		// draw version number
-		mainGame.drawWaterMark();
 		// draw foreground layer
-		graphics.drawImage(mainGame.getForeGroundImage(), 0, 0);
-		// draw terminal
-		graphics.drawImage(mainGame.getTerminalImage(), 0, 0);
+		RND.drawForeGround(graphics);
 		// disable button when paused
 		if (!playingState) {
 			graphics.drawImage(nobuttonImage, 0, 0);
@@ -802,7 +802,7 @@ public class GameState extends BasicGameState {
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
 					* COUNTER_BAR_X_FACTOR, height,
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s", mainGame.getColor()); }
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
 		if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
 				&& mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
@@ -816,7 +816,7 @@ public class GameState extends BasicGameState {
 			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, 
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s", mainGame.getColor()); }
+					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
 	}
 	
 	/**
@@ -941,7 +941,7 @@ public class GameState extends BasicGameState {
 	private void drawFloatingScores(Graphics graphics) {
 		synchronized (floatingScoreList) {
 			for (FloatingScore score : floatingScoreList) {
-				RND.text(graphics, score.getX(), score.getY(), score.getScore(),
+				RND.textSpecifiedColor(graphics, score.getX(), score.getY(), score.getScore(),
 						new Color(mainGame.getColor().r, mainGame.getColor().g,
 								mainGame.getColor().b, score.getOpacity()));
 			}
@@ -1084,22 +1084,13 @@ public class GameState extends BasicGameState {
 	private void loadButtons() throws SlickException {
 		returnButton = new Button(BUTTON_X, RETURN_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_Return_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Return_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Return2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Return2_Add.png"));
+				"> Return");
 		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_MainMenu_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_MainMenu_Add.png"),
-				new Image("resources/images_UI/Menu_Button_MainMenu2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_MainMenu2_Add.png"));
+				"> Main Menu");
 		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
-				new Image("resources/images_UI/Menu_Button_Quit_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Quit_Add.png"),
-				new Image("resources/images_UI/Menu_Button_Quit2_Norm.png"),
-				new Image("resources/images_UI/Menu_Button_Quit2_Add.png"));
+				"> Quit");
 	}
 	
 	/**

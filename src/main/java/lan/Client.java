@@ -53,7 +53,6 @@ public class Client extends Connector {
     @Override
     public void run() {
 		try {
-			System.out.println("CLIENT.call");
 			socket = new Socket();
 			// Connect to socket with timeout
 			socket.connect(new InetSocketAddress(host, portNumber), TIMEOUT_ATTEMPT);
@@ -63,13 +62,11 @@ public class Client extends Connector {
         	// Say hello here
         	messageQueue.add("PLAYER NAME "  // send your player's name to host
         		+ mainGame.getPlayerList().getPlayers().get(1).getPlayerName());
-			System.out.println("Connected to server");
 			timeLastInput = System.currentTimeMillis();
 			// This continues ad infinitum
 			while (running) {
 				manageHeartbeatCheck();
 				while (!this.messageQueue.isEmpty()) {
-					System.out.println("sending message: " + this.messageQueue.peek());
 					writer.println(this.messageQueue.poll());
 				}
 				readServerCommands();
@@ -104,7 +101,6 @@ public class Client extends Connector {
 	private void manageHeartbeatCheck() throws IOException {
 		if (heartBeatCheck
 				&& (System.currentTimeMillis() - timeLastInput) >= 2 * TIMEOUT_ATTEMPT) {
-			System.out.println("Heartbeat gone");
 			throw new IOException("No connection");
         }
 		if (!heartBeatCheck
@@ -168,7 +164,6 @@ public class Client extends Connector {
 			mainGame.killMultiplayer();
 		}
 		// heartBeat reset
-		System.out.println("Reset heartbeat");
 		heartBeatCheck = false;
 		timeLastInput = System.currentTimeMillis();
     }
@@ -244,7 +239,6 @@ public class Client extends Connector {
     		this.circleList = new ArrayList<BouncingCircle>();
     		this.editingCircleList = true;
     	} else if (message2.equals("END") && this.editingCircleList) {
-    		System.out.println("setting shit");
     		this.editingCircleList = false;
     		synchronized (gameState.getCircleList()) {
         		gameState.setCircleList(new CircleList(circleList));
@@ -271,7 +265,6 @@ public class Client extends Connector {
      */
     public void updatePowerupsAdd(Powerup powerup) {
     	sendMessage(powerup.toString() + "ADD ");
-		System.out.println("CLIENT SENT: " + powerup.toString() + "ADD ");
     }
     
     /**
@@ -341,7 +334,6 @@ public class Client extends Connector {
     		gameState.setLevelStarted(true);
     		gameState.setCountinStarted(false);
     	} else if (message2.equals("RESTART")) { 
-    		System.out.println("CLIENT IS NOW RESTARTING");
     		// force override life, level, score etc. Just. In. Case. someone forgets.
     		mainGame.resetLifeCount();
     		mainGame.resetLevelCount();
@@ -375,7 +367,6 @@ public class Client extends Connector {
      */
     private void powerupMessage(String message) {
     	String message2 = message.trim();
-    	System.out.println("CLIENT RECEIVING:  " + message2);
     	String[] stringList = message2.split(" ");
     	if (stringList[THREE].equals("ADD")) {
     		addPowerup(stringList);
@@ -493,7 +484,6 @@ public class Client extends Connector {
      */
     public void pleaPowerup(Powerup powerup) {
     	sendMessage(powerup.toString() + "PLEA ");
-    	System.out.println("CLIENT SENDING:  " + powerup.toString() + "PLEA ");
     }
     
 	/**

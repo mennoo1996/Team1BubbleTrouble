@@ -361,7 +361,6 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.resetLifeCount();
 		mainGame.resetLevelCount();
 		mainGame.setScore(0);
-		System.out.println("Adding message: " + message);
 		this.message = message;
 		popup.setText(this.message);
 		popup.setActive(true);

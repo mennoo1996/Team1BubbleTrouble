@@ -43,13 +43,11 @@ public class Host extends Connector {
     public Host(int portNumber, MainGame mainGame, GameState gameState) {
         super(portNumber, mainGame, gameState);
     	this.noClientYet = true;
-        System.out.println("HOST INITIALIZED");
     }
 
     @Override
     public void run()  {
         try {
-            System.out.println("host.call");
             serverSocket = new ServerSocket(portNumber);
             client = serverSocket.accept();
             noClientYet = false;
@@ -58,7 +56,6 @@ public class Host extends Connector {
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             messageQueue.add("PLAYER NAME " // send your player's name to client
                 + mainGame.getPlayerList().getPlayers().get(0).getPlayerName());
-            System.out.println("Client connected");
             timeLastInput = System.currentTimeMillis();
 
             // This continues ad infinitum
@@ -102,7 +99,6 @@ public class Host extends Connector {
         }
         if (!heartBeatCheck
                 && (System.currentTimeMillis() - timeLastInput) >= TIMEOUT_ATTEMPT) {
-            System.out.println("Sending heartbeat check");
             heartBeatCheck = true;
             this.messageQueue.add("HEARTBEAT_CHECK");
         }
@@ -188,7 +184,6 @@ public class Host extends Connector {
     private void levelMessage(String message) {
     	String message2 = message.trim();
     	if (message2.equals("RESTART")) { 
-    		System.out.println("HOST IS NOW RESTARTING");
     		// force override life, level, score etc. Just. In. Case. someone forgets.
     		mainGame.resetLifeCount();
     		mainGame.resetLevelCount();
@@ -358,7 +353,6 @@ public class Host extends Connector {
      */
     public void updatePowerupsAdd(Powerup powerup) {
     	sendMessage(powerup.toString() + "ADD ");
-		System.out.println("HOST SENT: " + powerup.toString() + "ADD ");
     }
     
     /**
@@ -367,7 +361,6 @@ public class Host extends Connector {
      */
     public void updatePowerupsDictate(Powerup powerup) {
     	sendMessage(powerup.toString() + "DICTATE ");
-		System.out.println("HOST SENT: " + powerup.toString() + "DICTATE ");
     }
     
     /**
@@ -376,7 +369,6 @@ public class Host extends Connector {
 	 */
 	public void updatePowerupsGrant(Powerup powerup) {
 		sendMessage(powerup.toString() + "GRANT ");
-		System.out.println("HOST SENT: " + powerup.toString() + "GRANT ");
 	}
     
     /**

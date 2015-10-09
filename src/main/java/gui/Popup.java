@@ -38,7 +38,6 @@ public class Popup {
 		this.warning = warning;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		System.out.println(screenWidth);
 		button = new Button(screenWidth / 2f - RND.getStringPixelWidth("> OK <") / 2f, 
 				screenHeight / 2f + BUTTON_OFFSET_Y, 
 				BUTTON_WIDTH, BUTTON_HEIGHT, "> OK <");

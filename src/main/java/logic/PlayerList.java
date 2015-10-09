@@ -242,9 +242,6 @@ public class PlayerList {
 	 * @param sbg The stateBasedGame that uses this state.
 	 */
 	public void playerDeath(StateBasedGame sbg) {
-		if (mainGame.isClient()) {
-			System.out.println("DADADADA " + died);
-		}
 		if (!died) {
 			logger.log("Player died, reducing lives", Logger.PriorityLevels.MEDIUM,
 					"players");

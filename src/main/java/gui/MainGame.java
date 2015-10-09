@@ -900,7 +900,6 @@ public class MainGame extends StateBasedGame {
 	 * Kill any multiplayer socket connections running.
 	 */
 	public void killMultiplayer() {
-		System.out.println("Killing multiplayer");
 		if (this.lanMultiplayer) {
 			if (isHost) {
 				try {

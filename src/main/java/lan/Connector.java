@@ -245,7 +245,6 @@ public abstract class Connector implements Runnable {
     	
     	int id = Integer.parseInt(stringList[0]);
     	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);
-    	System.out.println("spiky = " + spikey);
     	Weapon weapon;
     	
     	if (!spikey) {

@@ -260,7 +260,6 @@ public class Player {
 			weapon.update(gameState.getCeiling(), gameState.getFloor(), deltaFloat);
 			// Disable laser when it has reached the ceiling
 			if (!weapon.isVisible()) {
-				System.out.println("Setting shot of " + playerNumber + "to false");
 				shot = false;
 			}
 		}

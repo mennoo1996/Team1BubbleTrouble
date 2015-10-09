@@ -449,15 +449,15 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 * @return				a string containing the representations
 	 */
 	public static String circleListToString(ArrayList<BouncingCircle> circleList) {
-		String res = "UPDATE CIRCLELIST START";
+		StringBuffer res = new StringBuffer().append("UPDATE CIRCLELIST START");
 		
 		for (BouncingCircle bCircle : circleList) {
-			res += "\n" + bCircle.toString();
+			res.append('\n');
+			res.append(bCircle.toString());
 		}
+		res.append("\nUPDATE CIRCLELIST END");
 		
-		res += "\nUPDATE CIRCLELIST END";
-		
-		return res;
+		return res.toString();
 	}
 	
 	/**
@@ -468,15 +468,16 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 */
 	public static String requiredListToString(ArrayList<BouncingCircle> circleList, 
 			int gateNumber) {
-		String res = "UPDATE REQUIREDLIST START " + gateNumber;
+		StringBuffer res = new StringBuffer().append("UPDATE REQUIREDLIST START");
+		res.append(gateNumber);
 		
 		for (BouncingCircle bCircle : circleList) {
-			res += "\n" + bCircle.toString();
+			res.append('\n');
+			res.append(bCircle.toString());
 		}
-		
-		res += "\nUPDATE CIRCLELIST END";
-		
-		return res;
+		res.append("\nUPDATE CIRCLELIST END");
+
+		return res.toString();
 	}
 	
 	/**

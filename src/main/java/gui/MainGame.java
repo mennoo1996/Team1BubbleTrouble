@@ -38,7 +38,7 @@ public class MainGame extends StateBasedGame {
 	// Game Colors
 	private boolean shuffleColors = false;
 	private static final int COLOR_COUNT = 6;
-	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
+	private static final Color COLOR_RED = new Color(0.9f, 0.15f, 0.1f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
 	private static final Color COLOR_GREEN = new Color(0.35f, 0.6f, 0.05f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
@@ -136,8 +136,8 @@ public class MainGame extends StateBasedGame {
 		this.player2ImageStringN = "Player2sprite_Norm.png";
 		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
-		this.setColor(COLOR_GREEN);
-		this.setNextColor(COLOR_GREEN);
+		this.setColor(COLOR_RED);
+		this.setNextColor(COLOR_RED);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
 		this.lanMultiplayer = false;
@@ -237,7 +237,6 @@ public class MainGame extends StateBasedGame {
 	 * @param color the next color for the game to use
 	 */
 	public void setNextColor(Color color) {
-		
 		this.nextColor = color;
 	}
 	
@@ -247,31 +246,39 @@ public class MainGame extends StateBasedGame {
 	public void switchColor() {
 		this.color = nextColor;
 		if (shuffleColors) { // shuffle
-			switch ((int) Math.round(Math.random() * COLOR_COUNT)) {
-			case 1: if (this.color == COLOR_BLUE) {
-				this.color = COLOR_ORANGE; } else {
-				this.color = COLOR_BLUE; } break;
-			case 2: if (this.color == COLOR_ORANGE) {
-				this.color = COLOR_GREEN; } else {
-				this.color = COLOR_ORANGE; } break;
-			case NUM_3: if (this.color == COLOR_RED) {
-					this.color = COLOR_BLUE; } else {
-					this.color = COLOR_RED; } break;
-			case NUM_4: if (this.color == COLOR_GREEN) {
-					this.color = COLOR_PINK; } else {
-					this.color = COLOR_GREEN; } break;
-			case NUM_5: if (this.color == COLOR_WHITE) {
-					this.color = COLOR_RED; } else {
-					this.color = COLOR_WHITE; } break;
-			case NUM_6: if (this.color == COLOR_PINK) {
-					this.color = COLOR_WHITE; } else {
-					this.color = COLOR_PINK; } break;
-			default: break;
-			}
+			shuffleColor();
 		}
-		String logString = "Color changed to " + color.toString();
+		String logString = "Color changed to " + this.color.toString();
 		Logger.getInstance().log(logString, Logger.PriorityLevels.MEDIUM, "color");
 		RND.setColor(color);
+	}
+	
+	/**
+	 * Sets a shuffled color for the game by RND. If the color returned is the same as before,
+	 * another color is force-picked.
+	 */
+	public void shuffleColor() {
+		switch ((int) Math.round(Math.random() * COLOR_COUNT)) {
+		case 1: if (this.color == COLOR_BLUE) {
+			this.color = COLOR_ORANGE; } else {
+				this.color = COLOR_BLUE; } break;
+		case 2: if (this.color == COLOR_ORANGE) {
+			this.color = COLOR_GREEN; } else {
+				this.color = COLOR_ORANGE; } break;
+		case NUM_3: if (this.color == COLOR_RED) {
+			this.color = COLOR_BLUE; } else {
+				this.color = COLOR_RED; } break;
+		case NUM_4: if (this.color == COLOR_GREEN) {
+			this.color = COLOR_PINK; } else {
+				this.color = COLOR_GREEN; } break;
+		case NUM_5: if (this.color == COLOR_WHITE) {
+			this.color = COLOR_RED; } else {
+				this.color = COLOR_WHITE; } break;
+		case NUM_6: if (this.color == COLOR_PINK) {
+			this.color = COLOR_WHITE; } else {
+				this.color = COLOR_PINK; } break;
+		default: break;
+		}
 	}
 	
 	/**

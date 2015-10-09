@@ -146,10 +146,11 @@ public class FloatingScore implements Cloneable {
 	}
 	
 	/**
-	 * Clone the powerup.
+	 * @return Clone the floating score and return it.
 	 */
 	@Override
 	public FloatingScore clone() throws CloneNotSupportedException {
+		super.clone();
 		return new FloatingScore(score, x, y, speed, life);
 	}
 	

@@ -10,13 +10,17 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import logic.CircleList;
+import logic.Coin;
 import logic.Player;
 import logic.PlayerList;
+import logic.Weapon;
 import logic.WeaponList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;
+
+import powerups.Powerup;
 
 public class ClientTest {
 	Client c;
@@ -88,6 +92,38 @@ public class ClientTest {
 	}
 	
 	@Test
+	public void testReadServerCommands2_2() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands2_2.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		ArrayList<logic.Weapon> test = new ArrayList<logic.Weapon>();
+		test.add(new Weapon(0,0,1,1));
+		when(wl.getWeaponList()).thenReturn(test);
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
 	public void testReadServerCommands3() {
 		BufferedReader reader = null;
 		try {
@@ -122,6 +158,36 @@ public class ClientTest {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands4.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands4_2() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands4_2.txt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -394,6 +460,216 @@ public class ClientTest {
 	}
 	
 	@Test
+	public void testReadServerCommands12_2() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands12_2.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+
+	@Test
+	public void testReadServerCommands12_3() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands12_3.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands12_4() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands12_4.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands12_5() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands12_5.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands12_6() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands12_6.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands12_7() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands12_7.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands12_8() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands12_8.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
 	public void testReadServerCommands13() {
 		BufferedReader reader = null;
 		try {
@@ -424,10 +700,340 @@ public class ClientTest {
 	}
 	
 	@Test
+	public void testReadServerCommands13_2() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands13_2.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(1)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands13_3() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands13_3.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(1)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands13_7() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands13_7.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(1)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands13_8() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands13_8.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(1)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+	
+	@Test
 	public void testReadServerCommands14() {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands14.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+
+	@Test
+	public void testReadServerCommands14_2() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands14_2.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+
+	@Test
+	public void testReadServerCommands14_3() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands14_3.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+
+	@Test
+	public void testReadServerCommands14_4() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands14_4.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+
+	@Test
+	public void testReadServerCommands14_5() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands14_5.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+
+	@Test
+	public void testReadServerCommands14_6() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands14_6.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+
+	@Test
+	public void testReadServerCommands14_7() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands14_7.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+
+		c.readServerCommands();
+	}
+
+	@Test
+	public void testReadServerCommands14_8() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands14_8.txt"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -732,6 +1338,180 @@ public class ClientTest {
 		c.readServerCommands();
 	}
 
+	@Test
+	public void testReadServerCommands24() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands24.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
 	
+	@Test
+	public void testReadServerCommands25() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands25.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands26() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands26.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands27() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands27.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testReadServerCommands28() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadServerCommands27.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		c.setReader(reader);
+		
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(100)).thenReturn(p);
+		
+		WeaponList wl = mock(WeaponList.class);
+		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
+		when(gs.getWeaponList()).thenReturn(wl);
+		
+		c.readServerCommands();
+	}
+	
+	@Test
+	public void testMiscellaneous() {
+//		h.sendFloatingScore(new FloatingScore(new Coin(1, 2, true)));
+//		h.updatePlayerLocation(0, 1, 1);
+//		h.updatePlayerName(0, "MENNO");
+//		h.playerStartedMoving(1, 1, 1, "LEFT");
+//		h.playerStoppedMoving(1, 1, 1);
+//		h.updateLaser(0, 1, 1, 1, 1, true);
+//		h.laserDone(0);
+//		h.updateCircles(new ArrayList<BouncingCircle>());
+//		h.updatePowerupsAdd(new Powerup(1, 1, Powerup.PowerupType.SHIELD));
+//		h.updatePowerupsDictate(new Powerup(1, 1, Powerup.PowerupType.SHIELD));
+//		h.updateCoinsAdd(new Coin(1, 1, true));
+//		h.updateCoinsDictate(new Coin(1, 1, true));
+//		h.updateLevelStarted();
+//		h.updateCountinStarted();
+//		h.updatePauseStarted();
+//		h.updatePauseStopped();
+//		h.updateLives(5);
+		Coin coin = new Coin(0, 0, false);
+		Powerup powerup = new Powerup(0, 0, Powerup.PowerupType.FAST);
+		c.pleaCoin(coin);
+		c.pleaPowerup(powerup);
+		c.updatePowerupsAdd(powerup);
+	}
 
 }

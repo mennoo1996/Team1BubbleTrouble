@@ -124,8 +124,10 @@ public class Host extends Connector {
     public void readClientInputs() {
     	try {
 			while (reader.ready()) {
-				String message = reader.readLine();
-				String message2 = message.trim();
+				String message = reader.readLine(), message2 = "";
+				if (message != null) {
+					message2 = message.trim();
+				}
 				if (message2.startsWith("PLAYER")) {
 					playerMessage(message2.replaceFirst("PLAYER", ""));
 				} else if (message2.startsWith("POWERUP")) {
@@ -206,19 +208,6 @@ public class Host extends Connector {
     	}
     }
     
-    
-//    /**
-//     * Process a dead message.
-//     * @param message the message to process
-//     */
-//    protected void deadMessage(String message) {
-//    	String message2 = message.trim();
-//    	
-//    	if (message2.equals("CLIENT")) {
-//    		mainGame.getPlayerList().playerDeath(mainGame);
-//    	}
-//    }
-    
     /**
      * Attempt to gracefully shut down the LAN threads.
      * @throws InterruptedException Thrown if shutdown takes longer than expected.
@@ -230,7 +219,9 @@ public class Host extends Connector {
             running = false;
         }
         try {
-            serverSocket.close();
+        	if (serverSocket != null) {
+                serverSocket.close();
+        	}
         } catch (IOException er) {
             logger.log(er.getMessage(), Logger.PriorityLevels.LOW, "lan");
         }
@@ -302,6 +293,7 @@ public class Host extends Connector {
     	String[] stringList = message2.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
     		synchronized (gameState.getDroppedPowerups()) {
+				PowerupType type = getPowerupType(stringList[2]);
     			ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
         		for (Powerup powerup : gameState.getDroppedPowerups()) {
         			if (powerup.getxId() == Float.parseFloat(stringList[0])
@@ -311,7 +303,7 @@ public class Host extends Connector {
         				synchronized (gameState.getFloatingScores()) {
         					gameState.getFloatingScores().add(new FloatingScore(powerup));
         				}
-        				powerupMessage2(stringList);
+        				mainGame.getPlayerList().getPlayers().get(1).addPowerup(type);
         			}
         		} //end of loop
         		gameState.getDroppedPowerups().removeAll(poweruplist);
@@ -326,59 +318,38 @@ public class Host extends Connector {
      * @param stringList information on powerup
      */
     private void addPowerup(String[] stringList) {
-    	Powerup powerup;
-    	if (stringList[2].equals("SHIELD")) {
-    		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SHIELD); // shield added to level
-    	} else if (stringList[2].equals("SPIKY")) {
-    		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SPIKY); // spiky added to level
-    	} else if (stringList[2].equals("INSTANT")) {
-    		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.INSTANT); // inst added to level
-    	} else if (stringList[2].equals("HEALTH")) {
-    		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.HEALTH); // health added to level
-    	} else if (stringList[2].equals("FREEZE")) {
-    		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.FREEZE); // freeze added to level
-    	} else if (stringList[2].equals("SLOW")) {
-    		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.SLOW); // slow added to level
-    	} else if (stringList[2].equals("FAST")) {
-    		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.FAST); // fast added to level
-    	} else {
-    		powerup = new Powerup(Float.parseFloat(stringList[0]),
-    				Float.parseFloat(stringList[1]), PowerupType.RANDOM); }
+    	Powerup powerup = new Powerup(Float.parseFloat(stringList[0]),
+				Float.parseFloat(stringList[1]), getPowerupType(stringList[2]));
     	synchronized (gameState.getDroppedPowerups()) {
         	gameState.getDroppedPowerups().add(powerup);
     		updatePowerupsAdd(powerup); }
 	}
-    
+	
 	/**
-	 * Extension of powerupMessage() to circumvent checkstyle.
-	 * @param stringList given in powerupMessage().
+	 * Used to quickly determine powerup type from a string. Standard is shield.
+	 * @param string to determine from.
+	 * @return the poweruptype concluded.
 	 */
-	private void powerupMessage2(String[] stringList) {
-		if (stringList[2].equals("SHIELD")) {
-			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SHIELD);
-		} else if (stringList[2].equals("SPIKY")) {
-			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SPIKY);
-		} else if (stringList[2].equals("INSTANT")) {
-			mainGame.getPlayerList().getPlayers()
-			.get(1).addPowerup(PowerupType.INSTANT);
-		} else if (stringList[2].equals("HEALTH")) {
-			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.HEALTH);
-		} else if (stringList[2].equals("FREEZE")) {
-			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.FREEZE);
-		} else if (stringList[2].equals("SLOW")) {
-			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.SLOW);
-		} else if (stringList[2].equals("FAST")) {
-			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.FAST);
-		} else if (stringList[2].equals("RANDOM")) {
-			mainGame.getPlayerList().getPlayers().get(1).addPowerup(PowerupType.RANDOM);
+	private PowerupType getPowerupType(String string) {
+		PowerupType type = PowerupType.SHIELD;
+		if (string.equals("SHIELD")) {
+			type = PowerupType.SHIELD;
+		} else if (string.equals("SPIKY")) {
+			type = PowerupType.SPIKY;
+		} else if (string.equals("INSTANT")) {
+			type = PowerupType.INSTANT;
+		} else if (string.equals("HEALTH")) {
+			type = PowerupType.HEALTH;
+		} else if (string.equals("FREEZE")) {
+			type = PowerupType.FREEZE;
+		} else if (string.equals("SLOW")) {
+			type = PowerupType.SLOW;
+		} else if (string.equals("FAST")) {
+			type = PowerupType.FAST;
+		} else if (string.equals("RANDOM")) {
+			type = PowerupType.RANDOM;
 		}
+		return type;
 	}
     
     /**
@@ -403,7 +374,7 @@ public class Host extends Connector {
 	 * Grant a powerup.
 	 * @param powerup the powerup to grant
 	 */
-	private void updatePowerupsGrant(Powerup powerup) {
+	public void updatePowerupsGrant(Powerup powerup) {
 		sendMessage(powerup.toString() + "GRANT ");
 		System.out.println("HOST SENT: " + powerup.toString() + "GRANT ");
 	}
@@ -453,7 +424,7 @@ public class Host extends Connector {
      * Grant a coin to the client.
      * @param coin the coin to grant.
      */
-    private void updateCoinsGrant(Coin coin) {
+    public void updateCoinsGrant(Coin coin) {
     	sendMessage(coin.toString() + "GRANT ");
 	}
     

@@ -153,16 +153,6 @@ public class PowerupTest {
 	}
 	
 	@Test
-	public void testGetImageA() {
-		assertNull(Powerup.PowerupType.SHIELD.getImageA());
-	}
-	
-	@Test
-	public void testGetImageN() {
-		assertNull(Powerup.PowerupType.SHIELD.getImageN());
-	}
-	
-	@Test
 	public void testClone() {
 		Powerup p = new Powerup(100, 200, Powerup.PowerupType.SHIELD);
 		Powerup p2 = null;

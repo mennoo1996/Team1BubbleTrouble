@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.newdawn.slick.Image;
 
 import powerups.Powerup;
+import powerups.Powerup.PowerupType;
 
 public class HostTest {
 	MainGame mg;
@@ -460,15 +461,285 @@ public class HostTest {
 		
 	}
 
+	@Test
+	public void testReadClientInputs15() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs15.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
+
+	@Test
+	public void testReadClientInputs16() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs16.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
 	
+	@Test
+	public void testReadClientInputs17() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs17.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
 
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
 	
+	@Test
+	public void testReadClientInputs17_2() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs17_2.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
 
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
 	
+	@Test
+	public void testReadClientInputs17_3() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs17_3.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
 
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
 	
+	@Test
+	public void testReadClientInputs17_4() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs17_4.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
 
+		Image i3 = mock(Image.class);
 
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
+	
+	@Test
+	public void testReadClientInputs17_5() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs17_5.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
+
+	@Test
+	public void testReadClientInputs17_6() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs17_6.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
+	
+	@Test
+	public void testReadClientInputs17_7() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs17_7.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
+	
+	@Test
+	public void testReadClientInputs17_8() {
+		h = new Host(0, mg, gs);
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs17_8.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		h.setReader(reader);
+		PlayerList pl = mock(PlayerList.class);
+		ArrayList<Player> plist = mock(ArrayList.class);
+		when(mg.getPlayerList()).thenReturn(pl);
+		when(pl.getPlayers()).thenReturn(plist);
+		Image i1 = mock(Image.class);
+		Image i2 = mock(Image.class);
+
+		Image i3 = mock(Image.class);
+
+		Image i4 = mock(Image.class);
+		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
+		when(plist.get(0)).thenReturn(p);
+
+		h.readClientInputs();
+		
+	}
 	
 
 
@@ -499,6 +770,18 @@ public class HostTest {
 		h.updatePauseStarted();
 		h.updatePauseStopped();
 		h.updateLives(5);
+		Coin coin = new Coin(0,0,false);
+		Powerup powerup = new Powerup(0,0,PowerupType.SHIELD);
+		ArrayList<BouncingCircle> cir = new ArrayList<BouncingCircle>();
+		h.updateRequiredForGateList(cir, 0);
+		h.updatePowerupsGrant(powerup);
+		h.updateCoinsGrant(coin);
+		h.clientConnected();
+		h.updateRestart();
+		h.updateDead();
+		h.splittedCircle(new BouncingCircle(0, 0, 200, 100, 100, 1));
+		h.getReader();
+		h.setPortNumber(4000);
 		assertFalse(h.clientConnected());
 	}
 

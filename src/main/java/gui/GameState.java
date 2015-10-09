@@ -204,6 +204,8 @@ public class GameState extends BasicGameState {
 		score = 0;
 		levels.initialize();
 		totaltime = levels.getLevel(mainGame.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
+		fractionTimeParts = COUNTDOWN_BAR_PARTS;
+		System.out.println(fractionTimeParts + " adjiwuahiuejirjwejirowjer");
 		startTime = System.currentTimeMillis();
 		timeRemaining = totaltime;
 		prevTime = startTime;
@@ -835,8 +837,7 @@ public class GameState extends BasicGameState {
 	private void drawPowerups(Graphics graphics) {
 		synchronized (droppedPowerups) {
 			for (Powerup pow : droppedPowerups) {
-				pow.draw(graphics, mainGame);
-				
+				RND.drawPowerup(graphics, pow);
 			}
 		}
 	}
@@ -1057,7 +1058,6 @@ public class GameState extends BasicGameState {
 	 */
 	private void loadImages() throws SlickException {
 		loadHealthAndBallImages();
-		loadPowerupImages();
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 		// countdown bar images
@@ -1091,14 +1091,6 @@ public class GameState extends BasicGameState {
 		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
 				BUTTON_WIDTH, BUTTON_HEIGHT,
 				"> Quit");
-	}
-	
-	/**
-	 * Load the powerup images.
-	 * @throws SlickException if something goes wrong / file not found
-	 */
-	private void loadPowerupImages() throws SlickException {
-		Powerup.loadImages();
 	}
 	
 	/**

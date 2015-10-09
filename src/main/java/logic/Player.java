@@ -314,32 +314,30 @@ public class Player {
 		if (mainGame.isLanMultiplayer() && isOthersPlayer() && movingRight) {
 			isMovingRight = true;
 		}
-		if ((gameState.getSavedInput().isKeyDown(moveRightKey) 
+		if (((gameState.getSavedInput().isKeyDown(moveRightKey) 
 				&& !gameState.getSavedInput().isKeyDown(moveLeftKey)
 				&& this.getMaxX() < (containerWidth - gameState.getRightWall().getWidth()))
-				|| isMovingRight) {
-           if (freeToRoam || (this.getCenterX() > intersectingGate.getRectangle().getCenterX())) {
-        	   this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
-        	   this.movement = Movement.RIGHT;
-        	   didWalk = true;
-        	   if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate 
-        			   && mainGame.isHost() && playerNumber == 0) {
-        		   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
-        	   } else if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate
-        			   && mainGame.isClient() && playerNumber == 1) {
-        		   mainGame.getClient().playerStartedMoving(x, y, playerNumber, "RIGHT");
-        	   }
-        	   if (!lastLogMove.equals("right")) {
-        		   logger.log("Moving right from position " + this.getCenterX(),
-        				   PriorityLevels.VERYLOW, PLAYER);
-        		   lastLogMove = "right";
-        	   }
-        	   stoodStillOnLastUpdate = false;
-           }
-        }
+				|| isMovingRight) && (freeToRoam
+				|| (this.getCenterX() > intersectingGate.getRectangle().getCenterX()))) {
+			this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
+			this.movement = Movement.RIGHT;
+			didWalk = true;
+			if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate 
+					&& mainGame.isHost() && playerNumber == 0) {
+				mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
+			} else if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate
+					&& mainGame.isClient() && playerNumber == 1) {
+				mainGame.getClient().playerStartedMoving(x, y, playerNumber, "RIGHT");
+			}
+			if (!lastLogMove.equals("right")) {
+				logger.log("Moving right from position " + this.getCenterX(),
+						PriorityLevels.VERYLOW, PLAYER);
+				lastLogMove = "right";
+			}
+			stoodStillOnLastUpdate = false;
+		}
 		return didWalk;
 	}
-
 
 	/**
 	 * Process a movement to the left.
@@ -352,29 +350,28 @@ public class Player {
 		if (mainGame.isLanMultiplayer() && isOthersPlayer() && movingLeft) {
 			isMovingLeft = true;
 		}
-		if ((gameState.getSavedInput().isKeyDown(moveLeftKey) 
+		if (((gameState.getSavedInput().isKeyDown(moveLeftKey) 
 				&& !gameState.getSavedInput().isKeyDown(moveRightKey)
 				&& this.getX() > gameState.getLeftWall().getWidth() && !movingRight) 
-				|| isMovingLeft) {
-            if (freeToRoam || (this.getCenterX() < intersectingGate.getRectangle().getCenterX())) {
-            	this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
-            	this.movement = Movement.LEFT;
-            	didWalk = true;
-            	if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate) {
-         		   if (mainGame.isHost() && playerNumber == 0) {
-         			   mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
-         		   } else if (mainGame.isClient() && playerNumber == 1) {
-         			   mainGame.getClient().playerStartedMoving(x, y, playerNumber, "LEFT");
-         		   }
-         	   }
-            	if (!lastLogMove.equals("left")) {
-            		logger.log("Moving left from position " + this.getCenterX(),
-            				PriorityLevels.VERYLOW, PLAYER);
-            		lastLogMove = "left";
-            	}
-            	stoodStillOnLastUpdate = false;
-            }
-        }
+				|| isMovingLeft) && (freeToRoam 
+				|| (this.getCenterX() < intersectingGate.getRectangle().getCenterX()))) {
+			this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
+			this.movement = Movement.LEFT;
+			didWalk = true;
+			if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate) {
+				if (mainGame.isHost() && playerNumber == 0) {
+					mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
+				} else if (mainGame.isClient() && playerNumber == 1) {
+					mainGame.getClient().playerStartedMoving(x, y, playerNumber, "LEFT");
+				}
+			}
+			if (!lastLogMove.equals("left")) {
+				logger.log("Moving left from position " + this.getCenterX(),
+						PriorityLevels.VERYLOW, PLAYER);
+				lastLogMove = "left";
+			}
+			stoodStillOnLastUpdate = false;
+		}
 		return didWalk;
 	}
 

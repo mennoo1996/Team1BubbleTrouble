@@ -1,9 +1,16 @@
 package logic;
-import static org.junit.Assert.*;
-import logic.Coin;
-import logic.MyRectangle;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import gui.MainGame;
+import gui.RND;
 
 import org.junit.Test;
+
+import static org.mockito.Mockito.anyObject;
+
+import org.mockito.Mockito;
+import org.newdawn.slick.Graphics;
 
 
 public class CoinTest {

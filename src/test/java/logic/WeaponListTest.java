@@ -130,4 +130,14 @@ public class WeaponListTest {
 	public void testGetLaserTipImage() {
 		assertEquals(img, wl.getLasertipimageN());
 	}
+	
+	@Test
+	public void testGetLaserBeamImageA() {
+		assertEquals(imgA, wl.getLaserbeamimageA());
+	}
+	
+	@Test
+	public void testGetLaserTipImageA() {
+		assertEquals(imgA, wl.getLasertipimageA());
+	}
 }

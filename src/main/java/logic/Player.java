@@ -19,6 +19,7 @@ import powerups.FreezePowerup;
 import powerups.InstantLaser;
 import powerups.Powerup;
 import powerups.SlowPowerup;
+import powerups.SpeedPowerup;
 import powerups.Spiky;
 
 /**
@@ -377,7 +378,7 @@ public class Player {
 	/**
 	 * @return Whether or not current player is the host
 	 */
-	private boolean isOthersPlayer() {
+	public boolean isOthersPlayer() {
 		if (mainGame.isHost()) {
 			return playerNumber == 1;
 		} else {
@@ -390,11 +391,12 @@ public class Player {
 	 * @param containerHeight the height of the current GameContainer.
 	 * @return the Weapon of this player.
 	 */
-	private Weapon getWeapon(float containerHeight) {
+	public Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
 			logger.log("Shot regular laser from position " + this.getCenterX(),
 					PriorityLevels.MEDIUM, PLAYER);
-			return new Weapon(this.getCenterX(), containerHeight - gameState.getFloor().getHeight(),
+			return new Weapon(this.getCenterX(), 
+					containerHeight - gameState.getFloor().getHeight(),
 					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
@@ -610,7 +612,8 @@ public class Player {
 	private void addSlow() {
 		SlowPowerup sp = new SlowPowerup();
 		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-		gs.getSpeedPowerupList().add(sp);
+		ArrayList<SpeedPowerup> list = gs.getSpeedPowerupList();
+		list.add(sp);
 		sp.updateCircles(gs.getCircleList());
 	}
 	

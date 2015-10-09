@@ -93,5 +93,11 @@ public class HighScoresTest {
 		assertEquals(a.getScoreList().get(9),score11);
 		
 	}
+	
+	@Test
+	public void testGetLogger() {
+		HighScores a = new HighScores();
+		assertEquals(a.getLogger(), Logger.getInstance());
+	}
 
 }

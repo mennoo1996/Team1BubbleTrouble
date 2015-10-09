@@ -30,7 +30,7 @@ public class LevelContainerTest {
 	@Test
 	public void testAdd() {
 		LevelContainer welp = new LevelContainer(mg);
-		Level level = new Level1(mg);
+		Level level = new Level1(mg, false);
 		ArrayList<Level> first = new ArrayList<Level>();
 		first.add(level);
 		welp.add(level);
@@ -40,7 +40,7 @@ public class LevelContainerTest {
 	@Test
 	public void testGetLevel() {
 		LevelContainer welp = new LevelContainer(mg);
-		Level level = new Level1(mg);
+		Level level = new Level1(mg, false);
 		welp.add(level);
 		assertEquals(welp.getLevel(0),level);
 	}
@@ -62,7 +62,7 @@ public class LevelContainerTest {
 	@Test
 	public void testSetLevels() {
 		ArrayList<Level> result = new ArrayList<Level>();
-		result.add(new Level1(mg));
+		result.add(new Level1(mg, false));
 		LevelContainer welp = new LevelContainer(mg);
 		welp.setLevels(result);
 		assertEquals(welp.getLevels(),result);

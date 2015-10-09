@@ -24,9 +24,10 @@ public class Level5 extends Level {
 	/**
 	 * Construct a new Level5.
 	 * @param mainGame the mainGame that uses this level
+	 * @param isMultiplayer whether or not the level will be used in multiplayer
 	 */
-	public Level5(MainGame mainGame) {
-		super(mainGame);
+	public Level5(MainGame mainGame, boolean isMultiplayer) {
+		super(mainGame, isMultiplayer);
 	}
 	
 	@Override

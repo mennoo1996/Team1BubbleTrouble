@@ -30,9 +30,10 @@ public class Level8 extends Level {
 	/**
 	 * Construct a new Level8.
 	 * @param mainGame the mainGame that uses this level
+	 * @param isMultiplayer whether or not the level will be used in multiplayer
 	 */
-	public Level8(MainGame mainGame) {
-		super(mainGame);
+	public Level8(MainGame mainGame, boolean isMultiplayer) {
+		super(mainGame, isMultiplayer);
 	}
 	
 	@Override

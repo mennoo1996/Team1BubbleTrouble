@@ -22,9 +22,10 @@ public class Level2 extends Level {
 	/**
 	 * Creates a Level2.
 	 * @param maingame the mainGame that uses this level
+	 * @param isMultiplayer whether or not the level will be used in multiplayer
 	 */
-	public Level2(MainGame maingame) {
-		super(maingame);
+	public Level2(MainGame maingame, boolean isMultiplayer) {
+		super(maingame, isMultiplayer);
 	}
 	
 	@Override

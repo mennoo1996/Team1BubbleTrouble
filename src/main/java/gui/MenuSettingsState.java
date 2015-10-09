@@ -30,7 +30,7 @@ public class MenuSettingsState extends BasicGameState {
 	private Button shuffleButton;
 	 
 	// Game Colors
-	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
+	private static final Color COLOR_RED = new Color(0.9f, 0.15f, 0.1f);;
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
 	private static final Color COLOR_GREEN = new Color(0.35f, 0.6f, 0.05f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);

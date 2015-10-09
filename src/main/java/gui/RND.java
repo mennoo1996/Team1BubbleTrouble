@@ -346,31 +346,27 @@ public final class RND {
 	 * @param powerup the powerup to draw
 	 */
 	public static void drawPowerup(Graphics g, Powerup powerup) {
+		Image imageN; Image imageA;
+		float x = powerup.getX() - POWERUP_IMAGE_OFFSET, 
+			  y = powerup.getY() - POWERUP_IMAGE_OFFSET;
 		if (powerup.getType() == PowerupType.INSTANT) {
-			RND.drawColor(g, imageLaserImageN, imageLaserImageA, 
-					powerup.getX(), powerup.getY(), color);
+			imageN = imageLaserImageN; imageA = imageLaserImageA;
 		} else if (powerup.getType() == PowerupType.SPIKY) {
-			RND.drawColor(g, imageVineImageN, imageVineImageA, 
-					powerup.getX(), powerup.getY(), color);
+			imageN = imageVineImageN; imageA = imageVineImageA;
 		} else if (powerup.getType() == PowerupType.SHIELD) {
-			RND.drawColor(g, imageShieldImageN, imageShieldImageA, 
-					powerup.getX(), powerup.getY(), color);
+			imageN = imageShieldImageN; imageA = imageShieldImageA;
 		} else if (powerup.getType() == PowerupType.FREEZE) {
-			RND.drawColor(g, imageFreezeImageN, imageFreezeImageA, 
-					powerup.getX(), powerup.getY(), color);
+			imageN = imageFreezeImageN; imageA = imageFreezeImageA;
 		} else if (powerup.getType() == PowerupType.SLOW) {
-			RND.drawColor(g, imageSlowImageN, imageSlowImageA, 
-					powerup.getX(), powerup.getY(), color);
+			imageN = imageSlowImageN; imageA = imageSlowImageA;
 		} else if (powerup.getType() == PowerupType.FAST) {
-			RND.drawColor(g, imageFastImageN, imageFastImageA, 
-					powerup.getX(), powerup.getY(), color);
+			imageN = imageFastImageN; imageA = imageFastImageA;
 		} else if (powerup.getType() == PowerupType.HEALTH) {
-			RND.drawColor(g, imageHealthImageN, imageHealthImageA, 
-					powerup.getX(), powerup.getY(), color);
-		} else if (powerup.getType() == PowerupType.RANDOM) {
-			RND.drawColor(g, imageRandomImageN, imageRandomImageA, 
-					powerup.getX(), powerup.getY(), color);
+			imageN = imageHealthImageN; imageA = imageHealthImageA;
+		} else {
+			imageN = imageRandomImageN; imageA = imageRandomImageA;
 		}
+		RND.drawColor(g, imageN, imageA, x, y, color);
 	}
 	
 	/**
@@ -387,7 +383,7 @@ public final class RND {
 	 * @param g the context to draw in.
 	 */
 	public static void drawBackground(Graphics g) {
-		g.drawImage(imageBackground, 0, 0);
+		g.drawImage(imageBackground, 0, 0, color);
 	}
 	
 	/**

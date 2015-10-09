@@ -219,7 +219,9 @@ public class Host extends Connector {
             running = false;
         }
         try {
-            serverSocket.close();
+        	if (serverSocket != null) {
+                serverSocket.close();
+        	}
         } catch (IOException er) {
             logger.log(er.getMessage(), Logger.PriorityLevels.LOW, "lan");
         }

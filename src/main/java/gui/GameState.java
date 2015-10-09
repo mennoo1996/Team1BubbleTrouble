@@ -204,6 +204,8 @@ public class GameState extends BasicGameState {
 		score = 0;
 		levels.initialize();
 		totaltime = levels.getLevel(mainGame.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
+		fractionTimeParts = COUNTDOWN_BAR_PARTS;
+		System.out.println(fractionTimeParts + " adjiwuahiuejirjwejirowjer");
 		startTime = System.currentTimeMillis();
 		timeRemaining = totaltime;
 		prevTime = startTime;

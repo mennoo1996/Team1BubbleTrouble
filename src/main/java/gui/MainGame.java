@@ -38,7 +38,7 @@ public class MainGame extends StateBasedGame {
 	// Game Colors
 	private boolean shuffleColors = false;
 	private static final int COLOR_COUNT = 6;
-	private static final Color COLOR_RED = new Color(0.8f, 0.15f, 0.0f);
+	private static final Color COLOR_RED = new Color(0.9f, 0.15f, 0.1f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
 	private static final Color COLOR_GREEN = new Color(0.35f, 0.6f, 0.05f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
@@ -136,8 +136,8 @@ public class MainGame extends StateBasedGame {
 		this.player2ImageStringN = "Player2sprite_Norm.png";
 		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
-		this.setColor(COLOR_GREEN);
-		this.setNextColor(COLOR_GREEN);
+		this.setColor(COLOR_RED);
+		this.setNextColor(COLOR_RED);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
 		this.lanMultiplayer = false;

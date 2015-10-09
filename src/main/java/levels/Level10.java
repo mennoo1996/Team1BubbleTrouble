@@ -39,7 +39,7 @@ public class Level10 extends Level {
 			circles.add(new BouncingCircle(DEFAULT_BALL_X, 
 					LEVEL_10_BALL_FACTOR * i + DEFAULT_BALL_Y,
 					MINIMUM_RADIUS, LEVEL_10_XSPEED, DEFAULT_YSPEED, 
-					this.getMaingame().getGravity(), 0));	
+					this.getMaingame().getGravity(), i));	
 		}
 		
 		// The gate list

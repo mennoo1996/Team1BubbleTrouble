@@ -149,11 +149,11 @@ public class WeaponList {
 				weapon.getX() - LASER_X_DEVIATION, weapon.getY() - LASER_TIP_Y_DEVIATION,
 				mainGame.getColor()));
 
-		 RND.getInstance().drawColor(graphics, laserbeamimageN, laserbeamimageA,
+		 RND.getInstance().drawColor(new RenderOptions(graphics, laserbeamimageN, laserbeamimageA,
 				weapon.getX() - LASER_X_DEVIATION,
-				weapon.getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION,
+				weapon.getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION, mainGame.getColor()),
 				weapon.getX() + LASER_BEAM_X2_DEVIATION, weapon.getRectangle().getMaxY(), 0, 0,
-				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2, mainGame.getColor());
+				LASER_BEAM_SRCX2, LASER_BEAM_SRCY2);
 	}
 
 	/**

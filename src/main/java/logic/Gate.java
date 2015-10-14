@@ -85,8 +85,8 @@ public class Gate extends Rectangle {
 		float srcy = gateUpperN.getHeight() - GATE_Y_FACTOR * getHeightPercentage();
 		float srcx2 = gateUpperN.getWidth();
 		float srcy2 = gateUpperN.getHeight();
-		RND.getInstance().drawColor(graphics, gateUpperN, gateUpperA, x, y, x2, y2, 
-				srcx, srcy, srcx2, srcy2, mainGame.getColor());
+		RND.getInstance().drawColor(new RenderOptions(graphics, gateUpperN, gateUpperA, x, y,
+				mainGame.getColor()), x2, y2, srcx, srcy, srcx2, srcy2);
 		left = GATE_LEFT_LOWER;
 		float up = GATE_UP;
 		x = getMinX() - left - 1;
@@ -98,8 +98,8 @@ public class Gate extends Rectangle {
 		srcy = 0;
 		srcx2 = gateLowerN.getWidth();
 		srcy2 = GATE_Y_FACTOR_LOWER * getHeightPercentage();
-		RND.getInstance().drawColor(graphics, gateLowerN, gateLowerA, x, y, x2, y2, 
-				srcx, srcy, srcx2, srcy2, mainGame.getColor());
+		RND.getInstance().drawColor(new RenderOptions(graphics, gateLowerN, gateLowerA, x, y, 
+				mainGame.getColor()), x2, y2, srcx, srcy, srcx2, srcy2);
 	
 	}
 	

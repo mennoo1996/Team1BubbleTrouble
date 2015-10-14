@@ -209,56 +209,42 @@ public final class RND {
 	
 	/**
 	 * Draw function rendering objects to screen with color filter.
-	 * @param g graphics context
-	 * @param n normal image
-	 * @param a additive image
-	 * @param x x-location
-	 * @param y y-location
+	 * @param ro the renderoptions to render with
 	 * @param width width to draw the image with
 	 * @param height height to draw the image with
-	 * @param color color filter
 	 */
-	public void drawColor(Graphics g, Image n, Image a,
-			float x, float y, float width, float height,
-			Color color) {
-		n.draw(x, y, width, height, new Color(color.r * opacity, color.g * opacity, 
-				color.b * opacity));
-		if (!a.getTexture().equals(n.getTexture())) {
-			g.setDrawMode(Graphics.MODE_ADD);
-			a.draw(x, y, width, height, new Color(color.r * opacity, color.g * opacity, 
-					color.b * opacity));
-			g.setDrawMode(Graphics.MODE_NORMAL);
+	public void drawColor(RenderOptions ro, float width, float height) {
+		ro.getN().draw(ro.getX(), ro.getY(), width, height, new Color(color.r * opacity, 
+				color.g * opacity, color.b * opacity));
+		if (!ro.getA().getTexture().equals(ro.getN().getTexture())) {
+			ro.getG().setDrawMode(Graphics.MODE_ADD);
+			ro.getA().draw(ro.getX(), ro.getY(), width, height, new Color(color.r * opacity, 
+					color.g * opacity, color.b * opacity));
+			ro.getG().setDrawMode(Graphics.MODE_NORMAL);
 		}
 	}
 
 	
 	/**
 	 * Draw stretched function, with color settings.
-	 * @param g graphics context
-	 * @param n normal image
-	 * @param a additive image
-	 * @param x x-left
-	 * @param y y-top
+	 * @param ro the renderoptions to render with
 	 * @param x2 x-right
 	 * @param y2 y-bottom
 	 * @param srcx resx
 	 * @param srcy resy
 	 * @param srcx2 stretchx
 	 * @param srcy2 stretchy
-	 * @param color color filter
 	 */
-	public void drawColor(Graphics g, Image n, Image a, 
-			float x, float y, float x2, float y2, 
-			float srcx, float srcy, float srcx2, float srcy2,
-			Color color) {
-		g.drawImage(n, x, y, x2, y2, srcx, srcy, srcx2, srcy2,
+	public void drawColor(RenderOptions ro, float x2, float y2, 
+			float srcx, float srcy, float srcx2, float srcy2) {
+		ro.getG().drawImage(ro.getN(), ro.getX(), ro.getY(), x2, y2, srcx, srcy, srcx2, srcy2,
 				new Color(color.r, color.g, color.b, opacity)); 
 		
-		if (!a.getTexture().equals(n.getTexture())) {
-			g.setDrawMode(Graphics.MODE_ADD);
-			g.drawImage(a, x, y, x2, y2, srcx, srcy, srcx2, srcy2, 
+		if (!ro.getA().getTexture().equals(ro.getN().getTexture())) {
+			ro.getG().setDrawMode(Graphics.MODE_ADD);
+			ro.getG().drawImage(ro.getA(), ro.getX(), ro.getY(), x2, y2, srcx, srcy, srcx2, srcy2, 
 					new Color(color.r * opacity, color.g * opacity, color.b * opacity)); 
-			g.setDrawMode(Graphics.MODE_NORMAL);
+			ro.getG().setDrawMode(Graphics.MODE_NORMAL);
 		}
 	}
 	
@@ -329,9 +315,9 @@ public final class RND {
 				button.getY() - BUTTON_Y_OFFSET, color);
 		RND.getInstance().drawColor(ro1);
 		// draw body
-		RND.getInstance().drawColor(g, imageButtonBodyN, imageButtonBodyA,
-				button.getX() + BUTTON_BEGIN_OFFSET, button.getY() - BUTTON_Y_OFFSET,
-				dosFontM.getWidth(button.getText()) - BUTTON_END_OFFSET, BUTTON_HEIGHT, color);
+		RND.getInstance().drawColor(new RenderOptions(g, imageButtonBodyN, imageButtonBodyA,
+				button.getX() + BUTTON_BEGIN_OFFSET, button.getY() - BUTTON_Y_OFFSET, color),
+				dosFontM.getWidth(button.getText()) - BUTTON_END_OFFSET, BUTTON_HEIGHT);
 		// draw tail
 		RenderOptions ro3 = new RenderOptions(g, imageButtonTailN, imageButtonTailA, 
 				button.getX() + BUTTON_BEGIN_OFFSET + dosFontM.getWidth(button.getText()) 

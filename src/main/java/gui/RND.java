@@ -1,5 +1,7 @@
 package gui;
 
+import logic.RenderOptions;
+
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -191,21 +193,17 @@ public final class RND {
 	
 	/**
 	 * Draw function rendering objects to screen with color filter.
-	 * @param g graphics context
-	 * @param n normal image
-	 * @param a additive image
-	 * @param x x-location
-	 * @param y y-location
-	 * @param color color filter
+	 * @param ro - the renderoptions to render with.
 	 */
-	public void drawColor(Graphics g, Image n, Image a,
-			float x, float y, Color color) {
-		g.drawImage(n, x, y, new Color(color.r, color.g, color.b, opacity));
-		if (!a.getTexture().equals(n.getTexture())) {
-			g.setDrawMode(Graphics.MODE_ADD);
-			g.drawImage(a, x, y, new Color(color.r * opacity, color.g * opacity, 
+	public void drawColor(RenderOptions ro) {
+		ro.getG().drawImage(ro.getN(), ro.getX(), ro.getY(), 
+				new Color(color.r, color.g, color.b, opacity));
+		if (!ro.getA().getTexture().equals(ro.getN().getTexture())) {
+			ro.getG().setDrawMode(Graphics.MODE_ADD);
+			ro.getG().drawImage(ro.getA(), ro.getX(), ro.getY(), 
+					new Color(color.r * opacity, color.g * opacity, 
 					color.b * opacity));
-			g.setDrawMode(Graphics.MODE_NORMAL);
+			ro.getG().setDrawMode(Graphics.MODE_NORMAL);
 		}
 	}
 	
@@ -326,18 +324,19 @@ public final class RND {
 	 */
 	public void drawButtonHighlight(Graphics g, Button button) {
 		// draw head
-		RND.getInstance().drawColor(g, imageButtonHeadN, imageButtonHeadA, 
+		RenderOptions ro1 = new RenderOptions(g, imageButtonHeadN, imageButtonHeadA, 
 				button.getX() - BUTTON_X_OFFSET, 
 				button.getY() - BUTTON_Y_OFFSET, color);
+		RND.getInstance().drawColor(ro1);
 		// draw body
 		RND.getInstance().drawColor(g, imageButtonBodyN, imageButtonBodyA,
 				button.getX() + BUTTON_BEGIN_OFFSET, button.getY() - BUTTON_Y_OFFSET,
 				dosFontM.getWidth(button.getText()) - BUTTON_END_OFFSET, BUTTON_HEIGHT, color);
 		// draw tail
-		RND.getInstance().drawColor(g, imageButtonTailN, imageButtonTailA, 
-				button.getX() 
-				+ BUTTON_BEGIN_OFFSET + dosFontM.getWidth(button.getText()) - BUTTON_END_OFFSET, 
-				button.getY() - BUTTON_Y_OFFSET, color);
+		RenderOptions ro3 = new RenderOptions(g, imageButtonTailN, imageButtonTailA, 
+				button.getX() + BUTTON_BEGIN_OFFSET + dosFontM.getWidth(button.getText()) 
+				- BUTTON_END_OFFSET, button.getY() - BUTTON_Y_OFFSET, color);
+		RND.getInstance().drawColor(ro3);
 		
 		// draw text
 		dosFontM.drawString(button.getX(), button.getY(), button.getText(), 
@@ -384,7 +383,7 @@ public final class RND {
 		} else {
 			imageN = imageRandomImageN; imageA = imageRandomImageA;
 		}
-		RND.getInstance().drawColor(g, imageN, imageA, x, y, color);
+		RND.getInstance().drawColor(new RenderOptions(g, imageN, imageA, x, y, color));
 	}
 	
 	/**
@@ -420,7 +419,7 @@ public final class RND {
 	 * @param y coordinate y.
 	 */
 	public void drawLogo(Graphics g, int x, int y) {
-		drawColor(g, imageGameLogoN, imageGameLogoA, x, y, color);
+		drawColor(new RenderOptions(g, imageGameLogoN, imageGameLogoA, x, y, color));
 	}
 	
 }

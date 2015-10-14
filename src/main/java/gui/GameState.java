@@ -15,6 +15,7 @@ import logic.Logger;
 import logic.Logger.PriorityLevels;
 import logic.MyRectangle;
 import logic.Player;
+import logic.RenderOptions;
 import logic.Weapon;
 import logic.WeaponList;
 
@@ -712,15 +713,16 @@ public class GameState extends BasicGameState {
 		graphics.setColor(Color.white);
 		drawActiveCircles(graphics);
 		drawFloatingScores(graphics);
-		RND.getInstance().drawColor(graphics, ceilingImageN, ceilingImageA, 
+		RND.getInstance().drawColor(new RenderOptions(graphics, ceilingImageN, ceilingImageA, 
 				getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION, getCeiling().getHeight() 
-				- CEILING_DRAW_Y_DEVIATION, mainGame.getColor());
+				- CEILING_DRAW_Y_DEVIATION, mainGame.getColor()));
 		drawGates(container, graphics);
 		weaponList.drawWeapons(graphics);
 		mainGame.getPlayerList().drawPlayers(graphics);
 		drawItems(graphics);
 		// Draw walls, floor and ceiling
-		RND.getInstance().drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mainGame.getColor());
+		RND.getInstance().drawColor(new RenderOptions(graphics, wallsImageN, 
+				wallsImageA, 0, 0, mainGame.getColor()));
 		drawCountdownBar(container, graphics);
 		// Draw level/Score data
 		RND.getInstance().text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
@@ -796,9 +798,9 @@ public class GameState extends BasicGameState {
 			float rem = mainGame.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
 			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				RND.getInstance().drawColor(graphics, counterBarImageN, counterBarImageA,
-						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
+				RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+						counterBarImageA, SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
+						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor()));
 			}
 			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_2_X
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
@@ -810,9 +812,9 @@ public class GameState extends BasicGameState {
 			float rem = mainGame.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
 			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				RND.getInstance().drawColor(graphics, counterBarImageN, counterBarImageA,
-						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
+				RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+						counterBarImageA, SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
+						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor()));
 			}
 			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
@@ -862,10 +864,10 @@ public class GameState extends BasicGameState {
 	 */
 	private void drawCountdownBar(GameContainer container, Graphics graphics) {
 		for (int x = 0; x < fractionTimeParts; x++) {
-			RND.getInstance().drawColor(graphics, counterBarImageN, counterBarImageA,
-					container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION - COUNTER_BAR_PARTS_FACTOR
-					* (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR,
-					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+					counterBarImageA, container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION 
+					- COUNTER_BAR_PARTS_FACTOR * (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR,
+					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mainGame.getColor()));
 		}
 	}
 
@@ -892,29 +894,30 @@ public class GameState extends BasicGameState {
 			final float xPosition = circle.getMinX() - offset;
 			final float yPosition = circle.getMinY() - offset;
 			switch (r) {
-				case(RADIUS_6) : RND.getInstance().drawColor(graphics, ballsImagesN[0], 
-						ballsImagesA[0], xPosition, yPosition, mainGame.getColor()); break;
-				case(RADIUS_5) : RND.getInstance().drawColor(graphics, ballsImagesN[1], 
-						ballsImagesA[1], xPosition, yPosition, mainGame.getColor()); break;
-				case(RADIUS_4) : RND.getInstance().drawColor(graphics, ballsImagesN[2], 
-						ballsImagesA[2], xPosition, yPosition, mainGame.getColor()); break;
-				case(RADIUS_3) : RND.getInstance().drawColor(graphics, 
+				case(RADIUS_6) : RND.getInstance().drawColor(new RenderOptions(graphics, 
+						ballsImagesN[0], ballsImagesA[0], xPosition, yPosition, 
+						mainGame.getColor())); break;
+				case(RADIUS_5) : RND.getInstance().drawColor(new RenderOptions(graphics, 
+						ballsImagesN[1], ballsImagesA[1], xPosition, yPosition, 
+						mainGame.getColor())); break;
+				case(RADIUS_4) : RND.getInstance().drawColor(new RenderOptions(graphics, 
+						ballsImagesN[2], ballsImagesA[2], xPosition, yPosition, 
+						mainGame.getColor())); break;
+				case(RADIUS_3) : RND.getInstance().drawColor(new RenderOptions(graphics, 
 						ballsImagesN[BALL_IMAGE_THREE], ballsImagesA[BALL_IMAGE_THREE],
-						xPosition, yPosition, mainGame.getColor()); break;
-				case(RADIUS_2) : RND.getInstance().drawColor(graphics, 
+						xPosition, yPosition, mainGame.getColor())); break;
+				case(RADIUS_2) : RND.getInstance().drawColor(new RenderOptions(graphics, 
 						ballsImagesN[BALL_IMAGE_FOUR], ballsImagesA[BALL_IMAGE_FOUR],
-						xPosition, yPosition, mainGame.getColor()); break;
-				case(MINIMUM_RADIUS) : RND.getInstance().drawColor(graphics, 
+						xPosition, yPosition, mainGame.getColor())); break;
+				case(MINIMUM_RADIUS) : RND.getInstance().drawColor(new RenderOptions(graphics, 
 						ballsImagesN[BALL_IMAGE_FIVE], ballsImagesA[BALL_IMAGE_FIVE],
-						xPosition, yPosition, mainGame.getColor()); break;
+						xPosition, yPosition, mainGame.getColor())); break;
 				default:
 					try {
 						throw new SlickException("Radius was not one of the supported");
 					} catch (SlickException e) {
-						e.printStackTrace(); }
-			}
-		}
-	}
+						e.printStackTrace();
+	} } } }
 	
 	/**
 	 * Returns a deep copy of circlelist.
@@ -1032,10 +1035,10 @@ public class GameState extends BasicGameState {
             counterBarImageA.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
             counterBarImageN.rotate(degree);
             counterBarImageA.rotate(degree);
-            RND.getInstance().drawColor(graphics, counterBarImageN, counterBarImageA,
-            		container.getWidth() / 2 - COUNTER_BAR_DRAW_X_DEVIATION, 
+            RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+            		counterBarImageA, container.getWidth() / 2 - COUNTER_BAR_DRAW_X_DEVIATION, 
             		container.getHeight() / 2 - COUNTER_BAR_DRAW_Y_DEVIATION, 
-            		mainGame.getColor());
+            		mainGame.getColor()));
             counterBarImageN.rotate(-degree);
             counterBarImageA.rotate(-degree);
         }

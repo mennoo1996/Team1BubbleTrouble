@@ -183,10 +183,10 @@ public class PlayerList {
 			drawPlayerNoMovement(player, graphics);
 		}
 		if (player.hasShield()) {
-			RND.getInstance().drawColor(graphics, player.getShieldImageN(), 
+			RND.getInstance().drawColor(new RenderOptions(graphics, player.getShieldImageN(), 
 					player.getShieldImageA(),
 					player.getX() - SHIELD_DRAW_X_DEVIATION,
-					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor());
+					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor()));
 		}
 		player.setMovement(Player.Movement.NO_MOVEMENT);
 	}
@@ -198,11 +198,11 @@ public class PlayerList {
 	 */
 	private void drawPlayerNoMovement(Player player, Graphics graphics) {
 		player.resetMovementCounter();
-		RND.getInstance().drawColor(graphics, 
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
 				player.getSpritesheetN().getSprite(2, 0),
 				player.getSpritesheetA().getSprite(2, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**
@@ -217,11 +217,11 @@ public class PlayerList {
                 * MOVEMENT_COUNTER_FACTOR) {
             sp = 0;
         }
-		RND.getInstance().drawColor(graphics, 
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
 				player.getSpritesheetN().getSprite(sp, 0),
 				player.getSpritesheetA().getSprite(sp, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**
@@ -236,11 +236,11 @@ public class PlayerList {
                 * MOVEMENT_COUNTER_FACTOR) {
             sp = SPRITE_SHEET_FOUR;
         }
-		RND.getInstance().drawColor(graphics, 
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
 				player.getSpritesheetN().getSprite(sp, 0), 
 				player.getSpritesheetA().getSprite(sp, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**

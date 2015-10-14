@@ -1,6 +1,7 @@
 package gui;
 
 import logic.MyRectangle;
+import logic.RenderOptions;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -174,20 +175,20 @@ public class Textfield {
 	public void drawColor(Graphics graphics, Color color) {
 		text = textfield.getText();
 		if (textfield.hasFocus()) {
-			RND.getInstance().drawColor(graphics, fieldOnNorm, fieldOnAdd, 
-					x - TF_BACKGROUND_DEVIATION, y - TF_BACKGROUND_DEVIATION, color);
+			RND.getInstance().drawColor(new RenderOptions(graphics, fieldOnNorm, fieldOnAdd, 
+					x - TF_BACKGROUND_DEVIATION, y - TF_BACKGROUND_DEVIATION, color));
 			if (cursor > 0 && cursor <= text.length()) {
 				String s = text.substring(0, cursor);
 				float length = RND.getInstance().getStringPixelWidth(s);
-				RND.getInstance().drawColor(graphics, cursorNorm, cursorAdd, 
-						x - TF_BACKGROUND_DEVIATION + length, y - TC_Y_DEVIATION, color);
+				RND.getInstance().drawColor(new RenderOptions(graphics, cursorNorm, cursorAdd, 
+						x - TF_BACKGROUND_DEVIATION + length, y - TC_Y_DEVIATION, color));
 			} else if (cursor == 0) {
-				RND.getInstance().drawColor(graphics, cursorNorm, cursorAdd, 
-						x - TF_BACKGROUND_DEVIATION + TC_X_DEVIATION, y - TC_Y_DEVIATION, color);
+				RND.getInstance().drawColor(new RenderOptions(graphics, cursorNorm, cursorAdd, 
+						x - TF_BACKGROUND_DEVIATION + TC_X_DEVIATION, y - TC_Y_DEVIATION, color));
 			}
 		} else {
-			RND.getInstance().drawColor(graphics, fieldNorm, fieldAdd, 
-					x - TF_BACKGROUND_DEVIATION, y - TF_BACKGROUND_DEVIATION, color);
+			RND.getInstance().drawColor(new RenderOptions(graphics, fieldNorm, fieldAdd, 
+					x - TF_BACKGROUND_DEVIATION, y - TF_BACKGROUND_DEVIATION, color));
 		}
 		RND.getInstance().textSpecifiedColor(graphics, x, y, text, color);
 	}

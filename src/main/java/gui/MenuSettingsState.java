@@ -1,6 +1,7 @@
 package gui;
 import logic.Logger;
 import logic.MyRectangle;
+import logic.RenderOptions;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -427,23 +428,23 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	private void drawSprites(Graphics graphics) {
 		if (mainGame.getPlayer1ImageStringN().equals(PLAYERSPRITE_NORM)) {
-			RND.getInstance().drawColor(graphics, highLightN, highLightA, MANNETJE_1_X, 
-					MANNETJE_1_Y, mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					MANNETJE_1_X, MANNETJE_1_Y, mainGame.getColor()));
 		} else if (mainGame.getPlayer1ImageStringN().equals(PLAYER2SPRITE_NORM)) {
-			RND.getInstance().drawColor(graphics, highLightN, highLightA, 
-					TELEFOON_1_X, TELEFOON_1_Y, mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					TELEFOON_1_X, TELEFOON_1_Y, mainGame.getColor()));
 		} else if (mainGame.getPlayer1ImageStringN().equals(ARIESPRITE)) {
-			RND.getInstance().drawColor(graphics, highLightN, highLightA, 
-					ARIE_1_X, ARIE_1_Y, mainGame.getColor()); }
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					ARIE_1_X, ARIE_1_Y, mainGame.getColor())); }
 		if (mainGame.getPlayer2ImageStringN().equals(PLAYERSPRITE_NORM)) {
-			RND.getInstance().drawColor(graphics, highLightN, highLightA, MANNETJE_2_X, 
-					MANNETJE_2_Y, mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					MANNETJE_2_X, MANNETJE_2_Y, mainGame.getColor()));
 		} else if (mainGame.getPlayer2ImageStringN().equals(PLAYER2SPRITE_NORM)) {
-			RND.getInstance().drawColor(graphics, highLightN, highLightA, 
-					TELEFOON_2_X, TELEFOON_2_Y, mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					TELEFOON_2_X, TELEFOON_2_Y, mainGame.getColor()));
 		} else if (mainGame.getPlayer2ImageStringN().equals(ARIESPRITE)) {
-			RND.getInstance().drawColor(graphics, highLightN, highLightA, 
-					ARIE_2_X, ARIE_2_Y, mainGame.getColor()); }
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					ARIE_2_X, ARIE_2_Y, mainGame.getColor())); }
 		returnButton.drawColor(graphics, input, mainGame.getColor());
 		
 		drawSprites2(graphics);
@@ -454,19 +455,25 @@ public class MenuSettingsState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawSprites2(Graphics graphics) {
-		RND.getInstance().drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
-				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mainGame.getColor());
-		RND.getInstance().drawColor(graphics, telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
-				telefoon1Rectangle.getX(), telefoon1Rectangle.getY(), mainGame.getColor());
-		RND.getInstance().drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
-				arie1Rectangle.getX(), arie1Rectangle.getY(), mainGame.getColor());
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
+				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
+				telefoon1Rectangle.getX(), telefoon1Rectangle.getY(), mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				arieN.getSprite(2, 0), arieA.getSprite(2, 0),
+				arie1Rectangle.getX(), arie1Rectangle.getY(), mainGame.getColor()));
 		
-		RND.getInstance().drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
-				mannetje2Rectangle.getX(), mannetje2Rectangle.getY(), mainGame.getColor());
-		RND.getInstance().drawColor(graphics, telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
-				telefoon2Rectangle.getX(), telefoon2Rectangle.getY(), mainGame.getColor());
-		RND.getInstance().drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
-				arie2Rectangle.getX(), arie2Rectangle.getY(), mainGame.getColor());
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
+				mannetje2Rectangle.getX(), mannetje2Rectangle.getY(), mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
+				telefoon2Rectangle.getX(), telefoon2Rectangle.getY(), mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				arieN.getSprite(2, 0), arieA.getSprite(2, 0),
+				arie2Rectangle.getX(), arie2Rectangle.getY(), mainGame.getColor()));
 	}
 
 	/**

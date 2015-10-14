@@ -19,6 +19,9 @@ public class HighScores {
 	 */
 	public HighScores() {
 		scoreList = new ArrayList<Score>();
+		if (logger == null) {
+			logger = Logger.getInstance();
+		}
 	}
 	
 	
@@ -95,15 +98,5 @@ public class HighScores {
 	public Logger getLogger() {
 		return logger;
 	}
-
-
-
-	/**
-	 * @param logger2 the logger to set
-	 */
-	public void setLogger(Logger logger2) {
-		logger = logger2;
-	}
-	
 }
 

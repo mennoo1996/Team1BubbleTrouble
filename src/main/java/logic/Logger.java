@@ -25,7 +25,7 @@ public final class Logger {
 	private boolean testing;
 	private String testingFileName;
 	
-	private static Logger instance = new Logger(true);
+	private volatile static Logger instance;
 	
 	/**
 	 * Constructor of the logger.
@@ -57,6 +57,13 @@ public final class Logger {
 	 * @return the logger
 	 */
 	public static Logger getInstance() {
+		if (instance == null) {
+			synchronized (Logger.class) {
+				if (instance == null) {
+					instance = new Logger(true);
+				}
+			}
+		}
 		return instance;
 	}
 	

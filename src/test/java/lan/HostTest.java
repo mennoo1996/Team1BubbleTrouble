@@ -363,40 +363,7 @@ public class HostTest {
 		
 	}
 	
-	@Test
-	public void testReadClientInputs12() {
-		h = new Host(0, mg, gs);
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader("resources/testing/testReadClientInputs12.txt"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		h.setReader(reader);
-		PlayerList pl = mock(PlayerList.class);
-		ArrayList<Player> plist = mock(ArrayList.class);
-		when(mg.getPlayerList()).thenReturn(pl);
-		when(pl.getPlayers()).thenReturn(plist);
-		Image i1 = mock(Image.class);
-		Image i2 = mock(Image.class);
-
-		Image i3 = mock(Image.class);
-
-		Image i4 = mock(Image.class);
-		Player p = new Player(1, 2, 3, 4, i1, i2, i3, i4, mg);
-		when(plist.get(100)).thenReturn(p);
-		
-		WeaponList wl = mock(WeaponList.class);
-		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
-		
-		h.readClientInputs();
-		
-		
-		
-	}
-
+	
 	
 
 	@Test

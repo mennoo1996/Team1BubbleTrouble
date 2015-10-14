@@ -25,7 +25,7 @@ public final class Logger {
 	private boolean testing;
 	private String testingFileName;
 	
-	private volatile static Logger instance;
+	private static volatile Logger instance;
 	
 	/**
 	 * Constructor of the logger.

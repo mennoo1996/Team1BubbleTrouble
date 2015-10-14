@@ -56,10 +56,10 @@ public class Powerup implements Cloneable {
     }
 
     /**
-     * Update Powerups graphical thingy.
-     * @param gameState Game State
-     * @param containerHeight Game Container
-     * @param deltaFloat Delta
+     * Update this powerup.
+     * @param gameState the gameState that uses this powerup.
+     * @param containerHeight the GameContainer that we are playing in
+     * @param deltaFloat the time in seconds since last update
      */
     public void update(GameState gameState, float containerHeight, float deltaFloat) {
         if (!gameState.isPaused()) {
@@ -88,7 +88,7 @@ public class Powerup implements Cloneable {
 
     /**
      * 
-     * @return .
+     * @return the xId.
      */
     public float getxId() {
 		return xId;
@@ -96,7 +96,7 @@ public class Powerup implements Cloneable {
 
     /**
      * 
-     * @param xId .
+     * @param xId the xId to set.
      */
 	public void setxId(float xId) {
 		this.xId = xId;
@@ -104,7 +104,7 @@ public class Powerup implements Cloneable {
 
 	/**
 	 * 
-	 * @return .
+	 * @return the yId.
 	 */
 	public float getyId() {
 		return yId;
@@ -112,7 +112,7 @@ public class Powerup implements Cloneable {
 
 	/**
 	 * 
-	 * @param yId .
+	 * @param yId the yId to set.
 	 */
 	public void setyId(float yId) {
 		this.yId = yId;
@@ -133,7 +133,7 @@ public class Powerup implements Cloneable {
     }
 
     /**
-     * @return powerup's x coord center
+     * @return powerup's y coord center
      */
     public float getCenterY() {
         return y + POWERUP_WIDTH / 2;
@@ -163,6 +163,7 @@ public class Powerup implements Cloneable {
 
 	/**
 	 * Clone the powerup.
+	 * @throws CloneNotSupportedException if the clone is not supported.
 	 */
 	@Override
 	public Powerup clone() throws CloneNotSupportedException {

@@ -1,11 +1,11 @@
 package logic;
 
+import gui.MainGame;
+import gui.RND;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-
-import gui.MainGame;
-import gui.RND;
 
 /**
  * Created by alexandergeenen on 09/09/15.
@@ -55,7 +55,7 @@ public class Coin {
      * @param mainGame the maingame that uses this coin
      */
     public void draw(Graphics graphics, MainGame mainGame) {
-    	RND.drawColor(graphics, coinImageN, coinImageA, 
+    	RND.getInstance().drawColor(graphics, coinImageN, coinImageA, 
 				x - COIN_IMAGE_OFFSET, y - COIN_IMAGE_OFFSET,
 				mainGame.getColor());
 	}

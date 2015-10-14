@@ -16,48 +16,50 @@ import powerups.Powerup.PowerupType;
  */
 public final class RND {
 	
+	private static volatile RND rnd;
+	
 	// Fonts used globally
 	
-	private static AngelCodeFont dosFontN; // normal font
-	private static AngelCodeFont dosFontA; // additive font
-	private static AngelCodeFont dosFontM; // masking (button) font
+	private AngelCodeFont dosFontN; // normal font
+	private AngelCodeFont dosFontA; // additive font
+	private AngelCodeFont dosFontM; // masking (button) font
 	
 	// Images used globally (buttons, the terminal, etc)
 	
-	private static Image imageGameLogoN;
-	private static Image imageGameLogoA;
-	private static Image imageBackground;
-	private static Image imageForeground;
-	private static Image imageTerminal;
+	private Image imageGameLogoN;
+	private Image imageGameLogoA;
+	private Image imageBackground;
+	private Image imageForeground;
+	private Image imageTerminal;
 
-	private static Image imageButtonHeadN;
-	private static Image imageButtonHeadA;
-	private static Image imageButtonBodyN;
-	private static Image imageButtonBodyA;
-	private static Image imageButtonTailN;
-	private static Image imageButtonTailA;
+	private Image imageButtonHeadN;
+	private Image imageButtonHeadA;
+	private Image imageButtonBodyN;
+	private Image imageButtonBodyA;
+	private Image imageButtonTailN;
+	private Image imageButtonTailA;
 
-	private static Image imageLaserImageN;
-	private static Image imageLaserImageA;
-	private static Image imageShieldImageN;
-	private static Image imageShieldImageA;
-	private static Image imageVineImageN;
-	private static Image imageVineImageA;
-	private static Image imageFreezeImageN;
-	private static Image imageFreezeImageA;
-	private static Image imageSlowImageN;
-	private static Image imageSlowImageA;
-	private static Image imageFastImageN;
-	private static Image imageFastImageA;
-	private static Image imageHealthImageN;
-	private static Image imageHealthImageA;
-	private static Image imageRandomImageN;
-	private static Image imageRandomImageA;
+	private Image imageLaserImageN;
+	private Image imageLaserImageA;
+	private Image imageShieldImageN;
+	private Image imageShieldImageA;
+	private Image imageVineImageN;
+	private Image imageVineImageA;
+	private Image imageFreezeImageN;
+	private Image imageFreezeImageA;
+	private Image imageSlowImageN;
+	private Image imageSlowImageA;
+	private Image imageFastImageN;
+	private Image imageFastImageA;
+	private Image imageHealthImageN;
+	private Image imageHealthImageA;
+	private Image imageRandomImageN;
+	private Image imageRandomImageA;
 	
 	// Miscellaneous variables used globally
 	
-	private static Color color;
-	private static float opacity = 1.0f;
+	private Color color;
+	private float opacity = 1.0f;
 
 	private static final int BUTTON_BEGIN_OFFSET = 4;
 	private static final int BUTTON_END_OFFSET = 22;
@@ -72,14 +74,30 @@ public final class RND {
 	 * 
 	 */
 	private RND() {
-	 	// Don't use this
+		
+	}
+	
+	/**
+	 * Return instance of RND.
+	 * @return	the instance
+	 */
+	public static RND getInstance() {
+	 	if (rnd == null) {
+	 		synchronized (RND.class) {
+	 			if (rnd == null) {
+	 				rnd = new RND();
+	 			}
+	 		}
+	 	}
+	 	
+	 	return rnd;
 	}
 	
 	/**
 	 * Initialize the RND - this function makes sure all the images/fonts
 	 * used globally are properly loaded.
 	 */
-	public static void init() {
+	public void init() {
 		try {
 			imageBackground = new Image("resources/terminal/Screen_Underlayer.png");
 			imageForeground = new Image("resources/terminal/Screen_Overlayer.png");
@@ -96,7 +114,7 @@ public final class RND {
 	 * Make sure all the fonts are properly loaded.
 	 * @throws SlickException this means some font assets are missing!
 	 */
-	private static void initFonts() throws SlickException {
+	public void initFonts() throws SlickException {
 		dosFontN = new AngelCodeFont("resources/images_Font/dosfont.fnt",
 				"resources/images_Font/dosfont_Norm.png");
 		dosFontA = new AngelCodeFont("resources/images_Font/dosfont.fnt",
@@ -109,7 +127,7 @@ public final class RND {
 	 * Make sure all the images for buttons are properly loaded.
 	 * @throws SlickException this means some button images are missing!
 	 */
-	private static void initButtonImages() throws SlickException {
+	private void initButtonImages() throws SlickException {
 		imageButtonHeadN = 
 				new Image("resources/images_UI/images_Buttons/Menu_Button_Head_Norm.png");
 		imageButtonHeadA = 
@@ -128,7 +146,7 @@ public final class RND {
      * Load the powerup images.
      * @throws SlickException if something goes wrong / file not found
      */
-    public static void initPowerups() throws SlickException {
+    public void initPowerups() throws SlickException {
     	String location = "resources/images_Powerup/";
 		imageLaserImageN = new Image(location + "laserPowerup_Norm.png");
 		imageLaserImageA = new Image(location + "laserPowerup_Add.png");
@@ -152,14 +170,14 @@ public final class RND {
 	 * Set opacity of all on-screen elements to a certain value.
 	 * @param newOpacity the new opacity of on-screen elements.
 	 */
-	public static void setOpacity(float newOpacity) {
+	public void setOpacity(float newOpacity) {
 		opacity = newOpacity;
 	}
 	
 	/**
 	 * @return the opacity of on-screen elements.
 	 */
-	public static float getOpacity() {
+	public float getOpacity() {
 		return opacity;
 	}
 	
@@ -167,7 +185,7 @@ public final class RND {
 	 * set screen color to new color.
 	 * @param newColor to set
 	 */
-	public static void setColor(Color newColor) {
+	public void setColor(Color newColor) {
 		color = newColor;
 	}
 	
@@ -180,7 +198,7 @@ public final class RND {
 	 * @param y y-location
 	 * @param color color filter
 	 */
-	public static void drawColor(Graphics g, Image n, Image a,
+	public void drawColor(Graphics g, Image n, Image a,
 			float x, float y, Color color) {
 		g.drawImage(n, x, y, new Color(color.r, color.g, color.b, opacity));
 		if (!a.getTexture().equals(n.getTexture())) {
@@ -202,7 +220,7 @@ public final class RND {
 	 * @param height height to draw the image with
 	 * @param color color filter
 	 */
-	public static void drawColor(Graphics g, Image n, Image a,
+	public void drawColor(Graphics g, Image n, Image a,
 			float x, float y, float width, float height,
 			Color color) {
 		n.draw(x, y, width, height, new Color(color.r * opacity, color.g * opacity, 
@@ -231,7 +249,7 @@ public final class RND {
 	 * @param srcy2 stretchy
 	 * @param color color filter
 	 */
-	public static void drawColor(Graphics g, Image n, Image a, 
+	public void drawColor(Graphics g, Image n, Image a, 
 			float x, float y, float x2, float y2, 
 			float srcx, float srcy, float srcx2, float srcy2,
 			Color color) {
@@ -253,7 +271,7 @@ public final class RND {
 	 * @param y location
 	 * @param text to draw
 	 */
-	public static void text(Graphics g, 
+	public void text(Graphics g, 
 			float x, float y, String text) {
 		
 		dosFontN.drawString(x, y, text, new Color(color.r, color.g, color.b, opacity));
@@ -272,7 +290,7 @@ public final class RND {
 	 * @param text to draw
 	 * @param color color to set
 	 */
-	public static void textSpecifiedColor(Graphics g, 
+	public void textSpecifiedColor(Graphics g, 
 			float x, float y, String text, Color color) {
 		Color newColor;
 		
@@ -297,7 +315,7 @@ public final class RND {
 	 * @param y location
 	 * @param text to draw
 	 */
-	public static void textNoColor(float x, float y, String text) {
+	public void textNoColor(float x, float y, String text) {
 		dosFontN.drawString(x, y, text);
 	}
 	
@@ -306,17 +324,17 @@ public final class RND {
 	 * @param g the context to draw in.
 	 * @param button the button to draw.
 	 */
-	public static void drawButtonHighlight(Graphics g, Button button) {
+	public void drawButtonHighlight(Graphics g, Button button) {
 		// draw head
-		RND.drawColor(g, imageButtonHeadN, imageButtonHeadA, 
+		RND.getInstance().drawColor(g, imageButtonHeadN, imageButtonHeadA, 
 				button.getX() - BUTTON_X_OFFSET, 
 				button.getY() - BUTTON_Y_OFFSET, color);
 		// draw body
-		RND.drawColor(g, imageButtonBodyN, imageButtonBodyA,
+		RND.getInstance().drawColor(g, imageButtonBodyN, imageButtonBodyA,
 				button.getX() + BUTTON_BEGIN_OFFSET, button.getY() - BUTTON_Y_OFFSET,
 				dosFontM.getWidth(button.getText()) - BUTTON_END_OFFSET, BUTTON_HEIGHT, color);
 		// draw tail
-		RND.drawColor(g, imageButtonTailN, imageButtonTailA, 
+		RND.getInstance().drawColor(g, imageButtonTailN, imageButtonTailA, 
 				button.getX() 
 				+ BUTTON_BEGIN_OFFSET + dosFontM.getWidth(button.getText()) - BUTTON_END_OFFSET, 
 				button.getY() - BUTTON_Y_OFFSET, color);
@@ -324,7 +342,7 @@ public final class RND {
 		// draw text
 		dosFontM.drawString(button.getX(), button.getY(), button.getText(), 
 				new Color(0, 0, 0, BUTTON_TEXT_OPACITY));
-		RND.textSpecifiedColor(g, button.getX(), button.getY(), button.getText(), 
+		RND.getInstance().textSpecifiedColor(g, button.getX(), button.getY(), button.getText(), 
 				new Color(color.r, color.g, color.b, 1f - BUTTON_TEXT_OPACITY));
 	}
 	
@@ -335,7 +353,7 @@ public final class RND {
 	 * @param x location
 	 * @param y location
 	 */
-	public static void draw(Graphics graphics, Image imageNorm,
+	public void draw(Graphics graphics, Image imageNorm,
 			int x, int y) {
 		graphics.drawImage(imageNorm, x, y);
 	}
@@ -345,7 +363,7 @@ public final class RND {
 	 * @param g the graphics context to draw in
 	 * @param powerup the powerup to draw
 	 */
-	public static void drawPowerup(Graphics g, Powerup powerup) {
+	public void drawPowerup(Graphics g, Powerup powerup) {
 		Image imageN; Image imageA;
 		float x = powerup.getX() - POWERUP_IMAGE_OFFSET, 
 			  y = powerup.getY() - POWERUP_IMAGE_OFFSET;
@@ -366,7 +384,7 @@ public final class RND {
 		} else {
 			imageN = imageRandomImageN; imageA = imageRandomImageA;
 		}
-		RND.drawColor(g, imageN, imageA, x, y, color);
+		RND.getInstance().drawColor(g, imageN, imageA, x, y, color);
 	}
 	
 	/**
@@ -374,7 +392,7 @@ public final class RND {
 	 * @param text to examine
 	 * @return pixel width of text in int
 	 */
-	public static int getStringPixelWidth(String text) {
+	public int getStringPixelWidth(String text) {
 		return dosFontN.getWidth(text);
 	}
 	
@@ -382,7 +400,7 @@ public final class RND {
 	 * Draws the background image onto the screen.
 	 * @param g the context to draw in.
 	 */
-	public static void drawBackground(Graphics g) {
+	public void drawBackground(Graphics g) {
 		g.drawImage(imageBackground, 0, 0, color);
 	}
 	
@@ -390,7 +408,7 @@ public final class RND {
 	 * Draws the foreground and terminal images onto the screen.
 	 * @param g the context to draw in.
 	 */
-	public static void drawForeGround(Graphics g) {
+	public void drawForeGround(Graphics g) {
 		g.drawImage(imageForeground, 0, 0);
 		g.drawImage(imageTerminal, 0, 0);
 	}
@@ -401,7 +419,7 @@ public final class RND {
 	 * @param x coordinate x.
 	 * @param y coordinate y.
 	 */
-	public static void drawLogo(Graphics g, int x, int y) {
+	public void drawLogo(Graphics g, int x, int y) {
 		drawColor(g, imageGameLogoN, imageGameLogoA, x, y, color);
 	}
 	

@@ -38,8 +38,8 @@ public class Popup {
 		this.warning = warning;
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		button = new Button(screenWidth / 2f - RND.getStringPixelWidth("> OK <") / 2f, 
-				screenHeight / 2f + BUTTON_OFFSET_Y, 
+		button = new Button(screenWidth / 2f - RND.getInstance().getStringPixelWidth("> OK <") 
+				/ 2f, screenHeight / 2f + BUTTON_OFFSET_Y, 
 				BUTTON_WIDTH, BUTTON_HEIGHT, "> OK <");
 		separator = new Separator(screenWidth / 2 + SEPARATOR_OFFSET_X,
 				screenHeight / 2, false, "", screenWidth);
@@ -91,9 +91,9 @@ public class Popup {
 			graphics.fillRect(0, 0, screenWidth, screenHeight
 					- PAUSED_RECT_Y_DEVIATION);
 			button.drawColor(graphics, input, color);
-			RND.textSpecifiedColor(graphics, 
-					screenWidth / 2f - RND.getStringPixelWidth(warning) / 2f + TEXT_OFFSET_X, 
-					screenHeight / 2f + TEXT_OFFSET_Y,
+			RND.getInstance().textSpecifiedColor(graphics, 
+					screenWidth / 2f - RND.getInstance().getStringPixelWidth(warning) / 2f 
+					+ TEXT_OFFSET_X, screenHeight / 2f + TEXT_OFFSET_Y,
 					warning, color);
 			separator.drawColor(graphics, color);
 		}

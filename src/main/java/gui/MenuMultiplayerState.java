@@ -103,7 +103,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		Logger.getInstance().log("Entering MenuMultiplayerState", 
 				Logger.PriorityLevels.LOW, "States");
-		RND.setOpacity(0.0f);
+		RND.getInstance().setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
 	
@@ -115,8 +115,9 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
 		if (mainGame.getShouldSwitchState()) {
-			if (RND.getOpacity() > 0.0f) {
-				RND.setOpacity(RND.getOpacity() - ((float) delta) / mainGame.getOpacityFadeTimer());
+			if (RND.getInstance().getOpacity() > 0.0f) {
+				RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
+						- ((float) delta) / mainGame.getOpacityFadeTimer());
 			} else {
 				Logger.getInstance().log("Exiting MenuMultiplayerState", 
 						Logger.PriorityLevels.LOW, "States");
@@ -177,8 +178,9 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta) 
 			throws SlickException {
 		
-		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
-			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
+		if (RND.getInstance().getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+			RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
+					+ ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
 		
 		input = container.getInput();
@@ -243,7 +245,7 @@ public class MenuMultiplayerState extends BasicGameState {
 		mainGame.resetLevelCount();
 		mainGame.setScore(0);
 		Client client = new Client(ipField.getText(),
-				mainGame.getMultiplayerPort(), mainGame, gameState);
+				MainGame.getMultiplayerPort(), mainGame, gameState);
 		mainGame.spawnClient(client);
 		mainGame.setIsClient(true);
 		mainGame.setIsHost(false);
@@ -278,14 +280,14 @@ public class MenuMultiplayerState extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
 		this.input = container.getInput();
-		RND.drawBackground(graphics);
+		RND.getInstance().drawBackground(graphics);
 		
 		drawText(graphics, container);
 		drawSprites(graphics);
 		mainGame.drawWaterMark();
-		RND.drawLogo(graphics, LOGO_X, LOGO_Y);
+		RND.getInstance().drawLogo(graphics, LOGO_X, LOGO_Y);
 		popup.drawColor(graphics, this.input, mainGame.getColor());
-		RND.drawForeGround(graphics);
+		RND.getInstance().drawForeGround(graphics);
 	}
 	
 	/**
@@ -294,24 +296,24 @@ public class MenuMultiplayerState extends BasicGameState {
 	 * @param container appgamecontainer to use
 	 */
 	private void drawText(Graphics graphics, GameContainer container) {
-		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_1,
+		RND.getInstance().text(graphics, TEXT_HELP_X, TEXT_HELP_Y_1,
 				"# You can play a game together with another player, over LAN.");
-		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_2,
+		RND.getInstance().text(graphics, TEXT_HELP_X, TEXT_HELP_Y_2,
 				"# If you are the host, you will have to wait until another player joins you.");
-		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_3,
+		RND.getInstance().text(graphics, TEXT_HELP_X, TEXT_HELP_Y_3,
 				"# If you wish to join another player,"
 						+ " please enter their IP-address below.");
-		RND.text(graphics, TEXT_HELP_X, TEXT_HELP_Y_4, "# Your player name:");
+		RND.getInstance().text(graphics, TEXT_HELP_X, TEXT_HELP_Y_4, "# Your player name:");
 		if (mainGame.isHost()) {
 			try {
-				RND.text(graphics, TEXT_HOST_X, TEXT_HOST_Y, "# Hosting game on IP: " 
+				RND.getInstance().text(graphics, TEXT_HOST_X, TEXT_HOST_Y, "# Hosting game on IP: " 
 						+ InetAddress.getLocalHost().getHostAddress());
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
 		}
-		RND.text(graphics, TEXT_HELP_X, TEXT_JOIN_Y, "# Join this IP: ");
-		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+		RND.getInstance().text(graphics, TEXT_HELP_X, TEXT_JOIN_Y, "# Join this IP: ");
+		RND.getInstance().text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 	}
 	

@@ -145,11 +145,11 @@ public class WeaponList {
 	 */
 	private void drawWeapon(Graphics graphics, int weaponNumber) {
 		Weapon weapon = weaponList.get(weaponNumber);
-		RND.drawColor(graphics, lasertipimageN, lasertipimageA,
+		RND.getInstance().drawColor(graphics, lasertipimageN, lasertipimageA,
 				weapon.getX() - LASER_X_DEVIATION, weapon.getY() - LASER_TIP_Y_DEVIATION,
 				mainGame.getColor());
 
-		RND.drawColor(graphics, laserbeamimageN, laserbeamimageA,
+		RND.getInstance().drawColor(graphics, laserbeamimageN, laserbeamimageA,
 				weapon.getX() - LASER_X_DEVIATION,
 				weapon.getRectangle().getMinY() + LASER_BEAM_Y_DEVIATION,
 				weapon.getX() + LASER_BEAM_X2_DEVIATION, weapon.getRectangle().getMaxY(), 0, 0,

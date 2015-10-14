@@ -174,22 +174,22 @@ public class Textfield {
 	public void drawColor(Graphics graphics, Color color) {
 		text = textfield.getText();
 		if (textfield.hasFocus()) {
-			RND.drawColor(graphics, fieldOnNorm, fieldOnAdd, 
+			RND.getInstance().drawColor(graphics, fieldOnNorm, fieldOnAdd, 
 					x - TF_BACKGROUND_DEVIATION, y - TF_BACKGROUND_DEVIATION, color);
 			if (cursor > 0 && cursor <= text.length()) {
 				String s = text.substring(0, cursor);
-				float length = RND.getStringPixelWidth(s);
-				RND.drawColor(graphics, cursorNorm, cursorAdd, 
+				float length = RND.getInstance().getStringPixelWidth(s);
+				RND.getInstance().drawColor(graphics, cursorNorm, cursorAdd, 
 						x - TF_BACKGROUND_DEVIATION + length, y - TC_Y_DEVIATION, color);
 			} else if (cursor == 0) {
-				RND.drawColor(graphics, cursorNorm, cursorAdd, 
+				RND.getInstance().drawColor(graphics, cursorNorm, cursorAdd, 
 						x - TF_BACKGROUND_DEVIATION + TC_X_DEVIATION, y - TC_Y_DEVIATION, color);
 			}
 		} else {
-			RND.drawColor(graphics, fieldNorm, fieldAdd, 
+			RND.getInstance().drawColor(graphics, fieldNorm, fieldAdd, 
 					x - TF_BACKGROUND_DEVIATION, y - TF_BACKGROUND_DEVIATION, color);
 		}
-		RND.textSpecifiedColor(graphics, x, y, text, color);
+		RND.getInstance().textSpecifiedColor(graphics, x, y, text, color);
 	}
 	
 }

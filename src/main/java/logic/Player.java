@@ -116,7 +116,7 @@ public class Player {
 		this.shieldTimeRemaining = 0;
 		this.shot = false;
 		
-		this.movementHelper = new PlayerMovementHelper(this, mainGame);
+		this.movementHelper = new PlayerMovementHelper(this, gameState);
 	}
 	
 	/**
@@ -813,4 +813,25 @@ public class Player {
 		return movementHelper.getMovement();
 	}
 	
+	/**
+	 * Update the info in the movement helper.
+	 */
+	public void updateMovementHelperInfo() {
+		movementHelper.setX(x);
+		movementHelper.setY(y);
+		movementHelper.setPlayerNumber(playerNumber);
+		movementHelper.setMaxX(this.getMaxX());
+		movementHelper.setCenterX(this.getCenterX());
+		movementHelper.setMoveLeftKey(moveLeftKey);
+		movementHelper.setMoveRightKey(moveRightKey);
+		
+		movementHelper.setIsClient(mainGame.isClient());
+		movementHelper.setIsHost(mainGame.isHost());
+		movementHelper.setLanMultiplayer(mainGame.isLanMultiplayer());
+		movementHelper.setHost(mainGame.getHost());
+		movementHelper.setClient(mainGame.getClient());
+		movementHelper.setPlayerSpeed(mainGame.getPlayerSpeed());
+		movementHelper.setRightWallWidth(gameState.getRightWall().getWidth());
+		movementHelper.setLeftWallWidth(gameState.getLeftWall().getWidth());
+	}
 }

@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import logic.Logger.PriorityLevels;
+import logic.PlayerMovementHelper.Movement;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -29,19 +30,15 @@ import powerups.Spiky;
  */
 public class Player {
 
-	/**
-	 * Represents a Player movement.
-	 */
-	public enum Movement {
-		NO_MOVEMENT, LEFT, RIGHT
-	}
+
+	
+	private PlayerMovementHelper movementHelper;
 
 	private int shieldCount;
 	private float x;
 	private float y;
 	private float width;
 	private float height;
-	private Movement movement = Movement.NO_MOVEMENT;
 	private int movementCounter = 0;
 	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
 	private Image imageN;
@@ -54,15 +51,12 @@ public class Player {
 	private MainGame mainGame;
 
 	private GameState gameState;
-	private Gate intersectingGate;
-	private boolean stoodStillOnLastUpdate = false;
 	// weapon management
 	private LinkedList<Powerup.PowerupType> weapons;
 	private boolean shot;
 	private int playerNumber;
 	private final float startX;
 	private final float startY;
-	private String lastLogMove = "";
 	private String playerName = "";
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
@@ -74,8 +68,6 @@ public class Player {
 	private int moveLeftKey;
 	private int moveRightKey;
 	private int shootKey;
-    private boolean movingRight;
-    private boolean movingLeft;
 	
 	private static final int POWERUP_DURATION = 10;
 	private static final int RANDOM_DURATION = 100;
@@ -123,8 +115,8 @@ public class Player {
 		this.shieldCount = 0;
 		this.shieldTimeRemaining = 0;
 		this.shot = false;
-		this.movingLeft = false;
-		this.movingRight = false;
+		
+		this.movementHelper = new PlayerMovementHelper(this, mainGame);
 	}
 	
 	/**
@@ -141,7 +133,7 @@ public class Player {
 		}
 		processGates();
 		processWeapon(deltaFloat, containerHeight, testing);
-		processPlayerMovement(deltaFloat, containerWidth, testing);
+		movementHelper.processPlayerMovement(deltaFloat, containerWidth, testing);
 		processPowerups(deltaFloat, containerHeight);
 		processCoins();
 		
@@ -157,13 +149,13 @@ public class Player {
 			for (Gate someGate :gameState.getGateList()) {
 				if (this.getRectangle().intersects(someGate.getRectangle())) {
 					freeToRoam = false;
-					intersectingGate = someGate;
+					movementHelper.setIntersectingGate(someGate);
 				}
 			}
 		}
 		// Reset intersecting gate to none if there is no intersection
 		if (freeToRoam) {
-			intersectingGate = null;
+			movementHelper.setIntersectingGate(null);
 		}
 	}
 	 
@@ -263,115 +255,6 @@ public class Player {
 				shot = false;
 			}
 		}
-	}
-	
-	/**
-	 * Process the movement of this player.
-	 * @param deltaFloat the time in seconds since the last frame.
-	 * @param containerWidth the width of the current GameContainer
-	 * @param testing to check if we are testing or not
-	 */
-	private void processPlayerMovement(float deltaFloat, float containerWidth, boolean testing) {
-		if (testing) {
-			return;
-		}
-		boolean didWalk = false;
-
-		if (movement != Movement.RIGHT) {
-			didWalk = processMoveLeft(deltaFloat, didWalk);
-		}
-
-		if (movement != Movement.LEFT) {
-			didWalk = processMoveRight(deltaFloat, containerWidth, didWalk);
-		}
-		
-		
-		// didnt walk, stating still.
-		if (!didWalk && !stoodStillOnLastUpdate) {
-			stoodStillOnLastUpdate = true;
-			logger.log("Moved to position " + this.getCenterX(), PriorityLevels.LOW, PLAYER);
-			if (mainGame.isLanMultiplayer()) {
-				if (mainGame.isHost() && playerNumber == 0) {
-					mainGame.getHost().playerStoppedMoving(x, y, playerNumber);
-				} else if (mainGame.isClient() && playerNumber == 1) {
-					mainGame.getClient().playerStoppedMoving(x, y, playerNumber);
-				}
-			}
-			
-		}
-	}
-
-	/**
-	 * Process a movement to the right.
-	 * @param deltaFloat the time in seconds since the last frame
-	 * @param containerWidth the width of the current GameContainer
-	 * @param didWalk if the player did actually walk
-	 * @return a boolean to check if the player walked.
-	 */
-	private boolean processMoveRight(float deltaFloat, float containerWidth, boolean didWalk) {
-		boolean isMovingRight = false;
-		if (mainGame.isLanMultiplayer() && isOthersPlayer() && movingRight) {
-			isMovingRight = true;
-		}
-		if (((gameState.getSavedInput().isKeyDown(moveRightKey) 
-				&& !gameState.getSavedInput().isKeyDown(moveLeftKey)
-				&& this.getMaxX() < (containerWidth - gameState.getRightWall().getWidth()))
-				|| isMovingRight) && (freeToRoam
-				|| (this.getCenterX() > intersectingGate.getRectangle().getCenterX()))) {
-			this.setX(this.getX() + mainGame.getPlayerSpeed() * deltaFloat);
-			this.movement = Movement.RIGHT;
-			didWalk = true;
-			if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate 
-					&& mainGame.isHost() && playerNumber == 0) {
-				mainGame.getHost().playerStartedMoving(x, y, playerNumber, "RIGHT");
-			} else if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate
-					&& mainGame.isClient() && playerNumber == 1) {
-				mainGame.getClient().playerStartedMoving(x, y, playerNumber, "RIGHT");
-			}
-			if (!lastLogMove.equals("right")) {
-				logger.log("Moving right from position " + this.getCenterX(),
-						PriorityLevels.VERYLOW, PLAYER);
-				lastLogMove = "right";
-			}
-			stoodStillOnLastUpdate = false;
-		}
-		return didWalk;
-	}
-
-	/**
-	 * Process a movement to the left.
-	 * @param deltaFloat the time in seconds since the last frame
-	 * @param didWalk if the player did actually walk
-	 * @return a boolean to check if the player walked.
-	 */
-	private boolean processMoveLeft(float deltaFloat, boolean didWalk) {
-		boolean isMovingLeft = false;
-		if (mainGame.isLanMultiplayer() && isOthersPlayer() && movingLeft) {
-			isMovingLeft = true;
-		}
-		if (((gameState.getSavedInput().isKeyDown(moveLeftKey) 
-				&& !gameState.getSavedInput().isKeyDown(moveRightKey)
-				&& this.getX() > gameState.getLeftWall().getWidth() && !movingRight) 
-				|| isMovingLeft) && (freeToRoam 
-				|| (this.getCenterX() < intersectingGate.getRectangle().getCenterX()))) {
-			this.setX(this.getX() - mainGame.getPlayerSpeed() * deltaFloat);
-			this.movement = Movement.LEFT;
-			didWalk = true;
-			if (mainGame.isLanMultiplayer() && stoodStillOnLastUpdate) {
-				if (mainGame.isHost() && playerNumber == 0) {
-					mainGame.getHost().playerStartedMoving(x, y, playerNumber, "LEFT");
-				} else if (mainGame.isClient() && playerNumber == 1) {
-					mainGame.getClient().playerStartedMoving(x, y, playerNumber, "LEFT");
-				}
-			}
-			if (!lastLogMove.equals("left")) {
-				logger.log("Moving left from position " + this.getCenterX(),
-						PriorityLevels.VERYLOW, PLAYER);
-				lastLogMove = "left";
-			}
-			stoodStillOnLastUpdate = false;
-		}
-		return didWalk;
 	}
 
 	/**
@@ -710,20 +593,6 @@ public class Player {
 	}
 	
 	/**
-	 * @param movement the movement integer used to determine movement state. 
-	 */
-	public void setMovement(Movement movement) {
-		this.movement = movement;
-	}
-	
-	/**
-	 * @return the current movement used to determine movement
-	 */
-	public Movement getMovement() {
-		return movement;
-	}
-	
-	/**
 	 * @return movement counter for spritesheets
 	 */
 	public int getMovementCounter() {
@@ -873,34 +742,6 @@ public class Player {
 	public void setShieldTimeRemaining(long shieldTimeRemaining) {
 		this.shieldTimeRemaining = shieldTimeRemaining;
 	}
-
-	/**
-	 * @return the movingRight
-	 */
-	public boolean isMovingRight() {
-		return movingRight;
-	}
-
-	/**
-	 * @param movingRight the movingRight to set
-	 */
-	public void setMovingRight(boolean movingRight) {
-		this.movingRight = movingRight;
-	}
-
-	/**
-	 * @return the movingLeft
-	 */
-	public boolean isMovingLeft() {
-		return movingLeft;
-	}
-
-	/**
-	 * @param movingLeft the movingLeft to set
-	 */
-	public void setMovingLeft(boolean movingLeft) {
-		this.movingLeft = movingLeft;
-	}
 	
 	/**
 	 * Name for player.
@@ -942,6 +783,34 @@ public class Player {
 		setMoveLeftKey(0);
 		setMoveRightKey(0);
 		setShootKey(0);
+	}
+
+	/**
+	 * @return the freeToRoam
+	 */
+	public boolean isFreeToRoam() {
+		return freeToRoam;
+	}
+
+	/**
+	 * @param freeToRoam the freeToRoam to set
+	 */
+	public void setFreeToRoam(boolean freeToRoam) {
+		this.freeToRoam = freeToRoam;
+	}
+	
+	/**
+	 * @param movement the movement integer used to determine movement state. 
+	 */
+	public void setMovement(Movement movement) {
+		movementHelper.setMovement(movement);
+	}
+	
+	/**
+	 * @return the current movement used to determine movement
+	 */
+	public Movement getMovement() {
+		return movementHelper.getMovement();
 	}
 	
 }

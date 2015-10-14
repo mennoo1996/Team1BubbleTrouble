@@ -85,7 +85,7 @@ public class Coin {
      * Update Powerups graphical thingy.
      * @param floor - floor of the game.
      * @param containerHeight - height of gamecontainer.
-     * @param deltaFloat Delta
+     * @param deltaFloat Time in seconds since last frame
      */
     public void update(MyRectangle floor, float deltaFloat, float containerHeight) {
         if ((this.y + COIN_HEIGHT) < containerHeight - floor.getHeight()) {

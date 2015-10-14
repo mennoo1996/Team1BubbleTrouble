@@ -76,7 +76,7 @@ public abstract class Connector implements Runnable {
     	
     	if (index >= 0) {
     		gameState.getCircleList().getCircles().set(index, circle);    
-    		gameState.updateShotCirles2(circle, true);
+    		gameState.getCirclesHelper().updateShotCirles2(circle, true);
     	}
     }
     

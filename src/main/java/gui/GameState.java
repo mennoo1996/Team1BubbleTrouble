@@ -12,9 +12,7 @@ import logic.FloatingScore;
 import logic.Gate;
 import logic.LevelContainer;
 import logic.Logger;
-import logic.Logger.PriorityLevels;
 import logic.MyRectangle;
-import logic.Player;
 import logic.Weapon;
 import logic.WeaponList;
 
@@ -44,14 +42,14 @@ public class GameState extends BasicGameState {
 	
 	private  int totaltime;
 	
+	private GameStatePlayerHelper playerHelper;
+	private GameStateCirclesHelper circlesHelper;
+	
 	private MainGame mainGame;
-	private CircleList circleList;
-	private ArrayList<BouncingCircle> shotList;
 	private ArrayList<Powerup> droppedPowerups = new ArrayList<>();
 	private ArrayList<Coin> droppedCoins = new ArrayList<>();
 	private ArrayList<SpeedPowerup> speedPowerupList = new ArrayList<SpeedPowerup>();
 	private ArrayList<FloatingScore> floatingScoreList;
-	private ArrayList<Gate> gateList;
 
 	private int score;
 	private long startTime;
@@ -75,8 +73,6 @@ public class GameState extends BasicGameState {
 	private Image wallsImageN;
 	private Image wallsImageA;
 	
-	private Image[] ballsImagesN;
-	private Image[] ballsImagesA;
 	private Image ceilingImageN;
 	private Image ceilingImageA;
 	private Image counterBarImageN;
@@ -125,7 +121,6 @@ public class GameState extends BasicGameState {
 	private static final int CEILING_HEIGHT = 110;
 	private static final float COUNT_IN_TIME = 3000f;
 	private static final float TIME_REMAINING_FACTOR = 0.01f;
-	private static final int MINIMUM_SPLIT_RADIUS = 20;
 	private static final int PAUSE_FACTOR = 300;
 	private static final int CEILING_DRAW_X_DEVIATION = 10;
 	private static final int CEILING_DRAW_Y_DEVIATION = 25;
@@ -143,16 +138,6 @@ public class GameState extends BasicGameState {
 	private static final int SHIELD_COUNTER_OFFSET_2_X = 305;
 	private static final int SHIELD_COUNTER_INCREMENT_Y = 40;
 	private static final float SHIELD_COUNTER_DIVIDER = 1000f;
-	private static final int CIRCLE_DRAW_OFFSET = 13;
-	private static final int MINIMUM_RADIUS = 10;
-	private static final int RADIUS_2 = 20;
-	private static final int RADIUS_3 = 30;
-	private static final int RADIUS_4 = 45;
-	private static final int RADIUS_5 = 65;
-	private static final int RADIUS_6 = 90;
-	private static final int BALL_IMAGE_THREE = 3;
-	private static final int BALL_IMAGE_FOUR = 4;
-	private static final int BALL_IMAGE_FIVE = 5;
 	private static final int HEALTH_IMAGE_THREE = 3;
 	private static final int HEALTH_IMAGE_FOUR = 4;
 	private static final int HEALTH_IMAGE_FIVE = 5;
@@ -169,11 +154,6 @@ public class GameState extends BasicGameState {
 	private static final int COUNTER_BAR_ROTATION_Y = 50;
 	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
 	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
-	private static final int AMOUNT_OF_BALLS = 6;
-	private static final int POWERUP_CHANCE = 20;
-	private static final int COIN_CHANCE = 30;
-	private static final int CIRCLES_UPDATE_RATE = 100; // rate is in frames
-	private int lastCircleUpdate;
 	// Level ending, empty bar
 	
 	private Random random;
@@ -199,10 +179,10 @@ public class GameState extends BasicGameState {
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
 		random = new Random();
-		mainGame.getPlayerList().setAllPlayersShot(false);
-		mainGame.getPlayerList().getPlayers().forEach(Player::respawn);
 		score = 0;
 		levels.initialize();
+		playerHelper.enter();
+		circlesHelper.enter();
 		totaltime = levels.getLevel(mainGame.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
 		fractionTimeParts = COUNTDOWN_BAR_PARTS;
 		startTime = System.currentTimeMillis();
@@ -231,12 +211,8 @@ public class GameState extends BasicGameState {
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		floatingScoreList = new ArrayList<FloatingScore>();
-		circleList = new CircleList(levels.getLevel(mainGame.getLevelCounter()).getCircles());
-		shotList = new ArrayList<BouncingCircle>(); // list with shot circles
-		gateList = levels.getLevel(mainGame.getLevelCounter()).getGates();
 		droppedPowerups = new ArrayList<>();
 		droppedCoins = new ArrayList<>();
-		lastCircleUpdate = 0;
 	}
 	
 	
@@ -260,9 +236,8 @@ public class GameState extends BasicGameState {
 				if (mainGame.getSwitchState() == -1) {
 					System.exit(0);
 				} else {
-					mainGame.getPlayerList().getPlayers().forEach(Player::respawn);
-					mainGame.getPlayerList().setProcessCollisions(true);
 					mainGame.switchColor();
+					playerHelper.exit();
 					sbg.enterState(mainGame.getSwitchState());
 				}
 			}	
@@ -277,6 +252,8 @@ public class GameState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
+		playerHelper = new GameStatePlayerHelper(mainGame);
+		circlesHelper = new GameStateCirclesHelper(mainGame, this);
 		loadImages();
 		loadButtons();
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
@@ -285,9 +262,7 @@ public class GameState extends BasicGameState {
 		setRightWall(new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
-		
 		levels = new LevelContainer(mainGame);
-		
 		Weapon weapon1 = null;
 		Weapon weapon2 = null;
 		weaponList = new WeaponList(weapon1, mainGame, this, false);
@@ -355,32 +330,17 @@ public class GameState extends BasicGameState {
 	 * @param curTime the current time
 	 */
 	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {	
-		if (mainGame.isHost()) {
-			lastCircleUpdate++;
-			if (lastCircleUpdate >= CIRCLES_UPDATE_RATE) {
-				lastCircleUpdate = 0;
-				mainGame.getHost().updateCircles(circleList.getCircles());
-				
-				for (int i = 0; i < gateList.size(); i++) {
-					mainGame.getHost().updateRequiredForGateList(
-							gateList.get(i).getUnlockCircles(), i);
-				}
-			}
-		}
 		processTime(sbg, curTime);
 		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
 		// player-thingy
-		mainGame.getPlayerList().updatePlayers(deltaFloat,
-				container.getHeight(),
-				container.getWidth());
+		playerHelper.update(container, deltaFloat);
+		circlesHelper.update(container, deltaFloat);
 		processPause();
 		processSpeedPowerups(deltaFloat);
-		processCircles(container, deltaFloat);
 		updateFloatingScores(deltaFloat);
 		// if there are no circles required to be shot by a gate, remove said gate
-		updateGateExistence(deltaFloat);
 		processCoins(container, deltaFloat);
-		if (circleList.getCircles().isEmpty()) {
+		if (circlesHelper.getCircleList().getCircles().isEmpty()) {
 			endLevel();
 		}
 	}
@@ -481,118 +441,6 @@ public class GameState extends BasicGameState {
 			coin.update(getFloor(), deltafloat, container.getHeight());
 		}
 	}
-	
-	/**
-	 * Process the circles in the game.
-	 * @param container the GameContainer we are playing the game in
-	 * @param deltaFloat the time in seconds since the last frame
-	 */
-	private void processCircles(GameContainer container, float deltaFloat) {
-		ArrayList<BouncingCircle> ceilingList = new ArrayList<BouncingCircle>();
-		updateActiveCircles(container, deltaFloat, ceilingList);
-		removeCeilingCircles(ceilingList);
-		updateShotCircles();
-	}
-
-	/**
-	 * Update the circles that have been shot.
-	 */
-	private void updateShotCircles() {
-		for (BouncingCircle circle : shotList) {
-            if (!circle.isDone()) { // if the circle hasn't been handled
-
-            	FloatingScore floatingScore = new FloatingScore(circle);
-            	floatingScoreList.add(floatingScore);
-            	//Send to client
-            	if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
-            		mainGame.getHost().sendFloatingScore(floatingScore);
-            	}
-            	updateShotCirles2(circle, false);
-			}
-        }
-	}
-
-	/**
-	 * Process the effects of a shooting a circle.
-	 * @param circle the circle shot
-	 * @param fromPeer indicates if the split command came from a peer
-	 */
-	public void updateShotCirles2(BouncingCircle circle, boolean fromPeer) {
-		if (circleList.getCircles().contains(circle)) {
-            circleList.getCircles().remove(circle);
-            circle.setDone(true);
-            score += circle.getScore();
-        } // if the ball has a radius of 20, split it u
-        ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
-        if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
-        	splits = circle.getSplittedCircles(mainGame, this);
-            circleList.getCircles().addAll(splits);
-			checkItem(circle);
-        } else {
-        	Logger.getInstance().log(
-					"Circle with radius 10 shot, no new balls entered the game",
-        			PriorityLevels.MEDIUM,
-					"BouncingCircles");
-        } // if it was part of the gate reqs, add to new gate reqs
-		processUnlockCirclesGates(circle, splits);
-		
-		if (mainGame.isHost() && !fromPeer) {
-			//mainGame.getHost().updateCircles(getCircleList().getCircles());
-			mainGame.getHost().splittedCircle(circle);
-		} else if (mainGame.isClient() && !fromPeer) {
-			mainGame.getClient().splittedCircle(circle);
-		}
-	}
-
-	/**
-	 * Process the circles in the requirements lists of the gates.
-	 * @param circle the circle you are processing
-	 * @param splits the list of circles that have been split
-	 */
-	private void processUnlockCirclesGates(BouncingCircle circle,
-										   ArrayList<BouncingCircle> splits) {
-		for (Gate gate : gateList) {
-            if (gate.getUnlockCircles().contains(circle)) {
-                gate.getUnlockCircles().remove(circle);
-            }
-            if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
-                gate.addToRequirements(splits);
-            }
-        }
-	}
-
-	/**
-	 * Remove the circles that hit the ceiling.
-	 * @param ceilingList the list of circles that hit the ceiling
-	 */
-	private void removeCeilingCircles(ArrayList<BouncingCircle> ceilingList) {
-		circleList.getCircles().removeAll(ceilingList);
-	}
-
-	/**
-	 * Update the circles that are still in the game, after all the other process methods.
-	 * @param container the GameContainer you are playing in
-	 * @param deltaFloat the time ins seconds since the last frame
-	 * @param ceilingList the circles that have hit the ceiling
-	 */
-	private void updateActiveCircles(GameContainer container,
-			float deltaFloat, ArrayList<BouncingCircle> ceilingList) {
-		synchronized (circleList.getCircles()) {
-			for (Iterator<BouncingCircle> iterator = 
-					circleList.getCircles().iterator(); iterator.hasNext();) {
-				BouncingCircle circle = iterator.next();
-				circle.update(this, container.getHeight(), container.getWidth(), deltaFloat);
-
-				mainGame.getPlayerList().intersectPlayersWithCircle(circle);
-
-				weaponList.intersectWeaponsWithCircle(circle);
-
-				if (circle.isHitCeiling()) {
-					ceilingList.add(circle);
-				}
-			}
-		}
-	}
 
 	/**
 	 * Update the floating scores in the game.
@@ -609,30 +457,6 @@ public class GameState extends BasicGameState {
 					score.update(deltaFloat, timeDelta);
 				}
 			}
-		}
-	}
-	
-	/**
-	 * Update the existence of the gates. Remove them if the required balls have disappeared.
-	 * @param deltaFloat the time in seconds since the last frame.
-	 */
-	private void updateGateExistence(float deltaFloat) {
-		
-		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
-		synchronized (gateList) {
-			for (Gate gate : gateList) {
-				if (gate.getUnlockCircles().isEmpty()) {
-					tempGateList.add(gate);
-					gate.setFading(true);
-				}
-			}
-		}
-		for (Gate gate : tempGateList) {
-			if (gateList.contains(gate) && gate.isDone()) {
-				gateList.remove(gate);
-			} else if (gateList.contains(gate) && gate.isFading()) {
-				gate.update(deltaFloat);
-				}
 		}
 	}
 
@@ -694,7 +518,7 @@ public class GameState extends BasicGameState {
 	 * @return The gatelist.
 	 */
 	public ArrayList<Gate> getGateList() {
-		return gateList;
+		return circlesHelper.getGateList();
 	}
 
 	/**
@@ -709,15 +533,13 @@ public class GameState extends BasicGameState {
 			throws SlickException {
 		// draw background layer
 		RND.drawBackground(graphics);
-		graphics.setColor(Color.white);
-		drawActiveCircles(graphics);
+		circlesHelper.render(graphics, container);
+		playerHelper.render(graphics, container);
 		drawFloatingScores(graphics);
 		RND.drawColor(graphics, ceilingImageN, ceilingImageA, getLeftWall().getWidth() 
 				- CEILING_DRAW_X_DEVIATION, getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION, 
 				mainGame.getColor());
-		drawGates(container, graphics);
 		weaponList.drawWeapons(graphics);
-		mainGame.getPlayerList().drawPlayers(graphics);
 		drawItems(graphics);
 		// Draw walls, floor and ceiling
 		RND.drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mainGame.getColor());
@@ -745,16 +567,6 @@ public class GameState extends BasicGameState {
 		}
 		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + renderedScore);
-	}
-
-	/**
-	 * Draw all the gates.
-	 * @param container the GameContainer we are playing in
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawGates(GameContainer container, Graphics graphics) {
-		// draw all active gates
-		drawActiveGates(container, graphics);
 	}
 
 	/**
@@ -867,71 +679,6 @@ public class GameState extends BasicGameState {
 					* (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR,
 					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mainGame.getColor());
 		}
-	}
-
-	/**
-	 * Draw the active gates.
-	 * @param container the GameContainer we are playing in
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawActiveGates(GameContainer container, Graphics graphics) {
-		synchronized (gateList) {
-			for (Gate gate : gateList) {
-				gate.draw(graphics, mainGame, this, container);
-			}
-		}
-	}
-
-	/**
-	 * Draw the active circles.
-	 * @param graphics the Graphics object to draw things on screen.
-	 */
-	private void drawActiveCircles(Graphics graphics) {
-		for (BouncingCircle circle : this.getDummyList()) {
-			int r = (int) circle.getRadius(), offset = CIRCLE_DRAW_OFFSET;
-			final float xPosition = circle.getMinX() - offset;
-			final float yPosition = circle.getMinY() - offset;
-			switch (r) {
-				case(RADIUS_6) : RND.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
-						xPosition, yPosition, mainGame.getColor()); break;
-				case(RADIUS_5) : RND.drawColor(graphics, ballsImagesN[1], ballsImagesA[1],
-						xPosition, yPosition, mainGame.getColor()); break;
-				case(RADIUS_4) : RND.drawColor(graphics, ballsImagesN[2], ballsImagesA[2],
-						xPosition, yPosition, mainGame.getColor()); break;
-				case(RADIUS_3) : RND.drawColor(graphics, 
-						ballsImagesN[BALL_IMAGE_THREE], ballsImagesA[BALL_IMAGE_THREE],
-						xPosition, yPosition, mainGame.getColor()); break;
-				case(RADIUS_2) : RND.drawColor(graphics, 
-						ballsImagesN[BALL_IMAGE_FOUR], ballsImagesA[BALL_IMAGE_FOUR],
-						xPosition, yPosition, mainGame.getColor()); break;
-				case(MINIMUM_RADIUS) : RND.drawColor(graphics, 
-						ballsImagesN[BALL_IMAGE_FIVE], ballsImagesA[BALL_IMAGE_FIVE],
-						xPosition, yPosition, mainGame.getColor()); break;
-				default:
-					try {
-						throw new SlickException("Radius was not one of the supported");
-					} catch (SlickException e) {
-						e.printStackTrace(); }
-			}
-		}
-	}
-	
-	/**
-	 * Returns a deep copy of circlelist.
-	 * @return the dummyList
-	 */
-	private ArrayList<BouncingCircle> getDummyList() {
-		ArrayList<BouncingCircle> dummyList = new ArrayList<BouncingCircle>();
-		synchronized (circleList) {
-			for (BouncingCircle bCircle : circleList.getCircles()) {
-				try {
-					dummyList.add(bCircle.clone());
-				} catch (CloneNotSupportedException e) {
-					System.out.println("Clone was not supported");
-				}
-			} 
-		}
-		return dummyList;
 	}
 
 	/**
@@ -1070,7 +817,6 @@ public class GameState extends BasicGameState {
 		ceilingImageN = new Image("resources/images_Level/ceiling_Norm.png");
 		ceilingImageA = new Image("resources/images_Level/ceiling_Add.png");
 		// balls images
-		
 		// button image
 		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
 		Coin.loadImages();
@@ -1104,21 +850,6 @@ public class GameState extends BasicGameState {
 		health3Image = new Image("resources/Terminal/Terminal_Lights_3.png");
 		health4Image = new Image("resources/Terminal/Terminal_Lights_4.png");
 		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
-		
-		ballsImagesN = new Image[AMOUNT_OF_BALLS];
-		ballsImagesN[0] = new Image("resources/images_Balls/Ball_90_Norm.png");
-		ballsImagesN[1] = new Image("resources/images_Balls/Ball_65_Norm.png");
-		ballsImagesN[2] = new Image("resources/images_Balls/Ball_45_Norm.png");
-		ballsImagesN[BALL_IMAGE_THREE] = new Image("resources/images_Balls/Ball_30_Norm.png");
-		ballsImagesN[BALL_IMAGE_FOUR] = new Image("resources/images_Balls/Ball_20_Norm.png");
-		ballsImagesN[BALL_IMAGE_FIVE] = new Image("resources/images_Balls/Ball_10_Norm.png");
-		ballsImagesA = new Image[AMOUNT_OF_BALLS];
-		ballsImagesA[0] = new Image("resources/images_Balls/Ball_90_Add.png");
-		ballsImagesA[1] = new Image("resources/images_Balls/Ball_65_Add.png");
-		ballsImagesA[2] = new Image("resources/images_Balls/Ball_45_Add.png");
-		ballsImagesA[BALL_IMAGE_THREE] = new Image("resources/images_Balls/Ball_30_Add.png");
-		ballsImagesA[BALL_IMAGE_FOUR] = new Image("resources/images_Balls/Ball_20_Add.png");
-		ballsImagesA[BALL_IMAGE_FIVE] = new Image("resources/images_Balls/Ball_10_Add.png");
 	}
 	
 	/**
@@ -1158,32 +889,14 @@ public class GameState extends BasicGameState {
 	 * @param gatelist the gatelist to set
 	 */
 	public void setGateList(ArrayList<Gate> gatelist) {
-		this.gateList = gatelist;
-	}
-
-	/**
-	 * Check if an item should be dropped.
-	 * @param circle the circle that could drop this item
-	 */
-	private void checkItem(BouncingCircle circle) {
-		if (!mainGame.isLanMultiplayer() || mainGame.isHost()) {
-			// 5% of the time
-			final int total = 100;
-			int randInt = new Random().nextInt(total) + 1;
-			if (randInt <= POWERUP_CHANCE) {
-				dropPowerup(circle);
-			}
-			else if (randInt <= POWERUP_CHANCE + COIN_CHANCE) {
-				dropCoin(circle);
-			}
-		}
+		circlesHelper.setGateList(gatelist);
 	}
 
 	/**
 	 * Drop a coin.
 	 * @param circle the circle that should drop the coin.
 	 */
-	private void dropCoin(BouncingCircle circle) {
+	public void dropCoin(BouncingCircle circle) {
 		boolean bigMoney = random.nextBoolean();
 		Coin someCoin = new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney);
 		synchronized (droppedCoins) {
@@ -1198,7 +911,7 @@ public class GameState extends BasicGameState {
 	 * Drop a powerup.
 	 * @param circle the circle that should drop the powerup
 	 */
-	private void dropPowerup(BouncingCircle circle) {
+	public void dropPowerup(BouncingCircle circle) {
 		// Get a random powerup
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
 				.nextInt(Powerup.PowerupType.values().length)];
@@ -1332,14 +1045,14 @@ public class GameState extends BasicGameState {
 	 * @return the shotList
 	 */
 	public ArrayList<BouncingCircle> getShotList() {
-		return shotList;
+		return circlesHelper.getShotList();
 	}
 
 	/**
 	 * @param shotList the shotList to set
 	 */
 	public void setShotList(ArrayList<BouncingCircle> shotList) {
-		this.shotList = shotList;
+		circlesHelper.setShotList(shotList);
 	}
 
 	/**
@@ -1383,14 +1096,21 @@ public class GameState extends BasicGameState {
 	 * @return the circleList
 	 */
 	public CircleList getCircleList() {
-		return circleList;
+		return circlesHelper.getCircleList();
 	}
 
 	/**
 	 * @param circleList the circleList to set
 	 */
 	public void setCircleList(CircleList circleList) {
-		this.circleList = circleList;
+		circlesHelper.setCircleList(circleList);
+	}
+	
+	/**
+	 * @return The levelContainer used for holding and creating levels.
+	 */
+	public LevelContainer getLevelContainer() {
+		return levels;
 	}
 
 	/**
@@ -1421,6 +1141,12 @@ public class GameState extends BasicGameState {
 		this.speedPowerupList = speedPowerupList;
 	}
 	
+	/**
+	 * @return The GameStateCirclesHelper object.
+	 */
+	public GameStateCirclesHelper getCirclesHelper() {
+		return circlesHelper;
+	}
 	
 	
 }

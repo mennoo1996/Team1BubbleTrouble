@@ -45,7 +45,6 @@ public final class HighScoresParser {
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
 			hs = new HighScores();
-			hs.setLogger(logger);
 			String line = reader.readLine();
 			while (line != null) {
 				String[] splitted = line.split(",");

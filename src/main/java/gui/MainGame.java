@@ -223,7 +223,7 @@ public class MainGame extends StateBasedGame {
 	 */
 	public void setColor(Color color) {
 		this.color = color;
-		RND.setColor(color);
+		RND.getInstance().setColor(color);
 	}
 	
 	/**
@@ -250,11 +250,12 @@ public class MainGame extends StateBasedGame {
 		}
 		String logString = "Color changed to " + this.color.toString();
 		Logger.getInstance().log(logString, Logger.PriorityLevels.MEDIUM, "color");
-		RND.setColor(color);
+		RND.getInstance().setColor(color);
 	}
 	
 	/**
-	 * Sets a shuffled color for the game by RND. If the color returned is the same as before,
+	 * Sets a shuffled color for the game by RND.getInstance(). 
+	 * If the color returned is the same as before,
 	 * another color is force-picked.
 	 */
 	public void shuffleColor() {
@@ -337,7 +338,7 @@ public class MainGame extends StateBasedGame {
 		Logger.getInstance().log("MenuSettingsstate added", Logger.PriorityLevels.LOW, STATES);
 		this.addState(menuMultiplayerState);
 		Logger.getInstance().log("MenuMultiplayerState added", Logger.PriorityLevels.LOW, STATES);
-		RND.init();		initPlayers();
+		RND.getInstance().init();		initPlayers();
 		Calendar cal = Calendar.getInstance();
 		this.currentDate = cal.get(Calendar.DATE) + "/" + cal.get(Calendar.MONTH) 
 				+ "/" + cal.get(Calendar.YEAR);
@@ -700,8 +701,8 @@ public class MainGame extends StateBasedGame {
 	 * Draws version number, fps, and other info.
 	 */
 	public void drawWaterMark() {
-		RND.text(app.getGraphics(), VERSION_STRING_X, app.getHeight() - VERSION_STRING_Y_DEVIATION,
-				"#Version 1.0" + " #Date: " + currentDate 
+		RND.getInstance().text(app.getGraphics(), VERSION_STRING_X, app.getHeight() 
+				- VERSION_STRING_Y_DEVIATION, "#Version 1.0" + " #Date: " + currentDate 
 				+ " #fps: " + Integer.toString(getFpsInGame()));
 	}
 	

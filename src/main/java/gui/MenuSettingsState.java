@@ -1,6 +1,7 @@
 package gui;
 import logic.Logger;
 import logic.MyRectangle;
+import logic.RenderOptions;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -146,7 +147,7 @@ public class MenuSettingsState extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		Logger.getInstance().log("Entering MenuSettingsState", 
 				Logger.PriorityLevels.LOW, "States");
-		RND.setOpacity(0.0f);
+		RND.getInstance().setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
 	
@@ -158,8 +159,9 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
 		if (mainGame.getShouldSwitchState()) {
-			if (RND.getOpacity() > 0.0f) {
-				RND.setOpacity(RND.getOpacity() - ((float) delta) / mainGame.getOpacityFadeTimer());
+			if (RND.getInstance().getOpacity() > 0.0f) {
+				RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
+						- ((float) delta) / mainGame.getOpacityFadeTimer());
 			} else {
 				Logger.getInstance().log("Exiting MenuSettingsState", 
 						Logger.PriorityLevels.LOW, "States");
@@ -264,8 +266,9 @@ public class MenuSettingsState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta) 
 			throws SlickException {
 		
-		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
-			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
+		if (RND.getInstance().getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+			RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
+					+ ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
 		
 		input = container.getInput();
@@ -378,28 +381,28 @@ public class MenuSettingsState extends BasicGameState {
 			throws SlickException {
 		this.input = container.getInput();
 		
-		RND.drawBackground(graphics);
-		RND.text(graphics, TEXT_X, TEXT_1_Y, 
+		RND.getInstance().drawBackground(graphics);
+		RND.getInstance().text(graphics, TEXT_X, TEXT_1_Y, 
 				"# You can choose a player skin per player by clicking on it below.");
-		RND.text(graphics, TEXT_X, TEXT_2_Y, 
+		RND.getInstance().text(graphics, TEXT_X, TEXT_2_Y, 
 				"# We advice different skins for each player but it's your choice!");
 
-		RND.text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
-		RND.text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
+		RND.getInstance().text(graphics, TEXT_X, PLAYER_1_TEXT_Y, "> Player 1:");
+		RND.getInstance().text(graphics, TEXT_X, PLAYER_2_TEXT_Y, "> Player 2:");
 	
-		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+		RND.getInstance().text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		drawSprites(graphics);
 
 		mainGame.drawWaterMark();
-		RND.drawLogo(graphics, LOGO_X, LOGO_Y);
+		RND.getInstance().drawLogo(graphics, LOGO_X, LOGO_Y);
 		separatorTop.drawColor(graphics, mainGame.getColor());
 		separatorMiddle.drawColor(graphics, mainGame.getColor());
 		separatorBottom.drawColor(graphics, mainGame.getColor());
 		drawControls(graphics);
 		drawColorControls(graphics);
 		// any and all drawing is done BEFORE THESE TWO FOR THE 1000TH TIME
-		RND.drawForeGround(graphics);
+		RND.getInstance().drawForeGround(graphics);
 		// NO DRAWING HERE. BAD. BOO. SHOO. BEGONE.
 	}
 	
@@ -412,10 +415,10 @@ public class MenuSettingsState extends BasicGameState {
 		controlsPlayer1 += "Shoot weapon = spacebar";
 		String controlsPlayer2 = "Move left = a\nMove right = d\nShoot weapon = w";
 		
-		RND.text(graphics, CONTROL_X1, P1_CONTROL_Y, "# Player 1:");
-		RND.text(graphics, CONTROL_X1 + CONTROL_XBETW, P1_CONTROL_Y, controlsPlayer1);
-		RND.text(graphics, CONTROL_X2, P1_CONTROL_Y, "# Player 2:");
-		RND.text(graphics, CONTROL_X2 + CONTROL_XBETW, P1_CONTROL_Y, controlsPlayer2);
+		RND.getInstance().text(graphics, CONTROL_X1, P1_CONTROL_Y, "# Player 1:");
+		RND.getInstance().text(graphics, CONTROL_X1 + CONTROL_XBETW, P1_CONTROL_Y, controlsPlayer1);
+		RND.getInstance().text(graphics, CONTROL_X2, P1_CONTROL_Y, "# Player 2:");
+		RND.getInstance().text(graphics, CONTROL_X2 + CONTROL_XBETW, P1_CONTROL_Y, controlsPlayer2);
 		
 	}
 	
@@ -425,23 +428,23 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	private void drawSprites(Graphics graphics) {
 		if (mainGame.getPlayer1ImageStringN().equals(PLAYERSPRITE_NORM)) {
-			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_1_X, MANNETJE_1_Y, 
-					mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					MANNETJE_1_X, MANNETJE_1_Y, mainGame.getColor()));
 		} else if (mainGame.getPlayer1ImageStringN().equals(PLAYER2SPRITE_NORM)) {
-			RND.drawColor(graphics, highLightN, highLightA, 
-					TELEFOON_1_X, TELEFOON_1_Y, mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					TELEFOON_1_X, TELEFOON_1_Y, mainGame.getColor()));
 		} else if (mainGame.getPlayer1ImageStringN().equals(ARIESPRITE)) {
-			RND.drawColor(graphics, highLightN, highLightA, 
-					ARIE_1_X, ARIE_1_Y, mainGame.getColor()); }
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					ARIE_1_X, ARIE_1_Y, mainGame.getColor())); }
 		if (mainGame.getPlayer2ImageStringN().equals(PLAYERSPRITE_NORM)) {
-			RND.drawColor(graphics, highLightN, highLightA, MANNETJE_2_X, MANNETJE_2_Y, 
-					mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					MANNETJE_2_X, MANNETJE_2_Y, mainGame.getColor()));
 		} else if (mainGame.getPlayer2ImageStringN().equals(PLAYER2SPRITE_NORM)) {
-			RND.drawColor(graphics, highLightN, highLightA, 
-					TELEFOON_2_X, TELEFOON_2_Y, mainGame.getColor());
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					TELEFOON_2_X, TELEFOON_2_Y, mainGame.getColor()));
 		} else if (mainGame.getPlayer2ImageStringN().equals(ARIESPRITE)) {
-			RND.drawColor(graphics, highLightN, highLightA, 
-					ARIE_2_X, ARIE_2_Y, mainGame.getColor()); }
+			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+					ARIE_2_X, ARIE_2_Y, mainGame.getColor())); }
 		returnButton.drawColor(graphics, input, mainGame.getColor());
 		
 		drawSprites2(graphics);
@@ -452,19 +455,25 @@ public class MenuSettingsState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawSprites2(Graphics graphics) {
-		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
-				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mainGame.getColor());
-		RND.drawColor(graphics, telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
-				telefoon1Rectangle.getX(), telefoon1Rectangle.getY(), mainGame.getColor());
-		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
-				arie1Rectangle.getX(), arie1Rectangle.getY(), mainGame.getColor());
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
+				mannetje1Rectangle.getX(), mannetje1Rectangle.getY(), mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
+				telefoon1Rectangle.getX(), telefoon1Rectangle.getY(), mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				arieN.getSprite(2, 0), arieA.getSprite(2, 0),
+				arie1Rectangle.getX(), arie1Rectangle.getY(), mainGame.getColor()));
 		
-		RND.drawColor(graphics, mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
-				mannetje2Rectangle.getX(), mannetje2Rectangle.getY(), mainGame.getColor());
-		RND.drawColor(graphics, telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
-				telefoon2Rectangle.getX(), telefoon2Rectangle.getY(), mainGame.getColor());
-		RND.drawColor(graphics, arieN.getSprite(2, 0), arieA.getSprite(2, 0),
-				arie2Rectangle.getX(), arie2Rectangle.getY(), mainGame.getColor());
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				mannetjeN.getSprite(2, 0), mannetjeA.getSprite(2, 0),
+				mannetje2Rectangle.getX(), mannetje2Rectangle.getY(), mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				telefoonN.getSprite(2, 0), telefoonA.getSprite(2, 0),
+				telefoon2Rectangle.getX(), telefoon2Rectangle.getY(), mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				arieN.getSprite(2, 0), arieA.getSprite(2, 0),
+				arie2Rectangle.getX(), arie2Rectangle.getY(), mainGame.getColor()));
 	}
 
 	/**
@@ -472,9 +481,9 @@ public class MenuSettingsState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen.
 	 */
 	private void drawColorControls(Graphics graphics) {
-		RND.text(graphics, COLOR_TEXT_X, COLOR_TEXT_1_Y,
+		RND.getInstance().text(graphics, COLOR_TEXT_X, COLOR_TEXT_1_Y,
 				"# Change game color manually,");
-		RND.text(graphics, COLOR_TEXT_X, COLOR_TEXT_2_Y,
+		RND.getInstance().text(graphics, COLOR_TEXT_X, COLOR_TEXT_2_Y,
 				"# or let it shuffle!.");
 //		
 //		for (int i = 0; i < NUM_7; i++) {

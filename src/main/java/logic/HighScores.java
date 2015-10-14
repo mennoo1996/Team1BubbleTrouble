@@ -13,13 +13,15 @@ public class HighScores {
 	
 	private ArrayList<Score> scoreList;
 	private static final int MAX_HIGHSCORES = 10;
-	private static Logger logger = Logger.getInstance();
-	
+	private static Logger logger;
 	/**
 	 * Construct a new HighScores object. 
 	 */
 	public HighScores() {
 		scoreList = new ArrayList<Score>();
+		if (logger == null) {
+			logger = Logger.getInstance();
+		}
 	}
 	
 	
@@ -96,15 +98,5 @@ public class HighScores {
 	public Logger getLogger() {
 		return logger;
 	}
-
-
-
-	/**
-	 * @param logger the logger to set
-	 */
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-	
 }
 

@@ -44,7 +44,7 @@ public class Separator {
 	 * @param color to draw in
 	 */
 	public void drawColor(Graphics graphics, Color color) {
-		RND.textSpecifiedColor(graphics, x, y, text, color);
+		RND.getInstance().textSpecifiedColor(graphics, x, y, text, color);
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class Separator {
 
 		StringBuffer firstHalf = new StringBuffer(), secondHalf = new StringBuffer();
 		// lengths
-		int titleLength = RND.getStringPixelWidth(title);
+		int titleLength = RND.getInstance().getStringPixelWidth(title);
 		int secondLength = (int) (screenWidth / 2 - x) - titleLength / 2;
 		int firstLength = secondLength;
 		
@@ -66,10 +66,10 @@ public class Separator {
 		}
 		
 		// fill with characters
-		while (RND.getStringPixelWidth(firstHalf.toString()) < firstLength) {
+		while (RND.getInstance().getStringPixelWidth(firstHalf.toString()) < firstLength) {
 			firstHalf.append('=');
 		}
-		while (RND.getStringPixelWidth(secondHalf.toString()) < firstLength) {
+		while (RND.getInstance().getStringPixelWidth(secondHalf.toString()) < firstLength) {
 			secondHalf.append('=');
 		}
 

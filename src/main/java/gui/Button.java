@@ -56,9 +56,9 @@ public class Button {
 	 */
 	public void drawColor(Graphics graphics, Input input, Color color) {
 		if (isMouseOver(input)) {
-			RND.drawButtonHighlight(graphics, this);
+			RND.getInstance().drawButtonHighlight(graphics, this);
 		} else {
-			RND.text(graphics, x, y, text);
+			RND.getInstance().text(graphics, x, y, text);
 		}
 	}
 	
@@ -72,9 +72,9 @@ public class Button {
 	 */
 	public void drawColor(Graphics graphics, Input input, Color color, boolean enable) {
 		if (isMouseOver(input) && enable) {
-			RND.drawButtonHighlight(graphics, this);
+			RND.getInstance().drawButtonHighlight(graphics, this);
 		} else {
-			RND.text(graphics, x, y, text);
+			RND.getInstance().text(graphics, x, y, text);
 		}
 	}
 	

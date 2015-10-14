@@ -115,11 +115,13 @@ public class PlayerList {
 	public void drawPlayers(Graphics graphics) {
 		drawPlayer(playerList.get(0), graphics);
 		if (mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) {
-			RND.text(graphics, playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION,
+			RND.getInstance().text(graphics, 
+					playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION,
 					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, 
 					"#" + playerList.get(0).getPlayerName());
 			drawPlayer(playerList.get(1), graphics);
-			RND.text(graphics, playerList.get(1).getX() - PLAYER_NAME_X_DEVIATION,
+			RND.getInstance().text(graphics, 
+					playerList.get(1).getX() - PLAYER_NAME_X_DEVIATION,
 					playerList.get(1).getCenterY() - PLAYER_NAME_Y_DEVIATION, 
 					"#" + playerList.get(1).getPlayerName());
 		}
@@ -181,9 +183,10 @@ public class PlayerList {
 			drawPlayerNoMovement(player, graphics);
 		}
 		if (player.hasShield()) {
-			RND.drawColor(graphics, player.getShieldImageN(), player.getShieldImageA(),
+			RND.getInstance().drawColor(new RenderOptions(graphics, player.getShieldImageN(), 
+					player.getShieldImageA(),
 					player.getX() - SHIELD_DRAW_X_DEVIATION,
-					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor());
+					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor()));
 		}
 		player.setMovement(Player.Movement.NO_MOVEMENT);
 	}
@@ -195,10 +198,11 @@ public class PlayerList {
 	 */
 	private void drawPlayerNoMovement(Player player, Graphics graphics) {
 		player.resetMovementCounter();
-		RND.drawColor(graphics, player.getSpritesheetN().getSprite(2, 0),
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				player.getSpritesheetN().getSprite(2, 0),
 				player.getSpritesheetA().getSprite(2, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**
@@ -213,10 +217,11 @@ public class PlayerList {
                 * MOVEMENT_COUNTER_FACTOR) {
             sp = 0;
         }
-		RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0),
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				player.getSpritesheetN().getSprite(sp, 0),
 				player.getSpritesheetA().getSprite(sp, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**
@@ -231,10 +236,11 @@ public class PlayerList {
                 * MOVEMENT_COUNTER_FACTOR) {
             sp = SPRITE_SHEET_FOUR;
         }
-		RND.drawColor(graphics, player.getSpritesheetN().getSprite(sp, 0),
+		RND.getInstance().drawColor(new RenderOptions(graphics, 
+				player.getSpritesheetN().getSprite(sp, 0), 
 				player.getSpritesheetA().getSprite(sp, 0),
 				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor());
+				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**

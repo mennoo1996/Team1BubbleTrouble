@@ -90,7 +90,7 @@ public class MenuMainState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		Logger.getInstance().log("Entering MenuMainState", Logger.PriorityLevels.LOW, "States");
-		RND.setOpacity(0.0f);
+		RND.getInstance().setOpacity(0.0f);
 		mainGame.stopSwitchState();
 	}
 	
@@ -102,12 +102,13 @@ public class MenuMainState extends BasicGameState {
 	 */
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
 		if (mainGame.getShouldSwitchState()) {
-			if (RND.getOpacity() > 0.0f) {
+			if (RND.getInstance().getOpacity() > 0.0f) {
 				int fadeTimer = mainGame.getOpacityFadeTimer();
 				if (mainGame.getSwitchState() == -1) {
 					fadeTimer = 2 * 2 * 2 * fadeTimer;
 				}
-				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
+				RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
+						- ((float) delta) / fadeTimer);
 			} else {
 				Logger.getInstance().log("Exiting MenuMainState", 
 						Logger.PriorityLevels.LOW, "States");
@@ -131,8 +132,9 @@ public class MenuMainState extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
 		Input input = container.getInput();
-		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
-			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
+		if (RND.getInstance().getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+			RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
+					+ ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
 
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
@@ -186,20 +188,20 @@ public class MenuMainState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics) 
 			throws SlickException {
-		RND.drawBackground(graphics);
-		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+		RND.getInstance().drawBackground(graphics);
+		RND.getInstance().text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y, "Waiting for user input...");
 		renderButtons(container, graphics);
 		mainGame.drawWaterMark();
-		RND.drawLogo(graphics, LOGO_X, LOGO_Y);
+		RND.getInstance().drawLogo(graphics, LOGO_X, LOGO_Y);
 		separatorTop.drawColor(graphics, mainGame.getColor());
 		String highScoresString = mainGame.getHighscores().toString();
-		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
-		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
+		RND.getInstance().text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
+		RND.getInstance().text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
 				"The best scores of your predecessors!");
 		
 		// NO DRAWING AFTER THIS POINT. BOO.
-		RND.drawForeGround(graphics);
+		RND.getInstance().drawForeGround(graphics);
 		// NO DRAWING HERE. BAD PROGRAMMER. BAD.
 	}
 

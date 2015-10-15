@@ -1,6 +1,6 @@
 package logic;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 
@@ -171,7 +171,7 @@ public class BouncingCircle extends Circle implements Cloneable {
 		} else if (this.getMaxX() > containerWidth - gameState.getRightWall().getWidth()) {
 			xSpeed = -initSpeed;
 		} else {
-			for (Gate gate : gameState.getGateList()) {
+			for (Gate gate : gameState.getCirclesHelper().getGateList()) {
 				if (gate.getRectangle().intersects(this.getCircle())) {
 					if (gate.getUnlockCircles().contains(this)) {
 						xSpeed = -initSpeed;
@@ -202,22 +202,22 @@ public class BouncingCircle extends Circle implements Cloneable {
 		if (newYSpeed > MINIMUM_SPEED) {
 			newYSpeed = MINIMUM_SPEED;
 		}
-		// bonus speed when hit at the right moment
 		if (newYSpeed < BONUS_SPEED_FACTOR * radius) {
 			logger.log("New balls aquired bonus speed",
 					PriorityLevels.VERYLOW, "BouncingCircles");
 			newYSpeed -= BONUS_SPEED;
 		}
 		BouncingCircle circle1 = new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), 
-				xSpeed,	newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID());
+				xSpeed,	newYSpeed, mainGame.getGravity(), 
+				gameState.getCirclesHelper().getCircleList().getNewID());
 		BouncingCircle circle2 = new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), 
-				-xSpeed, newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID());
+				-xSpeed, newYSpeed, mainGame.getGravity(), 
+				gameState.getCirclesHelper().getCircleList().getNewID());
 		if (multiplier != 0) {
 			circle1.setMultiplier(multiplier);
 			circle2.setMultiplier(multiplier);
 		}
-		res.add(circle1);
-		res.add(circle2);	
+		res.add(circle1); res.add(circle2);	
 		return res;
 	}
 	
@@ -418,10 +418,6 @@ public class BouncingCircle extends Circle implements Cloneable {
 	public void setHitCeiling(boolean hitCeiling) {
 		this.hitCeiling = hitCeiling;
 	}
-
-//	float centerPointX, float centerPointY, 
-//	float radius, float xSpeed, float ySpeed, 
-//	float gravity, float multiplier
 	
 	/**
 	 * Return a String-representation of this BouncingCircle.
@@ -429,17 +425,9 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 */
 	@Override
 	public String toString() {
-		float centerPointX = this.getCenterX();
-		float centerPointY = this.getCenterY();
-		float radius = this.getRadius();
-		float xSpeed = this.xSpeed;
-		float ySpeed = this.ySpeed;
-		float gravity = this.gravity;
-		float multiplier = this.multiplier;
-		
-		String res = "CIRCLE " + centerPointX + " " + centerPointY 
-				+ " " + radius + " " + xSpeed + " " + ySpeed 
-				+ " " + gravity + " " + multiplier + " " + id;
+		String res = "CIRCLE " + this.getCenterX() + " " + this.getCenterY() 
+				+ " " + this.getRadius() + " " + this.xSpeed + " " + this.ySpeed 
+				+ " " + this.gravity + " " + this.multiplier + " " + id;
 		return res;
 	}
 	
@@ -485,7 +473,6 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 */
 	@Override
 	public BouncingCircle clone() throws CloneNotSupportedException {
-		super.clone();
 		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
 				this.getRadius(), xSpeed, ySpeed, gravity, id);
 		res.setMultiplier(this.multiplier);

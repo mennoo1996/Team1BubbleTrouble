@@ -27,14 +27,10 @@ public class Spiky extends Weapon {
      */
     @Override
     public void update(Rectangle ceiling, Rectangle floor, float deltaFloat) {
-        boolean stayVisible = true;
         final int offsetY = 10;
         final int offsetFloor = 7;
-        if (!this.isVisible()) {
-            stayVisible = false;
-        }
         super.update(ceiling, floor, deltaFloat);
-        if (this.getY() <= ceiling.getHeight() && stayVisible) {
+        if (this.getY() <= ceiling.getHeight() && this.isVisible()) {
             this.setY(ceiling.getHeight() - offsetY);
             this.setHeight(floor.getMinY() - ceiling.getHeight() + offsetFloor);
             this.setVisible(true);

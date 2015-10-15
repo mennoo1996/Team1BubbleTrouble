@@ -6,8 +6,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guigame.GameStateCirclesHelper;
+import guigame.GameStateInterfaceHelper;
+import guigame.GameStateItemsHelper;
+import guigame.GameStateLogicHelper;
+import guigame.GameStatePauseHelper;
+import guigame.GameStatePlayerHelper;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 
@@ -31,6 +37,13 @@ public class PlayerListTest {
 	SpriteSheet s;
 	GameState gs;
 
+	GameStateCirclesHelper ch = mock(GameStateCirclesHelper.class);
+	GameStateItemsHelper ih = mock(GameStateItemsHelper.class);
+	GameStateInterfaceHelper ifh = mock(GameStateInterfaceHelper.class);
+	GameStatePlayerHelper ph = mock(GameStatePlayerHelper.class);
+	GameStateLogicHelper lh = mock(GameStateLogicHelper.class);
+	GameStatePauseHelper pah = mock(GameStatePauseHelper.class);
+	
 	@Before
 	public void setUp() throws Exception {
 		i = mock(Image.class);
@@ -38,6 +51,12 @@ public class PlayerListTest {
 		mg = new MainGame("maingame");
 		s = mock(SpriteSheet.class);
 		gs = mock(GameState.class);
+		when(gs.getItemsHelper()).thenReturn(ih);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getInterfaceHelper()).thenReturn(ifh);
+		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getPauseHelper()).thenReturn(pah);
 	}
 	
 	@Test
@@ -97,8 +116,8 @@ public class PlayerListTest {
 		StateBasedGame sbg = mock(StateBasedGame.class);
 		p = mock(Player.class);
 		mg = mock(MainGame.class);
-		gs = mock(GameState.class);
 		PlayerList pl = new PlayerList(p, mg, gs);
+		when(gs.getLogicHelper().getScore()).thenReturn(100);
 		pl.playerDeath(sbg);
 		
 	}
@@ -121,7 +140,6 @@ public class PlayerListTest {
 		StateBasedGame sbg = mock(StateBasedGame.class);
 		p = mock(Player.class);
 		mg = mock(MainGame.class);
-		gs = mock(GameState.class);
 		
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.setDied(false);
@@ -135,7 +153,6 @@ public class PlayerListTest {
 		StateBasedGame sbg = mock(StateBasedGame.class);
 		p = mock(Player.class);
 		mg = mock(MainGame.class);
-		gs = mock(GameState.class);
 		
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.setDied(false);

@@ -24,7 +24,6 @@ public class Weapon {
 	 * @param laserSpeed the speed of the laser
 	 */
 	public Weapon(float x, float y, float laserSpeed, float laserWidth) {
-		super();
 		this.x = x - (HALF * laserWidth);
 		this.y = y;
 		this.laserSpeed = laserSpeed;
@@ -50,12 +49,7 @@ public class Weapon {
 	public void update(Rectangle ceiling, Rectangle floor, float deltaFloat) {
 		y -= laserSpeed * deltaFloat;
 		height += laserSpeed * deltaFloat;
-		
-		if (y < ceiling.getHeight()) {
-			this.visible = false;
-		}
-		
-		
+		this.visible = y >= ceiling.getHeight();
 	}
 	
 	

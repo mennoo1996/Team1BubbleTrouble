@@ -1,7 +1,7 @@
 package logic;
-import gui.GameState;
-import gui.MainGame;
-import gui.RND;
+import guigame.GameState;
+import guimenu.MainGame;
+import guimenu.RND;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,6 @@ public class PlayerList {
 	 * @param gameState		- the gamestate
 	 */
 	public PlayerList(Player player1, MainGame mainGame, GameState gameState) {
-		super();
 		playerList = new ArrayList<Player>();
 		playerList.add(player1);
 		this.mainGame = mainGame;
@@ -154,30 +153,14 @@ public class PlayerList {
 	}
 	
 	/**
-	 * set images of players.
-	 * @param playerNumber number of player.
-	 * @param imageStringN string of normal image
-	 * @param imageStringA string of additive image
-	 */
-	public void setPlayerImages(int playerNumber, String imageStringN, String imageStringA) {
-		try {
-			Image imageN = new Image(PLAYER_IMAGES + imageStringN);
-			Image imageA = new Image(PLAYER_IMAGES + imageStringA);
-			playerList.get(playerNumber).setImage(imageN, imageA);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
 	 * Draws player.
 	 * @param player to draw
 	 * @param graphics context
 	 */
 	private void drawPlayer(Player player, Graphics graphics) {
-		if (player.getMovement() == Player.Movement.RIGHT) {
+		if (player.getMovement() == PlayerMovementHelper.Movement.RIGHT) {
 			drawPlayerMoveRight(player, graphics);
-		} else if (player.getMovement() == Player.Movement.LEFT) {
+		} else if (player.getMovement() == PlayerMovementHelper.Movement.LEFT) {
 			drawPlayerMoveLeft(player, graphics);
 		} else {
 			drawPlayerNoMovement(player, graphics);
@@ -188,7 +171,7 @@ public class PlayerList {
 					player.getX() - SHIELD_DRAW_X_DEVIATION,
 					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor()));
 		}
-		player.setMovement(Player.Movement.NO_MOVEMENT);
+		player.setMovement(PlayerMovementHelper.Movement.NO_MOVEMENT);
 	}
 
 	/**
@@ -259,7 +242,7 @@ public class PlayerList {
 			}
 			
 			if (mainGame.getLifeCount() <= 0) {
-				mainGame.setScore(mainGame.getScore() + gameState.getScore());
+				mainGame.setScore(mainGame.getScore() + gameState.getLogicHelper().getScore());
 				mainGame.setSwitchState(mainGame.getGameOverState());
 				logger.log("Player lives reached 0, game over",
 						Logger.PriorityLevels.HIGH, "players");

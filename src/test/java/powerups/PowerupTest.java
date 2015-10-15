@@ -5,9 +5,16 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gui.GameState;
+import guigame.GameState;
+import guigame.GameStateCirclesHelper;
+import guigame.GameStateInterfaceHelper;
+import guigame.GameStateItemsHelper;
+import guigame.GameStateLogicHelper;
+import guigame.GameStatePauseHelper;
+import guigame.GameStatePlayerHelper;
 import logic.MyRectangle;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -19,6 +26,32 @@ public class PowerupTest {
 	
 	private static final float POWERUP_WIDTH = 40;
     private static final float POWERUP_HEIGHT = 40;
+	
+    GameState gs;
+    
+	GameStateCirclesHelper ch;
+	GameStateItemsHelper ih;
+	GameStateInterfaceHelper ifh;
+	GameStatePlayerHelper ph;
+	GameStateLogicHelper lh;
+	GameStatePauseHelper pah;
+    
+	@Before
+	public void setUp() throws Exception {
+		gs = mock(GameState.class);
+		ch = mock(GameStateCirclesHelper.class);
+		ih = mock(GameStateItemsHelper.class);
+		ifh = mock(GameStateInterfaceHelper.class);
+		ph = mock(GameStatePlayerHelper.class);
+		lh = mock(GameStateLogicHelper.class);
+		pah = mock(GameStatePauseHelper.class);
+		when(gs.getItemsHelper()).thenReturn(ih);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getInterfaceHelper()).thenReturn(ifh);
+		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getPauseHelper()).thenReturn(pah);
+	}
 	
 	@Test
 	public void getRectangleTest() {
@@ -72,9 +105,8 @@ public class PowerupTest {
 	@Test
 	public void testUpdate1() {
 		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
-		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
-		when(gs.isPaused()).thenReturn(false);
+		when(gs.getLogicHelper().isPaused()).thenReturn(false);
 		when(gs.getFloor()).thenReturn(floor);
 		p.update(gs, 100, 100);
 	}
@@ -82,9 +114,8 @@ public class PowerupTest {
 	@Test
 	public void testUpdate2() {
 		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
-		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
-		when(gs.isPaused()).thenReturn(false);
+		when(gs.getLogicHelper().isPaused()).thenReturn(false);
 		when(gs.getFloor()).thenReturn(floor);
 		p.update(gs, 1000, 100);
 	}
@@ -92,9 +123,8 @@ public class PowerupTest {
 	@Test
 	public void testUpdate3() {
 		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
-		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
-		when(gs.isPaused()).thenReturn(true);
+		when(gs.getLogicHelper().isPaused()).thenReturn(true);
 		when(gs.getFloor()).thenReturn(floor);
 		p.update(gs, 1000, 100);
 	}

@@ -1,7 +1,7 @@
 package gui;
 import static org.junit.Assert.*;
-import gui.MainGame;
-import gui.MenuSettingsState;
+import guimenu.MainGame;
+import guimenu.MenuSettingsState;
 
 import org.junit.Before;
 import org.junit.Test;

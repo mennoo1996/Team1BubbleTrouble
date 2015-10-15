@@ -1,7 +1,7 @@
 package logic;
-import gui.GameState;
-import gui.MainGame;
-import gui.RND;
+import guigame.GameState;
+import guimenu.MainGame;
+import guimenu.RND;
 
 import java.util.ArrayList;
 
@@ -41,7 +41,6 @@ public class WeaponList {
 	 * @param testing	- testing state or not
 	 */
 	public WeaponList(Weapon weapon1, MainGame mainGame, GameState gameState, boolean testing) {
-		super();
 		this.weaponList = new ArrayList<Weapon>();
 		weaponList.add(weapon1);
 		this.mainGame = mainGame;
@@ -81,7 +80,7 @@ public class WeaponList {
 				&& weaponNumber == 0) || (mainGame.isClient() && weaponNumber == 1);
 		
 		if (player.isShot() && weapon.getRectangle().intersects(circle) && canProcessLAN) {
-			gameState.getShotList().add(circle);
+			gameState.getCirclesHelper().getShotList().add(circle);
 			logger.log("Circle shot", Logger.PriorityLevels.LOW, "weapon");
 			weapon.setVisible(false);
 			if (mainGame.isHost() && weaponNumber == 0) {

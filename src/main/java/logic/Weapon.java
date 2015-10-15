@@ -24,7 +24,6 @@ public class Weapon {
 	 * @param laserSpeed the speed of the laser
 	 */
 	public Weapon(float x, float y, float laserSpeed, float laserWidth) {
-		super();
 		this.x = x - (HALF * laserWidth);
 		this.y = y;
 		this.laserSpeed = laserSpeed;

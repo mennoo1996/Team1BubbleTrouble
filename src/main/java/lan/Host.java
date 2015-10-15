@@ -110,8 +110,7 @@ public class Host extends Connector {
      */
     @Override
     protected void nameMessage(String message) {
-    	String message2 = message.trim();
-    	mainGame.getPlayerList().getPlayers().get(1).setPlayerName(message2);
+    	mainGame.getPlayerList().getPlayers().get(1).setPlayerName(message.trim());
     }
     
     /**
@@ -150,12 +149,12 @@ public class Host extends Connector {
     
     /**
      * Process messages received from the client part 2.
-     * @param message2 the message to process
+     * @param message the message to process
      */
-    private void readClientInputs2(String message2) {
-    	if (message2.startsWith(LASER)) {
-			laserMessage(message2.replaceFirst(LASER, ""));
-		} else if (message2.startsWith("SHUTDOWN")) {
+    private void readClientInputs2(String message) {
+    	if (message.startsWith(LASER)) {
+			laserMessage(message.replaceFirst(LASER, ""));
+		} else if (message.startsWith("SHUTDOWN")) {
             MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
                     this.mainGame.getState(mainGame.getMultiplayerState());
             multiplayerState.addMessage("Client Quit.");
@@ -169,11 +168,11 @@ public class Host extends Connector {
      * @param message the message to process
      */
     private void systemMessage(String message) {
-    	String message2 = message.trim();
-    	if (message2.startsWith("PAUSE")) {
-    		pauseMessage(message2.replaceFirst("PAUSE", ""));
-    	} else if (message2.startsWith("LEVEL")) {
-    		levelMessage(message2.replaceFirst("LEVEL", ""));
+    	message = message.trim();
+    	if (message.startsWith("PAUSE")) {
+    		pauseMessage(message.replaceFirst("PAUSE", ""));
+    	} else if (message.startsWith("LEVEL")) {
+    		levelMessage(message.replaceFirst("LEVEL", ""));
     	}
     }
     
@@ -182,8 +181,8 @@ public class Host extends Connector {
      * @param message the message to process
      */
     private void levelMessage(String message) {
-    	String message2 = message.trim();
-    	if (message2.equals("RESTART")) { 
+    	message = message.trim();
+    	if (message.equals("RESTART")) { 
     		// force override life, level, score etc. Just. In. Case. someone forgets.
     		mainGame.resetLifeCount();
     		mainGame.resetLevelCount();
@@ -197,9 +196,9 @@ public class Host extends Connector {
      * @param message String containing the message
      */
     private void newMessage(String message) {
-    	String message2 = message.trim();
-    	if (message2.startsWith(LASER)) {
-    		newLaserMessage(message2.replaceFirst(LASER, ""));
+    	message = message.trim();
+    	if (message.startsWith(LASER)) {
+    		newLaserMessage(message.replaceFirst(LASER, ""));
     	}
     }
     
@@ -284,8 +283,8 @@ public class Host extends Connector {
      * @param message the message to process
      */
 	private void powerupMessage(String message) {
-		String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
+		message = message.trim();
+    	String[] stringList = message.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
     		synchronized (gameState.getDroppedPowerups()) {
 				PowerupType type = getPowerupType(stringList[2]);
@@ -326,23 +325,26 @@ public class Host extends Connector {
 	 * @return the poweruptype concluded.
 	 */
 	private PowerupType getPowerupType(String string) {
-		PowerupType type = PowerupType.SHIELD;
-		if (string.equals("SHIELD")) {
-			type = PowerupType.SHIELD;
-		} else if (string.equals("SPIKY")) {
-			type = PowerupType.SPIKY;
-		} else if (string.equals("INSTANT")) {
-			type = PowerupType.INSTANT;
-		} else if (string.equals("HEALTH")) {
-			type = PowerupType.HEALTH;
-		} else if (string.equals("FREEZE")) {
-			type = PowerupType.FREEZE;
-		} else if (string.equals("SLOW")) {
-			type = PowerupType.SLOW;
-		} else if (string.equals("FAST")) {
-			type = PowerupType.FAST;
-		} else if (string.equals("RANDOM")) {
-			type = PowerupType.RANDOM;
+		PowerupType type;
+		switch (string) {
+		case "SHIELD":
+			type = PowerupType.SHIELD; break;
+		case "SPIKY":
+			type = PowerupType.SPIKY; break;
+		case "INSTANT":
+			type = PowerupType.INSTANT; break;
+		case "HEALTH":
+			type = PowerupType.HEALTH; break;
+		case "FREEZE":
+			type = PowerupType.FREEZE; break;
+		case "SLOW":
+			type = PowerupType.SLOW; break;
+		case "FAST":
+			type = PowerupType.FAST; break;
+		case "RANDOM":
+			type = PowerupType.RANDOM; break;
+		default:
+			type = PowerupType.SHIELD; break;
 		}
 		return type;
 	}
@@ -376,8 +378,8 @@ public class Host extends Connector {
      * @param message the message to process
      */
     private void coinMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
+    	message = message.trim();
+    	String[] stringList = message.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
     		synchronized (gameState.getDroppedCoins()) {
     			ArrayList<Coin> coinlist = new ArrayList<Coin>();

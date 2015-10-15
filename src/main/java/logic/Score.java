@@ -14,7 +14,6 @@ public class Score {
 	 * @param name the name of the player
 	 */
 	public Score(int score, String name) {
-		super();
 		this.score = score;
 		this.name = name;
 	}

@@ -44,7 +44,6 @@ public class PlayerList {
 	 * @param gameState		- the gamestate
 	 */
 	public PlayerList(Player player1, MainGame mainGame, GameState gameState) {
-		super();
 		playerList = new ArrayList<Player>();
 		playerList.add(player1);
 		this.mainGame = mainGame;

@@ -1,7 +1,7 @@
 package logic;
-import gui.GameState;
-import gui.MainGame;
-import gui.RND;
+import guigame.GameState;
+import guimenu.MainGame;
+import guimenu.RND;
 
 import java.util.ArrayList;
 

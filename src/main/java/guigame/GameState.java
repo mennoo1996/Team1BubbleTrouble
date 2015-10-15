@@ -1,4 +1,6 @@
-package gui;
+package guigame;
+import guimenu.MainGame;
+import guimenu.RND;
 import logic.LevelContainer;
 import logic.Logger;
 import logic.MyRectangle;

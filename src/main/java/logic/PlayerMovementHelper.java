@@ -1,6 +1,6 @@
 package logic;
 
-import gui.GameState;
+import guigame.GameState;
 import lan.Client;
 import lan.Host;
 import logic.Logger.PriorityLevels;

@@ -1,6 +1,6 @@
 package powerups;
 
-import gui.GameState;
+import guigame.GameState;
 
 import java.util.concurrent.TimeUnit;
 

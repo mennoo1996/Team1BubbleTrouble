@@ -1,6 +1,6 @@
 package levels;
 
-import gui.MainGame;
+import guimenu.MainGame;
 
 /**
  * The abstract factory which can create levels.

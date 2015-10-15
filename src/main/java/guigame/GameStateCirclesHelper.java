@@ -1,4 +1,6 @@
-package gui;
+package guigame;
+
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 import java.util.Iterator;

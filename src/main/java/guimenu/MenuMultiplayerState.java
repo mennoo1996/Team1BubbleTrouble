@@ -1,4 +1,6 @@
-package gui;
+package guimenu;
+
+import guigame.GameState;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

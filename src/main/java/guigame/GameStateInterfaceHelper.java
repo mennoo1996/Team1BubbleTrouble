@@ -1,4 +1,7 @@
-package gui;
+package guigame;
+
+import guimenu.MainGame;
+import guimenu.RND;
 
 import java.util.ArrayList;
 import java.util.Iterator;

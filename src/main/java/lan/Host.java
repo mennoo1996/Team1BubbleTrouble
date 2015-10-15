@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 import powerups.Powerup;
 import powerups.Powerup.PowerupType;
-import gui.GameState;
-import gui.MainGame;
-import gui.MenuMultiplayerState;
+import guigame.GameState;
+import guimenu.MainGame;
+import guimenu.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;

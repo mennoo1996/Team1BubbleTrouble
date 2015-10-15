@@ -1,6 +1,6 @@
 package logic;
 
-import gui.RND;
+import guimenu.RND;
 
 import java.util.ArrayList;
 

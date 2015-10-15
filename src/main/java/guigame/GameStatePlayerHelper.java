@@ -1,4 +1,6 @@
-package gui;
+package guigame;
+
+import guimenu.MainGame;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

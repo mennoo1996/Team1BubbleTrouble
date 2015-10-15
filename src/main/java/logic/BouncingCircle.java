@@ -1,6 +1,6 @@
 package logic;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 

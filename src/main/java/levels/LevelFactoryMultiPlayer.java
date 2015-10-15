@@ -1,6 +1,6 @@
 package levels;
 
-import gui.MainGame;
+import guimenu.MainGame;
 
 import java.lang.reflect.Constructor;
 

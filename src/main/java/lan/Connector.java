@@ -1,7 +1,7 @@
 package lan;
 
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guimenu.MainGame;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;

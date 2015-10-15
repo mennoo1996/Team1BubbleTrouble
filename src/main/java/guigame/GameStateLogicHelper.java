@@ -1,5 +1,6 @@
-package gui;
+package guigame;
 
+import guimenu.MainGame;
 import logic.Logger;
 
 import org.newdawn.slick.GameContainer;

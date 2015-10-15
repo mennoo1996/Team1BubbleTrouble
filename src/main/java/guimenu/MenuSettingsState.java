@@ -1,4 +1,4 @@
-package gui;
+package guimenu;
 import logic.Logger;
 import logic.MyRectangle;
 import logic.RenderOptions;

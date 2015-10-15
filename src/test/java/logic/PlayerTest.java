@@ -5,14 +5,14 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.anyFloat;
-import gui.GameState;
-import gui.GameStateCirclesHelper;
-import gui.GameStateInterfaceHelper;
-import gui.GameStateItemsHelper;
-import gui.GameStateLogicHelper;
-import gui.GameStatePauseHelper;
-import gui.GameStatePlayerHelper;
-import gui.MainGame;
+import guigame.GameState;
+import guigame.GameStateCirclesHelper;
+import guigame.GameStateInterfaceHelper;
+import guigame.GameStateItemsHelper;
+import guigame.GameStateLogicHelper;
+import guigame.GameStatePauseHelper;
+import guigame.GameStatePlayerHelper;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 

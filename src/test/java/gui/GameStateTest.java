@@ -1,7 +1,7 @@
 package gui;
 import static org.junit.Assert.*;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 

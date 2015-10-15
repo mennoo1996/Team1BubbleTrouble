@@ -153,22 +153,6 @@ public class PlayerList {
 	}
 	
 	/**
-	 * set images of players.
-	 * @param playerNumber number of player.
-	 * @param imageStringN string of normal image
-	 * @param imageStringA string of additive image
-	 */
-	public void setPlayerImages(int playerNumber, String imageStringN, String imageStringA) {
-		try {
-			Image imageN = new Image(PLAYER_IMAGES + imageStringN);
-			Image imageA = new Image(PLAYER_IMAGES + imageStringA);
-			playerList.get(playerNumber).setImage(imageN, imageA);
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
 	 * Draws player.
 	 * @param player to draw
 	 * @param graphics context

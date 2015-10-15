@@ -167,7 +167,7 @@ public class PlayerMovementHelper {
 			isMovingRight = true;
 		}
 		return (processRightNeeded2(containerWidth, isMovingRight) && (player.isFreeToRoam()
-						| (centerX > intersectingGate.getRectangle().getCenterX())));
+						|| (centerX > intersectingGate.getRectangle().getCenterX())));
 	}
 	
 	/**
@@ -382,6 +382,20 @@ public class PlayerMovementHelper {
 	 */
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	/**
+	 * @param movingRight the movingRight to set
+	 */
+	public void setMovingRight(boolean movingRight) {
+		this.movingRight = movingRight;
+	}
+
+	/**
+	 * @param movingLeft the movingLeft to set
+	 */
+	public void setMovingLeft(boolean movingLeft) {
+		this.movingLeft = movingLeft;
 	}
 	
 	

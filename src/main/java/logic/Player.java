@@ -4,24 +4,16 @@ import gui.MainGame;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import logic.Logger.PriorityLevels;
 import logic.PlayerMovementHelper.Movement;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
-import powerups.FastPowerup;
-import powerups.FreezePowerup;
-import powerups.InstantLaser;
 import powerups.Powerup;
-import powerups.SlowPowerup;
-import powerups.SpeedPowerup;
-import powerups.Spiky;
 
 /**
  * This class represents a Player.
@@ -33,6 +25,8 @@ public class Player {
 
 	
 	private PlayerMovementHelper movementHelper;
+	private PlayerPowerupHelper powerupHelper;
+	private PlayerWeaponHelper weaponHelper;
 
 	private int shieldCount;
 	private float x;
@@ -53,7 +47,6 @@ public class Player {
 	private GameState gameState;
 	// weapon management
 	private LinkedList<Powerup.PowerupType> weapons;
-	private boolean shot;
 	private int playerNumber;
 	private final float startX;
 	private final float startY;
@@ -69,14 +62,12 @@ public class Player {
 	private int moveRightKey;
 	private int shootKey;
 	
-	private static final int POWERUP_DURATION = 10;
-	private static final int RANDOM_DURATION = 100;
 	private long shieldTimeRemaining;
 	
 	private Logger logger = Logger.getInstance();
 	
 	private static final String POWERUPS = "powerups";
-	private static final String PLAYER = "Player";
+	private static final int POWERUP_DURATION = 10;
 
 	/**
 	 * Constructor class.
@@ -114,9 +105,10 @@ public class Player {
 		this.weapons = new LinkedList<>();
 		this.shieldCount = 0;
 		this.shieldTimeRemaining = 0;
-		this.shot = false;
 		
 		this.movementHelper = new PlayerMovementHelper(this, gameState);
+		this.powerupHelper = new PlayerPowerupHelper(this, mainGame, gameState);
+		this.weaponHelper = new PlayerWeaponHelper(mainGame, gameState, this);
 	}
 	
 	/**
@@ -128,13 +120,13 @@ public class Player {
 	 */
 	public void update(float deltaFloat, float containerHeight, float containerWidth, 
 			boolean testing) {
-		if (!gameState.isPaused() && shieldTimeRemaining > 0) {
+		if (!gameState.isPaused() & shieldTimeRemaining > 0) {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
 		processGates();
-		processWeapon(deltaFloat, containerHeight, testing);
+		weaponHelper.processWeapon(deltaFloat, containerHeight, testing);
 		movementHelper.processPlayerMovement(deltaFloat, containerWidth, testing);
-		processPowerups(deltaFloat, containerHeight);
+		powerupHelper.processPowerups(deltaFloat, containerHeight);
 		processCoins();
 		
 	}
@@ -159,37 +151,13 @@ public class Player {
 		}
 	}
 	 
+
 	/**
-	 * Process the intersection of a player with the powerups.
-	 * @param deltaFloat the time in seconds since the last frame.
-	 * @param containerHeight the height of the current GameContainer
+	 * Add a powerup to the player.
+	 * @param type powerup type
 	 */
-	private void processPowerups(float deltaFloat, float containerHeight) { // MARKED
-
-		ArrayList<Powerup> usedPowerups = new ArrayList<>();
-		synchronized (gameState.getDroppedPowerups()) {
-			for (Powerup powerup : gameState.getDroppedPowerups()) {
-				powerup.update(gameState, containerHeight, deltaFloat);
-
-				if (powerup.getRectangle().intersects(this.getRectangle())) {
-					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
-						//Add a powerup to the player
-						this.addPowerup(powerup.getType());
-						gameState.getFloatingScores().add(new FloatingScore(powerup));
-						usedPowerups.add(powerup);
-
-						if (mainGame.isHost() && playerNumber == 0) {
-							mainGame.getHost().updatePowerupsDictate(powerup);
-						}
-					} else if (mainGame.isClient() && playerNumber == 1) {
-						mainGame.getClient().pleaPowerup(powerup);
-					}
-				}
-			}
-		}
-		//UsedPowerups is empty if client
-		gameState.getDroppedPowerups().removeAll(usedPowerups);
-		gameState.getDroppedPowerups().removeIf(Powerup::removePowerup);
+	public void addPowerup(Powerup.PowerupType type) {
+		powerupHelper.addPowerup(type);
 	}
 
 	/**
@@ -201,17 +169,17 @@ public class Player {
 			for (Coin coin : gameState.getDroppedCoins()) {
 
 				if (coin.getRectangle().intersects(this.getRectangle())) {
-					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
+					if (!mainGame.isLanMultiplayer() | (mainGame.isHost() & playerNumber == 0)) {
 						//Here is the claim
 						gameState.addToScore(coin.getPoints());
 						gameState.getFloatingScores().add(new FloatingScore(coin));
 						usedCoins.add(coin);
 						logger.log("Picked up coin", 
 								Logger.PriorityLevels.MEDIUM, POWERUPS);
-						if (mainGame.isHost() && playerNumber == 0) {
+						if (mainGame.isHost() & playerNumber == 0) {
 							mainGame.getHost().updateCoinsDictate(coin);
 						}
-					} else if (mainGame.isClient() && playerNumber == 1) {
+					} else if (mainGame.isClient() & playerNumber == 1) {
 						mainGame.getClient().pleaCoin(coin);
 					}
 
@@ -222,40 +190,7 @@ public class Player {
 		gameState.getDroppedCoins().removeAll(usedCoins);
 	}
 
-	/**
-	 * Process the weapon of this player.
-	 * @param deltaFloat the time in seconds since the last frame.
-	 * @param containerHeight the height of the current GameContainer
-	 * @param testing to check if we are testing or not.
-	 */
-	private void processWeapon(float deltaFloat, float containerHeight, boolean testing) {
-		// Shoot laser when spacebar is pressed and no laser is active
-		if (!testing && gameState.getSavedInput().isKeyPressed(shootKey)
-				&& !shot) {
-			shot = true;
-			gameState.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
-			
-			Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
-			boolean spiky = (weapon instanceof Spiky);
-			if (mainGame.isHost()) {
-				mainGame.getHost().updateLaser(playerNumber, weapon.getX(), 
-						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth(), spiky);
-			} else if (mainGame.isClient()) {
-				mainGame.getClient().updateLaser(playerNumber, weapon.getX(), 
-						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth(), spiky);
-			}
-			
-		}
-		Weapon weapon = gameState.getWeaponList().getWeaponList().get(playerNumber);
-		// Update laser
-		if (shot) {
-			weapon.update(gameState.getCeiling(), gameState.getFloor(), deltaFloat);
-			// Disable laser when it has reached the ceiling
-			if (!weapon.isVisible()) {
-				shot = false;
-			}
-		}
-	}
+	
 
 	/**
 	 * @return Whether or not current player is the host
@@ -268,35 +203,7 @@ public class Player {
 		}
 	}
 
-	/**
-	 * Get the weapon of this player.
-	 * @param containerHeight the height of the current GameContainer.
-	 * @return the Weapon of this player.
-	 */
-	public Weapon getWeapon(float containerHeight) {
-		if (weapons.isEmpty()) {
-			logger.log("Shot regular laser from position " + this.getCenterX(),
-					PriorityLevels.MEDIUM, PLAYER);
-			return new Weapon(this.getCenterX(), 
-					containerHeight - gameState.getFloor().getHeight(),
-					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
-		}
-		Powerup.PowerupType subType = weapons.peekLast();
-		if (subType == Powerup.PowerupType.SPIKY) {
-			logger.log("Shot spiky laser from position " + this.getCenterX(), 
-					PriorityLevels.HIGH, PLAYER);
-			return new Spiky(this.getCenterX(), containerHeight - gameState.getFloor().getHeight(),
-					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
-		}
-		if (subType == Powerup.PowerupType.INSTANT) {
-			logger.log("Shot instant laser from position " + this.getCenterX(), 
-					PriorityLevels.HIGH, PLAYER);
-			return new InstantLaser(this.getCenterX(),
-					containerHeight - gameState.getFloor().getHeight(), mainGame.getLaserWidth());
-		}
-		// Wrong weapon type, time to crash hard.
-		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
-	}
+	
 
 	/**
 	 * Reset this player to its original location.
@@ -452,122 +359,7 @@ public class Player {
 		return shieldCount > 0;
 	}
 
-	/**
-	 * Add a powerup to the player.
-	 * @param type powerup type
-	 */
-	public void addPowerup(Powerup.PowerupType type) {
-		logger.log("Adding powerup " + type.toString(),
-				Logger.PriorityLevels.MEDIUM, POWERUPS);
-		if (type == Powerup.PowerupType.INSTANT) {
-			addWeapon(type);
-		} else if (type == Powerup.PowerupType.SHIELD) {
-			addShield();
-		} else if (type == Powerup.PowerupType.SPIKY) {
-			addWeapon(type);
-		} else if (type == Powerup.PowerupType.FREEZE) {
-			addFreeze();
-		} else if (type == Powerup.PowerupType.SLOW) {
-			addSlow();
-		} else if (type == Powerup.PowerupType.FAST) {
-			addFast();
-		} else if (type == Powerup.PowerupType.HEALTH) {
-			addHealth();
-		} else if (type == Powerup.PowerupType.RANDOM) {
-			addRandom();
-		}
-	}
-
-	/**
-	 * Add a freeze powerup to the player.
-	 */
-	private void addFreeze() {
-		FreezePowerup fp = new FreezePowerup();
-		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-		gs.getSpeedPowerupList().add(fp);
-		fp.updateCircles(gs.getCircleList());
-	}
 	
-	/**
-	 * Add a slow powerup to the player.
-	 */
-	private void addSlow() {
-		SlowPowerup sp = new SlowPowerup();
-		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-		ArrayList<SpeedPowerup> list = gs.getSpeedPowerupList();
-		list.add(sp);
-		sp.updateCircles(gs.getCircleList());
-	}
-	
-	/**
-	 * Add a fast powerup to the player.
-	 */
-	private void addFast() {
-		FastPowerup fp = new FastPowerup();
-		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-		gs.getSpeedPowerupList().add(fp);
-		fp.updateCircles(gs.getCircleList());
-	}
-	
-	/**
-	 * Add a random powerup to the player. We do this by spawning another powerup 
-	 * (only for the playing player!!!) so multiplayer code can handle this by itself.
-	 */
-	private void addRandom() {
-		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
-		.nextInt(Powerup.PowerupType.values().length - 1)];
-		Executors.newScheduledThreadPool(1).schedule(() -> {
-			Powerup powerup = new Powerup(x, y, newPowerup);
-			synchronized (gameState.getDroppedPowerups()) {
-				if (!mainGame.isLanMultiplayer()) {
-					gameState.getDroppedPowerups().add(powerup);
-				} else if (mainGame.isHost() && playerNumber == 0) {
-					gameState.getDroppedPowerups().add(powerup);
-					mainGame.getHost().updatePowerupsAdd(powerup);
-				} else if (mainGame.isClient() && playerNumber == 1) {
-					mainGame.getClient().updatePowerupsAdd(powerup);
-				}
-			}
-		}, RANDOM_DURATION, TimeUnit.MILLISECONDS);
-
-	}
-	
-	/**
-	 * Add health to the player.
-	 */
-	private void addHealth() {
-		if (mainGame.getLifeCount() < MainGame.getLives()) {
-			mainGame.setLifeCount(mainGame.getLifeCount() + 1);
-		}
-	}
-	
-	/**
-	 * Add a shield for this player.
-	 */
-	private void addShield() {
-        shieldCount += 1;
-        shieldTimeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_DURATION);
-        Executors.newScheduledThreadPool(1).schedule(() -> {
-                    if (shieldCount > 0) {
-                        shieldCount -= 1;
-                    }
-                },
-                POWERUP_DURATION, TimeUnit.SECONDS);
-    }
-	
-	/**
-	 * Add a weapon for this player.
-	 * @param type the type of the powerup
-	 */
-	private void addWeapon(Powerup.PowerupType type) {
-		weapons.add(type);
-		Executors.newScheduledThreadPool(1).schedule(() -> {
-					if (!weapons.isEmpty()) {
-						weapons.removeFirst();
-					}
-				},
-				POWERUP_DURATION, TimeUnit.SECONDS);
-	}
 	
 	/**
 	 * @return the player spritesheet_norm
@@ -701,14 +493,14 @@ public class Player {
 	 * @return the shot
 	 */
 	public boolean isShot() {
-		return shot;
+		return weaponHelper.isShot();
 	}
 
 	/**
 	 * @param shot the shot to set
 	 */
 	public void setShot(boolean shot) {
-		this.shot = shot;
+		weaponHelper.setShot(shot);
 	}
 
 	/**
@@ -813,6 +605,58 @@ public class Player {
 		return movementHelper.getMovement();
 	}
 	
+
+	/**
+	 * @param movement the movement integer used to determine movement state. 
+	 */
+	public void setMovingLeft(boolean movement) {
+		movementHelper.setMovingLeft(movement);
+	}
+	
+	/**
+	 * @param movement the movement integer used to determine movement state. 
+	 */
+	public void setMovingRight(boolean movement) {
+		movementHelper.setMovingRight(movement);
+	}
+	
+	/**
+	 * Add a shield for this player.
+	 */
+	public void addShield() {
+        shieldCount += 1;
+        shieldTimeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_DURATION);
+        Executors.newScheduledThreadPool(1).schedule(() -> {
+                    if (shieldCount > 0) {
+                        shieldCount -= 1;
+                    }
+                },
+                POWERUP_DURATION, TimeUnit.SECONDS);
+    }
+	
+	/**
+	 * Add a weapon for this player.
+	 * @param type the type of the powerup
+	 */
+	public void addWeapon(Powerup.PowerupType type) {
+		weapons.add(type);
+		Executors.newScheduledThreadPool(1).schedule(() -> {
+					if (!weapons.isEmpty()) {
+						weapons.removeFirst();
+					}
+				},
+				POWERUP_DURATION, TimeUnit.SECONDS);
+	}
+	
+	
+	
+	/**
+	 * @return the weapons
+	 */
+	public LinkedList<Powerup.PowerupType> getWeapons() {
+		return weapons;
+	}
+
 	/**
 	 * Update the info in the movement helper.
 	 */

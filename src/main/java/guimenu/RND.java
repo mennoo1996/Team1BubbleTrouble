@@ -9,7 +9,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import powerups.Powerup;
-import powerups.Powerup.PowerupType;
 
 /**
  * Final class that holds simple draw functions.
@@ -18,7 +17,7 @@ import powerups.Powerup.PowerupType;
  */
 public final class RND {
 	
-	private static volatile RND rnd;
+	private static volatile RND instance;
 	
 	// Fonts used globally
 	
@@ -41,22 +40,7 @@ public final class RND {
 	private Image imageButtonTailN;
 	private Image imageButtonTailA;
 
-	private Image imageLaserImageN;
-	private Image imageLaserImageA;
-	private Image imageShieldImageN;
-	private Image imageShieldImageA;
-	private Image imageVineImageN;
-	private Image imageVineImageA;
-	private Image imageFreezeImageN;
-	private Image imageFreezeImageA;
-	private Image imageSlowImageN;
-	private Image imageSlowImageA;
-	private Image imageFastImageN;
-	private Image imageFastImageA;
-	private Image imageHealthImageN;
-	private Image imageHealthImageA;
-	private Image imageRandomImageN;
-	private Image imageRandomImageA;
+	
 	
 	// Miscellaneous variables used globally
 	
@@ -84,15 +68,15 @@ public final class RND {
 	 * @return	the instance
 	 */
 	public static RND getInstance() {
-	 	if (rnd == null) {
+	 	if (instance == null) {
 	 		synchronized (RND.class) {
-	 			if (rnd == null) {
-	 				rnd = new RND();
+	 			if (instance == null) {
+	 				instance = new RND();
 	 			}
 	 		}
 	 	}
 	 	
-	 	return rnd;
+	 	return instance;
 	}
 	
 	/**
@@ -106,7 +90,9 @@ public final class RND {
 			imageTerminal = new Image("resources/terminal/Terminal_Base.png");
 			imageGameLogoN = new Image("resources/images_UI/Menu_Logo_Norm.png");
 			imageGameLogoA = new Image("resources/images_UI/Menu_Logo_Add.png");
-			initButtonImages(); initFonts(); initPowerups();
+			initButtonImages();
+			initFonts(); 
+			Powerup.loadImages();
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -144,29 +130,7 @@ public final class RND {
 				new Image("resources/images_UI/images_Buttons/Menu_Button_Tail_Add.png");
 	}
 	
-	 /**
-     * Load the powerup images.
-     * @throws SlickException if something goes wrong / file not found
-     */
-    public void initPowerups() throws SlickException {
-    	String location = "resources/images_Powerup/";
-		imageLaserImageN = new Image(location + "laserPowerup_Norm.png");
-		imageLaserImageA = new Image(location + "laserPowerup_Add.png");
-		imageShieldImageN = new Image(location + "shieldPowerup_Norm.png");
-		imageShieldImageA = new Image(location + "shieldPowerup_Add.png");
-		imageVineImageN = new Image(location + "vinePowerup_Norm.png");
-		imageVineImageA = new Image(location + "vinePowerup_Add.png");
-		imageFreezeImageN = new Image(location + "freezePowerup_Norm.png");
-		imageFreezeImageA = new Image(location + "freezePowerup_Add.png");
-		imageSlowImageN = new Image(location + "slowPowerup_Norm.png");
-		imageSlowImageA = new Image(location + "slowPowerup_Add.png");
-		imageFastImageN = new Image(location + "fastPowerup_Norm.png");
-		imageFastImageA = new Image(location + "fastPowerup_Add.png");
-		imageHealthImageN = new Image(location + "healthPowerup_Norm.png");
-		imageHealthImageA = new Image(location + "healthPowerup_Add.png");
-		imageRandomImageN = new Image(location + "randomPowerup_Norm.png");
-		imageRandomImageA = new Image(location + "randomPowerup_Add.png");
-    }
+	
 	
 	/**
 	 * Set opacity of all on-screen elements to a certain value.
@@ -349,26 +313,11 @@ public final class RND {
 	 * @param powerup the powerup to draw
 	 */
 	public void drawPowerup(Graphics g, Powerup powerup) {
-		Image imageN; Image imageA;
+		Image imageN = powerup.getType().getImageN();
+		Image imageA = powerup.getType().getImageA();
 		float x = powerup.getX() - POWERUP_IMAGE_OFFSET, 
 			  y = powerup.getY() - POWERUP_IMAGE_OFFSET;
-		if (powerup.getType() == PowerupType.INSTANT) {
-			imageN = imageLaserImageN; imageA = imageLaserImageA;
-		} else if (powerup.getType() == PowerupType.SPIKY) {
-			imageN = imageVineImageN; imageA = imageVineImageA;
-		} else if (powerup.getType() == PowerupType.SHIELD) {
-			imageN = imageShieldImageN; imageA = imageShieldImageA;
-		} else if (powerup.getType() == PowerupType.FREEZE) {
-			imageN = imageFreezeImageN; imageA = imageFreezeImageA;
-		} else if (powerup.getType() == PowerupType.SLOW) {
-			imageN = imageSlowImageN; imageA = imageSlowImageA;
-		} else if (powerup.getType() == PowerupType.FAST) {
-			imageN = imageFastImageN; imageA = imageFastImageA;
-		} else if (powerup.getType() == PowerupType.HEALTH) {
-			imageN = imageHealthImageN; imageA = imageHealthImageA;
-		} else {
-			imageN = imageRandomImageN; imageA = imageRandomImageA;
-		}
+		
 		RND.getInstance().drawColor(new RenderOptions(g, imageN, imageA, x, y, color));
 	}
 	

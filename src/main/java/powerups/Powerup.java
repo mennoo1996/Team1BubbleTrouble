@@ -1,9 +1,11 @@
 package powerups;
 
-import guigame.GameState;
-
 import java.util.concurrent.TimeUnit;
 
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
+import guigame.GameState;
 import logic.MyRectangle;
 /**
  * Created by alexandergeenen on 09/09/15.
@@ -15,6 +17,44 @@ public class Powerup implements Cloneable {
      */
     public enum PowerupType {
     	SHIELD, SPIKY, INSTANT, FREEZE, SLOW, FAST, HEALTH, RANDOM;
+    	
+    	private Image imageN;
+    	private Image imageA;
+    	
+    	static {
+    		SHIELD.imageA = imageShieldImageA;
+    		SHIELD.imageN = imageShieldImageN;
+    		SPIKY.imageA = imageVineImageA;
+    		SPIKY.imageN = imageVineImageN;
+    		INSTANT.imageA = imageLaserImageA;
+    		INSTANT.imageN = imageLaserImageN;
+    		FREEZE.imageA = imageFreezeImageA;
+    		FREEZE.imageN = imageFreezeImageN;
+    		SLOW.imageA = imageSlowImageA;
+    		SLOW.imageN = imageSlowImageN;
+    		FAST.imageA = imageFastImageA;
+    		FAST.imageN = imageFastImageN;
+    		HEALTH.imageA = imageHealthImageA;
+    		HEALTH.imageN = imageHealthImageN;
+    		RANDOM.imageA = imageRandomImageA;
+    		RANDOM.imageN = imageHealthImageN;
+    	}
+    	
+    	/**
+    	 * Get the image A.
+    	 * @return the imagea.
+    	 */
+    	public Image getImageA() {
+    		return imageA;
+    	}
+    	
+    	/**
+    	 * Get the imageN.
+    	 * @return the imagen.
+    	 */
+    	public Image getImageN() {
+    		return imageN;
+    	}
     }
 
     private static final float POWERUP_WIDTH = 40;
@@ -27,6 +67,23 @@ public class Powerup implements Cloneable {
     private float x, y, width, height, xId, yId;
     private long timeRemaining;
     private PowerupType type;
+    
+    private static Image imageLaserImageN;
+	private static Image imageLaserImageA;
+	private static Image imageShieldImageN;
+	private static Image imageShieldImageA;
+	private static Image imageVineImageN;
+	private static Image imageVineImageA;
+	private static Image imageFreezeImageN;
+	private static Image imageFreezeImageA;
+	private static Image imageSlowImageN;
+	private static Image imageSlowImageA;
+	private static Image imageFastImageN;
+	private static Image imageFastImageA;
+	private static Image imageHealthImageN;
+	private static Image imageHealthImageA;
+	private static Image imageRandomImageN;
+	private static Image imageRandomImageA;
 
     /**
      * Create a new powerup element.
@@ -43,6 +100,31 @@ public class Powerup implements Cloneable {
         this.height = POWERUP_HEIGHT;
         this.type = power;
         this.timeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_TIME);
+    }
+    
+    /**
+     * Load the images for powerups.
+     * @throws SlickException if something goes wrong / file not found
+     */
+    public static void loadImages() throws SlickException {
+    	String location = "resources/images_Powerup/";
+		imageLaserImageN = new Image(location + "laserPowerup_Norm.png");
+		imageLaserImageA = new Image(location + "laserPowerup_Add.png");
+		imageShieldImageN = new Image(location + "shieldPowerup_Norm.png");
+		imageShieldImageA = new Image(location + "shieldPowerup_Add.png");
+		imageVineImageN = new Image(location + "vinePowerup_Norm.png");
+		imageVineImageA = new Image(location + "vinePowerup_Add.png");
+		imageFreezeImageN = new Image(location + "freezePowerup_Norm.png");
+		imageFreezeImageA = new Image(location + "freezePowerup_Add.png");
+		imageSlowImageN = new Image(location + "slowPowerup_Norm.png");
+		imageSlowImageA = new Image(location + "slowPowerup_Add.png");
+		imageFastImageN = new Image(location + "fastPowerup_Norm.png");
+		imageFastImageA = new Image(location + "fastPowerup_Add.png");
+		imageHealthImageN = new Image(location + "healthPowerup_Norm.png");
+		imageHealthImageA = new Image(location + "healthPowerup_Add.png");
+		imageRandomImageN = new Image(location + "randomPowerup_Norm.png");
+		imageRandomImageA = new Image(location + "randomPowerup_Add.png");
+   
     }
     
     /**

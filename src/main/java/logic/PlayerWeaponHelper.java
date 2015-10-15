@@ -46,8 +46,8 @@ public class PlayerWeaponHelper {
 	 */
 	public void processWeapon(float deltaFloat, float containerHeight, boolean testing) {
 		// Shoot laser when spacebar is pressed and no laser is active
-		if (!testing & gameState.getSavedInput().isKeyPressed(player.getShootKey())
-				& !shot) {
+		if (!testing && gameState.getSavedInput().isKeyPressed(player.getShootKey())
+				&& !shot) {
 			shot = true;
 			gameState.getWeaponList().setWeapon(playerNumber, this.getWeapon(containerHeight));
 			

@@ -277,13 +277,6 @@ public class PlayerTest {
 	}
 	
 	@Test
-	public void testMovement() {
-		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovement(Player.Movement.NO_MOVEMENT);
-		assertEquals(Player.Movement.NO_MOVEMENT, p.getMovement());
-	}
-	
-	@Test
 	public void testMovementCounter() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		p.resetMovementCounter();
@@ -334,6 +327,8 @@ public class PlayerTest {
 		when(gs.getFloor()).thenReturn(floor);
 		when(gs.getCeiling()).thenReturn(ceiling);
 		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getLeftWall()).thenReturn(floor);
+		when(gs.getRightWall()).thenReturn(floor);
 
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		p.update(1, 1000, 1600, true);
@@ -342,33 +337,6 @@ public class PlayerTest {
 	}
 	
 
-	@Test
-	public void testIsMovingRight() {
-		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovingRight(true);
-		assertTrue(p.isMovingRight());
-	}
-
-	@Test
-	public void testSetMovingRight() {
-		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovingRight(false);
-		assertFalse(p.isMovingRight());
-	}
-	
-	@Test
-	public void testIsMovingLeft() {
-		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovingLeft(true);
-		assertTrue(p.isMovingLeft());
-	}
-
-	@Test
-	public void testSetMovingLeft() {
-		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovingLeft(false);
-		assertFalse(p.isMovingLeft());
-	}
 	
 	@Test
 	public void testSetPlayerName() {
@@ -526,32 +494,6 @@ public class PlayerTest {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		p.setPlayerNumber(1);
 		assertTrue(p.isOthersPlayer());
-	}
-
-	@Test
-	public void testGetWeapon1() {
-		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
-		p.setgameState(gs);
-		p.getWeapon(100);
-	}
-	
-	@Test
-	public void testGetWeapon2() {
-		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.addPowerup(Powerup.PowerupType.SPIKY);
-		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
-		p.setgameState(gs);
-		p.getWeapon(100);
-	}
-	
-	@Test
-	public void testGetWeapon3() {
-		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.addPowerup(Powerup.PowerupType.INSTANT);
-		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
-		p.setgameState(gs);
-		p.getWeapon(100);
 	}
 	
 	@Test

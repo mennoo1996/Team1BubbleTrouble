@@ -2,7 +2,7 @@ package logic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
-import gui.MainGame;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,7 @@
 package gui;
 import static org.junit.Assert.*;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 
@@ -25,13 +25,6 @@ public class GameStateTest {
 		MainGame mg = new MainGame(null);
 		GameState gamestate = new GameState(mg);
 		assertEquals(gamestate.getmainGame(),mg);
-	}
-
-	@Test
-	public void testGetGateList() {
-		MainGame mg = new MainGame(null);
-		GameState gamestate = new GameState(mg);
-		assertEquals(gamestate.getGateList(),null);
 	}
 	
 	@Test
@@ -73,31 +66,12 @@ public class GameStateTest {
 		
 		assertEquals(a,gamestate.getRightWall());
 	}
-
-	@Test
-	public void testSetGateList() {
-		MainGame mg = new MainGame(null);
-		GameState gamestate = new GameState(mg);
-		ArrayList<Gate> gatelist = new ArrayList<Gate>();
-		gamestate.setGateList(gatelist);
-		
-		assertEquals(gatelist,gamestate.getGateList());
-	}
 	
 	@Test
 	public void testGetMainGame() {
 		MainGame mg = new MainGame(null);
 		GameState gamestate = new GameState(mg);
 		assertEquals(mg,gamestate.getmainGame());
-	}
-	
-	@Test
-	public void testSetMainGame() {
-		MainGame mg = new MainGame(null);
-		MainGame mo = new MainGame("hi");
-		GameState gamestate = new GameState(mg);
-		gamestate.setmainGame(mo);
-		assertEquals(mo,gamestate.getmainGame());
 	}
 
 }

@@ -1,7 +1,6 @@
 package levels;
 
-import gui.MainGame;
-
+import guimenu.MainGame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 

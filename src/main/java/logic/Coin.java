@@ -1,7 +1,7 @@
 package logic;
 
-import gui.MainGame;
-import gui.RND;
+import guimenu.MainGame;
+import guimenu.RND;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -67,7 +67,6 @@ public class Coin {
     public static void loadImages() throws SlickException {
     	coinImageN = new Image("resources/images_Gameplay/coin_Norm.png");
 		coinImageA = new Image("resources/images_Gameplay/coin_Add.png");
-	
     }
     
 

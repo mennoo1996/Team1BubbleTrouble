@@ -1,6 +1,6 @@
 package powerups;
 
-import gui.GameState;
+import guigame.GameState;
 
 import java.util.concurrent.TimeUnit;
 
@@ -62,7 +62,7 @@ public class Powerup implements Cloneable {
      * @param deltaFloat Delta
      */
     public void update(GameState gameState, float containerHeight, float deltaFloat) {
-        if (!gameState.isPaused()) {
+        if (!gameState.getLogicHelper().isPaused()) {
             timeRemaining -= deltaFloat * SECONDS_TO_MS;
         }
         if ((this.y + POWERUP_HEIGHT) < containerHeight - gameState.getFloor().getHeight()) {

@@ -5,8 +5,14 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.anyFloat;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guigame.GameStateCirclesHelper;
+import guigame.GameStateInterfaceHelper;
+import guigame.GameStateItemsHelper;
+import guigame.GameStateLogicHelper;
+import guigame.GameStatePauseHelper;
+import guigame.GameStatePlayerHelper;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 
@@ -32,6 +38,13 @@ public class PlayerTest {
 	SpriteSheet s2;
 	GameState gs;
 
+	GameStateCirclesHelper ch = mock(GameStateCirclesHelper.class);
+	GameStateItemsHelper ih = mock(GameStateItemsHelper.class);
+	GameStateInterfaceHelper ifh = mock(GameStateInterfaceHelper.class);
+	GameStatePlayerHelper ph = mock(GameStatePlayerHelper.class);
+	GameStateLogicHelper lh = mock(GameStateLogicHelper.class);
+	GameStatePauseHelper pah = mock(GameStatePauseHelper.class);
+
 	@Before
 	public void setUp() throws Exception {
 		Logger.getInstance().setLoggingOn(false);
@@ -42,6 +55,15 @@ public class PlayerTest {
 		mg = new MainGame("maingame");
 		s = mock(SpriteSheet.class);
 		gs = mock(GameState.class);
+		ch = mock(GameStateCirclesHelper.class);
+		ih = mock(GameStateItemsHelper.class);
+		ifh = mock(GameStateInterfaceHelper.class);
+		when(gs.getItemsHelper()).thenReturn(ih);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getInterfaceHelper()).thenReturn(ifh);
+		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getPauseHelper()).thenReturn(pah);
 	}
 
 	@Test
@@ -277,13 +299,6 @@ public class PlayerTest {
 	}
 	
 	@Test
-	public void testMovement() {
-		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovement(Player.Movement.NO_MOVEMENT);
-		assertEquals(Player.Movement.NO_MOVEMENT, p.getMovement());
-	}
-	
-	@Test
 	public void testMovementCounter() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		p.resetMovementCounter();
@@ -326,49 +341,23 @@ public class PlayerTest {
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
 		
-		when(gs.getGateList()).thenReturn(gl);
-		when(gs.getDroppedPowerups()).thenReturn(pl);
-		when(gs.getFloatingScores()).thenReturn(fsl);
+		when(ch.getGateList()).thenReturn(gl);
+		when(ih.getDroppedPowerups()).thenReturn(pl);
+		when(ifh.getFloatingScores()).thenReturn(fsl);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		when(gs.getFloor()).thenReturn(floor);
 		when(gs.getCeiling()).thenReturn(ceiling);
-		when(gs.getWeaponList()).thenReturn(wl);
-
+		when(ph.getWeaponList()).thenReturn(wl);
+		when(gs.getLeftWall()).thenReturn(floor);
+		when(gs.getRightWall()).thenReturn(floor);
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.update(1, 1000, 1600, true);
+		//p.update(1, 1000, 1600, true);
 		assertEquals(1,p.getX(),0);
 		assertEquals(2,p.getY(),0);
 	}
 	
 
-	@Test
-	public void testIsMovingRight() {
-		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovingRight(true);
-		assertTrue(p.isMovingRight());
-	}
-
-	@Test
-	public void testSetMovingRight() {
-		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovingRight(false);
-		assertFalse(p.isMovingRight());
-	}
-	
-	@Test
-	public void testIsMovingLeft() {
-		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovingLeft(true);
-		assertTrue(p.isMovingLeft());
-	}
-
-	@Test
-	public void testSetMovingLeft() {
-		Player p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.setMovingLeft(false);
-		assertFalse(p.isMovingLeft());
-	}
 	
 	@Test
 	public void testSetPlayerName() {
@@ -527,45 +516,19 @@ public class PlayerTest {
 		p.setPlayerNumber(1);
 		assertTrue(p.isOthersPlayer());
 	}
-
-	@Test
-	public void testGetWeapon1() {
-		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
-		p.setgameState(gs);
-		p.getWeapon(100);
-	}
-	
-	@Test
-	public void testGetWeapon2() {
-		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.addPowerup(Powerup.PowerupType.SPIKY);
-		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
-		p.setgameState(gs);
-		p.getWeapon(100);
-	}
-	
-	@Test
-	public void testGetWeapon3() {
-		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		p.addPowerup(Powerup.PowerupType.INSTANT);
-		when(gs.getFloor()).thenReturn(new MyRectangle(1,1,1,1));
-		p.setgameState(gs);
-		p.getWeapon(100);
-	}
 	
 	@Test
 	public void testAddPowerup1() {
 		ArrayList<SpeedPowerup> plist = new ArrayList<SpeedPowerup>();
-		when(gs.getSpeedPowerupList()).thenReturn(plist);
+		when(ih.getSpeedPowerupList()).thenReturn(plist);
 		MainGame mg = mock(MainGame.class);
 		when(mg.getState(1)).thenReturn(gs);
 		when(mg.getGameState()).thenReturn(1);
 		CircleList cl = mock(CircleList.class);
 		Mockito.doNothing().when(cl).setAllMultipliers(anyFloat());
-		when(gs.getCircleList()).thenReturn(cl);
+		when(ch.getCircleList()).thenReturn(cl);
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		gs.getSpeedPowerupList();
+		gs.getItemsHelper().getSpeedPowerupList();
 		assertEquals(0, plist.size());
 		p.addPowerup(Powerup.PowerupType.SLOW);
 		assertEquals(1, plist.size());
@@ -574,15 +537,15 @@ public class PlayerTest {
 	@Test
 	public void testAddPowerup2() {
 		ArrayList<SpeedPowerup> plist = new ArrayList<SpeedPowerup>();
-		when(gs.getSpeedPowerupList()).thenReturn(plist);
+		when(gs.getItemsHelper().getSpeedPowerupList()).thenReturn(plist);
 		MainGame mg = mock(MainGame.class);
 		when(mg.getState(1)).thenReturn(gs);
 		when(mg.getGameState()).thenReturn(1);
 		CircleList cl = mock(CircleList.class);
 		Mockito.doNothing().when(cl).setAllMultipliers(anyFloat());
-		when(gs.getCircleList()).thenReturn(cl);
+		when(gs.getCirclesHelper().getCircleList()).thenReturn(cl);
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		gs.getSpeedPowerupList();
+		gs.getItemsHelper().getSpeedPowerupList();
 		assertEquals(0, plist.size());
 		p.addPowerup(Powerup.PowerupType.FREEZE);
 		assertEquals(1, plist.size());
@@ -591,15 +554,15 @@ public class PlayerTest {
 	@Test
 	public void testAddPowerup3() {
 		ArrayList<SpeedPowerup> plist = new ArrayList<SpeedPowerup>();
-		when(gs.getSpeedPowerupList()).thenReturn(plist);
+		when(gs.getItemsHelper().getSpeedPowerupList()).thenReturn(plist);
 		MainGame mg = mock(MainGame.class);
 		when(mg.getState(1)).thenReturn(gs);
 		when(mg.getGameState()).thenReturn(1);
 		CircleList cl = mock(CircleList.class);
 		Mockito.doNothing().when(cl).setAllMultipliers(anyFloat());
-		when(gs.getCircleList()).thenReturn(cl);
+		when(gs.getCirclesHelper().getCircleList()).thenReturn(cl);
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		gs.getSpeedPowerupList();
+		gs.getItemsHelper().getSpeedPowerupList();
 		assertEquals(0, plist.size());
 		p.addPowerup(Powerup.PowerupType.FAST);
 		assertEquals(1, plist.size());

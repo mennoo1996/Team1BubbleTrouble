@@ -1,7 +1,7 @@
 package logic;
-import gui.GameState;
-import gui.MainGame;
-import gui.RND;
+import guigame.GameState;
+import guimenu.MainGame;
+import guimenu.RND;
 
 import java.util.ArrayList;
 
@@ -158,9 +158,9 @@ public class PlayerList {
 	 * @param graphics context
 	 */
 	private void drawPlayer(Player player, Graphics graphics) {
-		if (player.getMovement() == Player.Movement.RIGHT) {
+		if (player.getMovement() == PlayerMovementHelper.Movement.RIGHT) {
 			drawPlayerMoveRight(player, graphics);
-		} else if (player.getMovement() == Player.Movement.LEFT) {
+		} else if (player.getMovement() == PlayerMovementHelper.Movement.LEFT) {
 			drawPlayerMoveLeft(player, graphics);
 		} else {
 			drawPlayerNoMovement(player, graphics);
@@ -171,7 +171,7 @@ public class PlayerList {
 					player.getX() - SHIELD_DRAW_X_DEVIATION,
 					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor()));
 		}
-		player.setMovement(Player.Movement.NO_MOVEMENT);
+		player.setMovement(PlayerMovementHelper.Movement.NO_MOVEMENT);
 	}
 
 	/**
@@ -242,7 +242,7 @@ public class PlayerList {
 			}
 			
 			if (mainGame.getLifeCount() <= 0) {
-				mainGame.setScore(mainGame.getScore() + gameState.getScore());
+				mainGame.setScore(mainGame.getScore() + gameState.getLogicHelper().getScore());
 				mainGame.setSwitchState(mainGame.getGameOverState());
 				logger.log("Player lives reached 0, game over",
 						Logger.PriorityLevels.HIGH, "players");

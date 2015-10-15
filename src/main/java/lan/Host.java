@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 import powerups.Powerup;
 import powerups.Powerup.PowerupType;
-import gui.GameState;
-import gui.MainGame;
-import gui.MenuMultiplayerState;
+import guigame.GameState;
+import guimenu.MainGame;
+import guimenu.MenuMultiplayerState;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
@@ -286,21 +286,22 @@ public class Host extends Connector {
 		message = message.trim();
     	String[] stringList = message.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
-    		synchronized (gameState.getDroppedPowerups()) {
+    		synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
 				PowerupType type = getPowerupType(stringList[2]);
     			ArrayList<Powerup> poweruplist = new ArrayList<Powerup>();
-        		for (Powerup powerup : gameState.getDroppedPowerups()) {
+        		for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
         			if (powerup.getxId() == Float.parseFloat(stringList[0])
         					&& powerup.getyId() == Float.parseFloat(stringList[1])) {
         				poweruplist.add(powerup);
         				this.updatePowerupsGrant(powerup);
-        				synchronized (gameState.getFloatingScores()) {
-        					gameState.getFloatingScores().add(new FloatingScore(powerup));
+        				synchronized (gameState.getInterfaceHelper().getFloatingScores()) {
+        					gameState.getInterfaceHelper().getFloatingScores().
+        					add(new FloatingScore(powerup));
         				}
         				mainGame.getPlayerList().getPlayers().get(1).addPowerup(type);
         			}
         		} //end of loop
-        		gameState.getDroppedPowerups().removeAll(poweruplist);
+        		gameState.getItemsHelper().getDroppedPowerups().removeAll(poweruplist);
     		}
     	} else if (stringList[THREE].equals("ADD")) {
     		addPowerup(stringList);
@@ -314,8 +315,8 @@ public class Host extends Connector {
     private void addPowerup(String[] stringList) {
     	Powerup powerup = new Powerup(Float.parseFloat(stringList[0]),
 				Float.parseFloat(stringList[1]), getPowerupType(stringList[2]));
-    	synchronized (gameState.getDroppedPowerups()) {
-        	gameState.getDroppedPowerups().add(powerup);
+    	synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
+        	gameState.getItemsHelper().getDroppedPowerups().add(powerup);
     		updatePowerupsAdd(powerup); }
 	}
 	
@@ -381,19 +382,20 @@ public class Host extends Connector {
     	message = message.trim();
     	String[] stringList = message.split(" ");
     	if (stringList[THREE].equals("PLEA")) {
-    		synchronized (gameState.getDroppedCoins()) {
+    		synchronized (gameState.getItemsHelper().getDroppedCoins()) {
     			ArrayList<Coin> coinlist = new ArrayList<Coin>();
-        		for (Coin coin : gameState.getDroppedCoins()) {
+        		for (Coin coin : gameState.getItemsHelper().getDroppedCoins()) {
         			if (coin.getxId() == Float.parseFloat(stringList[0])
         					&& coin.getyId() == Float.parseFloat(stringList[1])) {
         				coinlist.add(coin);
         				this.updateCoinsGrant(coin);
-        				synchronized (gameState.getFloatingScores()) {
-        					gameState.getFloatingScores().add(new FloatingScore(coin));
+        				synchronized (gameState.getInterfaceHelper().getFloatingScores()) {
+        					gameState.getInterfaceHelper().getFloatingScores().
+        					add(new FloatingScore(coin));
         				}
         			}
         		}
-        		gameState.getDroppedCoins().removeAll(coinlist);
+        		gameState.getItemsHelper().getDroppedCoins().removeAll(coinlist);
     		}
     	}
 	}

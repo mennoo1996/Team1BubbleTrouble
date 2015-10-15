@@ -1,8 +1,14 @@
 package lan;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guigame.GameStateCirclesHelper;
+import guigame.GameStateInterfaceHelper;
+import guigame.GameStateItemsHelper;
+import guigame.GameStateLogicHelper;
+import guigame.GameStatePauseHelper;
+import guigame.GameStatePlayerHelper;
+import guimenu.MainGame;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,6 +17,7 @@ import java.util.ArrayList;
 
 import logic.CircleList;
 import logic.Coin;
+import logic.Logger;
 import logic.Player;
 import logic.PlayerList;
 import logic.Weapon;
@@ -19,6 +26,7 @@ import logic.WeaponList;
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SpriteSheet;
 
 import powerups.Powerup;
 
@@ -27,13 +35,24 @@ public class ClientTest {
 	MainGame mg;
 	GameState gs;
 	
-	
+	GameStateCirclesHelper ch = mock(GameStateCirclesHelper.class);
+	GameStateItemsHelper ih = mock(GameStateItemsHelper.class);
+	GameStateInterfaceHelper ifh = mock(GameStateInterfaceHelper.class);
+	GameStatePlayerHelper ph = mock(GameStatePlayerHelper.class);
+	GameStateLogicHelper lh = mock(GameStateLogicHelper.class);
+	GameStatePauseHelper pah = mock(GameStatePauseHelper.class);
 
 	@Before
 	public void setUp() throws Exception {
 		mg = mock(MainGame.class);
 		gs = mock(GameState.class);
 		c = new Client("a", 1, mg, gs);
+		when(gs.getItemsHelper()).thenReturn(ih);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getInterfaceHelper()).thenReturn(ifh);
+		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getPauseHelper()).thenReturn(pah);
 	}
 	
 	@Test
@@ -86,7 +105,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -118,7 +137,7 @@ public class ClientTest {
 		ArrayList<logic.Weapon> test = new ArrayList<logic.Weapon>();
 		test.add(new Weapon(0,0,1,1));
 		when(wl.getWeaponList()).thenReturn(test);
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -148,7 +167,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -178,7 +197,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -208,7 +227,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -238,7 +257,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -268,7 +287,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -298,7 +317,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -328,7 +347,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -359,7 +378,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -389,7 +408,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -420,11 +439,11 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		//ArrayList<BouncingCircle> clist = new ArrayList<BouncingCircle>();
 		CircleList clmock = mock(CircleList.class);
-		when(gs.getCircleList()).thenReturn(clmock);
+		when(gs.getCirclesHelper().getCircleList()).thenReturn(clmock);
 		
 		c.readServerCommands();
 	}
@@ -454,7 +473,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -484,7 +503,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -514,7 +533,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -544,7 +563,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -574,7 +593,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -604,7 +623,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -634,7 +653,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -664,7 +683,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -694,7 +713,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -724,7 +743,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -754,7 +773,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -784,7 +803,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -814,7 +833,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -844,7 +863,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -874,7 +893,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -904,7 +923,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -934,7 +953,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -964,7 +983,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -994,7 +1013,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -1024,7 +1043,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -1054,7 +1073,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 		c.readServerCommands();
 	}
@@ -1084,7 +1103,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 
 		c.readServerCommands();
@@ -1115,7 +1134,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 
 		c.readServerCommands();
@@ -1146,7 +1165,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 
 		c.readServerCommands();
@@ -1177,7 +1196,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 
 
 		c.readServerCommands();
@@ -1208,7 +1227,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 	
 
 		c.readServerCommands();
@@ -1239,7 +1258,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 
 		c.readServerCommands();
@@ -1270,7 +1289,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 	
 
 		c.readServerCommands();
@@ -1301,7 +1320,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 
 		c.readServerCommands();
@@ -1332,7 +1351,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 
 		c.readServerCommands();
@@ -1363,7 +1382,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -1393,7 +1412,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -1423,7 +1442,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}
@@ -1453,7 +1472,7 @@ public class ClientTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		c.readServerCommands();
 	}

@@ -18,6 +18,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import commands.CommandQueue;
+import commands.RemoveCircleCommand;
+
 /**
  * GameState Helper class for managing all circles. This is done to prevent GameState 
  * from holding too much responsibility and/or knowledge. The class should only
@@ -25,6 +28,8 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Mark
  */
 public class GameStateCirclesHelper extends GameStateHelper {
+	
+	private CommandQueue commandQueue;
 
 	private MainGame mainGame;
 	private GameState parentState;
@@ -51,6 +56,8 @@ public class GameStateCirclesHelper extends GameStateHelper {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+		
+		commandQueue = CommandQueue.getInstance();
 	}
 
 	@Override
@@ -148,7 +155,8 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	 */
 	public void updateShotCirles2(BouncingCircle circle, boolean fromPeer) {
 		if (circleList.getCircles().contains(circle)) {
-            circleList.getCircles().remove(circle);
+            //circleList.getCircles().remove(circle);
+			commandQueue.addCommand(new RemoveCircleCommand(circleList, circle));
             circle.setDone(true);
             parentState.getLogicHelper().addToScore(circle.getScore());
         } // if the ball has a radius of 20, split it u

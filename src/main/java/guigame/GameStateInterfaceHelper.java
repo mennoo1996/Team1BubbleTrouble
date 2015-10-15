@@ -122,7 +122,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 
 	@Override
 	public void exit() {
-		// anything needed for UI on exit?
+		  throw new UnsupportedOperationException("not supported");
 	}
 
 	@Override

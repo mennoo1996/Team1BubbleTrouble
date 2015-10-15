@@ -171,7 +171,7 @@ public class BouncingCircle extends Circle implements Cloneable {
 		} else if (this.getMaxX() > containerWidth - gameState.getRightWall().getWidth()) {
 			xSpeed = -initSpeed;
 		} else {
-			for (Gate gate : gameState.getCirclesHelper().getGateList()) {
+			for (Gate gate : gameState.getGateHelper().getGateList()) {
 				if (gate.getRectangle().intersects(this.getCircle())) {
 					if (gate.getUnlockCircles().contains(this)) {
 						xSpeed = -initSpeed;

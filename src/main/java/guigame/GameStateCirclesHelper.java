@@ -30,7 +30,6 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	private GameState parentState;
 	private CircleList circleList; // object holding all circles
 	private ArrayList<BouncingCircle> shotList; // list of all shot circles
-	private ArrayList<Gate> gateList; // list of all required circles for a gate
 	private int lastCircleUpdate;
 	
 	private static final int MINIMUM_SPLIT_RADIUS = 20;
@@ -60,7 +59,6 @@ public class GameStateCirclesHelper extends GameStateHelper {
 		circleList = new CircleList(parentState.getLevelContainer().getLevel(
 				mainGame.getLevelCounter()).getCircles());
 		shotList = new ArrayList<BouncingCircle>(); 
-		gateList = parentState.getLevelContainer().getLevel(mainGame.getLevelCounter()).getGates();
 	}
 	
 	@Override
@@ -75,22 +73,17 @@ public class GameStateCirclesHelper extends GameStateHelper {
 			if (lastCircleUpdate >= CIRCLES_UPDATE_RATE) {
 				lastCircleUpdate = 0;
 				mainGame.getHost().updateCircles(circleList.getCircles());
-				
-				for (int i = 0; i < gateList.size(); i++) {
-					mainGame.getHost().updateRequiredForGateList(
-							gateList.get(i).getUnlockCircles(), i);
-				}
+				parentState.getGateHelper().update(container, sbg, deltaFloat);
 			}
 		}
 		processCircles(container, deltaFloat);
-		updateGateExistence(deltaFloat);
+		parentState.getGateHelper().updateGateExistence(deltaFloat);
 	}
 	
 	
 	@Override
 	public void render(Graphics graphics, GameContainer container) {
 		circleList.drawCircles(graphics, mainGame.getColor());
-		drawGates(container, graphics);
 	}
 	
 	/**
@@ -180,29 +173,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 		}
 	}
 	
-	/**
-	 * Update the existence of the gates. Remove them if the required balls have disappeared.
-	 * @param deltaFloat the time in seconds since the last frame.
-	 */
-	private void updateGateExistence(float deltaFloat) {
-
-		ArrayList<Gate> tempGateList = new ArrayList<Gate>();
-		synchronized (gateList) {
-			for (Gate gate : gateList) {
-				if (gate.getUnlockCircles().isEmpty()) {
-					tempGateList.add(gate);
-					gate.setFading(true);
-				}
-			}
-		}
-		for (Gate gate : tempGateList) {
-			if (gateList.contains(gate) && gate.isDone()) {
-				gateList.remove(gate);
-			} else if (gateList.contains(gate) && gate.isFading()) {
-				gate.update(deltaFloat);
-			}
-		}
-	}
+	
 	
 	/**
 	 * Process the circles in the requirements lists of the gates.
@@ -211,7 +182,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	 */
 	private void processUnlockCirclesGates(BouncingCircle circle,
 										   ArrayList<BouncingCircle> splits) {
-		for (Gate gate : gateList) {
+		for (Gate gate : parentState.getGateHelper().getGateList()) {
             if (gate.getUnlockCircles().contains(circle)) {
                 gate.getUnlockCircles().remove(circle);
             }
@@ -240,19 +211,6 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	}
 	
 	/**
-	 * Draw the gates.
-	 * @param container the GameContainer we are playing in
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawGates(GameContainer container, Graphics graphics) {
-		synchronized (gateList) {
-			for (Gate gate : gateList) {
-				gate.draw(graphics, mainGame, parentState, container);
-			}
-		}
-	}
-	
-	/**
 	 * @return the shotList that shot circles are stored in.
 	 */
 	public ArrayList<BouncingCircle> getShotList() {
@@ -265,21 +223,6 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	 */
 	public void setShotList(ArrayList<BouncingCircle> shotlist) {
 		this.shotList = shotlist;
-	}
-	
-	/**
-	 * @return the gatelist that gates are stored in.
-	 */
-	public ArrayList<Gate> getGateList() {
-		return gateList;
-	}
-	
-	/**
-	 * set the gatelist.
-	 * @param gatelist the gatelist to set
-	 */
-	public void setGateList(ArrayList<Gate> gatelist) {
-		this.gateList = gatelist;
 	}
 	
 	/**

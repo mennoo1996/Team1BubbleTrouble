@@ -8,9 +8,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 
-import gui.GameState;
-import gui.MainGame;
-import gui.RND;
+import guigame.GameState;
+import guimenu.MainGame;
+import guimenu.RND;
 
 
 /**

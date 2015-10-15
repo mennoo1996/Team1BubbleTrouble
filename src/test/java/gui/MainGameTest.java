@@ -1,5 +1,6 @@
 package gui;
 import static org.junit.Assert.assertEquals;
+import guimenu.MainGame;
 import logic.HighScores;
 
 import org.junit.Test;

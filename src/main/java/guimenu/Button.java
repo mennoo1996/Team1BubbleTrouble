@@ -1,4 +1,4 @@
-package gui;
+package guimenu;
 import logic.MyRectangle;
 
 import org.newdawn.slick.Color;
@@ -42,10 +42,7 @@ public class Button {
 	 * @return boolean whether or not the mouse is hovering over the button.
 	 */
 	public boolean isMouseOver(Input input) {
-		if (getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-			return true;
-		}
-		return false;
+		return getRectangle().contains(input.getMouseX(), input.getMouseY());
 	}
 	
 	/**

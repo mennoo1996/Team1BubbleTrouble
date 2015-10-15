@@ -2,7 +2,7 @@ package levels;
 
 import java.util.ArrayList;
 
-import gui.MainGame;
+import guimenu.MainGame;
 import logic.BouncingCircle;
 import logic.Gate;
 

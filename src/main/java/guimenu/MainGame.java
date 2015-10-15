@@ -1,4 +1,6 @@
-package gui;
+package guimenu;
+import guigame.GameState;
+
 import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

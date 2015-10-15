@@ -12,9 +12,7 @@ public class FloatingScore implements Cloneable {
 	private static final float MAX_LIFE = 1000;
 	private static final float Y_OFFSET = 120;
 	
-	/**
-	 * Variables.
-	 */
+	
 	private String score;
 	private float x;
 	private float y;
@@ -23,7 +21,7 @@ public class FloatingScore implements Cloneable {
 	private float opacity = 1.0f;
 	
 	/**
-	 * Constructor class for a floating score.
+	 * Constructor method for a floating score.
 	 * @param circle the circle this score draws its information from
 	 */
 	public FloatingScore(BouncingCircle circle) {
@@ -36,11 +34,11 @@ public class FloatingScore implements Cloneable {
 	
 	/**
 	 * Constructor for a floating score.
-	 * @param score	the score of the flaoting score
-	 * @param x the x of the flaoting score
-	 * @param y the y of the flaoting score
-	 * @param speed the speed of the flaoting score
-	 * @param life the life of the flaoting score
+	 * @param score	the score of the floating score
+	 * @param x the x of the floating score
+	 * @param y the y of the floating score
+	 * @param speed the speed of the floating score
+	 * @param life the life of the floating score
 	 */
 	public FloatingScore(String score, float x, float y, float speed, float life) {
 		this.score = score;
@@ -147,6 +145,7 @@ public class FloatingScore implements Cloneable {
 	
 	/**
 	 * @return Clone the floating score and return it.
+	 * @throws CloneNotSupportedException if the clone is not supported
 	 */
 	@Override
 	public FloatingScore clone() throws CloneNotSupportedException {

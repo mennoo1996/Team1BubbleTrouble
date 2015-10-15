@@ -11,7 +11,7 @@ public class FreezePowerup extends SpeedPowerup {
 	private static final int MULTIPLIER = 0;
 	
 	/**
-	 * constructor.
+	 * Construct a new FreezePowerup.
 	 */
 	public FreezePowerup() {
 		super(MULTIPLIER);

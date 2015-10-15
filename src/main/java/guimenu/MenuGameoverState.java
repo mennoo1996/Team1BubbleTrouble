@@ -71,6 +71,8 @@ public class MenuGameoverState extends BasicGameState {
 	private static final int HIGHSCORES_TITLE_X = 760;
 	private static final int HIGHSCORES_TITLE_Y = 238;
 	
+	private static final int EXIT_FACTOR = 8;
+	
 	private static final String USER_INPUT = "user-input";
 
 	private Separator separatorTop;
@@ -155,7 +157,7 @@ public class MenuGameoverState extends BasicGameState {
 			if (RND.getInstance().getOpacity() > 0.0f) {
 				int fadeTimer = mainGame.getOpacityFadeTimer();
 				if (mainGame.getSwitchState() == -1) {
-					fadeTimer = 2 * 2 * 2 * fadeTimer;
+					fadeTimer = EXIT_FACTOR * fadeTimer;
 				}
 				RND.getInstance().setOpacity(RND.getInstance().getOpacity()
 						- ((float) delta) / fadeTimer);
@@ -200,36 +202,47 @@ public class MenuGameoverState extends BasicGameState {
 	 */
 	private void processButtons(Input input) {
 		if (playButton.isMouseOver(input)) {
-			processStartOver();
-			Logger.getInstance().log("play again button clicked", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
+			processStartOver();	
 		} 
 		else if (saveButton.isMouseOver(input)) {
 			saveScore();
-			Logger.getInstance().log("save button clicked", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
 		else if (menuButton.isMouseOver(input)) {
-			// Go to startState
-			mainGame.resetLifeCount();
-			mainGame.resetLevelCount();
-			mainGame.setScore(0);
-			mainGame.killMultiplayer();
-			mainGame.setSwitchState(mainGame.getStartState());
-			Logger.getInstance().log("main menu button clicked", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
+			menuButtonClicked();
 		}
 		else if (quitButton.isMouseOver(input)) {
-			mainGame.setSwitchState(-1);
-			Logger.getInstance().log("exit button clicked", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
+			quitButtonClicked();
 		}
+	}
+	
+	/**
+	 * Process a click on the menu button.
+	 */
+	private void menuButtonClicked() {
+		mainGame.resetLifeCount();
+		mainGame.resetLevelCount();
+		mainGame.setScore(0);
+		mainGame.killMultiplayer();
+		mainGame.setSwitchState(mainGame.getStartState());
+		Logger.getInstance().log("main menu button clicked", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+	}
+	
+	/**
+	 * Process a click on the exit button.
+	 */
+	private void quitButtonClicked() {
+		mainGame.setSwitchState(-1);
+		Logger.getInstance().log("exit button clicked", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
 	}
 
 	/**
 	 * Process how to start a new game from this state.
 	 */
 	private void processStartOver() {
+		Logger.getInstance().log("play again button clicked", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		if (mainGame.isLanMultiplayer()) {
 			if (mainGame.isHost()) {
 				mainGame.getHost().updateRestart();
@@ -361,6 +374,8 @@ public class MenuGameoverState extends BasicGameState {
 	 * Saves score for this player.
 	 */
 	private void saveScore() {
+		Logger.getInstance().log("save button clicked", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		Score score = new Score(mainGame.getScore(), nameField.getText());
 		mainGame.getHighscores().add(score);
 		mainGame.getHighscores().sort();

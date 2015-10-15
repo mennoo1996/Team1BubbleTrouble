@@ -331,7 +331,7 @@ public class PlayerTest {
 		Powerup pow = new Powerup(100,100,Powerup.PowerupType.SHIELD);
 		ArrayList<Powerup> pl = new ArrayList<Powerup>();
 		pl.add(pow);
-		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6, 0);
 		FloatingScore fs = new FloatingScore(circle);
 		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
 		fsl.add(fs);

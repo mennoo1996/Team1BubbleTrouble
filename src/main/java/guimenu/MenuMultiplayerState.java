@@ -206,8 +206,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	private void processButtons(Input input) {
 		if (!popup.getActive()) {
 			if (returnButton.isMouseOver(input)) {
-				mainGame.killMultiplayer();
-				mainGame.setSwitchState(mainGame.getStartState());
+				processReturnButton();
 			} 
 			if (hostButton.isMouseOver(input)) {
 				attemptHost();
@@ -218,6 +217,14 @@ public class MenuMultiplayerState extends BasicGameState {
 		} else {
 			popup.processButton(input);
 		}
+	}
+	
+	/**
+	 * Process a click on the return button.
+	 */
+	private void processReturnButton() {
+		mainGame.killMultiplayer();
+		mainGame.setSwitchState(mainGame.getStartState());
 	}
 	
 	/**

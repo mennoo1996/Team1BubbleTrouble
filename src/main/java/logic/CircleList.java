@@ -108,5 +108,16 @@ public class CircleList {
 		this.circles = circles;
 	}
 	
+	/**
+	 * Removes a given circle from the list.
+	 * @param circle	the circle to remove
+	 */
+	public synchronized void removeCircle(BouncingCircle circle) {
+		synchronized (circles) {
+			if (circles.contains(circle)) {
+				circles.remove(circle);
+			}
+		}
+	}
 
 }

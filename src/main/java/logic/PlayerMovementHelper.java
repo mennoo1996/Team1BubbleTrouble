@@ -1,7 +1,6 @@
 package logic;
 
 import gui.GameState;
-import gui.MainGame;
 import lan.Client;
 import lan.Host;
 import logic.Logger.PriorityLevels;
@@ -34,7 +33,6 @@ public class PlayerMovementHelper {
 	/**
 	 * Constructor.
 	 * @param player	- the player this movementhelper helps.
-	 * @param mainGame	- the game the player plays in.
 	 * @param gameState	- the gameState the player plays in.
 	 */
 	public PlayerMovementHelper(Player player, GameState gameState) {
@@ -71,6 +69,13 @@ public class PlayerMovementHelper {
 		processPlayerMovementStandingStill(didWalk);
 	}
 	
+	/**
+	 * Process player movement for the moving part.
+	 * @param didWalk			in dicates if the player did walk
+	 * @param deltaFloat		time since last frame
+	 * @param containerWidth	width of the container
+	 * @return					true or false
+	 */
 	private boolean processPlayerMovementMoving(boolean didWalk, 
 			float deltaFloat, float containerWidth) {
 		if (movement != Movement.RIGHT) {
@@ -84,7 +89,7 @@ public class PlayerMovementHelper {
 	}
 	
 	/**
-	 * .
+	 * @param didWalk	inidicates if the player did walk.
 	 */
 	private void processPlayerMovementStandingStill(boolean didWalk) {
 		// didnt walk, stating still.
@@ -173,6 +178,7 @@ public class PlayerMovementHelper {
 	/**
 	 * Determines if it is needed to process right movement.
 	 * @param containerWidth the width of the container
+	 * @param isMovingRight	indicates if the player is moving right
 	 * @return	true or false
 	 */
 	private boolean processRightNeeded2(float containerWidth, boolean isMovingRight) {

@@ -1,6 +1,6 @@
 package logic;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -118,7 +118,7 @@ public class Player {
 	 */
 	public void update(float deltaFloat, float containerHeight, float containerWidth, 
 			boolean testing) {
-		if (!gameState.isPaused() & shieldTimeRemaining > 0) {
+		if (!gameState.getLogicHelper().isPaused() && shieldTimeRemaining > 0) {
 			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
 		}
 		processGates();
@@ -135,8 +135,8 @@ public class Player {
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
-		synchronized (gameState.getGateList()) {
-			for (Gate someGate :gameState.getGateList()) {
+		synchronized (gameState.getCirclesHelper().getGateList()) {
+			for (Gate someGate :gameState.getCirclesHelper().getGateList()) {
 				if (this.getRectangle().intersects(someGate.getRectangle())) {
 					freeToRoam = false;
 					movementHelper.setIntersectingGate(someGate);
@@ -163,14 +163,15 @@ public class Player {
 	 */
 	private void processCoins() {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
-		synchronized (gameState.getDroppedCoins()) {
-			for (Coin coin : gameState.getDroppedCoins()) {
+		synchronized (gameState.getItemsHelper().getDroppedCoins()) {
+			for (Coin coin : gameState.getItemsHelper().getDroppedCoins()) {
 
 				if (coin.getRectangle().intersects(this.getRectangle())) {
 					if (!mainGame.isLanMultiplayer() | (mainGame.isHost() & playerNumber == 0)) {
 						//Here is the claim
-						gameState.addToScore(coin.getPoints());
-						gameState.getFloatingScores().add(new FloatingScore(coin));
+						gameState.getLogicHelper().addToScore(coin.getPoints());
+						gameState.getInterfaceHelper().getFloatingScores().
+						add(new FloatingScore(coin));
 						usedCoins.add(coin);
 						logger.log("Picked up coin", 
 								Logger.PriorityLevels.MEDIUM, POWERUPS);
@@ -185,10 +186,8 @@ public class Player {
 			}
 		}
 		//If client no used coins
-		gameState.getDroppedCoins().removeAll(usedCoins);
-	}
-
-	
+		gameState.getItemsHelper().getDroppedCoins().removeAll(usedCoins);
+	}	
 
 	/**
 	 * @return Whether or not current player is the host
@@ -356,8 +355,6 @@ public class Player {
 	public boolean hasShield() {
 		return shieldCount > 0;
 	}
-
-	
 	
 	/**
 	 * @return the player spritesheet_norm

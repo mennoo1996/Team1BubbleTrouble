@@ -1,7 +1,7 @@
 package levels;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import gui.MainGame;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 

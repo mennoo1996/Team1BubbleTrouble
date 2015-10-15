@@ -1,6 +1,6 @@
 package logic;
 
-import gui.MainGame;
+import guimenu.MainGame;
 
 
 /**

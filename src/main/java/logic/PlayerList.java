@@ -1,7 +1,7 @@
 package logic;
-import gui.GameState;
-import gui.MainGame;
-import gui.RND;
+import guigame.GameState;
+import guimenu.MainGame;
+import guimenu.RND;
 
 import java.util.ArrayList;
 
@@ -258,7 +258,7 @@ public class PlayerList {
 			}
 			
 			if (mainGame.getLifeCount() <= 0) {
-				mainGame.setScore(mainGame.getScore() + gameState.getScore());
+				mainGame.setScore(mainGame.getScore() + gameState.getLogicHelper().getScore());
 				mainGame.setSwitchState(mainGame.getGameOverState());
 				logger.log("Player lives reached 0, game over",
 						Logger.PriorityLevels.HIGH, "players");

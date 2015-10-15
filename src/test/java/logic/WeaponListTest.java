@@ -4,8 +4,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guigame.GameStateCirclesHelper;
+import guigame.GameStateInterfaceHelper;
+import guigame.GameStateItemsHelper;
+import guigame.GameStateLogicHelper;
+import guigame.GameStatePauseHelper;
+import guigame.GameStatePlayerHelper;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 
@@ -18,6 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.opengl.Texture;
 
 
@@ -32,10 +39,17 @@ public class WeaponListTest {
 	Image imgA;
 	Color col;
 
+	GameStateCirclesHelper ch;
+	GameStateItemsHelper ih;
+	GameStateInterfaceHelper ifh;
+	GameStatePlayerHelper ph;
+	GameStateLogicHelper lh;
+	GameStatePauseHelper pah;
+	
 	@Before
 	public void setUp() throws Exception {
 		mg = new MainGame("TestGame");
-		gs = new GameState(mg);
+		gs = mock(GameState.class);
 		
 		mg = mock(MainGame.class);
 
@@ -59,6 +73,19 @@ public class WeaponListTest {
 		when(imgA.getTexture()).thenReturn(texture);
 		wl.setLaserbeamimage(img, imgA);
 		wl.setLasertipimage(img, imgA);
+
+		ch = mock(GameStateCirclesHelper.class);
+		ih = mock(GameStateItemsHelper.class);
+		ifh = mock(GameStateInterfaceHelper.class);
+		ph = mock(GameStatePlayerHelper.class);
+		lh = mock(GameStateLogicHelper.class);
+		pah = mock(GameStatePauseHelper.class);
+		when(gs.getItemsHelper()).thenReturn(ih);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getInterfaceHelper()).thenReturn(ifh);
+		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getPauseHelper()).thenReturn(pah);
 	}
 	
 	@Test
@@ -71,7 +98,7 @@ public class WeaponListTest {
 	@Test
 	public void testIntersectWeaponsWithCircle1() {
 		mg.setMultiplayer(false);
-		gs.setShotList(new ArrayList<BouncingCircle>());
+		gs.getCirclesHelper().setShotList(new ArrayList<BouncingCircle>());
 		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
 		
 		wl.intersectWeaponsWithCircle(circle);
@@ -81,7 +108,7 @@ public class WeaponListTest {
 	@Test
 	public void testIntersectWeaponsWithCircle2() {
 		when(mg.isMultiplayer()).thenReturn(true);
-		gs.setShotList(new ArrayList<BouncingCircle>());
+		gs.getCirclesHelper().setShotList(new ArrayList<BouncingCircle>());
 		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
 		
 		wl.intersectWeaponsWithCircle(circle);

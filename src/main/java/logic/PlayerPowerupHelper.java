@@ -1,7 +1,7 @@
 package logic;
 
-import gui.GameState;
-import gui.MainGame;
+import guigame.GameState;
+import guimenu.MainGame;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -48,8 +48,8 @@ public class PlayerPowerupHelper {
 	public void processPowerups(float deltaFloat, float containerHeight) { // MARKED
 
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
-		synchronized (gameState.getDroppedPowerups()) {
-			for (Powerup powerup : gameState.getDroppedPowerups()) {
+		synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
+			for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
 				powerup.update(gameState, containerHeight, deltaFloat);
 
 				if (powerup.getRectangle().intersects(player.getRectangle())) {
@@ -57,7 +57,8 @@ public class PlayerPowerupHelper {
 							& player.getPlayerNumber() == 0)) {
 						//Add a powerup to the player
 						this.addPowerup(powerup.getType());
-						gameState.getFloatingScores().add(new FloatingScore(powerup));
+						gameState.getInterfaceHelper().getFloatingScores().
+						add(new FloatingScore(powerup));
 						usedPowerups.add(powerup);
 
 						if (mainGame.isHost() & player.getPlayerNumber() == 0) {
@@ -70,8 +71,8 @@ public class PlayerPowerupHelper {
 			}
 		}
 		//UsedPowerups is empty if client
-		gameState.getDroppedPowerups().removeAll(usedPowerups);
-		gameState.getDroppedPowerups().removeIf(Powerup::removePowerup);
+		gameState.getItemsHelper().getDroppedPowerups().removeAll(usedPowerups);
+		gameState.getItemsHelper().getDroppedPowerups().removeIf(Powerup::removePowerup);
 	}
 	
 	/**
@@ -106,8 +107,8 @@ public class PlayerPowerupHelper {
 	private void addFreeze() {
 		FreezePowerup fp = new FreezePowerup();
 		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-		gs.getSpeedPowerupList().add(fp);
-		fp.updateCircles(gs.getCircleList());
+		gs.getItemsHelper().getSpeedPowerupList().add(fp);
+		fp.updateCircles(gs.getCirclesHelper().getCircleList());
 	}
 	
 	/**
@@ -116,9 +117,9 @@ public class PlayerPowerupHelper {
 	private void addSlow() {
 		SlowPowerup sp = new SlowPowerup();
 		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-		ArrayList<SpeedPowerup> list = gs.getSpeedPowerupList();
+		ArrayList<SpeedPowerup> list = gs.getItemsHelper().getSpeedPowerupList();
 		list.add(sp);
-		sp.updateCircles(gs.getCircleList());
+		sp.updateCircles(gs.getCirclesHelper().getCircleList());
 	}
 	
 	/**
@@ -127,8 +128,8 @@ public class PlayerPowerupHelper {
 	private void addFast() {
 		FastPowerup fp = new FastPowerup();
 		GameState gs = (GameState) mainGame.getState(mainGame.getGameState());
-		gs.getSpeedPowerupList().add(fp);
-		fp.updateCircles(gs.getCircleList());
+		gs.getItemsHelper().getSpeedPowerupList().add(fp);
+		fp.updateCircles(gs.getCirclesHelper().getCircleList());
 	}
 	
 	/**
@@ -140,11 +141,11 @@ public class PlayerPowerupHelper {
 		.nextInt(Powerup.PowerupType.values().length - 1)];
 		Executors.newScheduledThreadPool(1).schedule(() -> {
 			Powerup powerup = new Powerup(player.getX(), player.getY(), newPowerup);
-			synchronized (gameState.getDroppedPowerups()) {
+			synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
 				if (!mainGame.isLanMultiplayer()) {
-					gameState.getDroppedPowerups().add(powerup);
+					gameState.getItemsHelper().getDroppedPowerups().add(powerup);
 				} else if (mainGame.isHost() & player.getPlayerNumber() == 0) {
-					gameState.getDroppedPowerups().add(powerup);
+					gameState.getItemsHelper().getDroppedPowerups().add(powerup);
 					mainGame.getHost().updatePowerupsAdd(powerup);
 				} else if (mainGame.isClient() & player.getPlayerNumber() == 1) {
 					mainGame.getClient().updatePowerupsAdd(powerup);

@@ -7,6 +7,11 @@ import logic.FloatingScore;
 
 import java.util.ArrayList;
 
+import commands.AddDroppedCoinCommand;
+import commands.AddFloatingScoreCommand;
+import commands.CommandQueue;
+import commands.RemoveDroppedCoinCommand;
+
 /**
  * Class to process the LAN multiplayer management of coins.
  * @author alexandergeenen
@@ -15,12 +20,14 @@ public class ClientCoinsHelper {
 
     private Client client;
     private GameState gameState;
+    private CommandQueue commandQueue;
 
     private static final int THREE = 3;
 
     public ClientCoinsHelper(Client client, GameState gameState) {
         this.client = client;
         this.gameState = gameState;
+        commandQueue = CommandQueue.getInstance();
     }
 
     /**
@@ -44,11 +51,10 @@ public class ClientCoinsHelper {
      * @param stringList description of the coin
      */
     private void addCoin(String[] stringList) {
-        synchronized (gameState.getItemsHelper().getDroppedCoins()) {
-            gameState.getItemsHelper().getDroppedCoins().add(
-                    new Coin(Float.parseFloat(stringList[0]),
-                            Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2])));
-        }
+		commandQueue.addCommand(new AddDroppedCoinCommand(
+				gameState.getItemsHelper().getDroppedCoins(), 
+				new Coin(Float.parseFloat(stringList[0]),
+				Float.parseFloat(stringList[1]), Boolean.parseBoolean(stringList[2]))));
     }
 
     /**
@@ -56,19 +62,17 @@ public class ClientCoinsHelper {
      * @param stringList description of the coin
      */
     private void dictateCoin(String[] stringList) {
-        ArrayList<Coin> coinlist = new ArrayList<Coin>();
         synchronized (gameState.getItemsHelper().getDroppedCoins()) {
             for (Coin coin : gameState.getItemsHelper().getDroppedCoins()) {
                 if (coin.getxId() == Float.parseFloat(stringList[0])
                         && coin.getyId() == Float.parseFloat(stringList[1])) {
-                    coinlist.add(coin);
-                    synchronized (gameState.getInterfaceHelper().getFloatingScores()) {
-                        gameState.getInterfaceHelper().getFloatingScores().
-                                add(new FloatingScore(coin));
-                    }
+    				commandQueue.addCommand(new RemoveDroppedCoinCommand(
+    						gameState.getItemsHelper().getDroppedCoins(), coin));
+    				commandQueue.addCommand(new AddFloatingScoreCommand(
+    						gameState.getInterfaceHelper().getFloatingScores(), 
+    						new FloatingScore(coin)));
                 }
             }
-            gameState.getItemsHelper().getDroppedCoins().removeAll(coinlist);
         }
     }
 
@@ -77,19 +81,17 @@ public class ClientCoinsHelper {
      * @param stringList the IDs of the coins
      */
     private void grantCoin(String[] stringList) {
-        ArrayList<Coin> coinlist = new ArrayList<Coin>();
         synchronized (gameState.getItemsHelper().getDroppedCoins()) {
             for (Coin coin : gameState.getItemsHelper().getDroppedCoins()) {
                 if (coin.getxId() == Float.parseFloat(stringList[0])
                         && coin.getyId() == Float.parseFloat(stringList[1])) {
-                    coinlist.add(coin);
-                    synchronized (gameState.getInterfaceHelper().getFloatingScores()) {
-                        gameState.getInterfaceHelper().getFloatingScores().
-                                add(new FloatingScore(coin));
-                    }
+    				commandQueue.addCommand(new RemoveDroppedCoinCommand(
+    						gameState.getItemsHelper().getDroppedCoins(), coin));
+    				commandQueue.addCommand(new AddFloatingScoreCommand(
+    						gameState.getInterfaceHelper().getFloatingScores(), 
+    						new FloatingScore(coin)));
                 }
             }
-            gameState.getItemsHelper().getDroppedCoins().removeAll(coinlist);
         }
     }
 }

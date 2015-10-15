@@ -10,6 +10,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import commands.AddFloatingScoreCommand;
+import commands.CommandQueue;
+import commands.SetCirclelistCommand;
+
 /**
  * Created by alexandergeenen on 15/10/15.
  */
@@ -19,12 +23,14 @@ public class ClientMessageReader {
     private ClientPowerupsHelper powerupsHelper;
     private ClientCoinsHelper coinsHelper;
     private MainGame mainGame;
+    private CommandQueue commandQueue;
 
     public ClientMessageReader(Client client, ClientPowerupsHelper powerupsHelper, ClientCoinsHelper coinsHelper, MainGame mainGame) {
         this.client = client;
         this.powerupsHelper = powerupsHelper;
         this.coinsHelper = coinsHelper;
         this.mainGame = mainGame;
+        commandQueue = CommandQueue.getInstance();
     }
 
     /**
@@ -92,8 +98,11 @@ public class ClientMessageReader {
     private void floatingMessage(String message) {
         String message2 = message.trim();
         String[] stringList = message2.split(" ");
-        gameState.getInterfaceHelper().getFloatingScores().add(new FloatingScore(stringList[2],
-                Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1])));
+        
+    	commandQueue.addCommand(new AddFloatingScoreCommand(
+    			gameState.getInterfaceHelper().getFloatingScores(), 
+    			new FloatingScore(stringList[2],
+				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1]))));
     }
 
 
@@ -156,9 +165,8 @@ public class ClientMessageReader {
             this.editingCircleList = true;
         } else if (message2.equals("END") && this.editingCircleList) {
             this.editingCircleList = false;
-            synchronized (gameState.getCirclesHelper().getCircleList()) {
-                gameState.getCirclesHelper().setCircleList(new CircleList(circleList));
-            }
+			commandQueue.addCommand(new SetCirclelistCommand(
+					gameState.getCirclesHelper().getCircleList(), circleList));
         }
     }
 

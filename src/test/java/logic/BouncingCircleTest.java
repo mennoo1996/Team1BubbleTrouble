@@ -97,7 +97,7 @@ public class BouncingCircleTest {
 		c.update(gs, 100, 1, 1);
 		
 		assertEquals(-4.0, c.getxSpeed(), 0);
-		assertEquals(5.0, c.getySpeed(), 0);
+		assertEquals(11.0, c.getySpeed(), 0);
 	}
 	
 	@Test
@@ -124,7 +124,7 @@ public class BouncingCircleTest {
 		c.update(gs, 100, 100, 1);
 		
 		assertEquals(-4.0, c.getxSpeed(), 0);
-		assertEquals(5.0, c.getySpeed(), 0);
+		assertEquals(11.0, c.getySpeed(), 0);
 	}
 	
 	@Test
@@ -150,7 +150,7 @@ public class BouncingCircleTest {
 		c.update(gs, 100, 100, 1);
 		
 		assertEquals(4.0, c.getxSpeed(), 0);
-		assertEquals(5.0, c.getySpeed(), 0);
+		assertEquals(11.0, c.getySpeed(), 0);
 	}
 	
 	@Test

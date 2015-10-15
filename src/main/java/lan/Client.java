@@ -38,8 +38,7 @@ public class Client extends Connector {
     private boolean editingCircleList;
 	private ArrayList<BouncingCircle> circleList;
     private ArrayList<BouncingCircle> requiredList;
-    private int gateNumber;
-    
+
     private static final String LASER = "LASER";
 	
 
@@ -192,7 +191,7 @@ public class Client extends Connector {
 				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1]))));
 	}
 
-    
+
     /**
      * Process a message about a circle.
      * @param message the message to process
@@ -207,7 +206,7 @@ public class Client extends Connector {
     		circle.setMultiplier(Float.parseFloat(stringList[SIX]));
         	this.circleList.add(circle);
     }
-    
+
     /**
      * Process a message about an update.
      * @param message the message to process
@@ -219,7 +218,7 @@ public class Client extends Connector {
     	} else if (message2.startsWith("REQUIREDLIST")) {
     		requiredListMessage(message2.replaceFirst("REQUIREDLIST", ""));
     	}
-    	
+
     }
     
     /**
@@ -229,22 +228,22 @@ public class Client extends Connector {
     private void requiredListMessage(String message) {
     	String message2 = message.trim();
     	String[] stringList = message2.split(" ");
-    	this.gateNumber = Integer.parseInt(stringList[1]);
-    	
+    	int gateNumber = Integer.parseInt(stringList[1]);
+
     	if (stringList[0].equals("START") && !this.editingCircleList) {
     		this.requiredList = new ArrayList<BouncingCircle>();
     	} else if (stringList[0].equals("END") && this.editingCircleList) {
     		gameState.getCirclesHelper().getGateList().get(gateNumber).setRequired(requiredList);
     	}
     }
-    
+
     /**
      * Process a message about the circleList.
      * @param message	the message to process
      */
     private void circleListMessage(String message) {
     	String message2 = message.trim();
-    	
+
     	if (message2.equals("START") && !this.editingCircleList) {
     		this.circleList = new ArrayList<BouncingCircle>();
     		this.editingCircleList = true;
@@ -277,7 +276,7 @@ public class Client extends Connector {
     public void updatePowerupsAdd(Powerup powerup) {
     	sendMessage(powerup.toString() + "ADD ");
     }
-    
+
     /**
      * Process a message about the location of a player.
      * @param message the message to process
@@ -288,11 +287,11 @@ public class Client extends Connector {
     	int id = Integer.parseInt(stringList[0]);
     	float x = Float.parseFloat(stringList[1]);
     	float y = Float.parseFloat(stringList[2]);
-    	
+
     	mainGame.getPlayerList().getPlayers().get(id).setX(x);
     	mainGame.getPlayerList().getPlayers().get(id).setY(y);
     }
-    
+
     /**
      * Process a message about the system.
      * @param message the message to process
@@ -309,19 +308,19 @@ public class Client extends Connector {
     		livesMessage(message2.replaceFirst("LIVES", ""));
     	}
     }
-    
+
     /**
      * Process message about lives.
      * @param message	the message to process
      */
     private void livesMessage(String message) {
     	String message2 = message.trim();
-    	
+
     	int lives = Integer.parseInt(message2);
     	mainGame.setLifeCount(lives);
     	mainGame.getPlayerList().setDied(false);
     }
-   
+
     /**
      * Process a message about the coutnin.
      * @param message	the message to process
@@ -332,8 +331,8 @@ public class Client extends Connector {
     		gameState.getLogicHelper().setCountinStarted(true);
     	}
     }
-   
-    
+
+
     /**
      * Process a message about the level.
      * @param message the message to process
@@ -343,7 +342,7 @@ public class Client extends Connector {
     	if (message2.equals("STARTED")) {
     		gameState.getLogicHelper().setLevelStarted(true);
     		gameState.getLogicHelper().setCountinStarted(false);
-    	} else if (message2.equals("RESTART")) { 
+    	} else if (message2.equals("RESTART")) {
     		// force override life, level, score etc. Just. In. Case. someone forgets.
     		mainGame.resetLifeCount();
     		mainGame.resetLevelCount();
@@ -369,8 +368,8 @@ public class Client extends Connector {
         }
     }
 
-    
-    
+
+
     /**
      * Process an incoming message about a powerup.
      * @param message the message to process
@@ -403,11 +402,11 @@ public class Client extends Connector {
     		} else if (stringList[2].equals("HEALTH")) {
     			type = PowerupType.HEALTH; // health added
     		} else if (stringList[2].equals("FREEZE")) {
-    			type = PowerupType.FREEZE; // freeze added 
+    			type = PowerupType.FREEZE; // freeze added
     		} else if (stringList[2].equals("SLOW")) {
-    			type = PowerupType.SLOW; // slow added 
+    			type = PowerupType.SLOW; // slow added
     		} else if (stringList[2].equals("FAST")) {
-    			type = PowerupType.FAST; // fast added 
+    			type = PowerupType.FAST; // fast added
     		} else if (stringList[2].equals("RANDOM")) {
     			type = PowerupType.RANDOM; // random added
     		}
@@ -454,7 +453,7 @@ public class Client extends Connector {
 			}
 		}
 	}
-    
+
     /**
      * Grant a powerup to the client's player.
      * @param stringList the IDs of the powerups
@@ -505,7 +504,7 @@ public class Client extends Connector {
     public void pleaPowerup(Powerup powerup) {
     	sendMessage(powerup.toString() + "PLEA ");
     }
-    
+
 	/**
      * Process an incoming message about a coin.
      * @param message the message to process
@@ -521,7 +520,7 @@ public class Client extends Connector {
     		grantCoin(stringList);
     	}
     }
-    
+
     /**
      * Add a coin to the level, client-sided.
      * @param stringList description of the coin
@@ -535,7 +534,7 @@ public class Client extends Connector {
     		
     	}
     }
-    
+
     /**
      * Dictate that a coin goes to the host player.
      * @param stringList description of the coin
@@ -554,7 +553,7 @@ public class Client extends Connector {
     		}
     	}
     }
-    
+
     /**
      * Grant a coin to a player.
      * @param stringList the IDs of the coins
@@ -573,7 +572,7 @@ public class Client extends Connector {
     		}
     	}
     }
-    
+
     /**
      * Confirm a coin to the host.
      * @param coin the coin to confirm

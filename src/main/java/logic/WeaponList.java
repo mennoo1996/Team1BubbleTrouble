@@ -41,7 +41,6 @@ public class WeaponList {
 	 * @param testing	- testing state or not
 	 */
 	public WeaponList(Weapon weapon1, MainGame mainGame, GameState gameState, boolean testing) {
-		super();
 		this.weaponList = new ArrayList<Weapon>();
 		weaponList.add(weapon1);
 		this.mainGame = mainGame;

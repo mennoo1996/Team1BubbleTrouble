@@ -22,11 +22,20 @@ public class CircleList {
 		highestID = 0;
 		
 		for (BouncingCircle circle : circles) {
-			if (circle.getId() > highestID) {
-				highestID = circle.getId();
-			}
+			higherID(circle);
 		}
 		
+	}
+	
+	/**
+	 * Checks if the ID of the given circle is higher as the highest ID in the CircleList,
+	 * if so it changes the highestID.
+	 * @param circle the circle of which the ID to check
+	 */
+	public void higherID(BouncingCircle circle) {
+		if (circle.getId() > highestID) {
+			highestID = circle.getId();
+		}
 	}
 	
 	/**
@@ -44,10 +53,7 @@ public class CircleList {
 	 * @param circle	the circle to add
 	 */
 	public void add(BouncingCircle circle) {
-		if (circle.getId() > highestID) {
-			highestID = circle.getId();
-		}
-		
+		higherID(circle);
 		circles.add(circle);
 	}
 	

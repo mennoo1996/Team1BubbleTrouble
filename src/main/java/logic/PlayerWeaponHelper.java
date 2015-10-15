@@ -119,6 +119,13 @@ public class PlayerWeaponHelper {
 	public boolean isShot() {
 		return shot;
 	}
+
+	/**
+	 * @param playerNumber the playerNumber to set
+	 */
+	public void setPlayerNumber(int playerNumber) {
+		this.playerNumber = playerNumber;
+	}
 	
 	
 

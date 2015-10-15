@@ -12,6 +12,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import commands.CommandQueue;
+
 /**
  * This class is the state that we are in during gameplay.
  * It contains basically all the game logic.
@@ -24,7 +26,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class GameState extends BasicGameState {
 	
-	
+	private CommandQueue commandQueue;
 	
 	private GameStatePlayerHelper playerHelper;
 	private GameStateCirclesHelper circlesHelper;
@@ -153,6 +155,8 @@ public class GameState extends BasicGameState {
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		levels = new LevelContainer(mainGame);
+		
+		commandQueue = CommandQueue.getInstance();
 	}
 	
 	/**
@@ -168,6 +172,8 @@ public class GameState extends BasicGameState {
 		setSavedInput(container.getInput());
 		logicHelper.update(container, sbg, delta);
 		exit(container, sbg, delta);
+		
+		commandQueue.executeQueue();
 	}
 	
 	/**

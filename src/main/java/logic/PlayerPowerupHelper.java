@@ -21,12 +21,17 @@ import powerups.SpeedPowerup;
  */
 public class PlayerPowerupHelper {
 	
-	private static final int RANDOM_DURATION = 100;
-	private static final String POWERUPS = "powerups";
 	private Player player;
 	private MainGame mainGame;
 	private GameState gameState;
 	
+	private long shieldTimeRemaining;
+	private int shieldCount;
+
+	private static final int SECONDS_TO_MS = 1000;
+	private static final int RANDOM_DURATION = 100;
+	private static final int POWERUP_DURATION = 10;
+	private static final String POWERUPS = "powerups";
 	
 	/**
 	 * @param player	- the player this helper belongs to.
@@ -38,6 +43,8 @@ public class PlayerPowerupHelper {
 		this.player = player;
 		this.mainGame = mainGame;
 		this.gameState = gameState;
+		this.shieldTimeRemaining = 0;
+		this.shieldCount = 0;
 	}
 
 	/**
@@ -45,8 +52,10 @@ public class PlayerPowerupHelper {
 	 * @param deltaFloat the time in seconds since the last frame.
 	 * @param containerHeight the height of the current GameContainer
 	 */
-	public void processPowerups(float deltaFloat, float containerHeight) { // MARKED
-
+	public void update(float deltaFloat, float containerHeight) { // MARKED
+		if (!gameState.getLogicHelper().isPaused() && shieldTimeRemaining > 0) {
+			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
+		}
 		ArrayList<Powerup> usedPowerups = new ArrayList<>();
 		synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
 			for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
@@ -70,7 +79,6 @@ public class PlayerPowerupHelper {
 				}
 			}
 		}
-		//UsedPowerups is empty if client
 		gameState.getItemsHelper().getDroppedPowerups().removeAll(usedPowerups);
 		gameState.getItemsHelper().getDroppedPowerups().removeIf(Powerup::removePowerup);
 	}
@@ -164,5 +172,52 @@ public class PlayerPowerupHelper {
 		}
 	}
 	
+	/**
+	 * Add a shield for this player.
+	 */
+	public void addShield() {
+        shieldCount += 1;
+        player.getPowerupHelper().setShieldTimeRemaining(
+        		TimeUnit.SECONDS.toMillis(POWERUP_DURATION));
+        Executors.newScheduledThreadPool(1).schedule(() -> {
+                    if (shieldCount > 0) {
+                        shieldCount -= 1;
+                    }
+                },
+                POWERUP_DURATION, TimeUnit.SECONDS);
+    }
+	
+	/**
+	 * Called from the Player class on respawns, resetting all necessary variables.
+	 */
+	public void respawn() {
+		shieldTimeRemaining = 0;
+		shieldCount = 0;
+	}
+	
+	/**
+	 * @return shield time remaing (MS)
+	 */
+	public float getShieldTimeRemaining() {
+		if (shieldCount > 0) {
+			return shieldTimeRemaining;
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * @param shieldTimeRemaining the shieldTimeRemaining to set
+	 */
+	public void setShieldTimeRemaining(long shieldTimeRemaining) {
+		this.shieldTimeRemaining = shieldTimeRemaining;
+	}
+	
+	/**
+	 * @return Whether or not the player has a shield
+	 */
+	public boolean hasShield() {
+		return shieldCount > 0;
+	}
 	
 }

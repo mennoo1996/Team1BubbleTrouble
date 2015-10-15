@@ -33,7 +33,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	private int lastCircleUpdate;
 	
 	private static final int MINIMUM_SPLIT_RADIUS = 20;
-	private static final int POWERUP_CHANCE = 20;
+	private static final int POWERUP_CHANCE = 80;
 	private static final int COIN_CHANCE = 30;
 	private static final int CIRCLES_UPDATE_RATE = 100; // rate is in frames
 	

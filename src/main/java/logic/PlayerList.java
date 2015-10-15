@@ -83,7 +83,7 @@ public class PlayerList {
 	public void intersectPlayersWithCircle(BouncingCircle circle) {
 		if (processCollisions) {
 			if (playerList.get(0).getRectangle().intersects(circle) 
-					&& !playerList.get(0).hasShield()) {
+					&& !playerList.get(0).getPowerupHelper().hasShield()) {
 				//LIVES FUNCTIONALITY
 				if (!mainGame.isLanMultiplayer()) {
 					playerDeath(mainGame);
@@ -95,7 +95,7 @@ public class PlayerList {
 			
 			if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
 					&& playerList.get(1).getRectangle().intersects(circle)
-					&& !playerList.get(1).hasShield()) {
+					&& !playerList.get(1).getPowerupHelper().hasShield()) {
 				//LIVES FUNCTIONALITY
 				if (!mainGame.isLanMultiplayer()) {
 					playerDeath(mainGame);
@@ -165,7 +165,7 @@ public class PlayerList {
 		} else {
 			drawPlayerNoMovement(player, graphics);
 		}
-		if (player.hasShield()) {
+		if (player.getPowerupHelper().hasShield()) {
 			RND.getInstance().drawColor(new RenderOptions(graphics, player.getShieldImageN(), 
 					player.getShieldImageA(),
 					player.getX() - SHIELD_DRAW_X_DEVIATION,

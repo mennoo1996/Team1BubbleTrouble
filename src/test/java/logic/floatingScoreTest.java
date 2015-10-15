@@ -19,7 +19,7 @@ public class floatingScoreTest {
 	
 	@Before
 	public void setup() {
-		c = new BouncingCircle(100, 100, 20, 10, 10, 1);
+		c = new BouncingCircle(100, 100, 20, 10, 10, 1, 0);
 		p = new Powerup(100, 100, Powerup.PowerupType.INSTANT);
 		co = new Coin(100, 100, true);
 	}

@@ -418,10 +418,6 @@ public class BouncingCircle extends Circle implements Cloneable {
 	public void setHitCeiling(boolean hitCeiling) {
 		this.hitCeiling = hitCeiling;
 	}
-
-//	float centerPointX, float centerPointY, 
-//	float radius, float xSpeed, float ySpeed, 
-//	float gravity, float multiplier
 	
 	/**
 	 * Return a String-representation of this BouncingCircle.
@@ -429,17 +425,9 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 */
 	@Override
 	public String toString() {
-		float centerPointX = this.getCenterX();
-		float centerPointY = this.getCenterY();
-		float radius = this.getRadius();
-		float xSpeed = this.xSpeed;
-		float ySpeed = this.ySpeed;
-		float gravity = this.gravity;
-		float multiplier = this.multiplier;
-		
-		String res = "CIRCLE " + centerPointX + " " + centerPointY 
-				+ " " + radius + " " + xSpeed + " " + ySpeed 
-				+ " " + gravity + " " + multiplier + " " + id;
+		String res = "CIRCLE " + this.getCenterX() + " " + this.getCenterY() 
+				+ " " + this.getRadius() + " " + this.xSpeed + " " + this.ySpeed 
+				+ " " + this.gravity + " " + this.multiplier + " " + id;
 		return res;
 	}
 	
@@ -485,7 +473,6 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 */
 	@Override
 	public BouncingCircle clone() throws CloneNotSupportedException {
-		super.clone();
 		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
 				this.getRadius(), xSpeed, ySpeed, gravity, id);
 		res.setMultiplier(this.multiplier);

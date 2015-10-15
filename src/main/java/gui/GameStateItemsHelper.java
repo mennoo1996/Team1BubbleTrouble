@@ -140,7 +140,7 @@ public class GameStateItemsHelper extends GameStateHelper {
 	private void drawPowerups(Graphics graphics) {
 		synchronized (droppedPowerups) {
 			for (Powerup pow : droppedPowerups) {
-				RND.drawPowerup(graphics, pow);
+				RND.getInstance().drawPowerup(graphics, pow);
 			}
 		}
 	}

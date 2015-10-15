@@ -136,7 +136,7 @@ public class MenuGameoverState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame sbg) {
 		Logger.getInstance().log("Entering MenuGameoverState", Logger.PriorityLevels.LOW, "States");
-		RND.setOpacity(0.0f);
+		RND.getInstance().setOpacity(0.0f);
 		mainGame.stopSwitchState();
 		displayLives = mainGame.getLifeCount();
 		mainGame.setLifeCount(MainGame.getLives());
@@ -152,12 +152,13 @@ public class MenuGameoverState extends BasicGameState {
 	 */
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
 		if (mainGame.getShouldSwitchState()) {
-			if (RND.getOpacity() > 0.0f) {
+			if (RND.getInstance().getOpacity() > 0.0f) {
 				int fadeTimer = mainGame.getOpacityFadeTimer();
 				if (mainGame.getSwitchState() == -1) {
 					fadeTimer = 2 * 2 * 2 * fadeTimer;
 				}
-				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
+				RND.getInstance().setOpacity(RND.getInstance().getOpacity()
+						- ((float) delta) / fadeTimer);
 			} else {
 				Logger.getInstance().log("Exiting MenuGameoverState", 
 						Logger.PriorityLevels.LOW, "States");
@@ -180,8 +181,9 @@ public class MenuGameoverState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
-		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
-			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
+		if (RND.getInstance().getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+			RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
+					+ ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
 		Input input = container.getInput();
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
@@ -267,23 +269,23 @@ public class MenuGameoverState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		RND.drawBackground(graphics);
+		RND.getInstance().drawBackground(graphics);
 		renderEndText(container, graphics);
 
 		nameField.drawColor(graphics, mainGame.getColor());
 		if (inputMessage != null) {
-			RND.text(graphics, TEXT_X, TEXT_4_Y, inputMessage);
+			RND.getInstance().text(graphics, TEXT_X, TEXT_4_Y, inputMessage);
 		}
 		renderButtons(container, graphics);
 		mainGame.drawWaterMark();
-		RND.drawLogo(graphics, LOGO_X, LOGO_Y);
+		RND.getInstance().drawLogo(graphics, LOGO_X, LOGO_Y);
 		separatorTop.drawColor(graphics, mainGame.getColor());
 		mainGame.getHighscores().sort();
 		String highScoresString = mainGame.getHighscores().toString();
-		RND.text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
-		RND.text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
+		RND.getInstance().text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
+		RND.getInstance().text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
 				"The best scores of your predecessors!");
-		RND.drawForeGround(graphics);
+		RND.getInstance().drawForeGround(graphics);
 		renderLives(graphics);
 	}
 
@@ -293,17 +295,18 @@ public class MenuGameoverState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void renderEndText(GameContainer container, Graphics graphics) {
-		RND.text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+		RND.getInstance().text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
 				"Waiting for user input...");
 		if (displayLives < 1) {
-			RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game Over");
+			RND.getInstance().text(graphics, TEXT_X, TEXT_1_Y, "# Game Over");
 		} else {
-			RND.text(graphics, TEXT_X, TEXT_1_Y, "# You won! You are the champion!");
+			RND.getInstance().text(graphics, TEXT_X, TEXT_1_Y, "# You won! You are the champion!");
 		}
 
-		RND.text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " + mainGame.getScore());
-		RND.text(graphics, TEXT_X, TEXT_3_Y, "# Please enter your name below");
+		RND.getInstance().text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " 
+		+ mainGame.getScore());
+		RND.getInstance().text(graphics, TEXT_X, TEXT_3_Y, "# Please enter your name below");
 	}
 
 	/**

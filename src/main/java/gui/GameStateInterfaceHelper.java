@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import logic.FloatingScore;
+import logic.RenderOptions;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -148,20 +149,22 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * @param container in which most objects are located.
 	 */
 	public void renderBottomLayer(Graphics graphics, GameContainer container) {
-		RND.drawColor(graphics, ceilingImageN, ceilingImageA, 
-				parentState.getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION, 
+		RND.getInstance().drawColor(new RenderOptions(graphics, ceilingImageN, 
+				ceilingImageA, parentState.getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION, 
 				parentState.getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION, 
-				mainGame.getColor());
-		RND.drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mainGame.getColor());
+				mainGame.getColor()));
+		RND.getInstance().drawColor(new RenderOptions(graphics, wallsImageN, wallsImageA, 
+				0, 0, mainGame.getColor()));
 		for (int x = 0; x < parentState.getLogicHelper().getFractionTimeParts(); x++) {
-			RND.drawColor(graphics, counterBarImageN, counterBarImageA,
+			RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+					counterBarImageA,
 					container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION - COUNTER_BAR_PARTS_FACTOR
 					* (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR,
-					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mainGame.getColor());
+					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mainGame.getColor()));
 		}
 		mainGame.drawWaterMark();
 		drawFloatingScores(graphics);
-		RND.text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
+		RND.getInstance().text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mainGame.getLevelCounter() + 1));
 		drawShieldTimer(graphics);
@@ -175,7 +178,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * @param playingState whether to draw the pause menu etc
 	 */
 	public void renderTopLayer(Graphics graphics, GameContainer container, boolean playingState) {
-		RND.drawForeGround(graphics);
+		RND.getInstance().drawForeGround(graphics);
 		if (!playingState) {
 			graphics.drawImage(nobuttonImage, 0, 0);
 		}
@@ -195,9 +198,9 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 		graphics.setColor(new Color(0f, 0f, 0f, COUNTIN_OVERLAY_COLOR_FACTOR));
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
 
-		RND.text(graphics, container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
+		RND.getInstance().text(graphics, container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
 				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
-		RND.text(graphics, container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION,
+		RND.getInstance().text(graphics, container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION,
 				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
 		
 		for (int i = 0; i < amount; i++) {
@@ -206,10 +209,10 @@ public class GameStateInterfaceHelper extends GameStateHelper {
             counterBarImageA.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
             counterBarImageN.rotate(degree);
             counterBarImageA.rotate(degree);
-            RND.drawColor(graphics, counterBarImageN, counterBarImageA,
-            		container.getWidth() / 2 - COUNTER_BAR_DRAW_X_DEVIATION, 
+            RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+            		counterBarImageA, container.getWidth() / 2 - COUNTER_BAR_DRAW_X_DEVIATION, 
             		container.getHeight() / 2 - COUNTER_BAR_DRAW_Y_DEVIATION, 
-            		mainGame.getColor());
+            		mainGame.getColor()));
             counterBarImageN.rotate(-degree);
             counterBarImageA.rotate(-degree);
         }
@@ -222,7 +225,8 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	private void drawFloatingScores(Graphics graphics) {
 		synchronized (floatingScoreList) {
 			for (FloatingScore score : floatingScoreList) {
-				RND.textSpecifiedColor(graphics, score.getX(), score.getY(), score.getScore(),
+				RND.getInstance().textSpecifiedColor(graphics, score.getX(), score.getY(), 
+						score.getScore(),
 						new Color(mainGame.getColor().r, mainGame.getColor().g,
 								mainGame.getColor().b, score.getOpacity()));
 			}
@@ -242,7 +246,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 			renderedScore = Integer.toString(mainGame.getScore() 
 					+ parentState.getLogicHelper().getScore());
 		}
-		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
+		RND.getInstance().text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
 				- SCORE_STRING_Y_DEVIATION, "Score: " + renderedScore);
 	}
 	
@@ -288,13 +292,13 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 		if (mainGame.getPlayerList().getPlayers().get(0).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
 			float rem = mainGame.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
+			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
-						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
+				RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+						counterBarImageA, SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
+						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor()));
 			}
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X
+			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_2_X
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
 					* COUNTER_BAR_X_FACTOR, height,
 					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
@@ -302,13 +306,13 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 				&& mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
 			float rem = mainGame.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
+			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
 			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
-						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
+				RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+						counterBarImageA, SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
+						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor()));
 			}
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
+			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_2_X 
 					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
 					* COUNTER_BAR_X_FACTOR, height, 
 					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }

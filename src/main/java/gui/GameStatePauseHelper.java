@@ -116,8 +116,8 @@ public class GameStatePauseHelper extends GameStateHelper {
 		Color overLay = new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR);
 		graphics.setColor(overLay);
 		graphics.fillRect(0, 0, container.getWidth(), container.getHeight());
-		RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game is paused...");
-		RND.text(graphics, TEXT_X, TEXT_2_Y, "========================");
+		RND.getInstance().text(graphics, TEXT_X, TEXT_1_Y, "# Game is paused...");
+		RND.getInstance().text(graphics, TEXT_X, TEXT_2_Y, "========================");
 		Input input = container.getInput();
 		returnButton.drawColor(graphics, input, mainGame.getColor());
 		menuButton.drawColor(graphics, input, mainGame.getColor());

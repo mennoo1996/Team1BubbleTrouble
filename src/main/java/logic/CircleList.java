@@ -42,9 +42,7 @@ public class CircleList {
 		highestID = 0;
 		
 		for (BouncingCircle circle : circles) {
-			if (circle.getId() > highestID) {
-				highestID = circle.getId();
-			}
+			higherID(circle);
 		}
 	}
 	
@@ -73,6 +71,17 @@ public class CircleList {
 	}
 	
 	/**
+	 * Checks if the ID of the given circle is higher as the highest ID in the CircleList,
+	 * if so it changes the highestID.
+	 * @param circle the circle of which the ID to check
+	 */
+	public void higherID(BouncingCircle circle) {
+		if (circle.getId() > highestID) {
+			highestID = circle.getId();
+		}
+	}
+	
+	/**
 	 * Set the multiplier of all circles.
 	 * @param multiplier - the multiplier to set
 	 */
@@ -87,10 +96,7 @@ public class CircleList {
 	 * @param circle	the circle to add
 	 */
 	public void add(BouncingCircle circle) {
-		if (circle.getId() > highestID) {
-			highestID = circle.getId();
-		}
-		
+		higherID(circle);
 		circles.add(circle);
 	}
 	
@@ -154,21 +160,22 @@ public class CircleList {
 			final float xPosition = circle.getMinX() - offset;
 			final float yPosition = circle.getMinY() - offset;
 			switch (r) {
-			case(RADIUS_6) : RND.drawColor(graphics, ballsImagesN[0], ballsImagesA[0],
-					xPosition, yPosition, color); break;
-			case(RADIUS_5) : RND.drawColor(graphics, ballsImagesN[1], ballsImagesA[1],
-					xPosition, yPosition, color); break;
-			case(RADIUS_4) : RND.drawColor(graphics, ballsImagesN[2], ballsImagesA[2],
-					xPosition, yPosition, color); break;
-			case(RADIUS_3) : RND.drawColor(graphics, 
+			case(RADIUS_6) : RND.getInstance().drawColor(new RenderOptions(graphics, 
+					ballsImagesN[0], ballsImagesA[0], xPosition, yPosition, color)); break;
+			case(RADIUS_5) : RND.getInstance().drawColor(new RenderOptions(graphics, 
+					ballsImagesN[1], ballsImagesA[1],
+					xPosition, yPosition, color)); break;
+			case(RADIUS_4) : RND.getInstance().drawColor(new RenderOptions(graphics, 
+					ballsImagesN[2], ballsImagesA[2], xPosition, yPosition, color)); break;
+			case(RADIUS_3) : RND.getInstance().drawColor(new RenderOptions(graphics, 
 					ballsImagesN[BALL_IMAGE_THREE], ballsImagesA[BALL_IMAGE_THREE],
-					xPosition, yPosition, color); break;
-			case(RADIUS_2) : RND.drawColor(graphics, 
+					xPosition, yPosition, color)); break;
+			case(RADIUS_2) : RND.getInstance().drawColor(new RenderOptions(graphics, 
 					ballsImagesN[BALL_IMAGE_FOUR], ballsImagesA[BALL_IMAGE_FOUR],
-					xPosition, yPosition, color); break;
-			case(MINIMUM_RADIUS) : RND.drawColor(graphics, 
+					xPosition, yPosition, color)); break;
+			case(MINIMUM_RADIUS) : RND.getInstance().drawColor(new RenderOptions(graphics, 
 					ballsImagesN[BALL_IMAGE_FIVE], ballsImagesA[BALL_IMAGE_FIVE],
-					xPosition, yPosition, color); break;
+					xPosition, yPosition, color)); break;
 			default:
 				try {
 					throw new SlickException("Radius was not one of the supported");

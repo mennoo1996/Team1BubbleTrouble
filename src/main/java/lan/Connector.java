@@ -1,18 +1,19 @@
 package lan;
 
+import gui.GameState;
+import gui.MainGame;
+
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import powerups.Spiky;
-import gui.GameState;
-import gui.MainGame;
 import logic.BouncingCircle;
 import logic.FloatingScore;
 import logic.Logger;
-import logic.Player.Movement;
+import logic.PlayerMovementHelper.Movement;
 import logic.Weapon;
+import powerups.Spiky;
 
 /**
  * Base class for a lan connnector.

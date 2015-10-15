@@ -68,7 +68,7 @@ public class GameState extends BasicGameState {
 	@Override
 	public void enter(GameContainer container, StateBasedGame arg1) throws SlickException {
 		Logger.getInstance().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
-		RND.setOpacity(0.0f);
+		RND.getInstance().setOpacity(0.0f);
 		mainGame.stopSwitchState();
 		levels.initialize();
 		playerHelper.enter();
@@ -102,12 +102,13 @@ public class GameState extends BasicGameState {
 	 * @param delta delta time for opacity checks.
 	 */
 	private void exitOpacityNotZero(int delta) {
-		if (RND.getOpacity() > 0.0f) {
+		if (RND.getInstance().getOpacity() > 0.0f) {
 			int fadeTimer = mainGame.getOpacityFadeTimer();
 			if (mainGame.getSwitchState() == -1) {
 				fadeTimer = 2 * 2 * 2 * fadeTimer;
 			}
-			RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
+			RND.getInstance().setOpacity(RND.getInstance().getOpacity()
+					- ((float) delta) / fadeTimer);
 		}
 	}
 	
@@ -116,7 +117,7 @@ public class GameState extends BasicGameState {
 	 * @param sbg the statebasedgame to use for switching states.
 	 */
 	private void exitOpacityZero(StateBasedGame sbg) {
-		if (RND.getOpacity() <= 0.0f) {
+		if (RND.getInstance().getOpacity() <= 0.0f) {
 			Logger.getInstance().log("Exiting GameState", Logger.PriorityLevels.LOW, "States");
 			if (mainGame.getSwitchState() == -1) {
 				System.exit(0);
@@ -172,8 +173,9 @@ public class GameState extends BasicGameState {
 	 * @param delta elapsed delta time.
 	 */
 	private void updateOpacity(int delta) {
-		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
-			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
+		if (RND.getInstance().getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+			RND.getInstance().setOpacity(RND.getInstance().getOpacity()
+					+ ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
 	}
 
@@ -187,7 +189,7 @@ public class GameState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		RND.drawBackground(graphics);
+		RND.getInstance().drawBackground(graphics);
 		circlesHelper.render(graphics, container);
 		playerHelper.render(graphics, container);
 		itemsHelper.render(graphics, container);

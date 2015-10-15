@@ -81,7 +81,7 @@ public class WeaponList {
 				&& weaponNumber == 0) || (mainGame.isClient() && weaponNumber == 1);
 		
 		if (player.isShot() && weapon.getRectangle().intersects(circle) && canProcessLAN) {
-			gameState.getShotList().add(circle);
+			gameState.getCirclesHelper().getShotList().add(circle);
 			logger.log("Circle shot", Logger.PriorityLevels.LOW, "weapon");
 			weapon.setVisible(false);
 			if (mainGame.isHost() && weaponNumber == 0) {

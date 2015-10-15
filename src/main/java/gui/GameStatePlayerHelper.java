@@ -2,8 +2,11 @@ package gui;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.StateBasedGame;
 
 import logic.Player;
+import logic.Weapon;
+import logic.WeaponList;
 
 /**
  * GameState Helper class for managing all players. This is done to prevent
@@ -14,13 +17,21 @@ import logic.Player;
 public class GameStatePlayerHelper extends GameStateHelper {
 
 	private MainGame mainGame;
+	private GameState parentState;
+	private WeaponList weaponList;
 	
 	/**
 	 * Constructor for GameStatePlayerHelper object.
-	 * @param app the Main Game this object is fetching data from.
+	 * @param app the Main Game this class draws data from.
+	 * @param state the GameState parent.
 	 */
-	public GameStatePlayerHelper(MainGame app) {
+	public GameStatePlayerHelper(MainGame app, GameState state) {
 		this.mainGame = app;
+		this.parentState = state;
+		Weapon weapon1 = null;
+		Weapon weapon2 = null;
+		weaponList = new WeaponList(weapon1, mainGame, parentState, false);
+		weaponList.add(weapon2);
 	}
 	
 	@Override
@@ -36,7 +47,7 @@ public class GameStatePlayerHelper extends GameStateHelper {
 	}
 	
 	@Override
-	public void update(GameContainer container, float deltaFloat) {
+	public void update(GameContainer container, StateBasedGame sbg, float deltaFloat) {
 		mainGame.getPlayerList().updatePlayers(deltaFloat,
 				container.getHeight(),
 				container.getWidth());
@@ -45,6 +56,14 @@ public class GameStatePlayerHelper extends GameStateHelper {
 	@Override
 	public void render(Graphics graphics, GameContainer container) {
 		mainGame.getPlayerList().drawPlayers(graphics);
+		weaponList.drawWeapons(graphics);
+	}
+	
+	/**
+	 * @return the weaponList holding all player weapons.
+	 */
+	public WeaponList getWeaponList() {
+		return weaponList;
 	}
 	
 }

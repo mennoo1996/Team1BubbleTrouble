@@ -19,8 +19,8 @@ public class CircleList {
 	private ArrayList<BouncingCircle> circles;
 	private int highestID;
 	
-	private Image[] ballsImagesN;
-	private Image[] ballsImagesA;
+	private static Image[] ballsImagesN;
+	private static Image[] ballsImagesA;
 
 	private static final int BALL_IMAGE_THREE = 3;
 	private static final int BALL_IMAGE_FOUR = 4;
@@ -34,7 +34,6 @@ public class CircleList {
 	private static final int RADIUS_5 = 65;
 	private static final int RADIUS_6 = 90;
 	
-	
 	/**
 	 * @param circles the circles of this circlelist.
 	 */
@@ -47,7 +46,12 @@ public class CircleList {
 				highestID = circle.getId();
 			}
 		}
-		
+	}
+	
+	/**
+	 * Load all circle images before rendering.
+	 */
+	public static void loadImages() {
 		ballsImagesN = new Image[AMOUNT_OF_BALLS];
 		try {
 			ballsImagesN[0] = new Image("resources/images_Balls/Ball_90_Norm.png");
@@ -66,7 +70,6 @@ public class CircleList {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -171,7 +174,7 @@ public class CircleList {
 					throw new SlickException("Radius was not one of the supported");
 				} catch (SlickException e) {
 					e.printStackTrace(); }
-		}
+			}
 		}
 	}
 

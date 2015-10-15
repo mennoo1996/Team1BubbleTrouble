@@ -8,6 +8,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 //import edu.umd.cs.findbugs.gui.Logger;
 import gui.GameState;
+import gui.GameStateCirclesHelper;
+import gui.GameStateInterfaceHelper;
+import gui.GameStateItemsHelper;
+import gui.GameStateLogicHelper;
+import gui.GameStatePauseHelper;
+import gui.GameStatePlayerHelper;
 import gui.MainGame;
 
 import java.util.ArrayList;
@@ -27,12 +33,32 @@ public class BouncingCircleTest {
 	GameContainer gc;
 	Logger logger;
 
+	GameStateCirclesHelper ch;
+	GameStateItemsHelper ih;
+	GameStateInterfaceHelper ifh;
+	GameStatePlayerHelper ph;
+	GameStateLogicHelper lh;
+	GameStatePauseHelper pah;
+	
 	@Before
 	public void setUp() throws Exception {
 		mg = new MainGame("TestGame");
-		gs = new GameState(mg);
-		gs.setCircleList(new CircleList(new ArrayList<BouncingCircle>()));
-		
+		gs = mock(GameState.class);
+		//gs.getCirclesHelper().setCircleList(new CircleList(new ArrayList<BouncingCircle>()));
+
+
+		ch = mock(GameStateCirclesHelper.class);
+		ih = mock(GameStateItemsHelper.class);
+		ifh = mock(GameStateInterfaceHelper.class);
+		ph = mock(GameStatePlayerHelper.class);
+		lh = mock(GameStateLogicHelper.class);
+		pah = mock(GameStatePauseHelper.class);
+		when(gs.getItemsHelper()).thenReturn(ih);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getInterfaceHelper()).thenReturn(ifh);
+		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getPauseHelper()).thenReturn(pah);
 		mg = mock(MainGame.class);
 	}
 	
@@ -44,7 +70,7 @@ public class BouncingCircleTest {
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
 		MyRectangle rightWall = new MyRectangle(1,1,1,1);
-		when(gs.isPaused()).thenReturn(false);
+		when(lh.isPaused()).thenReturn(false);
 		when(gs.getFloor()).thenReturn(floor);
 		when(gs.getCeiling()).thenReturn(ceiling);
 		when(gs.getLeftWall()).thenReturn(leftWall);
@@ -63,7 +89,7 @@ public class BouncingCircleTest {
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
 		MyRectangle rightWall = new MyRectangle(1,1,1,1);
-		when(gs.isPaused()).thenReturn(false);
+		when(lh.isPaused()).thenReturn(false);
 		when(gs.getFloor()).thenReturn(floor);
 		when(gs.getCeiling()).thenReturn(ceiling);
 		when(gs.getLeftWall()).thenReturn(leftWall);
@@ -82,7 +108,7 @@ public class BouncingCircleTest {
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
 		MyRectangle rightWall = new MyRectangle(1,1,1,1);
-		when(gs.isPaused()).thenReturn(false);
+		when(lh.isPaused()).thenReturn(false);
 		when(gs.getFloor()).thenReturn(floor);
 		when(gs.getCeiling()).thenReturn(ceiling);
 		when(gs.getLeftWall()).thenReturn(leftWall);
@@ -93,7 +119,8 @@ public class BouncingCircleTest {
 		circleList.add(c);
 		gate.setRequired(circleList);
 		gateList.add(gate);
-		when(gs.getGateList()).thenReturn(gateList);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getCirclesHelper().getGateList()).thenReturn(gateList);
 		c.update(gs, 100, 100, 1);
 		
 		assertEquals(-4.0, c.getxSpeed(), 0);
@@ -108,7 +135,7 @@ public class BouncingCircleTest {
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
 		MyRectangle rightWall = new MyRectangle(1,1,1,1);
-		when(gs.isPaused()).thenReturn(false);
+		when(lh.isPaused()).thenReturn(false);
 		when(gs.getFloor()).thenReturn(floor);
 		when(gs.getCeiling()).thenReturn(ceiling);
 		when(gs.getLeftWall()).thenReturn(leftWall);
@@ -118,7 +145,8 @@ public class BouncingCircleTest {
 		ArrayList<BouncingCircle> circleList = new ArrayList<BouncingCircle>();
 		gate.setRequired(circleList);
 		gateList.add(gate);
-		when(gs.getGateList()).thenReturn(gateList);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getCirclesHelper().getGateList()).thenReturn(gateList);
 		c.update(gs, 100, 100, 1);
 		
 		assertEquals(4.0, c.getxSpeed(), 0);
@@ -167,40 +195,11 @@ public class BouncingCircleTest {
 		assertFalse(c.isDone());
 	}
 	
-	@Test
-	public void testGetSplittedCirclesBonusSpeedBranch() {
-		c = new BouncingCircle(1,2,51,4,-15,6);
-		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg, gs);
-		assertEquals(-250.0, result.get(0).getySpeed(), 0);
-	}
-	
 
 	@Test
 	public void testGetSplittedCirclesSmallestRadius() {
 		c = new BouncingCircle(1, 2, 10, 4, 5, 6);
 		assertNull(c.getSplittedCircles(mg, gs));
-	}
-	
-	@Test
-	public void testGetSplittedCirclesUseMinimumSpeed() {
-		c = new BouncingCircle(1, 2, 20, 4, 5, 6);
-		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg, gs);
-		assertEquals(-250, result.get(0).getySpeed(), 0);
-	}
-	
-	@Test
-	public void testGetSplittedCirclesUseBonusSpeed() {
-		
-		c = new BouncingCircle(1, 2, 20, 4, -700, 0);
-		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg, gs);
-		assertEquals(-750, result.get(0).getySpeed(), 0);
-	}
-	
-	@Test
-	public void testGetSplittedCirclesNothingSpecial() {
-		c = new BouncingCircle(1, 2, 20, 4, -400, 0);
-		ArrayList<BouncingCircle> result = c.getSplittedCircles(mg, gs);
-		assertEquals(-450, result.get(1).getySpeed(), 0);
 	}
 	
 	@Test

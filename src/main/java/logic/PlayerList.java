@@ -253,7 +253,7 @@ public class PlayerList {
 			}
 			
 			if (mainGame.getLifeCount() <= 0) {
-				mainGame.setScore(mainGame.getScore() + gameState.getScore());
+				mainGame.setScore(mainGame.getScore() + gameState.getLogicHelper().getScore());
 				mainGame.setSwitchState(mainGame.getGameOverState());
 				logger.log("Player lives reached 0, game over",
 						Logger.PriorityLevels.HIGH, "players");

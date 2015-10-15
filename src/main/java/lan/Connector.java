@@ -69,13 +69,13 @@ public abstract class Connector implements Runnable {
 				Float.parseFloat(stringList[SIX]), Integer.parseInt(stringList[EIGHT]));
     	circle.setMultiplier(Float.parseFloat(stringList[SEVEN]));
     	
-    	gameState.getFloatingScores().add(new FloatingScore(circle));
+    	gameState.getInterfaceHelper().getFloatingScores().add(new FloatingScore(circle));
     	
-    	int index = gameState.getCircleList().getIndexForCircleWithID(
+    	int index = gameState.getCirclesHelper().getCircleList().getIndexForCircleWithID(
     			Integer.parseInt(stringList[EIGHT]));
     	
     	if (index >= 0) {
-    		gameState.getCircleList().getCircles().set(index, circle);    
+    		gameState.getCirclesHelper().getCircleList().getCircles().set(index, circle);    
     		gameState.getCirclesHelper().updateShotCirles2(circle, true);
     	}
     }
@@ -100,7 +100,7 @@ public abstract class Connector implements Runnable {
     	String message2 = message.trim();
     	
     	int id = Integer.parseInt(message2);
-    	gameState.getWeaponList().getWeaponList().get(id).setVisible(false);
+    	gameState.getPlayerHelper().getWeaponList().getWeaponList().get(id).setVisible(false);
     }
     
     
@@ -154,9 +154,9 @@ public abstract class Connector implements Runnable {
     	String message2 = message.trim();
     	
     	if (message2.equals("STARTED")) {
-    		gameState.pauseStarted(true);
+    		gameState.getPauseHelper().pauseStarted(true);
     	} else if (message2.equals("STOPPED")) {
-    		gameState.pauseStopped(true);
+    		gameState.getLogicHelper().pauseStopped(true);
     	}
     }
 
@@ -257,7 +257,7 @@ public abstract class Connector implements Runnable {
         			Float.parseFloat(stringList[FOUR]));
     	}
     	
-    	gameState.getWeaponList().setWeapon(id, weapon);
+    	gameState.getPlayerHelper().getWeaponList().setWeapon(id, weapon);
     	mainGame.getPlayerList().getPlayers().get(id).setShot(true);
     }
     

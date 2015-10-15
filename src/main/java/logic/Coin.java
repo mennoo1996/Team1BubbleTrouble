@@ -67,7 +67,6 @@ public class Coin {
     public static void loadImages() throws SlickException {
     	coinImageN = new Image("resources/images_Gameplay/coin_Norm.png");
 		coinImageA = new Image("resources/images_Gameplay/coin_Add.png");
-	
     }
     
 

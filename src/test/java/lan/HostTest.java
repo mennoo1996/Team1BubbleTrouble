@@ -4,6 +4,12 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gui.GameState;
+import gui.GameStateCirclesHelper;
+import gui.GameStateInterfaceHelper;
+import gui.GameStateItemsHelper;
+import gui.GameStateLogicHelper;
+import gui.GameStatePauseHelper;
+import gui.GameStatePlayerHelper;
 import gui.MainGame;
 
 import java.io.BufferedReader;
@@ -30,10 +36,30 @@ public class HostTest {
 	GameState gs;
 	Host h;
 
+	GameStateCirclesHelper ch;
+	GameStateItemsHelper ih;
+	GameStateInterfaceHelper ifh;
+	GameStatePlayerHelper ph;
+	GameStateLogicHelper lh;
+	GameStatePauseHelper pah;
+	
 	@Before
 	public void setUp() throws Exception {
 		mg = mock(MainGame.class);
 		gs = mock(GameState.class);
+
+		ch = mock(GameStateCirclesHelper.class);
+		ih = mock(GameStateItemsHelper.class);
+		ifh = mock(GameStateInterfaceHelper.class);
+		ph = mock(GameStatePlayerHelper.class);
+		lh = mock(GameStateLogicHelper.class);
+		pah = mock(GameStatePauseHelper.class);
+		when(gs.getItemsHelper()).thenReturn(ih);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getInterfaceHelper()).thenReturn(ifh);
+		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getPauseHelper()).thenReturn(pah);
 	}
 
 	@Test
@@ -355,7 +381,7 @@ public class HostTest {
 		
 		WeaponList wl = mock(WeaponList.class);
 		when(wl.getWeaponList()).thenReturn(new ArrayList<logic.Weapon>());
-		when(gs.getWeaponList()).thenReturn(wl);
+		when(gs.getPlayerHelper().getWeaponList()).thenReturn(wl);
 		
 		h.readClientInputs();
 		

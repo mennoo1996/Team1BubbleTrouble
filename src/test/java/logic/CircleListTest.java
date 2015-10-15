@@ -3,6 +3,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import gui.GameState;
+import gui.GameStateCirclesHelper;
+import gui.GameStateInterfaceHelper;
+import gui.GameStateItemsHelper;
+import gui.GameStateLogicHelper;
+import gui.GameStatePauseHelper;
+import gui.GameStatePlayerHelper;
 
 import java.util.ArrayList;
 
@@ -11,8 +18,30 @@ import org.junit.Test;
 
 public class CircleListTest {
 
+	GameState gs;
+	
+	GameStateCirclesHelper ch;
+	GameStateItemsHelper ih;
+	GameStateInterfaceHelper ifh;
+	GameStatePlayerHelper ph;
+	GameStateLogicHelper lh;
+	GameStatePauseHelper pah;
+	
 	@Before
 	public void setUp() throws Exception {
+		gs = mock(GameState.class);
+		ch = mock(GameStateCirclesHelper.class);
+		ih = mock(GameStateItemsHelper.class);
+		ifh = mock(GameStateInterfaceHelper.class);
+		ph = mock(GameStatePlayerHelper.class);
+		lh = mock(GameStateLogicHelper.class);
+		pah = mock(GameStatePauseHelper.class);
+		when(gs.getItemsHelper()).thenReturn(ih);
+		when(gs.getCirclesHelper()).thenReturn(ch);
+		when(gs.getInterfaceHelper()).thenReturn(ifh);
+		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getPauseHelper()).thenReturn(pah);
 	}
 
 	@Test

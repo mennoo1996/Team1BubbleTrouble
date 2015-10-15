@@ -14,13 +14,13 @@ import logic.Logger.PriorityLevels;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  * GameState Helper class for managing all circles. This is done to prevent GameState 
  * from holding too much responsibility and/or knowledge. The class should only
  * be used in conjunction with GameState.
  * @author Mark
- *
  */
 public class GameStateCirclesHelper extends GameStateHelper {
 
@@ -40,11 +40,16 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	 * Constructor for a GameStateCirclesHelper object.
 	 * @param app the Main Game this class draws data from.
 	 * @param state the GameState parent.
-	 * @throws SlickException means ball images can't be found!
 	 */
-	public GameStateCirclesHelper(MainGame app, GameState state) throws SlickException {
+	public GameStateCirclesHelper(MainGame app, GameState state) {
 		this.mainGame = app;
 		this.parentState = state;
+		try {
+			Gate.loadImages();
+			CircleList.loadImages();
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -62,7 +67,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	}
 
 	@Override
-	public void update(GameContainer container, float deltaFloat) {
+	public void update(GameContainer container, StateBasedGame sbg, float deltaFloat) {
 		if (mainGame.isHost()) {
 			lastCircleUpdate++;
 			if (lastCircleUpdate >= CIRCLES_UPDATE_RATE) {
@@ -114,7 +119,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 
 				mainGame.getPlayerList().intersectPlayersWithCircle(circle);
 
-				parentState.getWeaponList().intersectWeaponsWithCircle(circle);
+				parentState.getPlayerHelper().getWeaponList().intersectWeaponsWithCircle(circle);
 
 				if (circle.isHitCeiling()) {
 					ceilingList.add(circle);
@@ -131,7 +136,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
             if (!circle.isDone()) { // if the circle hasn't been handled
 
             	FloatingScore floatingScore = new FloatingScore(circle);
-            	parentState.getFloatingScores().add(floatingScore);
+            	parentState.getInterfaceHelper().getFloatingScores().add(floatingScore);
             	//Send to client
             	if (mainGame.isLanMultiplayer() && mainGame.isHost()) {
             		mainGame.getHost().sendFloatingScore(floatingScore);
@@ -150,7 +155,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 		if (circleList.getCircles().contains(circle)) {
             circleList.getCircles().remove(circle);
             circle.setDone(true);
-            parentState.setScore(parentState.getScore() + circle.getScore());
+            parentState.getLogicHelper().addToScore(circle.getScore());
         } // if the ball has a radius of 20, split it u
         ArrayList<BouncingCircle> splits = new ArrayList<BouncingCircle>();
         if (circle.getRadius() >= MINIMUM_SPLIT_RADIUS) {
@@ -224,10 +229,10 @@ public class GameStateCirclesHelper extends GameStateHelper {
 			final int total = 100;
 			int randInt = new Random().nextInt(total) + 1;
 			if (randInt <= POWERUP_CHANCE) {
-				parentState.dropPowerup(circle);
+				parentState.getItemsHelper().dropPowerup(circle);
 			}
 			else if (randInt <= POWERUP_CHANCE + COIN_CHANCE) {
-				parentState.dropCoin(circle);
+				parentState.getItemsHelper().dropCoin(circle);
 			}
 		}
 	}

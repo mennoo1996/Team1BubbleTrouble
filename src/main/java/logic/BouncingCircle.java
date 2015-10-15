@@ -171,7 +171,7 @@ public class BouncingCircle extends Circle implements Cloneable {
 		} else if (this.getMaxX() > containerWidth - gameState.getRightWall().getWidth()) {
 			xSpeed = -initSpeed;
 		} else {
-			for (Gate gate : gameState.getGateList()) {
+			for (Gate gate : gameState.getCirclesHelper().getGateList()) {
 				if (gate.getRectangle().intersects(this.getCircle())) {
 					if (gate.getUnlockCircles().contains(this)) {
 						xSpeed = -initSpeed;
@@ -202,22 +202,22 @@ public class BouncingCircle extends Circle implements Cloneable {
 		if (newYSpeed > MINIMUM_SPEED) {
 			newYSpeed = MINIMUM_SPEED;
 		}
-		// bonus speed when hit at the right moment
 		if (newYSpeed < BONUS_SPEED_FACTOR * radius) {
 			logger.log("New balls aquired bonus speed",
 					PriorityLevels.VERYLOW, "BouncingCircles");
 			newYSpeed -= BONUS_SPEED;
 		}
 		BouncingCircle circle1 = new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), 
-				xSpeed,	newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID());
+				xSpeed,	newYSpeed, mainGame.getGravity(), 
+				gameState.getCirclesHelper().getCircleList().getNewID());
 		BouncingCircle circle2 = new BouncingCircle(getCenterX(), getCenterY(), getNewRadius(), 
-				-xSpeed, newYSpeed, mainGame.getGravity(), gameState.getCircleList().getNewID());
+				-xSpeed, newYSpeed, mainGame.getGravity(), 
+				gameState.getCirclesHelper().getCircleList().getNewID());
 		if (multiplier != 0) {
 			circle1.setMultiplier(multiplier);
 			circle2.setMultiplier(multiplier);
 		}
-		res.add(circle1);
-		res.add(circle2);	
+		res.add(circle1); res.add(circle2);	
 		return res;
 	}
 	

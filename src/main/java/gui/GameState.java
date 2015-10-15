@@ -1,32 +1,14 @@
 package gui;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import logic.BouncingCircle;
-import logic.CircleList;
-import logic.Coin;
-import logic.FloatingScore;
-import logic.Gate;
 import logic.LevelContainer;
 import logic.Logger;
 import logic.MyRectangle;
-import logic.Weapon;
-import logic.WeaponList;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-
-import powerups.Powerup;
-import powerups.SpeedPowerup;
 
 /**
  * This class is the state that we are in during gameplay.
@@ -40,56 +22,18 @@ import powerups.SpeedPowerup;
  */
 public class GameState extends BasicGameState {
 	
-	private  int totaltime;
+	
 	
 	private GameStatePlayerHelper playerHelper;
 	private GameStateCirclesHelper circlesHelper;
+	private GameStateInterfaceHelper interfaceHelper;
+	private GameStateItemsHelper itemsHelper;
+	private GameStatePauseHelper pauseHelper;
+	private GameStateLogicHelper logicHelper;
 	
 	private MainGame mainGame;
-	private ArrayList<Powerup> droppedPowerups = new ArrayList<>();
-	private ArrayList<Coin> droppedCoins = new ArrayList<>();
-	private ArrayList<SpeedPowerup> speedPowerupList = new ArrayList<SpeedPowerup>();
-	private ArrayList<FloatingScore> floatingScoreList;
-
-	private int score;
-	private long startTime;
-	private long timeDelta;
-	private long timeRemaining;
-	private long prevTime;
-	private boolean countIn;
-	private boolean playingState;
-	private boolean waitEsc;
-	private boolean levelStarted;
-	private boolean countinStarted;
-	
-	// Images
-	private Image health0Image;
-	private Image health1Image;
-	private Image health2Image;
-	private Image health3Image;
-	private Image health4Image;
-	private Image health5Image;
-	private Image nobuttonImage;
-	private Image wallsImageN;
-	private Image wallsImageA;
-	
-	private Image ceilingImageN;
-	private Image ceilingImageA;
-	private Image counterBarImageN;
-	private Image counterBarImageA;
-	
-	// pause game buttons
-	private Button returnButton;
-	private Button menuButton;
-	private Button exitButton;
-	
-	// Countdown Bar Logic
-	private static final int COUNTDOWN_BAR_PARTS = 56;
-	private int fractionTimeParts;
-	private boolean waitForLevelEnd = false;
 	
 	// level objects
-	private WeaponList weaponList;
 	private MyRectangle floor;
 	private MyRectangle leftWall;
 	private MyRectangle rightWall;
@@ -98,65 +42,13 @@ public class GameState extends BasicGameState {
 
 	private LevelContainer levels;
 	
-	// PAUSE MENU
-	private static final int BUTTON_X = 164;
-	private static final int RETURN_BUTTON_Y = 238;
-	private static final int MENU_BUTTON_Y = 288;
-	private static final int EXIT_BUTTON_Y = 338;
-	private static final int TEXT_X = 164;
-	private static final int TEXT_1_Y = 142;
-	private static final int TEXT_2_Y = 190;
-	private static final int BUTTON_WIDTH = 1000;
-	private static final int BUTTON_HEIGHT = 50;
-	
 	// CONSTANTS
-	private static final int LEVEL_POINTS = 150;
-	private static final int SECOND_TO_MS_FACTOR = 1000;
-	private static final float SECOND_TO_MS_FACTOR_FLOAT = 1000f;
 	private static final int FLOOR_Y_DEVIATION = 210;
 	private static final int FLOOR_HEIGHT = 210;
 	private static final int LEFT_WALL_WIDTH = 105;
 	private static final int RIGHT_WALL_X_DEVIATION = 130;
 	private static final int RIGHT_WALL_WIDTH = 130;
 	private static final int CEILING_HEIGHT = 110;
-	private static final float COUNT_IN_TIME = 3000f;
-	private static final float TIME_REMAINING_FACTOR = 0.01f;
-	private static final int PAUSE_FACTOR = 300;
-	private static final int CEILING_DRAW_X_DEVIATION = 10;
-	private static final int CEILING_DRAW_Y_DEVIATION = 25;
-	private static final int LEVEL_STRING_X_DEVIATION = 270;
-	private static final int LEVEL_STRING_Y_DEVIATION = 84;
-	private static final int SCORE_STRING_Y_DEVIATION = 84;
-	private static final int COUNTER_BAR_X_DEVIATION = 80;
-	private static final int COUNTER_BAR_Y_DEVIATION = 60;
-	private static final int COUNTER_BAR_PARTS_FACTOR = 5;
-	private static final int COUNTER_BAR_X_FACTOR = 10;
-	private static final int SHIELD_COUNTER_OFFSET_X = 120;
-	private static final int SHIELD_COUNTER_OFFSET_Y = 90;
-	private static final int SHIELD_COUNTER_OFFSET_1_Y = -6;
-	private static final int SHIELD_COUNTER_OFFSET_1_X = 290;
-	private static final int SHIELD_COUNTER_OFFSET_2_X = 305;
-	private static final int SHIELD_COUNTER_INCREMENT_Y = 40;
-	private static final float SHIELD_COUNTER_DIVIDER = 1000f;
-	private static final int HEALTH_IMAGE_THREE = 3;
-	private static final int HEALTH_IMAGE_FOUR = 4;
-	private static final int HEALTH_IMAGE_FIVE = 5;
-	private static final float PAUSE_OVERLAY_COLOR_FACTOR = 0.5f;
-	private static final int PAUSED_RECT_Y_DEVIATION = 150;
-	private static final int PAUSED_STRING_X_DEVIATION = 130;
-	private static final int PAUSED_STRING_Y_DEVIATION = 53;
-	private static final float COUNT_FACTOR = 15f;
-	private static final int STARTING_STRING_X_DEVIATION = 90;
-	private static final int STARTING_COUNT_X_DEVIATION = 5;
-	private static final int WHOLE_CIRCLE_DEGREES = 360;
-	private static final int COUNT_IN_DEGREES = 15;
-	private static final int COUNTER_BAR_ROTATION_X = 12;
-	private static final int COUNTER_BAR_ROTATION_Y = 50;
-	private static final int COUNTER_BAR_DRAW_X_DEVIATION = 10;
-	private static final int COUNTER_BAR_DRAW_Y_DEVIATION = 91;
-	// Level ending, empty bar
-	
-	private Random random;
 	
 	/**
 	 * The constructor.
@@ -178,44 +70,19 @@ public class GameState extends BasicGameState {
 		Logger.getInstance().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
 		RND.setOpacity(0.0f);
 		mainGame.stopSwitchState();
-		random = new Random();
-		score = 0;
 		levels.initialize();
 		playerHelper.enter();
 		circlesHelper.enter();
-		totaltime = levels.getLevel(mainGame.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
-		fractionTimeParts = COUNTDOWN_BAR_PARTS;
-		startTime = System.currentTimeMillis();
-		timeRemaining = totaltime;
-		prevTime = startTime;
-		countIn = true;
-		if (mainGame.isHost()) {
-			mainGame.getHost().updateCountinStarted();
-		} else if (mainGame.isClient()) {
-			countIn = false;
-		}
-		enter2(container);
-	}
-	
-	/**
-	 * Second part of enter method.
-	 * @param container	the container of the game
-	 */
-	private void enter2(GameContainer container) {
-		playingState = true;
-		// Add player sprite and walls
+		itemsHelper.enter();
+		interfaceHelper.enter();
+		logicHelper.enter();
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
 		setRightWall(new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
-		floatingScoreList = new ArrayList<FloatingScore>();
-		droppedPowerups = new ArrayList<>();
-		droppedCoins = new ArrayList<>();
 	}
-	
-	
 	
 	/**
 	 * Exit function for state. Fades out and everything.
@@ -225,22 +92,39 @@ public class GameState extends BasicGameState {
 	 */
 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
 		if (mainGame.getShouldSwitchState()) {
-			if (RND.getOpacity() > 0.0f) {
-				int fadeTimer = mainGame.getOpacityFadeTimer();
-				if (mainGame.getSwitchState() == -1) {
-					fadeTimer = 2 * 2 * 2 * fadeTimer;
-				}
-				RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
+			exitOpacityNotZero(delta);
+			exitOpacityZero(sbg);
+		}
+	}
+	
+	/**
+	 * Ran when exiting while RND opacity is not at zero.
+	 * @param delta delta time for opacity checks.
+	 */
+	private void exitOpacityNotZero(int delta) {
+		if (RND.getOpacity() > 0.0f) {
+			int fadeTimer = mainGame.getOpacityFadeTimer();
+			if (mainGame.getSwitchState() == -1) {
+				fadeTimer = 2 * 2 * 2 * fadeTimer;
+			}
+			RND.setOpacity(RND.getOpacity() - ((float) delta) / fadeTimer);
+		}
+	}
+	
+	/**
+	 * Ran when exitigng while RND opacity is at zero.
+	 * @param sbg the statebasedgame to use for switching states.
+	 */
+	private void exitOpacityZero(StateBasedGame sbg) {
+		if (RND.getOpacity() <= 0.0f) {
+			Logger.getInstance().log("Exiting GameState", Logger.PriorityLevels.LOW, "States");
+			if (mainGame.getSwitchState() == -1) {
+				System.exit(0);
 			} else {
-				Logger.getInstance().log("Exiting GameState", Logger.PriorityLevels.LOW, "States");
-				if (mainGame.getSwitchState() == -1) {
-					System.exit(0);
-				} else {
-					mainGame.switchColor();
-					playerHelper.exit();
-					sbg.enterState(mainGame.getSwitchState());
-				}
-			}	
+				mainGame.switchColor();
+				playerHelper.exit();
+				sbg.enterState(mainGame.getSwitchState());
+			}
 		}
 	}
 	
@@ -252,10 +136,13 @@ public class GameState extends BasicGameState {
 	 */
 	public void init(GameContainer container, StateBasedGame arg1)
 			throws SlickException {
-		playerHelper = new GameStatePlayerHelper(mainGame);
+		playerHelper = new GameStatePlayerHelper(mainGame, this);
 		circlesHelper = new GameStateCirclesHelper(mainGame, this);
-		loadImages();
-		loadButtons();
+		interfaceHelper = new GameStateInterfaceHelper(mainGame, this);
+		itemsHelper = new GameStateItemsHelper(mainGame, this);
+		pauseHelper = new GameStatePauseHelper(mainGame, this);
+		logicHelper = new GameStateLogicHelper(mainGame, this);
+		
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -263,13 +150,7 @@ public class GameState extends BasicGameState {
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		levels = new LevelContainer(mainGame);
-		Weapon weapon1 = null;
-		Weapon weapon2 = null;
-		weaponList = new WeaponList(weapon1, mainGame, this, false);
-		weaponList.add(weapon2);
 	}
-
-
 	
 	/**
 	 * update method, called on each frame refresh.
@@ -280,245 +161,20 @@ public class GameState extends BasicGameState {
 	 */
 	public void update(GameContainer container, StateBasedGame sbg, int delta)
 			throws SlickException {
+		updateOpacity(delta);
+		setSavedInput(container.getInput());
+		logicHelper.update(container, sbg, delta);
+		exit(container, sbg, delta);
+	}
+	
+	/**
+	 * Process properly updating and increasing the opacity from the update loop.
+	 * @param delta elapsed delta time.
+	 */
+	private void updateOpacity(int delta) {
 		if (RND.getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
 			RND.setOpacity(RND.getOpacity() + ((float) delta) / mainGame.getOpacityFadeTimer());
 		}
-		setSavedInput(container.getInput());
-		if (playingState && !mainGame.getShouldSwitchState()) {
-			long curTime = System.currentTimeMillis();
-			timeDelta = curTime - prevTime;
-			boolean countingIn = (countIn && !mainGame.isClient()) || (mainGame.isClient()
-					&& countinStarted);
-			if (countingIn) {
-				if (timeDelta >= COUNT_IN_TIME) {
-					Logger.getInstance().log("Starting level", 
-							Logger.PriorityLevels.MEDIUM, "levels");
-					countIn = false;
-					mainGame.getPlayerList().setDied(false);
-					if (mainGame.isHost()) {
-						mainGame.getHost().updateLevelStarted();
-					}
-					prevTime = curTime;					
-				}
-			} else {
-				if (!mainGame.isLanMultiplayer() || mainGame.isHost() || levelStarted) {
-					playGame(container, sbg, delta, curTime);
-				}
-			}
-		} else {
-			processEscape(container);
-		} exit(container, sbg, delta);
-	}
-	
-	/**
-	 * Process the "press escape" event.
-	 * @param container the GameContainer we are playing in.
-	 */
-	private void processEscape(GameContainer container) {
-		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE) && !waitEsc) {
-			// Reset time countdown
-			pauseStopped(false);
-		}
-		processPauseButtons(container);
-	}
-
-	/**
-	 * Process everything in the game, for one frame.
-	 * @param container the GameContainer we are playing in
-	 * @param sbg the StateBasedGame that we are playing in
-	 * @param delta the time since the last frame in ms
-	 * @param curTime the current time
-	 */
-	private void playGame(GameContainer container, StateBasedGame sbg, int delta, long curTime) {	
-		processTime(sbg, curTime);
-		float deltaFloat = delta / SECOND_TO_MS_FACTOR_FLOAT;
-		// player-thingy
-		playerHelper.update(container, deltaFloat);
-		circlesHelper.update(container, deltaFloat);
-		processPause();
-		processSpeedPowerups(deltaFloat);
-		updateFloatingScores(deltaFloat);
-		// if there are no circles required to be shot by a gate, remove said gate
-		processCoins(container, deltaFloat);
-		if (circlesHelper.getCircleList().getCircles().isEmpty()) {
-			endLevel();
-		}
-	}
-
-	/**
-	 * Process all speedPowerups.
-	 * @param deltaFloat time since last update
-	 */
-	private void processSpeedPowerups(float deltaFloat) {
-		ArrayList<SpeedPowerup> doneList = new ArrayList<SpeedPowerup>();
-		synchronized (speedPowerupList) {
-			for (SpeedPowerup speedPowerup : speedPowerupList) {
-				speedPowerup.update(deltaFloat, 
-						((GameState) mainGame.getState(mainGame.getGameState())).getCircleList());
-				if (speedPowerup.isDone()) {
-					doneList.add(speedPowerup);
-				}
-			}
-		}
-		for (SpeedPowerup speedPowerup : doneList) {
-			speedPowerupList.remove(speedPowerup);
-		}
-	}
-
-	/**
-	 * Process the time in the current game.
-	 * @param sbg the statebasedgame we are playing in 
-	 * @param curTime the current time, used to calculate the difference
-	 */
-	private void processTime(StateBasedGame sbg, long curTime) {
-		timeRemaining -= timeDelta;
-		fractionTimeParts = Math.round((float) COUNTDOWN_BAR_PARTS 
-				* (float) timeRemaining / (float) totaltime);
-
-		if (waitForLevelEnd) {
-			timeRemaining -= TIME_REMAINING_FACTOR * totaltime;
-			if (timeRemaining < 1) {
-				timeRemaining = 1;
-			}
-		}
-
-		if (timeRemaining <= 0) {
-            mainGame.getPlayerList().playerDeath(sbg);
-        }
-		prevTime = curTime;
-	}
-
-	/**
-	 * Process the buttons if you are in the pause menu.
-	 * @param container the GameContainer we are playing in
-	 */
-	private void processPauseButtons(GameContainer container) {
-		Input input = container.getInput();
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
-			if (returnButton.isMouseOver(input) && !waitEsc) {
-				pauseStopped(false);
-			} else if (menuButton.isMouseOver(input)) {
-				mainGame.setScore(0);
-				mainGame.setLevelCounter(0);
-				mainGame.killMultiplayer();
-				mainGame.setSwitchState(mainGame.getStartState());
-			} else if (exitButton.isMouseOver(input)) {
-				mainGame.killMultiplayer();
-				mainGame.setSwitchState(-1);
-			}
-		}
-	}
-	
-	/**
-	 * Stop the paused mode of the game.
-	 * @param fromPeer	indicates if this has been requested from peer
-	 */
-	public void pauseStopped(boolean fromPeer) {
-		prevTime = System.currentTimeMillis();
-		countIn = true;
-		playingState = true;		
-		
-		if (mainGame.isHost() && !fromPeer) {
-			mainGame.getHost().updatePauseStopped();
-		}
-		
-		if (mainGame.isHost()) {
-			mainGame.getHost().updateCountinStarted();
-		}
-		
-		if (mainGame.isClient()) {
-			mainGame.getClient().updatePauseStopped();
-		}
-	}
-	
-	/**
-	 * Process the coins that are currently in the game.
-	 * @param container the GameContainer we are playing in
-	 * @param deltafloat the time in seconds since the last frame
-	 */
-	private void processCoins(GameContainer container, float deltafloat) {
-		for (Coin coin : droppedCoins) {
-			coin.update(getFloor(), deltafloat, container.getHeight());
-		}
-	}
-
-	/**
-	 * Update the floating scores in the game.
-	 * @param deltaFloat the time in seconds since the last frame
-	 */
-	private void updateFloatingScores(float deltaFloat) {
-		Iterator<FloatingScore> scoreListIterator = floatingScoreList.iterator();
-		synchronized (scoreListIterator) {
-			while (scoreListIterator.hasNext()) {
-				FloatingScore score = scoreListIterator.next();
-				if (score.isDead()) {
-					scoreListIterator.remove();
-				} else {
-					score.update(deltaFloat, timeDelta);
-				}
-			}
-		}
-	}
-
-	/**
-	 * End the level if needed.
-	 */
-	private void endLevel() {
-		if (!waitForLevelEnd) {
-            waitForLevelEnd = true;
-        }
-		score += ((double) timeRemaining / totaltime) * LEVEL_POINTS; // add level-ending score
-		
-		if (waitForLevelEnd && timeRemaining == 1) {
-            
-            mainGame.setScore(mainGame.getScore() + score); // update total score
-            int levelCounter = mainGame.getLevelCounter();
-			if (levelCounter < levels.size() - 1) {
-                waitForLevelEnd = false;
-                mainGame.setLevelCounter(mainGame.getLevelCounter() + 1);
-                //sbg.enterState(mainGame.getGameState()); // next level
-                mainGame.setSwitchState(mainGame.getGameState());
-            } else {
-                waitForLevelEnd = false;
-               // sbg.enterState(mainGame.getGameOverState()); // game completed
-                mainGame.setSwitchState(mainGame.getGameOverState());
-            }
-        }
-	}
-
-
-	/**
-	 * Process the pause screen.
-	 */
-	private void processPause() {
-		if (getSavedInput().isKeyDown(Input.KEY_ESCAPE)) {
-			pauseStarted(false);
-        }
-	}
-	
-	/**
-	 * Set the game to paused mode.
-	 * @param fromPeer	indicates if the pause has ben requested from peer
-	 */
-	public void pauseStarted(boolean fromPeer) {
-		waitEsc = true;
-		Executors.newScheduledThreadPool(1).schedule(() -> waitEsc = false,
-				PAUSE_FACTOR, TimeUnit.MILLISECONDS);
-		playingState = false;
-		
-		if (mainGame.isHost() && !fromPeer) {
-			mainGame.getHost().updatePauseStarted();
-		} else if (mainGame.isClient() && !fromPeer) {
-			mainGame.getClient().updatePauseStarted();
-		}
-	}
-
-	/**
-	 * Get the gate list.
-	 * @return The gatelist.
-	 */
-	public ArrayList<Gate> getGateList() {
-		return circlesHelper.getGateList();
 	}
 
 	/**
@@ -531,263 +187,13 @@ public class GameState extends BasicGameState {
 	 */
 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
 			throws SlickException {
-		// draw background layer
 		RND.drawBackground(graphics);
 		circlesHelper.render(graphics, container);
 		playerHelper.render(graphics, container);
-		drawFloatingScores(graphics);
-		RND.drawColor(graphics, ceilingImageN, ceilingImageA, getLeftWall().getWidth() 
-				- CEILING_DRAW_X_DEVIATION, getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION, 
-				mainGame.getColor());
-		weaponList.drawWeapons(graphics);
-		drawItems(graphics);
-		// Draw walls, floor and ceiling
-		RND.drawColor(graphics, wallsImageN, wallsImageA, 0, 0, mainGame.getColor());
-		drawCountdownBar(container, graphics);
-		// Draw level/Score data
-		RND.text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
-				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
-						+ Integer.toString(mainGame.getLevelCounter() + 1));
-		drawScore(container, graphics);
-		// Pause overlay and counter
-		drawMiscellaneous(container, graphics);
+		itemsHelper.render(graphics, container);
+		interfaceHelper.renderBottomLayer(graphics, container);
+		logicHelper.render(graphics, container);
 	}
-
-	/**
-	 * Draw the score.
-	 * @param container the GameContainer we are playing in
-	 * @param graphics the graphics object to draw things on screen
-	 */
-	private void drawScore(GameContainer container, Graphics graphics) {
-		String renderedScore;
-		if (mainGame.getShouldSwitchState()) {
-			renderedScore = Integer.toString(mainGame.getScore());
-		} else {
-			renderedScore = Integer.toString(mainGame.getScore() + score);
-		}
-		RND.text(graphics, (float) container.getWidth() / 2.0f, container.getHeight()
-				- SCORE_STRING_Y_DEVIATION, "Score: " + renderedScore);
-	}
-
-	/**
-	 * Draw some things like shield timer, health lights, etc.
-	 * @param container the GameContainer we are playing in
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawMiscellaneous(GameContainer container, Graphics graphics) {
-		// draw shield timers
-		drawShieldTimer(graphics);
-		// draw version number
-		mainGame.drawWaterMark();
-		// draw count-in over everything thats UI
-		if (playingState && (countIn || (mainGame.isClient() && countinStarted))) {
-			drawCountIn(container, graphics);
-		}
-		// draw pause screen over everything thats UI
-		if (!playingState) {
-			drawPausedScreen(container, graphics);
-		}
-		// draw foreground layer
-		RND.drawForeGround(graphics);
-		// disable button when paused
-		if (!playingState) {
-			graphics.drawImage(nobuttonImage, 0, 0);
-		}
-		// show correct health lights
-		drawHealth(graphics);
-	}
-
-	/**
-	 * Draw the shield timer.
-	 * @param graphics the Graphics object to draw things on screne
-	 */
-	private void drawShieldTimer(Graphics graphics) {
-		int height = SHIELD_COUNTER_OFFSET_Y;
-		if (mainGame.getPlayerList().getPlayers().get(0).hasShield()) {
-			height += SHIELD_COUNTER_INCREMENT_Y;
-			float rem = mainGame.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
-			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
-						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
-			}
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X
-					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
-					* COUNTER_BAR_X_FACTOR, height,
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
-		if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
-				&& mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
-			height += SHIELD_COUNTER_INCREMENT_Y;
-			float rem = mainGame.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
-			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				RND.drawColor(graphics, counterBarImageN, counterBarImageA,
-						SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor());
-			}
-			RND.text(graphics, SHIELD_COUNTER_OFFSET_2_X 
-					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
-					* COUNTER_BAR_X_FACTOR, height, 
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
-	}
-	
-	/**
-	 * Draw the items in the game.
-	 * @param graphics the Graphics object to draw things on screen.
-	 */
-	private void drawItems(Graphics graphics) {
-		drawPowerups(graphics);
-		drawCoins(graphics);
-	}
-
-	/**
-	 * Draw the powerups.
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawPowerups(Graphics graphics) {
-		synchronized (droppedPowerups) {
-			for (Powerup pow : droppedPowerups) {
-				RND.drawPowerup(graphics, pow);
-			}
-		}
-	}
-
-	/**
-	 * Draw the coins.
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawCoins(Graphics graphics) {
-		graphics.setColor(Color.blue);
-		synchronized (droppedCoins) {
-			for (Coin coin : droppedCoins) {
-				coin.draw(graphics, mainGame);
-			}	
-		}
-		graphics.setColor(Color.white);
-	}
-
-	/**
-	 * Draw the countdown bar.
-	 * @param container the GameContainer we are playing in
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawCountdownBar(GameContainer container, Graphics graphics) {
-		for (int x = 0; x < fractionTimeParts; x++) {
-			RND.drawColor(graphics, counterBarImageN, counterBarImageA,
-					container.getWidth() / 2 - COUNTER_BAR_X_DEVIATION - COUNTER_BAR_PARTS_FACTOR
-					* (COUNTDOWN_BAR_PARTS) + x * COUNTER_BAR_X_FACTOR,
-					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mainGame.getColor());
-		}
-	}
-
-	/**
-	 * Draw the floating scores.
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawFloatingScores(Graphics graphics) {
-		synchronized (floatingScoreList) {
-			for (FloatingScore score : floatingScoreList) {
-				RND.textSpecifiedColor(graphics, score.getX(), score.getY(), score.getScore(),
-						new Color(mainGame.getColor().r, mainGame.getColor().g,
-								mainGame.getColor().b, score.getOpacity()));
-			}
-		}
-	}
-	
-	/**
-	 * Draw the health lights.
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawHealth(Graphics graphics) {
-		switch (mainGame.getLifeCount()) {
-			case(0) :
-				graphics.drawImage(health0Image, 0, 0);
-			break;
-			case(1) :
-				graphics.drawImage(health1Image, 0, 0);
-			break;
-			case(2) :
-				graphics.drawImage(health2Image, 0, 0);
-			break;
-			case(HEALTH_IMAGE_THREE) :
-				graphics.drawImage(health3Image, 0, 0);
-			break;
-			case(HEALTH_IMAGE_FOUR) :
-				graphics.drawImage(health4Image, 0, 0);
-			break;
-			case(HEALTH_IMAGE_FIVE) :
-				graphics.drawImage(health5Image, 0, 0);
-			break;
-			default:
-				try {
-					throw new SlickException("Life count was not in the correct range");
-				} catch (SlickException e) {
-					e.printStackTrace();
-				}
-		}
-	}
-
-	/**
-	 * Draw the paused screen if needed.
-	 * @param container the GameContainer we are playing in
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawPausedScreen(GameContainer container, Graphics graphics) {
-		Color overLay = new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR);
-		graphics.setColor(overLay);
-		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
-				- PAUSED_RECT_Y_DEVIATION);
-		RND.text(graphics, TEXT_X, TEXT_1_Y, "# Game is paused...");
-		RND.text(graphics, TEXT_X, TEXT_2_Y, "========================");
-		Input input = container.getInput();
-		drawMouseOvers(input, graphics);
-	}
-	
-	/**
-	 * Draw the buttons with mouse over skin if mouse is near that button.
-	 * @param input the Input of the user
-	 * @param graphics the Graphics object in
-	 */
-	private void drawMouseOvers(Input input, Graphics graphics) {
-		returnButton.drawColor(graphics, input, mainGame.getColor());
-		menuButton.drawColor(graphics, input, mainGame.getColor());
-		exitButton.drawColor(graphics, input, mainGame.getColor());
-	}
-
-	/**
-	 * Draw the count in.
-	 * @param container the GameContainer we are playing in
-	 * @param graphics the Graphics object to draw things on screen
-	 */
-	private void drawCountIn(GameContainer container, Graphics graphics) {
-		int count = (int) Math.ceil((COUNT_IN_TIME - timeDelta) / SECOND_TO_MS_FACTOR),
-				amount = Math.round((COUNT_IN_TIME - timeDelta) / COUNT_IN_TIME * COUNT_FACTOR);
-
-		graphics.setColor(new Color(0f, 0f, 0f, PAUSE_OVERLAY_COLOR_FACTOR));
-		graphics.fillRect(0, 0, container.getWidth(), container.getHeight()
-				- PAUSED_RECT_Y_DEVIATION);
-
-		RND.text(graphics, container.getWidth() / 2 - STARTING_STRING_X_DEVIATION,
-				container.getHeight() / 2 - PAUSED_STRING_X_DEVIATION, "Starting in");
-		RND.text(graphics, container.getWidth() / 2 - STARTING_COUNT_X_DEVIATION,
-				container.getHeight() / 2 - PAUSED_STRING_Y_DEVIATION, Integer.toString(count));
-		
-		for (int i = 0; i < amount; i++) {
-            float degree = i * (WHOLE_CIRCLE_DEGREES / COUNT_IN_DEGREES);
-            counterBarImageN.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
-            counterBarImageA.setCenterOfRotation(COUNTER_BAR_ROTATION_X, COUNTER_BAR_ROTATION_Y);
-            counterBarImageN.rotate(degree);
-            counterBarImageA.rotate(degree);
-            RND.drawColor(graphics, counterBarImageN, counterBarImageA,
-            		container.getWidth() / 2 - COUNTER_BAR_DRAW_X_DEVIATION, 
-            		container.getHeight() / 2 - COUNTER_BAR_DRAW_Y_DEVIATION, 
-            		mainGame.getColor());
-            counterBarImageN.rotate(-degree);
-            counterBarImageA.rotate(-degree);
-        }
-	}
-
 
 	/**
 	 * Return the id of this gameState.
@@ -796,60 +202,6 @@ public class GameState extends BasicGameState {
 	@Override
 	public int getID() {
 		return 1;
-	}
-
-	/**
-	 * Load all the images.
-	 * @throws SlickException if something goes wrong / file not found
-	 */
-	private void loadImages() throws SlickException {
-		loadHealthAndBallImages();
-		// button image
-		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		// countdown bar images
-		counterBarImageN = new Image("resources/images_UI/counter_Norm.png");
-		counterBarImageA = new Image("resources/images_UI/counter_Add.png");
-		Gate.loadImages();
-		// walls image
-		wallsImageN = new Image("resources/images_Level/walls_Norm.png");
-		wallsImageA = new Image("resources/images_Level/walls_Add.png");
-		// ceiling image
-		ceilingImageN = new Image("resources/images_Level/ceiling_Norm.png");
-		ceilingImageA = new Image("resources/images_Level/ceiling_Add.png");
-		// balls images
-		// button image
-		nobuttonImage = new Image("resources/Terminal/Terminal_No_Button.png");
-		Coin.loadImages();
-	}
-	
-	/**
-	 * Load all the buttons.
-	 * @throws SlickException if something goes wrong / file not found
-	 */
-	private void loadButtons() throws SlickException {
-		returnButton = new Button(BUTTON_X, RETURN_BUTTON_Y,
-				BUTTON_WIDTH, BUTTON_HEIGHT,
-				"> Return");
-		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
-				BUTTON_WIDTH, BUTTON_HEIGHT,
-				"> Main Menu");
-		exitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
-				BUTTON_WIDTH, BUTTON_HEIGHT,
-				"> Quit");
-	}
-	
-	/**
-	 * Load the images for health and balls.
-	 * @throws SlickException if something goes wrong / file not found
-	 */
-	private void loadHealthAndBallImages() throws SlickException {
-		// load health images
-		health0Image = new Image("resources/Terminal/Terminal_Lights_0.png");
-		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
-		health2Image = new Image("resources/Terminal/Terminal_Lights_2.png");
-		health3Image = new Image("resources/Terminal/Terminal_Lights_3.png");
-		health4Image = new Image("resources/Terminal/Terminal_Lights_4.png");
-		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
 	}
 	
 	/**
@@ -883,46 +235,6 @@ public class GameState extends BasicGameState {
 	public void setRightWall(MyRectangle rightWall) {
 		this.rightWall = rightWall;
 	}
-	
-	/**
-	 * set the gatelist.
-	 * @param gatelist the gatelist to set
-	 */
-	public void setGateList(ArrayList<Gate> gatelist) {
-		circlesHelper.setGateList(gatelist);
-	}
-
-	/**
-	 * Drop a coin.
-	 * @param circle the circle that should drop the coin.
-	 */
-	public void dropCoin(BouncingCircle circle) {
-		boolean bigMoney = random.nextBoolean();
-		Coin someCoin = new Coin(circle.getCenterX(), circle.getCenterY(), bigMoney);
-		synchronized (droppedCoins) {
-			droppedCoins.add(someCoin);
-		}
-		if (mainGame.isLanMultiplayer()) {
-			mainGame.getHost().updateCoinsAdd(someCoin);
-		}
-	}
-
-	/**
-	 * Drop a powerup.
-	 * @param circle the circle that should drop the powerup
-	 */
-	public void dropPowerup(BouncingCircle circle) {
-		// Get a random powerup
-		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
-				.nextInt(Powerup.PowerupType.values().length)];
-		Powerup somePowerup = new Powerup(circle.getCenterX(), circle.getCenterY(), newPowerup);
-		//somePowerup = new Powerup(circle.getCenterX(), 
-		//circle.getCenterY(), Powerup.PowerupType.RANDOM);
-		droppedPowerups.add(somePowerup);
-		if (mainGame.isLanMultiplayer()) {
-			mainGame.getHost().updatePowerupsAdd(somePowerup);
-		}
-	}
 
 	/**
 	 * Get the MainGame.
@@ -930,14 +242,6 @@ public class GameState extends BasicGameState {
 	 */
 	public MainGame getmainGame() {
 		return mainGame;
-	}
-
-	/**
-	 * Set the maingame.
-	 * @param mainGame the maingame to set.
-	 */
-	public void setmainGame(MainGame mainGame) {
-		this.mainGame = mainGame;
 	}
 
 	/**
@@ -967,8 +271,7 @@ public class GameState extends BasicGameState {
 	public MyRectangle getRightWall() {
 		return rightWall;
 	}
-
-
+	
 	/**
 	 * @return the savedInput
 	 */
@@ -982,163 +285,12 @@ public class GameState extends BasicGameState {
 	public void setSavedInput(Input savedInput) {
 		this.savedInput = savedInput;
 	}
-
-	
-
-	/**
-	 * @return the weaponList
-	 */
-	public WeaponList getWeaponList() {
-		return weaponList;
-	}
-
-	/**
-	 * @param weaponList the weaponList to set
-	 */
-	public void setWeaponList(WeaponList weaponList) {
-		this.weaponList = weaponList;
-	}
-
-	/**
-	 * @return the score
-	 */
-	public int getScore() {
-		return score;
-	}
-
-	/**
-	 * @param score the score to set
-	 */
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	/**
-	 * @param points the number to increment score
-	 */
-	public void addToScore(int points) {
-		this.score += points;
-	}
-
-	/**
-	 * @return the droppedPowerups
-	 */
-	public ArrayList<Powerup> getDroppedPowerups() {
-		return droppedPowerups;
-	}
-
-	/**
-	 * @param droppedPowerups the droppedPowerups to set
-	 */
-	public void setDroppedPowerups(ArrayList<Powerup> droppedPowerups) {
-		this.droppedPowerups = droppedPowerups;
-	}
-
-	/**
-	 * @return dropped coins
-	 */
-	public ArrayList<Coin> getDroppedCoins() {
-		return droppedCoins;
-	}
-
-	/**
-	 * @return the shotList
-	 */
-	public ArrayList<BouncingCircle> getShotList() {
-		return circlesHelper.getShotList();
-	}
-
-	/**
-	 * @param shotList the shotList to set
-	 */
-	public void setShotList(ArrayList<BouncingCircle> shotList) {
-		circlesHelper.setShotList(shotList);
-	}
-
-	/**
- 	* @param droppedCoins list to set
- 	*/
-	public void setDroppedCoins(ArrayList<Coin> droppedCoins) {
-		this.droppedCoins = droppedCoins;
-	}
-	
-	/**
-	 * @return floating scores
-	 */
-	public ArrayList<FloatingScore> getFloatingScores() {
-		return floatingScoreList;
-	}
-
-	/**
-	 * @return whether or not the game is paused
-	 */
-	public boolean isPaused() {
-		return !playingState;
-	}
-
-	/**
-	 * @return the levelStarted
-	 */
-	public boolean isLevelStarted() {
-		return levelStarted;
-	}
-
-	/**
-	 * @param levelStarted the levelStarted to set
-	 */
-	public void setLevelStarted(boolean levelStarted) {
-		this.levelStarted = levelStarted;
-	}
-	
-	
-
-	/**
-	 * @return the circleList
-	 */
-	public CircleList getCircleList() {
-		return circlesHelper.getCircleList();
-	}
-
-	/**
-	 * @param circleList the circleList to set
-	 */
-	public void setCircleList(CircleList circleList) {
-		circlesHelper.setCircleList(circleList);
-	}
 	
 	/**
 	 * @return The levelContainer used for holding and creating levels.
 	 */
 	public LevelContainer getLevelContainer() {
 		return levels;
-	}
-
-	/**
-	 * @return the countinStarted
-	 */
-	public boolean isCountinStarted() {
-		return countinStarted;
-	}
-
-	/**
-	 * @param countinStarted the countinStarted to set
-	 */
-	public void setCountinStarted(boolean countinStarted) {
-		this.countinStarted = countinStarted;
-	}
-
-	/**
-	 * @return the speedPowerupList
-	 */
-	public ArrayList<SpeedPowerup> getSpeedPowerupList() {
-		return speedPowerupList;
-	}
-
-	/**
-	 * @param speedPowerupList the speedPowerupList to set
-	 */
-	public void setSpeedPowerupList(ArrayList<SpeedPowerup> speedPowerupList) {
-		this.speedPowerupList = speedPowerupList;
 	}
 	
 	/**
@@ -1148,5 +300,39 @@ public class GameState extends BasicGameState {
 		return circlesHelper;
 	}
 	
+	/**
+	 * @return The GameStateInterfaceHelper object.
+	 */
+	public GameStateInterfaceHelper getInterfaceHelper() {
+		return interfaceHelper;
+	}
+	
+	/**
+	 * @return The GameStatePauseHelper object.
+	 */
+	public GameStatePauseHelper getPauseHelper() {
+		return pauseHelper;
+	}
+	
+	/**
+	 * @return The GameStatePlayerHelper object.
+	 */
+	public GameStatePlayerHelper getPlayerHelper() {
+		return playerHelper;
+	}
+	
+	/**
+	 * @return The GameStateLogicHelper object.
+	 */
+	public GameStateLogicHelper getLogicHelper() {
+		return logicHelper;
+	}
+	
+	/**
+	 * @return The GameStateItemsHelper object
+	 */
+	public GameStateItemsHelper getItemsHelper() {
+		return itemsHelper;
+	}
 	
 }

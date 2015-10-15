@@ -21,8 +21,6 @@ import powerups.Powerup;
  *
  */
 public class Player {
-
-
 	
 	private PlayerMovementHelper movementHelper;
 	private PlayerPowerupHelper powerupHelper;

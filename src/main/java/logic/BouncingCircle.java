@@ -53,7 +53,6 @@ public class BouncingCircle extends Circle implements Cloneable {
 	private boolean done;
 	private boolean hitCeiling;
 	private int id;
-	private Logger logger = Logger.getInstance();
 	private float multiplier;
 
 	/**
@@ -131,7 +130,8 @@ public class BouncingCircle extends Circle implements Cloneable {
 		// When ball hits ceiling
 		if (this.getMinY() <= gameState.getCeiling().getHeight()) {
 			this.hitCeiling = true;
-			logger.log("circles hitted ceiling", Logger.PriorityLevels.LOW, "circles");
+			Logger.getInstance().log("circles hitted ceiling", 
+					Logger.PriorityLevels.LOW, "circles");
 		}
 		handleXCalculations(gameState, containerWidth, deltaFloat);
 	}
@@ -170,7 +170,7 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 * @return an arraylist with the splitted circles
 	 */
 	public ArrayList<BouncingCircle> getSplittedCircles(MainGame mainGame, GameState gameState) {
-		logger.log("Circle with radius " + radius + " shot, two circles with radius " 
+		Logger.getInstance().log("Circle with radius " + radius + " shot, two circles with radius " 
 				+ getNewRadius() + " entered the game", PriorityLevels.MEDIUM,
 				"BouncingCircles");
 		if (radius == MINIMUM_RADIUS) {
@@ -182,7 +182,7 @@ public class BouncingCircle extends Circle implements Cloneable {
 			newYSpeed = MINIMUM_SPEED;
 		}
 		if (newYSpeed < BONUS_SPEED_FACTOR * radius) {
-			logger.log("New balls aquired bonus speed",
+			Logger.getInstance().log("New balls aquired bonus speed",
 					PriorityLevels.VERYLOW, "BouncingCircles");
 			newYSpeed -= BONUS_SPEED;
 		}
@@ -457,10 +457,10 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 */
 	@Override
 	public BouncingCircle clone() throws CloneNotSupportedException {
+		super.clone();
 		BouncingCircle res = new BouncingCircle(this.getCenterX(), this.getCenterY(), 
 				this.getRadius(), xSpeed, ySpeed, gravity, id);
 		res.setMultiplier(this.multiplier);
-		
 		return res;
 	}
 

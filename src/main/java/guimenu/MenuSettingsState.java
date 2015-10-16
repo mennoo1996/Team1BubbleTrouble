@@ -24,6 +24,7 @@ public class MenuSettingsState extends BasicGameState {
 	
 	private Button blueButton;
 	private Button redButton;
+	private Button yellowButton;
 	private Button greenButton;
 	private Button orangeButton;
 	private Button whiteButton;
@@ -31,7 +32,8 @@ public class MenuSettingsState extends BasicGameState {
 	private Button shuffleButton;
 	 
 	// Game Colors
-	private static final Color COLOR_RED = new Color(0.9f, 0.15f, 0.1f);;
+	private static final Color COLOR_RED = new Color(0.9f, 0.15f, 0.1f);
+	private static final Color COLOR_YELLOW = new Color(0.7f, 0.65f, 0.1f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
 	private static final Color COLOR_GREEN = new Color(0.35f, 0.6f, 0.05f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
@@ -98,14 +100,9 @@ public class MenuSettingsState extends BasicGameState {
 	private static final int COLOR_BUTTON_2_X = 1014;
 	private static final int COLOR_BUTTON_3_X = 1200;
 	private static final int COLOR_BUTTON_WIDTH = 200;
-	private static final int COLOR_BUTTON_SHUFFLE_Y = 653;
-	private static final int COLOR_BUTTON_RED_Y = 703;
-	private static final int COLOR_BUTTON_ORANGE_Y = 753;
-	private static final int COLOR_BUTTON_WHITE_Y = 653;
-	private static final int COLOR_BUTTON_BLUE_Y = 703;
-	private static final int COLOR_BUTTON_PINK_Y = 753;
-	private static final int COLOR_BUTTON_GREEN_Y = 653;
-	
+	private static final int COLOR_BUTTON_1_Y = 653;
+	private static final int COLOR_BUTTON_2_Y = 703;
+	private static final int COLOR_BUTTON_3_Y = 753;
 	
 	private static final int PLAYER_SPRITE_WIDTH = 120;
 	private static final int PLAYER_SPRITE_HEIGHT = 120;
@@ -233,27 +230,30 @@ public class MenuSettingsState extends BasicGameState {
 		returnButton = new Button(RETURN_BUTTON_X, RETURN_BUTTON_Y, RETURN_BUTTON_WIDTH,
 				RETURN_BUTTON_HEIGHT, 
 				"< Return");
-		shuffleButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_SHUFFLE_Y, 
+		shuffleButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_1_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
 				"> Shuffle");
-		redButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_RED_Y, 
+		redButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_2_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
 				"> Red");
-		orangeButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_ORANGE_Y, 
+		orangeButton = new Button(COLOR_BUTTON_1_X, COLOR_BUTTON_3_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
 				"> Orange");
-		greenButton = new Button(COLOR_BUTTON_3_X, COLOR_BUTTON_GREEN_Y, 
+		greenButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_1_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
 				"> Green");
-		blueButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_BLUE_Y, 
+		blueButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_2_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
 				"> Blue");
-		whiteButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_WHITE_Y, 
+		whiteButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_3_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
 				"> White");
-		pinkButton = new Button(COLOR_BUTTON_2_X, COLOR_BUTTON_PINK_Y, 
+		pinkButton = new Button(COLOR_BUTTON_3_X, COLOR_BUTTON_1_Y, 
 				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
-				"> Pink");
+				"> Purple");
+		yellowButton = new Button(COLOR_BUTTON_3_X, COLOR_BUTTON_2_Y, 
+				COLOR_BUTTON_WIDTH, RETURN_BUTTON_HEIGHT,
+				"> Yellow");
 	}
 	
 	/**
@@ -372,7 +372,7 @@ public class MenuSettingsState extends BasicGameState {
 	 * Process a click on the return button.
 	 */
 	private void processReturnButton() {
-		mainGame.setSwitchState(mainGame.getStartState());
+		mainGame.setSwitchState(mainGame.getMainState());
 	}
 	
 	
@@ -384,22 +384,29 @@ public class MenuSettingsState extends BasicGameState {
 		mainGame.shuffleColor(false);
 		if (shuffleButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.shuffleColor(true);
+			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (redButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setNextColor(COLOR_RED);
+			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (blueButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setNextColor(COLOR_BLUE);
+			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (orangeButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setNextColor(COLOR_ORANGE);
+			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (greenButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setNextColor(COLOR_GREEN);
+			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (whiteButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setNextColor(COLOR_WHITE);
+			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (pinkButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.setNextColor(COLOR_PINK);
+			mainGame.setSwitchState(mainGame.getSettingsState());
+		} else if (yellowButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
+			mainGame.setNextColor(COLOR_YELLOW);
+			mainGame.setSwitchState(mainGame.getSettingsState());
 		} 
-		
-		mainGame.setSwitchState(mainGame.getSettingsState());
-
 	}
 	
 	/**
@@ -600,6 +607,7 @@ public class MenuSettingsState extends BasicGameState {
 		whiteButton.drawColor(graphics, input, mainGame.getColor());
 		pinkButton.drawColor(graphics, input, mainGame.getColor());
 		greenButton.drawColor(graphics, input, mainGame.getColor());
+		yellowButton.drawColor(graphics, input, mainGame.getColor());
 		
 	}
 	

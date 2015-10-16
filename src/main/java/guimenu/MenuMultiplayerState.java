@@ -224,7 +224,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	private void processReturnButton() {
 		mainGame.killMultiplayer();
-		mainGame.setSwitchState(mainGame.getStartState());
+		mainGame.setSwitchState(mainGame.getMainState());
 	}
 	
 	/**

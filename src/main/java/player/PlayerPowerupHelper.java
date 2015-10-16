@@ -63,18 +63,18 @@ public class PlayerPowerupHelper {
 				powerup.update(gameState, containerHeight, deltaFloat);
 
 				if (powerup.getRectangle().intersects(player.getLogicHelper().getRectangle())) {
-					if (!mainGame.isLanMultiplayer() | (mainGame.isHost() 
-							& player.getPlayerNumber() == 0)) {
+					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() 
+							&& player.getPlayerNumber() == 0)) {
 						//Add a powerup to the player
 						this.addPowerup(powerup.getType());
 						gameState.getInterfaceHelper().getFloatingScores().
 						add(new FloatingScore(powerup));
 						usedPowerups.add(powerup);
 
-						if (mainGame.isHost() & player.getPlayerNumber() == 0) {
+						if (mainGame.isHost() && player.getPlayerNumber() == 0) {
 							mainGame.getHost().updatePowerupsDictate(powerup);
 						}
-					} else if (mainGame.isClient() & player.getPlayerNumber() == 1) {
+					} else if (mainGame.isClient() && player.getPlayerNumber() == 1) {
 						mainGame.getClient().pleaPowerup(powerup);
 					}
 				}

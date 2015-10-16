@@ -10,7 +10,6 @@ import guimenu.MainGame;
  *
  */
 public class PlayerGateHelper {
-	private MainGame mainGame;
 	private GameState gameState;
 	private Player player;
 
@@ -23,7 +22,7 @@ public class PlayerGateHelper {
 	 * @param player		the player ythis helper belongs to.
 	 */
 	public PlayerGateHelper(MainGame mainGame, GameState gameState, Player player) {
-		this.mainGame = mainGame;
+		//mainGame goes unused, here.
 		this.gameState = gameState;
 		this.player = player;
 	}

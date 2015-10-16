@@ -71,7 +71,7 @@ public class Player {
 		this.powerupHelper = new PlayerPowerupHelper(this, mainGame, gameState);
 		this.weaponHelper = new PlayerWeaponHelper(mainGame, gameState, this);
 		this.gateHelper = new PlayerGateHelper(mainGame, gameState, this);
-		this.logicHelper = new PlayerLogicHelper(this, mainGame, gameState, x, y);
+		this.logicHelper = new PlayerLogicHelper(x, y);
 		logicHelper.setSpritesheet(new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE), 
 				new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE));
 		logicHelper.setImage(imageN, imageA);
@@ -127,17 +127,17 @@ public class Player {
 	 * @param usedCoins to dump it in
 	 */
 	private void processCoin(Coin coin, ArrayList<Coin> usedCoins) {
-		if (!mainGame.isLanMultiplayer() | (mainGame.isHost() & playerNumber == 0)) {
+		if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
 			gameState.getLogicHelper().addToScore(coin.getPoints());
 			gameState.getInterfaceHelper().getFloatingScores().
 			add(new FloatingScore(coin));
 			usedCoins.add(coin);
 			Logger.getInstance().log("Picked up coin", 
 					Logger.PriorityLevels.MEDIUM, POWERUPS);
-			if (mainGame.isHost() & playerNumber == 0) {
+			if (mainGame.isHost() && playerNumber == 0) {
 				mainGame.getHost().updateCoinsDictate(coin);
 			}
-		} else if (mainGame.isClient() & playerNumber == 1) {
+		} else if (mainGame.isClient() && playerNumber == 1) {
 			mainGame.getClient().pleaCoin(coin);
 		}
 	}

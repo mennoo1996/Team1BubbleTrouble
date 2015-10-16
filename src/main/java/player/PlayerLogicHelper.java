@@ -5,9 +5,6 @@ import logic.MyRectangle;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
-import guigame.GameState;
-import guimenu.MainGame;
-
 /**
  * Class which helps player with processing most basic logic crunching and data.
  * Should only be used by the Player class!
@@ -15,10 +12,6 @@ import guimenu.MainGame;
  *
  */
 public class PlayerLogicHelper {
-
-	private Player player;
-	private MainGame mainGame;
-	private GameState gameState;
 	
 	private float x;
 	private float y;
@@ -38,17 +31,10 @@ public class PlayerLogicHelper {
 	
 	/**
 	 * Constructor class for a PlayerLogicHelper object.
-	 * @param player	- the player this helper belongs to.
-	 * @param mainGame	- the gamestate the player plays in.
-	 * @param gameState	- the game the player plays in.
 	 * @param x - the starting x.
 	 * @param y - the starting y.
 	 */
-	public PlayerLogicHelper(Player player, MainGame mainGame, GameState gameState, 
-			float x, float y) {
-		this.player = player;
-		this.mainGame = mainGame;
-		this.gameState = gameState;
+	public PlayerLogicHelper(float x, float y) {
 		this.startX = x;
 		this.startY = y;
 	}

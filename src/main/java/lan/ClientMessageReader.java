@@ -170,7 +170,7 @@ public class ClientMessageReader {
         if (stringList[0].equals("START") && !this.editingCircleList) {
             this.requiredList = new ArrayList<BouncingCircle>();
         } else if (stringList[0].equals("END") && this.editingCircleList) {
-            gameState.getCirclesHelper().getGateList().get(gateNumber).setRequired(requiredList);
+            gameState.getGateHelper().getGateList().get(gateNumber).setRequired(requiredList);
         }
     }
 

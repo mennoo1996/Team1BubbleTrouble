@@ -17,13 +17,7 @@ import logic.Logger.PriorityLevels;
 public final class HighScoresParser {
 	private static Logger logger = Logger.getInstance();
 	
-	/**
-	 * Set the logger of this class.
-	 * @param loggerIn	- the logger to set
-	 */
-	public static void setLogger(Logger loggerIn) {
-		logger = loggerIn;
-	}
+	
 	 
 	/**
 	 * Unused constructor.
@@ -40,7 +34,7 @@ public final class HighScoresParser {
 	public static HighScores readHighScores(String fileName) {
 		logger.log("Highscores read from file, filename=" + fileName, 
 				PriorityLevels.LOW, "Highscores");
-		BufferedReader reader;
+		BufferedReader reader = null;
 		HighScores hs = null;
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
@@ -54,11 +48,17 @@ public final class HighScoresParser {
 				hs.add(score);
 				line = reader.readLine();
 			}
-			reader.close();
 		} catch (IOException e) {
-			System.out.println("exception");
+			System.out.println("Something went wrong while reading the highscores file");
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					System.out.println("Something went wrong while closing the reader");
+				}
+			}
 		}
-		
 		return hs;
 	}
 	
@@ -70,7 +70,7 @@ public final class HighScoresParser {
 	public static void writeHighScores(String fileName, HighScores hs) {
 		logger.log("Higscores written to file, filename=" + fileName, 
 				PriorityLevels.LOW, "Highscores");
-		PrintWriter writer;
+		PrintWriter writer = null;
 		try {
 			File file = new File(fileName);
 			writer = new PrintWriter(file, "UTF-8");
@@ -80,7 +80,11 @@ public final class HighScoresParser {
 			}
 			writer.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Something went wrong while writing the highscores file");
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
 		}
 	}
 }

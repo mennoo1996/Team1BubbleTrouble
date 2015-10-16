@@ -61,8 +61,8 @@ public abstract class Connector implements Runnable {
      * @param message	the message to process
      */
     protected void splitMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
+    	message = message.trim();
+    	String[] stringList = message.split(" ");
     	
     	BouncingCircle circle = new BouncingCircle(Float.parseFloat(stringList[1]),
 				Float.parseFloat(stringList[2]), Float.parseFloat(stringList[THREE]),
@@ -86,10 +86,10 @@ public abstract class Connector implements Runnable {
      * @param message String containing information about lasers
      */
     protected void laserMessage(String message) {
-    	String message2 = message.trim();
+    	message = message.trim();
     	
-    	if (message2.startsWith("DONE")) {
-    		laserDoneMessage(message2.replaceFirst("DONE", ""));
+    	if (message.startsWith("DONE")) {
+    		laserDoneMessage(message.replaceFirst("DONE", ""));
     	}
     }
     
@@ -98,9 +98,9 @@ public abstract class Connector implements Runnable {
      * @param message String containing information about the laser
      */
     protected void laserDoneMessage(String message) {
-    	String message2 = message.trim();
+    	message = message.trim();
     	
-    	int id = Integer.parseInt(message2);
+    	int id = Integer.parseInt(message);
     	gameState.getPlayerHelper().getWeaponList().getWeaponList().get(id).setVisible(false);
     }
     
@@ -110,14 +110,14 @@ public abstract class Connector implements Runnable {
      * @param message String containing information about the Player
      */
     protected void playerMessage(String message) {
-    	String message2 = message.trim();
+    	message = message.trim();
     	
-    	if (message2.startsWith("MOVEMENT")) {
-    		movementMessage(message2.replaceFirst("MOVEMENT", ""));
-    	} else if (message2.startsWith("DEAD")) {
-    		deadMessage(message2.replaceFirst("DEAD", ""));
-    	} else if (message2.startsWith("NAME")) {
-    		nameMessage(message2.replaceFirst("NAME", ""));
+    	if (message.startsWith("MOVEMENT")) {
+    		movementMessage(message.replaceFirst("MOVEMENT", ""));
+    	} else if (message.startsWith("DEAD")) {
+    		deadMessage(message.replaceFirst("DEAD", ""));
+    	} else if (message.startsWith("NAME")) {
+    		nameMessage(message.replaceFirst("NAME", ""));
     	}
     	
     	
@@ -128,8 +128,7 @@ public abstract class Connector implements Runnable {
      * @param message containing their player name.
      */
     protected void nameMessage(String message) {
-    	String message2 = message.trim();
-    	mainGame.getPlayerList().getPlayers().get(0).setPlayerName(message2);
+    	mainGame.getPlayerList().getPlayers().get(0).setPlayerName(message.trim());
     }
     
     
@@ -138,12 +137,12 @@ public abstract class Connector implements Runnable {
      * @param message the message to process
      */
     protected void movementMessage(String message) {
-    	String message2 = message.trim();
+    	message = message.trim();
     
-    	if (message2.startsWith("STARTED")) {
-    		movementStarted(message2.replaceFirst("STARTED", ""));
-    	} else if (message2.startsWith("STOPPED")) {
-    		movementStopped(message2.replaceFirst("STOPPED", ""));
+    	if (message.startsWith("STARTED")) {
+    		movementStarted(message.replaceFirst("STARTED", ""));
+    	} else if (message.startsWith("STOPPED")) {
+    		movementStopped(message.replaceFirst("STOPPED", ""));
     	}
     }
     
@@ -152,12 +151,17 @@ public abstract class Connector implements Runnable {
      * @param message	the message to process
      */
     protected void pauseMessage(String message) {
-    	String message2 = message.trim();
+    	message = message.trim();
     	
-    	if (message2.equals("STARTED")) {
+    	switch (message) {
+    	case "STARTED":
     		gameState.getPauseHelper().pauseStarted(true);
-    	} else if (message2.equals("STOPPED")) {
+    		break;
+    	case "STOPPED":
     		gameState.getLogicHelper().pauseStopped(true);
+    		break;
+    	default:
+    		break;
     	}
     }
 
@@ -166,8 +170,8 @@ public abstract class Connector implements Runnable {
      * @param message the message
      */
     protected void movementStopped(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
+    	message = message.trim();
+    	String[] stringList = message.split(" ");
 
     	int playerNumber = Integer.parseInt(stringList[0]);
     	float x = Float.parseFloat(stringList[1]);
@@ -176,9 +180,12 @@ public abstract class Connector implements Runnable {
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
         mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
         
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.NO_MOVEMENT);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).
+    	getMovementHelper().setMovingRight(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber)
+    	.getMovementHelper().setMovingLeft(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber)
+    	.getMovementHelper().setMovement(Movement.NO_MOVEMENT);
     }
     
 
@@ -187,8 +194,8 @@ public abstract class Connector implements Runnable {
      * @param message the message to process
      */
     protected void movementStarted(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
+    	message = message.trim();
+    	String[] stringList = message.split(" ");
 
     	int playerNumber = Integer.parseInt(stringList[0]);
     	float x = Float.parseFloat(stringList[1]);
@@ -198,12 +205,21 @@ public abstract class Connector implements Runnable {
         mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
         mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
         
-        if (direction.equals("LEFT")) {
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.LEFT);
-        } else if (direction.equals("RIGHT")) {
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.RIGHT);
+        switch (direction) {
+        case "LEFT":
+        	mainGame.getPlayerList().getPlayers().get(playerNumber)
+        	.getMovementHelper().setMovingLeft(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber)
+        	.getMovementHelper().setMovement(Movement.LEFT);
+        	break;
+        case "RIGHT":
+        	mainGame.getPlayerList().getPlayers().get(playerNumber)
+        	.getMovementHelper().setMovingRight(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber)
+        	.getMovementHelper().setMovement(Movement.RIGHT);
+        	break;
+        default:
+        	break;
         }
     }
     
@@ -241,8 +257,8 @@ public abstract class Connector implements Runnable {
      * @param message String that contains the information of the message
      */
     protected void newLaserMessage(String message) {
-    	String message2 = message.trim();
-    	String[] stringList = message2.split(" ");
+    	message = message.trim();
+    	String[] stringList = message.split(" ");
     	
     	int id = Integer.parseInt(stringList[0]);
     	boolean spikey = Boolean.parseBoolean(stringList[FIVE]);

@@ -91,12 +91,5 @@ public class HighScores {
 	}
 
 
-
-	/**
-	 * @return the logger
-	 */
-	public Logger getLogger() {
-		return logger;
-	}
 }
 

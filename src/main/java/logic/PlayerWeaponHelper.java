@@ -1,5 +1,9 @@
 package logic;
 
+import java.util.LinkedList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import guigame.GameState;
 import guimenu.MainGame;
 import logic.Logger.PriorityLevels;
@@ -21,8 +25,9 @@ public class PlayerWeaponHelper {
 	private boolean shot;
 	
 	private static final String PLAYER = "Player";
-	
-	
+	private static final int POWERUP_DURATION = 10;
+
+	private LinkedList<Powerup.PowerupType> weapons;
 	
 	/**
 	 * @param mainGame		the maingame the player plays in.
@@ -36,6 +41,7 @@ public class PlayerWeaponHelper {
 		this.player = player;
 		this.playerNumber = player.getPlayerNumber();
 		this.shot = false;
+		this.weapons = new LinkedList<>();
 	}
 
 	/**
@@ -81,14 +87,14 @@ public class PlayerWeaponHelper {
 	 * @return the Weapon of this player.
 	 */
 	public Weapon getWeapon(float containerHeight) {
-		if (player.getWeapons().isEmpty()) {
+		if (weapons.isEmpty()) {
 			Logger.getInstance().log("Shot regular laser from position " + player.getCenterX(),
 					PriorityLevels.MEDIUM, PLAYER);
 			return new Weapon(player.getCenterX(), 
 					containerHeight - gameState.getFloor().getHeight(),
 					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
-		Powerup.PowerupType subType = player.getWeapons().peekLast();
+		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
 			Logger.getInstance().log("Shot spiky laser from position " + player.getCenterX(), 
 					PriorityLevels.HIGH, PLAYER);
@@ -106,6 +112,20 @@ public class PlayerWeaponHelper {
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
 	}
 
+	/**
+	 * Add a weapon for this player.
+	 * @param type the type of the powerup
+	 */
+	public void addWeapon(Powerup.PowerupType type) {
+		weapons.add(type);
+		Executors.newScheduledThreadPool(1).schedule(() -> {
+					if (!weapons.isEmpty()) {
+						weapons.removeFirst();
+					}
+				},
+				POWERUP_DURATION, TimeUnit.SECONDS);
+	}
+	
 	/**
 	 * @param shot the shot to set
 	 */
@@ -127,6 +147,19 @@ public class PlayerWeaponHelper {
 		this.playerNumber = playerNumber;
 	}
 	
+	/**
+	 * @return the weapons
+	 */
+	public LinkedList<Powerup.PowerupType> getWeapons() {
+		return weapons;
+	}
 	
-
+	/**
+	 * Set the weapons to this new list.
+	 * @param newList the list to set.
+	 */
+	public void setWeapons(LinkedList<Powerup.PowerupType> newList) {
+		weapons = newList;
+	}
+	
 }

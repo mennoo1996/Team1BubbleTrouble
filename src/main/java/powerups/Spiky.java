@@ -19,12 +19,22 @@ public class Spiky extends Weapon {
         super(x, y, laserSpeed, laserWidth);
     }
 
+    /**
+     * Update this Spiky.
+     * @param ceiling The ceiling of the current level
+     * @param floor The floor of the current level
+     * @param deltaFloat the time in seconds since last update
+     */
     @Override
     public void update(Rectangle ceiling, Rectangle floor, float deltaFloat) {
+    	boolean stayVisible = true;
+    	if (!this.isVisible()) {
+    		stayVisible = false; // DO NOT REFACTOR THIS AWAY AGAIN. EVER.
+    	}						 // NO MATTER HOW DUMB IT LOOKS
         final int offsetY = 10;
         final int offsetFloor = 7;
         super.update(ceiling, floor, deltaFloat);
-        if (this.getY() <= ceiling.getHeight() && this.isVisible()) {
+        if (this.getY() <= ceiling.getHeight() && stayVisible) {
             this.setY(ceiling.getHeight() - offsetY);
             this.setHeight(floor.getMinY() - ceiling.getHeight() + offsetFloor);
             this.setVisible(true);

@@ -4,7 +4,7 @@ import logic.CircleList;
 
 
 /**
- * powerup which influences the speed of the circles.
+ * Powerup which influences the speed of the circles.
  * @author Bart
  *
  */
@@ -16,8 +16,8 @@ public abstract class SpeedPowerup {
 	private boolean done;
 	
 	/**
-	 * Construcor.
-	 * @param multiplier - the multiplayer of the powerup
+	 * Constructor.
+	 * @param multiplier - the multiplier of the powerup
 	 */
 	public SpeedPowerup(float multiplier) {
 		this.multiplier = multiplier;

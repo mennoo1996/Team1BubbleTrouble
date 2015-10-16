@@ -10,7 +10,7 @@ public class FastPowerup extends SpeedPowerup {
 	private static final float MULTIPLIER = 1.5f;
 	
 	/**
-	 * constructor.
+	 * Construct a new FastPowerup.
 	 */
 	public FastPowerup() {
 		super(MULTIPLIER);

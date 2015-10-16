@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.anyFloat;
 import guigame.GameState;
 import guigame.GameStateCirclesHelper;
+import guigame.GameStateGateHelper;
 import guigame.GameStateInterfaceHelper;
 import guigame.GameStateItemsHelper;
 import guigame.GameStateLogicHelper;
@@ -39,6 +40,7 @@ public class PlayerTest {
 	GameState gs;
 
 	GameStateCirclesHelper ch = mock(GameStateCirclesHelper.class);
+	GameStateGateHelper gh = mock(GameStateGateHelper.class);
 	GameStateItemsHelper ih = mock(GameStateItemsHelper.class);
 	GameStateInterfaceHelper ifh = mock(GameStateInterfaceHelper.class);
 	GameStatePlayerHelper ph = mock(GameStatePlayerHelper.class);
@@ -58,6 +60,7 @@ public class PlayerTest {
 		ch = mock(GameStateCirclesHelper.class);
 		ih = mock(GameStateItemsHelper.class);
 		ifh = mock(GameStateInterfaceHelper.class);
+		when(gs.getGateHelper()).thenReturn(gh);
 		when(gs.getItemsHelper()).thenReturn(ih);
 		when(gs.getCirclesHelper()).thenReturn(ch);
 		when(gs.getInterfaceHelper()).thenReturn(ifh);
@@ -331,7 +334,7 @@ public class PlayerTest {
 		Powerup pow = new Powerup(100,100,Powerup.PowerupType.SHIELD);
 		ArrayList<Powerup> pl = new ArrayList<Powerup>();
 		pl.add(pow);
-		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6, 0);
 		FloatingScore fs = new FloatingScore(circle);
 		ArrayList<FloatingScore> fsl = new ArrayList<FloatingScore>();
 		fsl.add(fs);
@@ -341,7 +344,7 @@ public class PlayerTest {
 		when(mg.getGameState()).thenReturn(1);
 		when(mg.getState(1)).thenReturn(gs);
 		
-		when(ch.getGateList()).thenReturn(gl);
+		when(gh.getGateList()).thenReturn(gl);
 		when(ih.getDroppedPowerups()).thenReturn(pl);
 		when(ifh.getFloatingScores()).thenReturn(fsl);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
@@ -387,14 +390,14 @@ public class PlayerTest {
 	@Test
 	public void testHasShieldFalse() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		assertFalse(p.hasShield());
+		assertFalse(p.getPowerupHelper().hasShield());
 	}
 	
 	@Test
 	public void testHasShieldTrue() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		p.addPowerup(Powerup.PowerupType.SHIELD);
-		assertTrue(p.hasShield());
+		assertTrue(p.getPowerupHelper().hasShield());
 	}
 
 	@Test
@@ -492,13 +495,13 @@ public class PlayerTest {
 	public void testShieldTimeRemaining1() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		p.addPowerup(Powerup.PowerupType.SHIELD);
-		assertTrue(p.shieldTimeRemaining() > 0);
+		assertTrue(p.getPowerupHelper().getShieldTimeRemaining() > 0);
 	}
 	
 	@Test
 	public void testShieldTimeRemaining2() {
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
-		assertEquals(0, p.shieldTimeRemaining(), 0);
+		assertEquals(0, p.getPowerupHelper().getShieldTimeRemaining(), 0);
 	}
 	
 	@Test

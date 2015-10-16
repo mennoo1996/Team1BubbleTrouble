@@ -20,19 +20,19 @@ public class BouncingCircle extends Circle implements Cloneable {
 	private static final int BONUS_SPEED_FACTOR = 4;
 	private static final int BONUS_SPEED = 50;
 	
-	private static final float MINIMUM_RADIUS = 10;
-	private static final float RADIUS_2 = 20;
-	private static final float RADIUS_3 = 30;
-	private static final float RADIUS_4 = 45;
-	private static final float RADIUS_5 = 65;
-	private static final float RADIUS_6 = 90;
+	private static final int MINIMUM_RADIUS = 10;
+	private static final int RADIUS_2 = 20;
+	private static final int RADIUS_3 = 30;
+	private static final int RADIUS_4 = 45;
+	private static final int RADIUS_5 = 65;
+	private static final int RADIUS_6 = 90;
 	
-	private static final float SPEED_FOR_MINIMUM_RADIUS = 360;
-	private static final float SPEED_FOR_RADIUS_2 = 470;
-	private static final float SPEED_FOR_RADIUS_3 = 530;
-	private static final float SPEED_FOR_RADIUS_4 = 570;
-	private static final float SPEED_FOR_RADIUS_5 = 610;
-	private static final float SPEED_FOR_RADIUS_6 = 650;
+	private static final int SPEED_FOR_MINIMUM_RADIUS = 360;
+	private static final int SPEED_FOR_RADIUS_2 = 470;
+	private static final int SPEED_FOR_RADIUS_3 = 530;
+	private static final int SPEED_FOR_RADIUS_4 = 570;
+	private static final int SPEED_FOR_RADIUS_5 = 610;
+	private static final int SPEED_FOR_RADIUS_6 = 650;
 	
 	private static final int POINTS_FOR_MINIMUM_RADIUS = 100;
 	private static final int POINTS_FOR_RADIUS_2 = 50;
@@ -81,28 +81,7 @@ public class BouncingCircle extends Circle implements Cloneable {
 		
 	}
 	
-	/**
-	 * 
-	 * @param centerPointX the X coordinate of the center point of the circle
-	 * @param centerPointY the Y coordinate of the center point of the circle
-	 * @param radius the radius of the circle
-	 * @param xSpeed the speed in horizontal direction
-	 * @param ySpeed the speed in vertical direction
-	 * @param gravity the gravity affecting this circle
-	 */
-	public BouncingCircle(float centerPointX, float centerPointY, 
-			float radius, float xSpeed, float ySpeed, float gravity) {
-		super(centerPointX, centerPointY, radius);
-		
-		this.xSpeed = xSpeed;
-		this.initSpeed = Math.abs(xSpeed);
-		this.ySpeed = ySpeed;
-		this.gravity = gravity;
-		this.done = false;
-		this.hitCeiling = false;
-		this.id = 0;
-		
-	}
+
 	
 	/**
 	 * Equals method for a BouncingCircle.
@@ -171,7 +150,7 @@ public class BouncingCircle extends Circle implements Cloneable {
 		} else if (this.getMaxX() > containerWidth - gameState.getRightWall().getWidth()) {
 			xSpeed = -initSpeed;
 		} else {
-			for (Gate gate : gameState.getCirclesHelper().getGateList()) {
+			for (Gate gate : gameState.getGateHelper().getGateList()) {
 				if (gate.getRectangle().intersects(this.getCircle())) {
 					if (gate.getUnlockCircles().contains(this)) {
 						xSpeed = -initSpeed;
@@ -226,21 +205,23 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 * @return the speed for the current radius
 	 */
 	public float getSpeedForRadius() {
-		if (radius == MINIMUM_RADIUS) {
+		int switchRadius = (int) radius;
+		switch (switchRadius) {
+		case MINIMUM_RADIUS:
 			return SPEED_FOR_MINIMUM_RADIUS;
-		} else if (radius == RADIUS_2) {
+		case RADIUS_2:
 			return SPEED_FOR_RADIUS_2;
-		} else if (radius == RADIUS_3) {
+		case RADIUS_3:
 			return SPEED_FOR_RADIUS_3;
-		} else if (radius == RADIUS_4) {
+		case RADIUS_4:
 			return SPEED_FOR_RADIUS_4;
-		} else if (radius == RADIUS_5) {
+		case RADIUS_5:
 			return SPEED_FOR_RADIUS_5;
-		} else if (radius == RADIUS_6) {
+		case RADIUS_6:
 			return SPEED_FOR_RADIUS_6;
-		} 
+			default: return 0;
+		}
 		
-		return 0f;
 	}
 	
 	/**
@@ -248,21 +229,22 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 * @return the new radius
 	 */
 	public float getNewRadius() {
-		if (radius == MINIMUM_RADIUS) {
+		int switchRadius = (int) radius;
+		switch (switchRadius) {
+		case MINIMUM_RADIUS:
 			return MINIMUM_RADIUS;
-		} else if (radius == RADIUS_2) {
+		case RADIUS_2:
 			return MINIMUM_RADIUS;
-		} else if (radius == RADIUS_3) {
+		case RADIUS_3:
 			return RADIUS_2;
-		} else if (radius == RADIUS_4) {
+		case RADIUS_4:
 			return RADIUS_3;
-		} else if (radius == RADIUS_5) {
+		case RADIUS_5:
 			return RADIUS_4;
-		} else if (radius == RADIUS_6) {
+		case RADIUS_6:
 			return RADIUS_5;
-		} 
-		
-		return 0f;
+			default: return 0;
+		}
 	}
 	
 	/**
@@ -270,21 +252,23 @@ public class BouncingCircle extends Circle implements Cloneable {
 	 * @return the points associated with the radius of this circle
 	 */
 	public int getScore() {
-		if (radius == MINIMUM_RADIUS) {
+		int switchRadius = (int) radius;
+		switch (switchRadius) {
+		case MINIMUM_RADIUS:
 			return POINTS_FOR_MINIMUM_RADIUS;
-		} else if (radius == RADIUS_2) {
+		case RADIUS_2:
 			return POINTS_FOR_RADIUS_2;
-		} else if (radius == RADIUS_3) {
+		case RADIUS_3:
 			return POINTS_FOR_RADIUS_3;
-		} else if (radius == RADIUS_4) {
+		case RADIUS_4:
 			return POINTS_FOR_RADIUS_4;
-		} else if (radius == RADIUS_5) {
+		case RADIUS_5:
 			return POINTS_FOR_RADIUS_5;
-		} else if (radius == RADIUS_6) {
+		case RADIUS_6:
 			return POINTS_FOR_RADIUS_6;
-		} 
+			default: return 0;
+		}
 		
-		return 0;
 	}
 	
 	/**

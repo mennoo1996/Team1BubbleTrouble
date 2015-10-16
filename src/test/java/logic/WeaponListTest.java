@@ -99,7 +99,7 @@ public class WeaponListTest {
 	public void testIntersectWeaponsWithCircle1() {
 		mg.setMultiplayer(false);
 		gs.getCirclesHelper().setShotList(new ArrayList<BouncingCircle>());
-		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6, 0);
 		
 		wl.intersectWeaponsWithCircle(circle);
 		assertFalse(w.isVisible());
@@ -109,7 +109,7 @@ public class WeaponListTest {
 	public void testIntersectWeaponsWithCircle2() {
 		when(mg.isMultiplayer()).thenReturn(true);
 		gs.getCirclesHelper().setShotList(new ArrayList<BouncingCircle>());
-		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6);
+		BouncingCircle circle = new BouncingCircle(1,2,3,4,5,6, 0);
 		
 		wl.intersectWeaponsWithCircle(circle);
 		assertFalse(w.isVisible());

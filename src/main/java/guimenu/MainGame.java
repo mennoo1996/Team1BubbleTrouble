@@ -10,8 +10,6 @@ import lan.Host;
 import logic.HighScores;
 import logic.HighScoresParser;
 import logic.Logger;
-import logic.Player;
-import logic.PlayerList;
 import logic.ShutDownHook;
 
 import org.newdawn.slick.AppGameContainer;
@@ -20,6 +18,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import player.Player;
+import player.PlayerList;
 
 /**
  * The main game object - basically the overall control system.

@@ -1,4 +1,4 @@
-package logic;
+package player;
 
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import guigame.GameState;
 import guimenu.MainGame;
+import logic.Logger;
+import logic.Weapon;
 import logic.Logger.PriorityLevels;
 import powerups.InstantLaser;
 import powerups.Powerup;

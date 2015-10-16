@@ -1,4 +1,4 @@
-package logic;
+package player;
 
 import guigame.GameState;
 import guimenu.MainGame;
@@ -8,6 +8,8 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import logic.FloatingScore;
+import logic.Logger;
 import powerups.FastPowerup;
 import powerups.FreezePowerup;
 import powerups.Powerup;

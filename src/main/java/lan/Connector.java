@@ -11,8 +11,8 @@ import java.util.Queue;
 import logic.BouncingCircle;
 import logic.FloatingScore;
 import logic.Logger;
-import logic.PlayerMovementHelper.Movement;
 import logic.Weapon;
+import player.PlayerMovementHelper.Movement;
 import powerups.Spiky;
 
 /**

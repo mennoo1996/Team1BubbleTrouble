@@ -1,5 +1,6 @@
-package logic;
+package player;
 
+import logic.Gate;
 import guigame.GameState;
 import guimenu.MainGame;
 

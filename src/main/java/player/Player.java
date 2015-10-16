@@ -1,9 +1,13 @@
-package logic;
+package player;
 import guigame.GameState;
 import guimenu.MainGame;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import logic.Coin;
+import logic.FloatingScore;
+import logic.Logger;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;

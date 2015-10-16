@@ -24,6 +24,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
 
+import player.Player;
 import powerups.Powerup;
 import powerups.SpeedPowerup;
 

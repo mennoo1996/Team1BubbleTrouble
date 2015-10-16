@@ -1,4 +1,6 @@
-package logic;
+package player;
+
+import logic.MyRectangle;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;

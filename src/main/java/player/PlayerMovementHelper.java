@@ -1,8 +1,10 @@
-package logic;
+package player;
 
 import guigame.GameState;
 import lan.Client;
 import lan.Host;
+import logic.Gate;
+import logic.Logger;
 import logic.Logger.PriorityLevels;
 
 

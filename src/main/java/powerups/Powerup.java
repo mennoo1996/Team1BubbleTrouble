@@ -37,7 +37,7 @@ public class Powerup implements Cloneable {
     		HEALTH.imageA = imageHealthImageA;
     		HEALTH.imageN = imageHealthImageN;
     		RANDOM.imageA = imageRandomImageA;
-    		RANDOM.imageN = imageHealthImageN;
+    		RANDOM.imageN = imageRandomImageN;
     	}
     	
     	/**

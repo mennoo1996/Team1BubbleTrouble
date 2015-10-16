@@ -20,7 +20,11 @@ public class ClientCoinsHelper {
 
     private static final int THREE = 3;
 
-    public ClientCoinsHelper(Client client, GameState gameState) {
+    /**
+     * Initialize an instance of the coins message processor.
+     * @param gameState Game state to alter based on messages.
+     */
+    public ClientCoinsHelper(GameState gameState) {
         this.gameState = gameState;
         commandQueue = CommandQueue.getInstance();
     }

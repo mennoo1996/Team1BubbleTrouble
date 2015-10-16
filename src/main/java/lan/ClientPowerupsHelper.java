@@ -13,7 +13,8 @@ import commands.CommandQueue;
 import commands.RemoveDroppedPowerupCommand;
 
 /**
- * Created by alexandergeenen on 15/10/15.
+ * Class used to process powerup messages received by a client.
+ * @author alexandergeenen
  */
 public class ClientPowerupsHelper {
 
@@ -23,6 +24,11 @@ public class ClientPowerupsHelper {
 
     private static final int THREE = 3;
 
+    /**
+     * Initialize an instance of the powerups message processor.
+     * @param gameState Game state to alter
+     * @param mainGame Main Game to alter
+     */
     public ClientPowerupsHelper(GameState gameState, MainGame mainGame) {
         this.gameState = gameState;
         this.mainGame = mainGame;
@@ -52,7 +58,7 @@ public class ClientPowerupsHelper {
     private void addPowerup(String[] stringList) {
         synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
             Powerup.PowerupType type = Powerup.PowerupType.SHIELD;
-            type = getPowerupType(stringList, type);
+            type = getPowerupType(stringList[2], type);
             if (type != null) {
             	commandQueue.addCommand(new AddDroppedPowerupCommand(
     					gameState.getItemsHelper().getDroppedPowerups(), 
@@ -68,7 +74,7 @@ public class ClientPowerupsHelper {
      */
     private void dictatePowerup(String[] stringList) {
         Powerup.PowerupType type = Powerup.PowerupType.SHIELD;
-        type = getPowerupType(stringList, type);
+        type = getPowerupType(stringList[2], type);
         for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
             if (powerup.getxId() == Float.parseFloat(stringList[0])
                     && powerup.getyId() == Float.parseFloat(stringList[1])) {
@@ -83,31 +89,31 @@ public class ClientPowerupsHelper {
         }
     }
 
-	private Powerup.PowerupType getPowerupType(String[] stringList, Powerup.PowerupType type) {
-		switch (stringList[2]) {
+    /**
+     * Get the proper powerup type.
+     * @param s String to parse
+     * @param type Initial type
+     * @return Correct powerup type
+     */
+	private Powerup.PowerupType getPowerupType(String s, Powerup.PowerupType type) {
+		switch (s) {
             case "SHIELD":
-                type = Powerup.PowerupType.SHIELD;
-                break;
+                type = Powerup.PowerupType.SHIELD; break;
             case "SPIKY":
-                type = Powerup.PowerupType.SPIKY;
-                break;
+                type = Powerup.PowerupType.SPIKY; break;
             case "INSTANT":
-                type = Powerup.PowerupType.INSTANT;
-                break;
+                type = Powerup.PowerupType.INSTANT; break;
             case "HEALTH":
-                type = Powerup.PowerupType.HEALTH;
-                break;
+                type = Powerup.PowerupType.HEALTH; break;
             case "FREEZE":
-                type = Powerup.PowerupType.FREEZE;
-                break;
+                type = Powerup.PowerupType.FREEZE; break;
             case "SLOW":
-                type = Powerup.PowerupType.SLOW;
-                break;
+                type = Powerup.PowerupType.SLOW; break;
             case "FAST":
-                type = Powerup.PowerupType.FAST;
-                break;
+                type = Powerup.PowerupType.FAST; break;
             case "RANDOM":
-                type = Powerup.PowerupType.RANDOM;
+                type = Powerup.PowerupType.RANDOM; break;
+            default:
                 break;
         }
 		return type;
@@ -118,40 +124,7 @@ public class ClientPowerupsHelper {
      * @param stringList the IDs of the powerups
      */
     private void grantPowerup(String[] stringList) {
-        switch (stringList[2]) {
-            case "SHIELD":
-    			commandQueue.addCommand(new AddPowerupToPlayerCommand(
-    					mainGame.getPlayerList().getPlayers().get(1), PowerupType.SHIELD));
-                break;
-            case "SPIKY":
-    			commandQueue.addCommand(new AddPowerupToPlayerCommand(
-    					mainGame.getPlayerList().getPlayers().get(1), PowerupType.SPIKY));
-                break;
-            case "INSTANT":
-    			commandQueue.addCommand(new AddPowerupToPlayerCommand(
-    					mainGame.getPlayerList().getPlayers().get(1), PowerupType.INSTANT));
-                break;
-            case "HEALTH":
-    			commandQueue.addCommand(new AddPowerupToPlayerCommand(
-    					mainGame.getPlayerList().getPlayers().get(1), PowerupType.HEALTH));
-                break;
-            case "FREEZE":
-    			commandQueue.addCommand(new AddPowerupToPlayerCommand(
-    					mainGame.getPlayerList().getPlayers().get(1), PowerupType.FREEZE));
-                break;
-            case "SLOW":
-    			commandQueue.addCommand(new AddPowerupToPlayerCommand(
-    					mainGame.getPlayerList().getPlayers().get(1), PowerupType.SLOW));
-                break;
-            case "FAST":
-    			commandQueue.addCommand(new AddPowerupToPlayerCommand(
-    					mainGame.getPlayerList().getPlayers().get(1), PowerupType.FAST));
-                break;
-            case "RANDOM":
-    			commandQueue.addCommand(new AddPowerupToPlayerCommand(
-    					mainGame.getPlayerList().getPlayers().get(1), PowerupType.RANDOM));
-                break;
-        }
+        parsePowerupCommand(stringList[2]);
         synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
             for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
                 if (powerup.getxId() == Float.parseFloat(stringList[0])
@@ -164,5 +137,17 @@ public class ClientPowerupsHelper {
                 }
             }
         }
+    }
+
+    /**
+     * Adds correct powerup to player.
+     * @param s Powerup string to parse
+     */
+    private void parsePowerupCommand(String s) {
+        PowerupType powerupType = PowerupType.SHIELD;
+        powerupType = getPowerupType(s, powerupType);
+        commandQueue.addCommand(new AddPowerupToPlayerCommand(
+                mainGame.getPlayerList().getPlayers().get(1), powerupType
+                ));
     }
 }

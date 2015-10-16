@@ -15,7 +15,8 @@ import commands.CommandQueue;
 import commands.SetCirclelistCommand;
 
 /**
- * Created by alexandergeenen on 15/10/15.
+ * Class used to process messages received by a client.
+ * @author alexandergeenen
  */
 public class ClientMessageReader {
 
@@ -35,10 +36,16 @@ public class ClientMessageReader {
 	private static final int SIX = 6;
 	private static final int SEVEN = 7;
 
+    /**
+     * Initialize an instance of the client's message processor.
+     * @param client Client for which to process messages
+     * @param mainGame Main Game to alter
+     * @param gameState Game state to alter
+     */
     public ClientMessageReader(Client client, MainGame mainGame, GameState gameState) {
         this.client = client;
         this.powerupsHelper = new ClientPowerupsHelper(gameState, mainGame);
-        this.coinsHelper = new ClientCoinsHelper(client, gameState);
+        this.coinsHelper = new ClientCoinsHelper(gameState);
         this.gameState = gameState;
         this.mainGame = mainGame;
         this.circleList = new ArrayList<>();
@@ -49,6 +56,7 @@ public class ClientMessageReader {
 
     /**
      * Process the commands given by the server.
+     * @param reader Message buffer from which to read
      */
     public void readServerCommands(BufferedReader reader) {
         try {

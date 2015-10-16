@@ -1,4 +1,8 @@
 package guimenu;
+import guiobjects.Button;
+import guiobjects.RND;
+import guiobjects.Separator;
+import guiobjects.Textfield;
 import logic.HighScoresParser;
 import logic.Logger;
 import logic.Score;
@@ -217,7 +221,7 @@ public class MenuGameoverState extends BasicGameState {
 			mainGame.resetLevelCount();
 			mainGame.setScore(0);
 			mainGame.killMultiplayer();
-			mainGame.setSwitchState(mainGame.getStartState());
+			mainGame.setSwitchState(mainGame.getMainState());
 			Logger.getInstance().log("main menu button clicked", 
 					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}

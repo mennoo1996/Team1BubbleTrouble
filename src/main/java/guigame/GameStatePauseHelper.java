@@ -1,8 +1,8 @@
 package guigame;
 
-import guimenu.Button;
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.Button;
+import guiobjects.RND;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -20,9 +20,6 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Mark
  */
 public class GameStatePauseHelper extends GameStateHelper {
-
-	private MainGame mainGame;
-	private GameState parentState;
 	
 	private Button returnButton;
 	private Button menuButton;
@@ -91,7 +88,7 @@ public class GameStatePauseHelper extends GameStateHelper {
 				mainGame.setScore(0);
 				mainGame.setLevelCounter(0);
 				mainGame.killMultiplayer();
-				mainGame.setSwitchState(mainGame.getStartState()); }
+				mainGame.setSwitchState(mainGame.getMainState()); }
 			if (exitButton.isMouseOver(input)) {
 				mainGame.killMultiplayer();
 				mainGame.setSwitchState(-1); }

@@ -1,4 +1,4 @@
-package logic;
+package player;
 
 import guigame.GameState;
 import guimenu.MainGame;
@@ -8,6 +8,8 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import logic.FloatingScore;
+import logic.Logger;
 import powerups.FastPowerup;
 import powerups.FreezePowerup;
 import powerups.Powerup;
@@ -39,7 +41,6 @@ public class PlayerPowerupHelper {
 	 * @param gameState	- the game the player plays in.
 	 */
 	public PlayerPowerupHelper(Player player, MainGame mainGame, GameState gameState) {
-		super();
 		this.player = player;
 		this.mainGame = mainGame;
 		this.gameState = gameState;
@@ -61,19 +62,19 @@ public class PlayerPowerupHelper {
 			for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
 				powerup.update(gameState, containerHeight, deltaFloat);
 
-				if (powerup.getRectangle().intersects(player.getRectangle())) {
-					if (!mainGame.isLanMultiplayer() | (mainGame.isHost() 
-							& player.getPlayerNumber() == 0)) {
+				if (powerup.getRectangle().intersects(player.getLogicHelper().getRectangle())) {
+					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() 
+							&& player.getPlayerNumber() == 0)) {
 						//Add a powerup to the player
 						this.addPowerup(powerup.getType());
 						gameState.getInterfaceHelper().getFloatingScores().
 						add(new FloatingScore(powerup));
 						usedPowerups.add(powerup);
 
-						if (mainGame.isHost() & player.getPlayerNumber() == 0) {
+						if (mainGame.isHost() && player.getPlayerNumber() == 0) {
 							mainGame.getHost().updatePowerupsDictate(powerup);
 						}
-					} else if (mainGame.isClient() & player.getPlayerNumber() == 1) {
+					} else if (mainGame.isClient() && player.getPlayerNumber() == 1) {
 						mainGame.getClient().pleaPowerup(powerup);
 					}
 				}
@@ -146,7 +147,8 @@ public class PlayerPowerupHelper {
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
 		.nextInt(Powerup.PowerupType.values().length - 1)];
 		Executors.newScheduledThreadPool(1).schedule(() -> {
-			Powerup powerup = new Powerup(player.getX(), player.getY(), newPowerup);
+			Powerup powerup = new Powerup(player.getLogicHelper().getX(),
+					player.getLogicHelper().getY(), newPowerup);
 			synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
 				if (!mainGame.isLanMultiplayer()) {
 					gameState.getItemsHelper().getDroppedPowerups().add(powerup);

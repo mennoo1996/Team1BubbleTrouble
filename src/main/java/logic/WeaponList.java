@@ -1,13 +1,16 @@
 package logic;
 import guigame.GameState;
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.RND;
+import guiobjects.RenderOptions;
 
 import java.util.ArrayList;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+
+import player.Player;
 
 /**
  * A list of weapons.

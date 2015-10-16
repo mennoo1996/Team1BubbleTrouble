@@ -1,7 +1,8 @@
 package logic;
 
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.RND;
+import guiobjects.RenderOptions;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;

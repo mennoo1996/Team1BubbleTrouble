@@ -1,9 +1,13 @@
-package logic;
+package player;
 import guigame.GameState;
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.RND;
+import guiobjects.RenderOptions;
 
 import java.util.ArrayList;
+
+import logic.BouncingCircle;
+import logic.Logger;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -82,7 +86,7 @@ public class PlayerList {
 	 */
 	public void intersectPlayersWithCircle(BouncingCircle circle) {
 		if (processCollisions) {
-			if (playerList.get(0).getRectangle().intersects(circle) 
+			if (playerList.get(0).getLogicHelper().getRectangle().intersects(circle) 
 					&& !playerList.get(0).getPowerupHelper().hasShield()) {
 				//LIVES FUNCTIONALITY
 				if (!mainGame.isLanMultiplayer()) {
@@ -94,7 +98,7 @@ public class PlayerList {
 			}
 			
 			if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
-					&& playerList.get(1).getRectangle().intersects(circle)
+					&& playerList.get(1).getLogicHelper().getRectangle().intersects(circle)
 					&& !playerList.get(1).getPowerupHelper().hasShield()) {
 				//LIVES FUNCTIONALITY
 				if (!mainGame.isLanMultiplayer()) {
@@ -115,13 +119,13 @@ public class PlayerList {
 		drawPlayer(playerList.get(0), graphics);
 		if (mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) {
 			RND.getInstance().text(graphics, 
-					playerList.get(0).getX() - PLAYER_NAME_X_DEVIATION,
-					playerList.get(0).getCenterY() - PLAYER_NAME_Y_DEVIATION, 
+					playerList.get(0).getLogicHelper().getX() - PLAYER_NAME_X_DEVIATION,
+					playerList.get(0).getLogicHelper().getCenterY() - PLAYER_NAME_Y_DEVIATION, 
 					"#" + playerList.get(0).getPlayerName());
 			drawPlayer(playerList.get(1), graphics);
 			RND.getInstance().text(graphics, 
-					playerList.get(1).getX() - PLAYER_NAME_X_DEVIATION,
-					playerList.get(1).getCenterY() - PLAYER_NAME_Y_DEVIATION, 
+					playerList.get(1).getLogicHelper().getX() - PLAYER_NAME_X_DEVIATION,
+					playerList.get(1).getLogicHelper().getCenterY() - PLAYER_NAME_Y_DEVIATION, 
 					"#" + playerList.get(1).getPlayerName());
 		}
 	}
@@ -146,7 +150,7 @@ public class PlayerList {
 		try {
 			Image imageN = new Image(PLAYER_IMAGES + imageStringN);
 			Image imageA = new Image(PLAYER_IMAGES + imageStringA);
-			playerList.get(playerNumber).setImage(imageN, imageA);
+			playerList.get(playerNumber).getLogicHelper().setImage(imageN, imageA);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -166,10 +170,11 @@ public class PlayerList {
 			drawPlayerNoMovement(player, graphics);
 		}
 		if (player.getPowerupHelper().hasShield()) {
-			RND.getInstance().drawColor(new RenderOptions(graphics, player.getShieldImageN(), 
-					player.getShieldImageA(),
-					player.getX() - SHIELD_DRAW_X_DEVIATION,
-					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor()));
+			RND.getInstance().drawColor(new RenderOptions(
+					graphics, player.getLogicHelper().getShieldImageN(), 
+					player.getLogicHelper().getShieldImageA(),
+					player.getLogicHelper().getX() - SHIELD_DRAW_X_DEVIATION,
+					player.getLogicHelper().getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor()));
 		}
 		player.getMovementHelper().setMovement(PlayerMovementHelper.Movement.NO_MOVEMENT);
 	}
@@ -180,12 +185,12 @@ public class PlayerList {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawPlayerNoMovement(Player player, Graphics graphics) {
-		player.resetMovementCounter();
+		player.getMovementHelper().resetMovementCounter();
 		RND.getInstance().drawColor(new RenderOptions(graphics, 
-				player.getSpritesheetN().getSprite(2, 0),
-				player.getSpritesheetA().getSprite(2, 0),
-				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
+				player.getLogicHelper().getSpritesheetN().getSprite(2, 0),
+				player.getLogicHelper().getSpritesheetA().getSprite(2, 0),
+				player.getLogicHelper().getX() - PLAYER_DRAW_X_DEVIATION,
+				player.getLogicHelper().getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**
@@ -194,17 +199,19 @@ public class PlayerList {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawPlayerMoveLeft(Player player, Graphics graphics) {
-		player.incrementMovementCounter();
+		player.getMovementHelper().incrementMovementCounter();
 		int sp = 1;
-		if (player.getMovementCounter() > player.getMovementCounter_Max()
+		if (player.getMovementHelper().getMovementCounter() 
+				>
+		player.getMovementHelper().getMovementCounter_Max()
                 * MOVEMENT_COUNTER_FACTOR) {
             sp = 0;
         }
 		RND.getInstance().drawColor(new RenderOptions(graphics, 
-				player.getSpritesheetN().getSprite(sp, 0),
-				player.getSpritesheetA().getSprite(sp, 0),
-				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
+				player.getLogicHelper().getSpritesheetN().getSprite(sp, 0),
+				player.getLogicHelper().getSpritesheetA().getSprite(sp, 0),
+				player.getLogicHelper().getX() - PLAYER_DRAW_X_DEVIATION,
+				player.getLogicHelper().getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**
@@ -213,17 +220,19 @@ public class PlayerList {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawPlayerMoveRight(Player player, Graphics graphics) {
-		player.incrementMovementCounter();
+		player.getMovementHelper().incrementMovementCounter();
 		int sp = SPRITE_SHEET_THREE;
-		if (player.getMovementCounter() > player.getMovementCounter_Max()
+		if (player.getMovementHelper().getMovementCounter() 
+				>
+		player.getMovementHelper().getMovementCounter_Max()
                 * MOVEMENT_COUNTER_FACTOR) {
             sp = SPRITE_SHEET_FOUR;
         }
 		RND.getInstance().drawColor(new RenderOptions(graphics, 
-				player.getSpritesheetN().getSprite(sp, 0), 
-				player.getSpritesheetA().getSprite(sp, 0),
-				player.getX() - PLAYER_DRAW_X_DEVIATION,
-				player.getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
+				player.getLogicHelper().getSpritesheetN().getSprite(sp, 0), 
+				player.getLogicHelper().getSpritesheetA().getSprite(sp, 0),
+				player.getLogicHelper().getX() - PLAYER_DRAW_X_DEVIATION,
+				player.getLogicHelper().getY() - PLAYER_DRAW_Y_DEVIATION, mainGame.getColor()));
 	}
 
 	/**

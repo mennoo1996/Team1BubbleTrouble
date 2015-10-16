@@ -6,7 +6,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
-import logic.Player;
+import player.Player;
 import logic.Weapon;
 import logic.WeaponList;
 
@@ -17,9 +17,7 @@ import logic.WeaponList;
  * @author Mark
  */
 public class GameStatePlayerHelper extends GameStateHelper {
-
-	private MainGame mainGame;
-	private GameState parentState;
+	
 	private WeaponList weaponList;
 	
 	/**

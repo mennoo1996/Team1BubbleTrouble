@@ -215,8 +215,8 @@ public class ClientMessageReader {
         float x = Float.parseFloat(stringList[1]);
         float y = Float.parseFloat(stringList[2]);
 
-        mainGame.getPlayerList().getPlayers().get(id).setX(x);
-        mainGame.getPlayerList().getPlayers().get(id).setY(y);
+        mainGame.getPlayerList().getPlayers().get(id).getLogicHelper().setX(x);
+        mainGame.getPlayerList().getPlayers().get(id).getLogicHelper().setY(y);
     }
 
     /**

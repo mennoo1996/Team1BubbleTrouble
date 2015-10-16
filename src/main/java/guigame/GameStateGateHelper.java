@@ -16,9 +16,6 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Mark
  */
 public class GameStateGateHelper extends GameStateHelper {
-
-	private MainGame mainGame;
-	private GameState parentState;
 	
 	private ArrayList<Gate> gateList;
 	
@@ -34,7 +31,8 @@ public class GameStateGateHelper extends GameStateHelper {
 	
 	@Override
 	public void enter() {
-		gateList = parentState.getLevelContainer().getLevel(mainGame.getLevelCounter()).getGates();
+		gateList = parentState.getLevelsHelper().getLevelContainer().getLevel(
+				mainGame.getLevelCounter()).getGates();
 	}
 
 	@Override

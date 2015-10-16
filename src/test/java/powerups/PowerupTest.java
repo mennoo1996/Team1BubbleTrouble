@@ -1,7 +1,6 @@
 package powerups;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -9,6 +8,7 @@ import guigame.GameState;
 import guigame.GameStateCirclesHelper;
 import guigame.GameStateInterfaceHelper;
 import guigame.GameStateItemsHelper;
+import guigame.GameStateLevelsHelper;
 import guigame.GameStateLogicHelper;
 import guigame.GameStatePauseHelper;
 import guigame.GameStatePlayerHelper;
@@ -18,8 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import powerups.Powerup;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PowerupTest {
@@ -34,6 +32,7 @@ public class PowerupTest {
 	GameStateInterfaceHelper ifh;
 	GameStatePlayerHelper ph;
 	GameStateLogicHelper lh;
+	GameStateLevelsHelper leh;
 	GameStatePauseHelper pah;
     
 	@Before
@@ -44,12 +43,14 @@ public class PowerupTest {
 		ifh = mock(GameStateInterfaceHelper.class);
 		ph = mock(GameStatePlayerHelper.class);
 		lh = mock(GameStateLogicHelper.class);
+		leh = mock(GameStateLevelsHelper.class);
 		pah = mock(GameStatePauseHelper.class);
 		when(gs.getItemsHelper()).thenReturn(ih);
 		when(gs.getCirclesHelper()).thenReturn(ch);
 		when(gs.getInterfaceHelper()).thenReturn(ifh);
 		when(gs.getPlayerHelper()).thenReturn(ph);
 		when(gs.getLogicHelper()).thenReturn(lh);
+		when(gs.getLevelsHelper()).thenReturn(leh);
 		when(gs.getPauseHelper()).thenReturn(pah);
 	}
 	
@@ -107,7 +108,7 @@ public class PowerupTest {
 		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		when(gs.getLogicHelper().isPaused()).thenReturn(false);
-		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getLevelsHelper().getFloor()).thenReturn(floor);
 		p.update(gs, 100, 100);
 	}
 	
@@ -116,7 +117,7 @@ public class PowerupTest {
 		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		when(gs.getLogicHelper().isPaused()).thenReturn(false);
-		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getLevelsHelper().getFloor()).thenReturn(floor);
 		p.update(gs, 1000, 100);
 	}
 	
@@ -125,7 +126,7 @@ public class PowerupTest {
 		Powerup p = new Powerup(100,100,Powerup.PowerupType.SHIELD);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		when(gs.getLogicHelper().isPaused()).thenReturn(true);
-		when(gs.getFloor()).thenReturn(floor);
+		when(gs.getLevelsHelper().getFloor()).thenReturn(floor);
 		p.update(gs, 1000, 100);
 	}
 	

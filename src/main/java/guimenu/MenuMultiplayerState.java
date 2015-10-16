@@ -1,6 +1,11 @@
 package guimenu;
 
 import guigame.GameState;
+import guiobjects.Button;
+import guiobjects.Popup;
+import guiobjects.RND;
+import guiobjects.Separator;
+import guiobjects.Textfield;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -224,7 +229,7 @@ public class MenuMultiplayerState extends BasicGameState {
 	 */
 	private void processReturnButton() {
 		mainGame.killMultiplayer();
-		mainGame.setSwitchState(mainGame.getStartState());
+		mainGame.setSwitchState(mainGame.getMainState());
 	}
 	
 	/**

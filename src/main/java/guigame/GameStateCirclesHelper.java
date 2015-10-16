@@ -38,7 +38,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	private int lastCircleUpdate;
 	
 	private static final int MINIMUM_SPLIT_RADIUS = 20;
-	private static final int POWERUP_CHANCE = 80;
+	private static final int POWERUP_CHANCE = 20;
 	private static final int COIN_CHANCE = 30;
 	private static final int CIRCLES_UPDATE_RATE = 100; // rate is in frames
 	
@@ -63,7 +63,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	@Override
 	public void enter() {
 		lastCircleUpdate = 0;
-		circleList = new CircleList(parentState.getLevelContainer().getLevel(
+		circleList = new CircleList(parentState.getLevelsHelper().getLevelContainer().getLevel(
 				mainGame.getLevelCounter()).getCircles());
 		shotList = new ArrayList<BouncingCircle>(); 
 	}

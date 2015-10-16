@@ -1,7 +1,7 @@
 package guigame;
 
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.RND;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,12 +24,9 @@ import powerups.SpeedPowerup;
  */
 public class GameStateItemsHelper extends GameStateHelper {
 	
-	private MainGame mainGame;
-	private GameState parentState;
-	
 	private ArrayList<Powerup> droppedPowerups = new ArrayList<>();
 	private ArrayList<Coin> droppedCoins = new ArrayList<>();
-	private ArrayList<SpeedPowerup> speedPowerupList = new ArrayList<SpeedPowerup>();
+	private ArrayList<SpeedPowerup> speedPowerups = new ArrayList<SpeedPowerup>();
 	
 	private Random random;
 	
@@ -72,8 +69,8 @@ public class GameStateItemsHelper extends GameStateHelper {
 	 */
 	private void processSpeedPowerups(float deltaFloat) {
 		ArrayList<SpeedPowerup> doneList = new ArrayList<SpeedPowerup>();
-		synchronized (speedPowerupList) {
-			for (SpeedPowerup speedPowerup : speedPowerupList) {
+		synchronized (speedPowerups) {
+			for (SpeedPowerup speedPowerup : speedPowerups) {
 				speedPowerup.update(deltaFloat, 
 						((GameState) mainGame.getState(mainGame.getGameState())).
 						getCirclesHelper().getCircleList());
@@ -83,7 +80,7 @@ public class GameStateItemsHelper extends GameStateHelper {
 			}
 		}
 		for (SpeedPowerup speedPowerup : doneList) {
-			speedPowerupList.remove(speedPowerup);
+			speedPowerups.remove(speedPowerup);
 		}
 	}
 	
@@ -94,7 +91,8 @@ public class GameStateItemsHelper extends GameStateHelper {
 	 */
 	private void processCoins(GameContainer container, float deltafloat) {
 		for (Coin coin : droppedCoins) {
-			coin.update(parentState.getFloor(), deltafloat, container.getHeight());
+			coin.update(parentState.getLevelsHelper().getFloor(), 
+					deltafloat, container.getHeight());
 		}
 	}
 	
@@ -132,15 +130,15 @@ public class GameStateItemsHelper extends GameStateHelper {
 	
 	@Override
 	public void render(Graphics graphics, GameContainer container) {
-		drawPowerups(graphics);
-		drawCoins(graphics);
+		renderPowerups(graphics);
+		renderCoins(graphics);
 	}
 	
 	/**
 	 * Draw the powerups.
 	 * @param graphics the Graphics object to draw things on screen
 	 */
-	private void drawPowerups(Graphics graphics) {
+	private void renderPowerups(Graphics graphics) {
 		synchronized (droppedPowerups) {
 			for (Powerup pow : droppedPowerups) {
 				RND.getInstance().drawPowerup(graphics, pow);
@@ -152,7 +150,7 @@ public class GameStateItemsHelper extends GameStateHelper {
 	 * Draw the coins.
 	 * @param graphics the Graphics object to draw things on screen
 	 */
-	private void drawCoins(Graphics graphics) {
+	private void renderCoins(Graphics graphics) {
 		graphics.setColor(Color.blue);
 		synchronized (droppedCoins) {
 			for (Coin coin : droppedCoins) {
@@ -194,14 +192,14 @@ public class GameStateItemsHelper extends GameStateHelper {
 	 * @return the speedPowerupList
 	 */
 	public ArrayList<SpeedPowerup> getSpeedPowerupList() {
-		return speedPowerupList;
+		return speedPowerups;
 	}
 
 	/**
 	 * @param speedPowerupList the speedPowerupList to set
 	 */
 	public void setSpeedPowerupList(ArrayList<SpeedPowerup> speedPowerupList) {
-		this.speedPowerupList = speedPowerupList;
+		this.speedPowerups = speedPowerupList;
 	}
 
 }

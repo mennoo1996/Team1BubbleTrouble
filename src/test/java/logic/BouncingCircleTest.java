@@ -12,6 +12,7 @@ import guigame.GameStateCirclesHelper;
 import guigame.GameStateGateHelper;
 import guigame.GameStateInterfaceHelper;
 import guigame.GameStateItemsHelper;
+import guigame.GameStateLevelsHelper;
 import guigame.GameStateLogicHelper;
 import guigame.GameStatePauseHelper;
 import guigame.GameStatePlayerHelper;
@@ -40,6 +41,7 @@ public class BouncingCircleTest {
 	GameStateInterfaceHelper ifh;
 	GameStatePlayerHelper ph;
 	GameStateLogicHelper lh;
+	GameStateLevelsHelper leh;
 	GameStatePauseHelper pah;
 	
 	@Before
@@ -54,6 +56,7 @@ public class BouncingCircleTest {
 		ifh = mock(GameStateInterfaceHelper.class);
 		ph = mock(GameStatePlayerHelper.class);
 		lh = mock(GameStateLogicHelper.class);
+		leh = mock(GameStateLevelsHelper.class);
 		pah = mock(GameStatePauseHelper.class);
 		gh = mock(	GameStateGateHelper.class);
 		when(gs.getItemsHelper()).thenReturn(ih);
@@ -63,22 +66,22 @@ public class BouncingCircleTest {
 		when(gs.getLogicHelper()).thenReturn(lh);
 		when(gs.getPauseHelper()).thenReturn(pah);
 		when(gs.getGateHelper()).thenReturn(gh);
+		when(gs.getLevelsHelper()).thenReturn(leh);
 		mg = mock(MainGame.class);
 	}
 	
 	@Test
 	public void testUpdate1() {
 		c = new BouncingCircle(1, 2, 10, 4, 5, 6, 0);
-		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
 		MyRectangle rightWall = new MyRectangle(1,1,1,1);
 		when(lh.isPaused()).thenReturn(false);
-		when(gs.getFloor()).thenReturn(floor);
-		when(gs.getCeiling()).thenReturn(ceiling);
-		when(gs.getLeftWall()).thenReturn(leftWall);
-		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getLevelsHelper().getFloor()).thenReturn(floor);
+		when(gs.getLevelsHelper().getCeiling()).thenReturn(ceiling);
+		when(gs.getLevelsHelper().getLeftWall()).thenReturn(leftWall);
+		when(gs.getLevelsHelper().getRightWall()).thenReturn(rightWall);
 		c.update(gs, 1, 1, 1);
 		
 		assertEquals(4.0, c.getxSpeed(), 0);
@@ -88,16 +91,15 @@ public class BouncingCircleTest {
 	@Test
 	public void testUpdate2() {
 		c = new BouncingCircle(30, 2, 10, 4, 5, 6, 0);
-		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
 		MyRectangle rightWall = new MyRectangle(1,1,1,1);
 		when(lh.isPaused()).thenReturn(false);
-		when(gs.getFloor()).thenReturn(floor);
-		when(gs.getCeiling()).thenReturn(ceiling);
-		when(gs.getLeftWall()).thenReturn(leftWall);
-		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getLevelsHelper().getFloor()).thenReturn(floor);
+		when(gs.getLevelsHelper().getCeiling()).thenReturn(ceiling);
+		when(gs.getLevelsHelper().getLeftWall()).thenReturn(leftWall);
+		when(gs.getLevelsHelper().getRightWall()).thenReturn(rightWall);
 		c.update(gs, 100, 1, 1);
 		
 		assertEquals(-4.0, c.getxSpeed(), 0);
@@ -112,10 +114,10 @@ public class BouncingCircleTest {
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
 		MyRectangle rightWall = new MyRectangle(1,1,1,1);
 		when(lh.isPaused()).thenReturn(false);
-		when(gs.getFloor()).thenReturn(floor);
-		when(gs.getCeiling()).thenReturn(ceiling);
-		when(gs.getLeftWall()).thenReturn(leftWall);
-		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getLevelsHelper().getFloor()).thenReturn(floor);
+		when(gs.getLevelsHelper().getCeiling()).thenReturn(ceiling);
+		when(gs.getLevelsHelper().getLeftWall()).thenReturn(leftWall);
+		when(gs.getLevelsHelper().getRightWall()).thenReturn(rightWall);
 		Gate gate = new Gate(30,2, 1, 1);
 		ArrayList<Gate> gateList = new ArrayList<Gate>();
 		ArrayList<BouncingCircle> circleList = new ArrayList<BouncingCircle>();
@@ -139,10 +141,10 @@ public class BouncingCircleTest {
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
 		MyRectangle rightWall = new MyRectangle(1,1,1,1);
 		when(lh.isPaused()).thenReturn(false);
-		when(gs.getFloor()).thenReturn(floor);
-		when(gs.getCeiling()).thenReturn(ceiling);
-		when(gs.getLeftWall()).thenReturn(leftWall);
-		when(gs.getRightWall()).thenReturn(rightWall);
+		when(gs.getLevelsHelper().getFloor()).thenReturn(floor);
+		when(gs.getLevelsHelper().getCeiling()).thenReturn(ceiling);
+		when(gs.getLevelsHelper().getLeftWall()).thenReturn(leftWall);
+		when(gs.getLevelsHelper().getRightWall()).thenReturn(rightWall);
 		Gate gate = new Gate(30,2, 1, 1);
 		ArrayList<Gate> gateList = new ArrayList<Gate>();
 		ArrayList<BouncingCircle> circleList = new ArrayList<BouncingCircle>();

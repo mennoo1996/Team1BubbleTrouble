@@ -1,4 +1,7 @@
 package guimenu;
+import guiobjects.Button;
+import guiobjects.RND;
+import guiobjects.Separator;
 import logic.Logger;
 
 import org.newdawn.slick.GameContainer;

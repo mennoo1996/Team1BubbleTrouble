@@ -20,14 +20,14 @@ import java.util.ArrayList;
 import logic.BouncingCircle;
 import logic.Coin;
 import logic.FloatingScore;
-import logic.Player;
-import logic.PlayerList;
 import logic.WeaponList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;
 
+import player.Player;
+import player.PlayerList;
 import powerups.Powerup;
 import powerups.Powerup.PowerupType;
 

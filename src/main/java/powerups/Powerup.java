@@ -37,7 +37,7 @@ public class Powerup implements Cloneable {
     		HEALTH.imageA = imageHealthImageA;
     		HEALTH.imageN = imageHealthImageN;
     		RANDOM.imageA = imageRandomImageA;
-    		RANDOM.imageN = imageHealthImageN;
+    		RANDOM.imageN = imageRandomImageN;
     	}
     	
     	/**
@@ -147,10 +147,12 @@ public class Powerup implements Cloneable {
         if (!gameState.getLogicHelper().isPaused()) {
             timeRemaining -= deltaFloat * SECONDS_TO_MS;
         }
-        if ((this.y + POWERUP_HEIGHT) < containerHeight - gameState.getFloor().getHeight()) {
+        if ((this.y + POWERUP_HEIGHT) < containerHeight 
+        		- gameState.getLevelsHelper().getFloor().getHeight()) {
             this.y += POWERUP_SPEED * deltaFloat;
         } else {
-            this.y = containerHeight - gameState.getFloor().getHeight() - POWERUP_HEIGHT;
+            this.y = containerHeight 
+            		- gameState.getLevelsHelper().getFloor().getHeight() - POWERUP_HEIGHT;
         }
     }
 

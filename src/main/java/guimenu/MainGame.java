@@ -1,5 +1,6 @@
 package guimenu;
 import guigame.GameState;
+import guiobjects.RND;
 
 import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
@@ -10,8 +11,6 @@ import lan.Host;
 import logic.HighScores;
 import logic.HighScoresParser;
 import logic.Logger;
-import logic.Player;
-import logic.PlayerList;
 import logic.ShutDownHook;
 
 import org.newdawn.slick.AppGameContainer;
@@ -20,6 +19,9 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+
+import player.Player;
+import player.PlayerList;
 
 /**
  * The main game object - basically the overall control system.
@@ -30,7 +32,6 @@ public class MainGame extends StateBasedGame {
 
 	///// CONFIGURATION /////
 	
-	// Speeds in pixels per second
 	private static final int DEFAULT_X_RES = 1600;
 	private static final int DEFAULT_Y_RES = 1000;
 	
@@ -39,8 +40,9 @@ public class MainGame extends StateBasedGame {
 	
 	// Game Colors
 	private boolean shuffleColors = false;
-	private static final int COLOR_COUNT = 6;
+	private static final int COLOR_COUNT = 7;
 	private static final Color COLOR_RED = new Color(0.9f, 0.15f, 0.1f);
+	private static final Color COLOR_YELLOW = new Color(0.7f, 0.65f, 0.1f);
 	private static final Color COLOR_ORANGE = new Color(1.0f, 0.4f, 0.1f);
 	private static final Color COLOR_GREEN = new Color(0.35f, 0.6f, 0.05f);
 	private static final Color COLOR_BLUE = new Color(0.15f, 0.5f, 0.8f);
@@ -51,6 +53,7 @@ public class MainGame extends StateBasedGame {
 	private static final int NUM_4 = 4;
 	private static final int NUM_5 = 5;
 	private static final int NUM_6 = 6;
+	private static final int NUM_7 = 7;
 	
 	private float gravity = DEFAULT_GRAVITY;
 	private float startingSpeed = DEFAULT_STARTING_SPEED;
@@ -80,7 +83,7 @@ public class MainGame extends StateBasedGame {
 	private HighScores highscores;
 	
 	//////////////////////// STATES //////////////
-	private static  final int MENU_START_STATE = 0;
+	private static  final int MENU_MAIN_STATE = 0;
 	private static final int GAME_STATE = 1;
 	private static final int MENU_GAMEOVER_STATE = 2;
 	private static final int MENU_SETTINGS_STATE = 3;
@@ -138,8 +141,8 @@ public class MainGame extends StateBasedGame {
 		this.player2ImageStringN = "Player2sprite_Norm.png";
 		this.player2ImageStringA = "Player2sprite_Add.png";
 		this.lifeCount = LIVES;
-		this.setColor(COLOR_RED);
-		this.setNextColor(COLOR_RED);
+		this.setColor(COLOR_YELLOW);
+		this.setNextColor(COLOR_YELLOW);
 		this.highscores = HighScoresParser.readHighScores(highscoresFile);
 		this.multiplayer = false;
 		this.lanMultiplayer = false;
@@ -272,7 +275,7 @@ public class MainGame extends StateBasedGame {
 			this.color = COLOR_BLUE; } else {
 				this.color = COLOR_RED; } break;
 		case NUM_4: if (this.color == COLOR_GREEN) {
-			this.color = COLOR_PINK; } else {
+			this.color = COLOR_YELLOW; } else {
 				this.color = COLOR_GREEN; } break;
 		case NUM_5: if (this.color == COLOR_WHITE) {
 			this.color = COLOR_RED; } else {
@@ -280,6 +283,9 @@ public class MainGame extends StateBasedGame {
 		case NUM_6: if (this.color == COLOR_PINK) {
 			this.color = COLOR_WHITE; } else {
 				this.color = COLOR_PINK; } break;
+		case NUM_7: if (this.color == COLOR_YELLOW) {
+			this.color = COLOR_GREEN; } else {
+				this.color = COLOR_YELLOW; } break;
 		default: break;
 		}
 	}
@@ -609,10 +615,10 @@ public class MainGame extends StateBasedGame {
 
 	
 	/**
-	 * @return the startState
+	 * @return the mainState
 	 */
-	public int getStartState() {
-		return MENU_START_STATE;
+	public int getMainState() {
+		return MENU_MAIN_STATE;
 	}
 
 	/**
@@ -770,7 +776,7 @@ public class MainGame extends StateBasedGame {
 			stateString = "Showing UI-transition to exit application.";
 			break;
 		case (0):
-			stateString += "StartState";
+			stateString += "MainState";
 			break;
 		case (1):
 			stateString += "GameState";

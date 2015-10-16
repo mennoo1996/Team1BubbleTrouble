@@ -89,25 +89,10 @@ public class Separator {
 	}
 
 	/**
-	 * @param x location of the separator.
-	 */
-	public void setX(float x) {
-		this.x = x;
-		recalculate();
-	}
-
-	/**
 	 * @return the y location of the separator.
 	 */
 	public float getY() {
 		return y;
-	}
-
-	/**
-	 * @param y location of separator.
-	 */
-	public void setY(float y) {
-		this.y = y;
 	}
 
 	/**

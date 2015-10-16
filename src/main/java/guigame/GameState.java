@@ -34,6 +34,7 @@ public class GameState extends BasicGameState {
 	private GameStateItemsHelper itemsHelper;
 	private GameStatePauseHelper pauseHelper;
 	private GameStateLogicHelper logicHelper;
+	private GameStateGateHelper gateHelper;
 	
 	private MainGame mainGame;
 	
@@ -80,6 +81,7 @@ public class GameState extends BasicGameState {
 		itemsHelper.enter();
 		interfaceHelper.enter();
 		logicHelper.enter();
+		gateHelper.enter();
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -147,7 +149,7 @@ public class GameState extends BasicGameState {
 		itemsHelper = new GameStateItemsHelper(mainGame, this);
 		pauseHelper = new GameStatePauseHelper(mainGame, this);
 		logicHelper = new GameStateLogicHelper(mainGame, this);
-		
+		gateHelper = new GameStateGateHelper(mainGame, this);
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -199,6 +201,7 @@ public class GameState extends BasicGameState {
 			throws SlickException {
 		RND.getInstance().drawBackground(graphics);
 		circlesHelper.render(graphics, container);
+		gateHelper.render(graphics, container);
 		playerHelper.render(graphics, container);
 		itemsHelper.render(graphics, container);
 		interfaceHelper.renderBottomLayer(graphics, container);
@@ -343,6 +346,13 @@ public class GameState extends BasicGameState {
 	 */
 	public GameStateItemsHelper getItemsHelper() {
 		return itemsHelper;
+	}
+	
+	/**
+	 * @return The GameStateGateHelper object
+	 */
+	public GameStateGateHelper getGateHelper() {
+		return gateHelper;
 	}
 	
 }

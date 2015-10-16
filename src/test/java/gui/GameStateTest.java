@@ -2,7 +2,6 @@ package gui;
 import static org.junit.Assert.assertEquals;
 import guigame.GameState;
 import guimenu.MainGame;
-import logic.MyRectangle;
 
 import org.junit.Test;
 

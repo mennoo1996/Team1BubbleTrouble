@@ -1,7 +1,7 @@
 package guigame;
 
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.RND;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -94,7 +94,8 @@ public class GameStateItemsHelper extends GameStateHelper {
 	 */
 	private void processCoins(GameContainer container, float deltafloat) {
 		for (Coin coin : droppedCoins) {
-			coin.update(parentState.getFloor(), deltafloat, container.getHeight());
+			coin.update(parentState.getLevelsHelper().getFloor(), 
+					deltafloat, container.getHeight());
 		}
 	}
 	

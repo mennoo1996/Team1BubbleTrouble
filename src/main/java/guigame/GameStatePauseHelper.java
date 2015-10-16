@@ -1,8 +1,8 @@
 package guigame;
 
-import guimenu.Button;
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.Button;
+import guiobjects.RND;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;

@@ -10,7 +10,8 @@ import org.newdawn.slick.geom.Rectangle;
 
 import guigame.GameState;
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.RND;
+import guiobjects.RenderOptions;
 
 
 /**
@@ -77,9 +78,11 @@ public class Gate extends Rectangle {
 	public void draw(Graphics graphics, MainGame mainGame, GameState gameState,
 			GameContainer container) {
 		int left = GATE_LEFT, down = GATE_DOWN;
-		float x = getMinX() - left, y = gameState.getCeiling().getHeight() - GATE_Y_DEVIATION;
+		float x = getMinX() - left, y = gameState.getLevelsHelper().getCeiling().getHeight() 
+				- GATE_Y_DEVIATION;
 		float x2 = x + gateUpperN.getWidth();
-		float y2 = gameState.getCeiling().getHeight() + GATE_Y_FACTOR * getHeightPercentage() 
+		float y2 = gameState.getLevelsHelper().getCeiling().getHeight() 
+				+ GATE_Y_FACTOR * getHeightPercentage() 
 				+ down - GATE_Y_DEVIATION;
 		float srcx = 0;
 		float srcy = gateUpperN.getHeight() - GATE_Y_FACTOR * getHeightPercentage();
@@ -90,17 +93,16 @@ public class Gate extends Rectangle {
 		left = GATE_LEFT_LOWER;
 		float up = GATE_UP;
 		x = getMinX() - left - 1;
-		y = container.getHeight() - gameState.getFloor().getHeight()
+		y = container.getHeight() - gameState.getLevelsHelper().getFloor().getHeight()
 				- GATE_Y_FACTOR_LOWER * getHeightPercentage() - up;
 		x2 = x + gateLowerN.getWidth() - 1;
-		y2 = container.getHeight() - gameState.getFloor().getHeight();
+		y2 = container.getHeight() - gameState.getLevelsHelper().getFloor().getHeight();
 		srcx = 0;
 		srcy = 0;
 		srcx2 = gateLowerN.getWidth();
 		srcy2 = GATE_Y_FACTOR_LOWER * getHeightPercentage();
 		RND.getInstance().drawColor(new RenderOptions(graphics, gateLowerN, gateLowerA, x, y, 
 				mainGame.getColor()), x2, y2, srcx, srcy, srcx2, srcy2);
-	
 	}
 	
 	/**

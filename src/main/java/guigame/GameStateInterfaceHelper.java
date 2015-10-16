@@ -1,13 +1,13 @@
 package guigame;
 
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.RND;
+import guiobjects.RenderOptions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import logic.FloatingScore;
-import logic.RenderOptions;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -153,8 +153,9 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 */
 	public void renderBottomLayer(Graphics graphics, GameContainer container) {
 		RND.getInstance().drawColor(new RenderOptions(graphics, ceilingImageN, 
-				ceilingImageA, parentState.getLeftWall().getWidth() - CEILING_DRAW_X_DEVIATION, 
-				parentState.getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION, 
+				ceilingImageA, parentState.getLevelsHelper().getLeftWall().getWidth()
+					- CEILING_DRAW_X_DEVIATION, 
+				parentState.getLevelsHelper().getCeiling().getHeight() - CEILING_DRAW_Y_DEVIATION, 
 				mainGame.getColor()));
 		RND.getInstance().drawColor(new RenderOptions(graphics, wallsImageN, wallsImageA, 
 				0, 0, mainGame.getColor()));

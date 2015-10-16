@@ -1,4 +1,4 @@
-package guimenu;
+package guiobjects;
 import logic.MyRectangle;
 
 import org.newdawn.slick.Color;

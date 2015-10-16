@@ -52,7 +52,7 @@ public class GameStateLogicHelper extends GameStateHelper {
 	
 	@Override
 	public void enter() {
-		totaltime = parentState.getLevelContainer().
+		totaltime = parentState.getLevelsHelper().getLevelContainer().
 				getLevel(mainGame.getLevelCounter()).getTime() * SECOND_TO_MS_FACTOR;
 		fractionTimeParts = COUNTDOWN_BAR_PARTS;
 		timeRemaining = totaltime;
@@ -189,7 +189,7 @@ public class GameStateLogicHelper extends GameStateHelper {
             mainGame.setScore(mainGame.getScore() + score); // update total score
             int levelCounter = mainGame.getLevelCounter();
             waitForLevelEnd = false;
-			if (levelCounter < parentState.getLevelContainer().size() - 1) {
+			if (levelCounter < parentState.getLevelsHelper().getLevelContainer().size() - 1) {
                 mainGame.setLevelCounter(mainGame.getLevelCounter() + 1);
                 mainGame.setSwitchState(mainGame.getGameState());
             } else {

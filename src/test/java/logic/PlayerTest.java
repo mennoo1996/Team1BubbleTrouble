@@ -10,6 +10,7 @@ import guigame.GameStateCirclesHelper;
 import guigame.GameStateGateHelper;
 import guigame.GameStateInterfaceHelper;
 import guigame.GameStateItemsHelper;
+import guigame.GameStateLevelsHelper;
 import guigame.GameStateLogicHelper;
 import guigame.GameStatePauseHelper;
 import guigame.GameStatePlayerHelper;
@@ -46,6 +47,7 @@ public class PlayerTest {
 	GameStateInterfaceHelper ifh = mock(GameStateInterfaceHelper.class);
 	GameStatePlayerHelper ph = mock(GameStatePlayerHelper.class);
 	GameStateLogicHelper lh = mock(GameStateLogicHelper.class);
+	GameStateLevelsHelper leh = mock(GameStateLevelsHelper.class);
 	GameStatePauseHelper pah = mock(GameStatePauseHelper.class);
 
 	@Before
@@ -66,6 +68,7 @@ public class PlayerTest {
 		when(gs.getCirclesHelper()).thenReturn(ch);
 		when(gs.getInterfaceHelper()).thenReturn(ifh);
 		when(gs.getPlayerHelper()).thenReturn(ph);
+		when(gs.getLevelsHelper()).thenReturn(leh);
 		when(gs.getLogicHelper()).thenReturn(lh);
 		when(gs.getPauseHelper()).thenReturn(pah);
 	}
@@ -328,7 +331,6 @@ public class PlayerTest {
 	
 	@Test
 	public void testUpdate1() {
-		GameState gs = mock(GameState.class);
 		Gate gate = new Gate(1,1,1,1);
 		ArrayList<Gate> gl = new ArrayList<Gate>();
 		gl.add(gate);
@@ -350,11 +352,11 @@ public class PlayerTest {
 		when(ifh.getFloatingScores()).thenReturn(fsl);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
-		when(gs.getFloor()).thenReturn(floor);
-		when(gs.getCeiling()).thenReturn(ceiling);
+		when(gs.getLevelsHelper().getFloor()).thenReturn(floor);
+		when(gs.getLevelsHelper().getCeiling()).thenReturn(ceiling);
 		when(ph.getWeaponList()).thenReturn(wl);
-		when(gs.getLeftWall()).thenReturn(floor);
-		when(gs.getRightWall()).thenReturn(floor);
+		when(gs.getLevelsHelper().getLeftWall()).thenReturn(floor);
+		when(gs.getLevelsHelper().getRightWall()).thenReturn(floor);
 		p = new Player(1, 2, 3, 4, i, i2, i3, i4, mg);
 		//p.update(1, 1000, 1600, true);
 		assertEquals(1,p.getLogicHelper().getX(),0);

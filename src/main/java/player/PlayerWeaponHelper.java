@@ -58,7 +58,6 @@ public class PlayerWeaponHelper {
 			shot = true;
 			gameState.getPlayerHelper().getWeaponList().setWeapon(playerNumber, 
 					this.getWeapon(containerHeight));
-			
 			Weapon weapon = gameState.getPlayerHelper().getWeaponList().
 					getWeaponList().get(playerNumber);
 			boolean spiky = (weapon instanceof Spiky);
@@ -74,7 +73,8 @@ public class PlayerWeaponHelper {
 				getWeaponList().get(playerNumber);
 		// Update laser
 		if (shot) {
-			weapon.update(gameState.getCeiling(), gameState.getFloor(), deltaFloat);
+			weapon.update(gameState.getLevelsHelper().getCeiling(), 
+					gameState.getLevelsHelper().getFloor(), deltaFloat);
 			// Disable laser when it has reached the ceiling
 			if (!weapon.isVisible()) {
 				shot = false;
@@ -93,7 +93,7 @@ public class PlayerWeaponHelper {
 		+ player.getLogicHelper().getCenterX(),
 					PriorityLevels.MEDIUM, PLAYER);
 			return new Weapon(player.getLogicHelper().getCenterX(), 
-					containerHeight - gameState.getFloor().getHeight(),
+					containerHeight - gameState.getLevelsHelper().getFloor().getHeight(),
 					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
@@ -102,7 +102,7 @@ public class PlayerWeaponHelper {
 		+ player.getLogicHelper().getCenterX(), 
 					PriorityLevels.HIGH, PLAYER);
 			return new Spiky(player.getLogicHelper().getCenterX(), containerHeight 
-					- gameState.getFloor().getHeight(), mainGame.getLaserSpeed(), 
+					- gameState.getLevelsHelper().getFloor().getHeight(), mainGame.getLaserSpeed(), 
 					mainGame.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
@@ -110,7 +110,8 @@ public class PlayerWeaponHelper {
 		+ player.getLogicHelper().getCenterX(), 
 					PriorityLevels.HIGH, PLAYER);
 			return new InstantLaser(player.getLogicHelper().getCenterX(),
-					containerHeight - gameState.getFloor().getHeight(), mainGame.getLaserWidth());
+					containerHeight - gameState.getLevelsHelper().getFloor().getHeight(), 
+						mainGame.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());

@@ -2,9 +2,12 @@ package logic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import logic.MyRectangle;
 import logic.Weapon;
 import guigame.GameState;
+import guigame.GameStateLevelsHelper;
 import guimenu.MainGame;
 
 import org.junit.Before;
@@ -15,12 +18,15 @@ public class WeaponTest {
 	Weapon l;
 	MainGame mg;
 	GameState gs;
+	GameStateLevelsHelper leh = mock(GameStateLevelsHelper.class);
 
 	@Before
 	public void setUp() throws Exception {
 		l = new Weapon(1, 2, 3, 4);
 		mg = new MainGame("TestGame");
-		gs = new GameState(mg);
+		gs = mock(GameState.class);
+		when(gs.getLevelsHelper()).thenReturn(leh);
+		when(leh.getCeiling()).thenReturn(new MyRectangle(0, 0, 200, 200));
 	}
 
 	@Test
@@ -68,37 +74,37 @@ public class WeaponTest {
 
 	@Test
 	public void testUpdateY() {
-		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
-		l.update(gs.getCeiling(), gs.getFloor(), 0.5f);
+		gs.getLevelsHelper().setCeiling(new MyRectangle(0, 0, 0, 4));
+		l.update(gs.getLevelsHelper().getCeiling(), gs.getLevelsHelper().getFloor(), 0.5f);
 		assertEquals(0.5f, l.getY(), 0);
 		
 	}
 	
 	@Test
 	public void testUpdateYNoConstantValue() {
-		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
-		l.update(gs.getCeiling(), gs.getFloor(), 1);
+		gs.getLevelsHelper().setCeiling(new MyRectangle(0, 0, 0, 4));
+		l.update(gs.getLevelsHelper().getCeiling(), gs.getLevelsHelper().getFloor(), 1);
 		assertEquals(-1, l.getY(), 0);
 	}
 	
 	@Test
 	public void testUpdateHeight() {
-		gs.setCeiling(new MyRectangle(0, 0, 0, 4));
-		l.update(gs.getCeiling(), gs.getFloor(), 0.5f);
+		gs.getLevelsHelper().setCeiling(new MyRectangle(0, 0, 0, 4));
+		l.update(gs.getLevelsHelper().getCeiling(), gs.getLevelsHelper().getFloor(), 0.5f);
 		assertEquals(1.5, l.getHeight(), 0);
 	}
 	
 	@Test
 	public void testUpdateHeightNoConstantValue() {
-		gs.setCeiling(new MyRectangle(0, 0, 0 ,4));
-		l.update(gs.getCeiling(), gs.getFloor(), 1);
+		gs.getLevelsHelper().setCeiling(new MyRectangle(0, 0, 0 ,4));
+		l.update(gs.getLevelsHelper().getCeiling(), gs.getLevelsHelper().getFloor(), 1);
 		assertEquals(3, l.getHeight(), 0);
 	}
 	
 	@Test
 	public void testUpdateVisible(){
-		gs.setCeiling(new MyRectangle(0, 0, 0, 1));
-		l.update(gs.getCeiling(), gs.getFloor(), 0.5f);
+		gs.getLevelsHelper().setCeiling(new MyRectangle(0, 0, 0, 1));
+		l.update(gs.getLevelsHelper().getCeiling(), gs.getLevelsHelper().getFloor(), 0.5f);
 		assertFalse(l.isVisible());
 	}
 	

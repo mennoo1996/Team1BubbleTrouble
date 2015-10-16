@@ -13,7 +13,7 @@ import logic.Gate;
  *
  */
 public class Level1 extends Level {
-
+	
 	/**
 	 * Creates a level.
 	 * @param maingame the game in which the level is created

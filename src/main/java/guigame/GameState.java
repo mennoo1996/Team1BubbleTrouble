@@ -1,9 +1,7 @@
 package guigame;
 import guimenu.MainGame;
-import guimenu.RND;
-import logic.LevelContainer;
+import guiobjects.RND;
 import logic.Logger;
-import logic.MyRectangle;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -35,25 +33,11 @@ public class GameState extends BasicGameState {
 	private GameStatePauseHelper pauseHelper;
 	private GameStateLogicHelper logicHelper;
 	private GameStateGateHelper gateHelper;
+	private GameStateLevelsHelper levelsHelper;
 	
 	private MainGame mainGame;
 	
-	// level objects
-	private MyRectangle floor;
-	private MyRectangle leftWall;
-	private MyRectangle rightWall;
-	private MyRectangle ceiling;
 	private Input savedInput;
-
-	private LevelContainer levels;
-	
-	// CONSTANTS
-	private static final int FLOOR_Y_DEVIATION = 210;
-	private static final int FLOOR_HEIGHT = 210;
-	private static final int LEFT_WALL_WIDTH = 105;
-	private static final int RIGHT_WALL_X_DEVIATION = 130;
-	private static final int RIGHT_WALL_WIDTH = 130;
-	private static final int CEILING_HEIGHT = 110;
 	
 	/**
 	 * The constructor.
@@ -75,19 +59,13 @@ public class GameState extends BasicGameState {
 		Logger.getInstance().log("Entering GameState", Logger.PriorityLevels.LOW, "States");
 		RND.getInstance().setOpacity(0.0f);
 		mainGame.stopSwitchState();
-		levels.initialize();
 		playerHelper.enter();
+		levelsHelper.enter();
 		circlesHelper.enter();
 		itemsHelper.enter();
 		interfaceHelper.enter();
 		logicHelper.enter();
 		gateHelper.enter();
-		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
-				container.getWidth(), FLOOR_HEIGHT));
-		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
-		setRightWall(new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
-				0, RIGHT_WALL_WIDTH, container.getHeight()));
-		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 	}
 	
 	/**
@@ -150,14 +128,7 @@ public class GameState extends BasicGameState {
 		pauseHelper = new GameStatePauseHelper(mainGame, this);
 		logicHelper = new GameStateLogicHelper(mainGame, this);
 		gateHelper = new GameStateGateHelper(mainGame, this);
-		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
-				container.getWidth(), FLOOR_HEIGHT));
-		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
-		setRightWall(new MyRectangle(container.getWidth() - RIGHT_WALL_X_DEVIATION,
-				0, RIGHT_WALL_WIDTH, container.getHeight()));
-		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
-		levels = new LevelContainer(mainGame);
-		
+		levelsHelper = new GameStateLevelsHelper(mainGame, this, container);
 		commandQueue = CommandQueue.getInstance();
 	}
 	
@@ -216,38 +187,6 @@ public class GameState extends BasicGameState {
 	public int getID() {
 		return 1;
 	}
-	
-	/**
-	 * Set the ceiling.
-	 * @param c the ceiling to set
-	 */
-	public void setCeiling(MyRectangle c) {
-		ceiling = c;
-	}
-	
-	/**
-	 * Set the floor.
-	 * @param floor the floor to set
-	 */
-	public void setFloor(MyRectangle floor) {
-		this.floor = floor;
-	}
-	
-	/**
-	 * Set the left wall.
-	 * @param leftWall the left wall to set
-	 */
-	public void setLeftWall(MyRectangle leftWall) {
-		this.leftWall = leftWall;
-	}
-	
-	/**
-	 * Set the right wall.
-	 * @param rightWall the right wall to set
-	 */
-	public void setRightWall(MyRectangle rightWall) {
-		this.rightWall = rightWall;
-	}
 
 	/**
 	 * Get the MainGame.
@@ -255,34 +194,6 @@ public class GameState extends BasicGameState {
 	 */
 	public MainGame getmainGame() {
 		return mainGame;
-	}
-
-	/**
-	 * @return the floor
-	 */
-	public MyRectangle getFloor() {
-		return floor;
-	}
-
-	/**
-	 * @return the ceiling
-	 */
-	public MyRectangle getCeiling() {
-		return ceiling;
-	}
-
-	/**
-	 * @return the leftWall
-	 */
-	public MyRectangle getLeftWall() {
-		return leftWall;
-	}
-
-	/**
-	 * @return the rightWall
-	 */
-	public MyRectangle getRightWall() {
-		return rightWall;
 	}
 	
 	/**
@@ -300,10 +211,10 @@ public class GameState extends BasicGameState {
 	}
 	
 	/**
-	 * @return The levelContainer used for holding and creating levels.
+	 * @return The GameStateCirclesHelper object.
 	 */
-	public LevelContainer getLevelContainer() {
-		return levels;
+	public GameStateLevelsHelper getLevelsHelper() {
+		return levelsHelper;
 	}
 	
 	/**

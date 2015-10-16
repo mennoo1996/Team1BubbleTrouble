@@ -1,7 +1,10 @@
 package guimenu;
+import guiobjects.Button;
+import guiobjects.RND;
+import guiobjects.RenderOptions;
+import guiobjects.Separator;
 import logic.Logger;
 import logic.MyRectangle;
-import logic.RenderOptions;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;

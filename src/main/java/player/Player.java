@@ -319,8 +319,8 @@ public class Player {
 		movementHelper.setHost(mainGame.getHost());
 		movementHelper.setClient(mainGame.getClient());
 		movementHelper.setPlayerSpeed(mainGame.getPlayerSpeed());
-		movementHelper.setRightWallWidth(gameState.getRightWall().getWidth());
-		movementHelper.setLeftWallWidth(gameState.getLeftWall().getWidth());
+		movementHelper.setRightWallWidth(gameState.getLevelsHelper().getRightWall().getWidth());
+		movementHelper.setLeftWallWidth(gameState.getLevelsHelper().getLeftWall().getWidth());
 	}
 	
 	/**

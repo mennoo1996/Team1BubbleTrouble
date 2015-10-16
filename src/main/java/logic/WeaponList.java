@@ -1,7 +1,8 @@
 package logic;
 import guigame.GameState;
 import guimenu.MainGame;
-import guimenu.RND;
+import guiobjects.RND;
+import guiobjects.RenderOptions;
 
 import java.util.ArrayList;
 

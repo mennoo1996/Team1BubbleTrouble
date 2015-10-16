@@ -121,14 +121,14 @@ public class BouncingCircle extends Circle implements Cloneable {
 		// Calculations for Y coordinates
 		this.setY(this.getY() + ySpeed * deltaFloat * multiplier);
 		// When the ball hit the floor reverse it's speed
-		if (this.getMaxY() > containerHeight - gameState.getFloor().getHeight()) {
+		if (this.getMaxY() > containerHeight - gameState.getLevelsHelper().getFloor().getHeight()) {
 			ySpeed = -getSpeedForRadius();
 		} else if (multiplier != 0) {
 			// Else increase the speed
 			ySpeed += (gravity * deltaFloat) * multiplier;
 		}
 		// When ball hits ceiling
-		if (this.getMinY() <= gameState.getCeiling().getHeight()) {
+		if (this.getMinY() <= gameState.getLevelsHelper().getCeiling().getHeight()) {
 			this.hitCeiling = true;
 			Logger.getInstance().log("circles hitted ceiling", 
 					Logger.PriorityLevels.LOW, "circles");
@@ -145,9 +145,10 @@ public class BouncingCircle extends Circle implements Cloneable {
 		// Calculations for X coordinates
 		this.setX(this.getX() + xSpeed * deltaFloat * multiplier);
 		// If the ball hit a wall reverse it's speed
-		if (this.getX() < gameState.getLeftWall().getWidth()) {
+		if (this.getX() < gameState.getLevelsHelper().getLeftWall().getWidth()) {
 			xSpeed = initSpeed;
-		} else if (this.getMaxX() > containerWidth - gameState.getRightWall().getWidth()) {
+		} else if (this.getMaxX() > containerWidth
+				- gameState.getLevelsHelper().getRightWall().getWidth()) {
 			xSpeed = -initSpeed;
 		} else {
 			for (Gate gate : gameState.getGateHelper().getGateList()) {

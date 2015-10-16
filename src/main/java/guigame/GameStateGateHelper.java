@@ -34,7 +34,8 @@ public class GameStateGateHelper extends GameStateHelper {
 	
 	@Override
 	public void enter() {
-		gateList = parentState.getLevelContainer().getLevel(mainGame.getLevelCounter()).getGates();
+		gateList = parentState.getLevelsHelper().getLevelContainer().getLevel(
+				mainGame.getLevelCounter()).getGates();
 	}
 
 	@Override

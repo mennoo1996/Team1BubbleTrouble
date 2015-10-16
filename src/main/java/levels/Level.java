@@ -89,16 +89,8 @@ public abstract class Level {
 	 * Returns the game.
 	 * @return the game to return
 	 */
-	public MainGame getMaingame() {
+	protected MainGame getMaingame() {
 		return maingame;
-	}
-
-	/**
-	 * Sets the game.
-	 * @param maingame the game to set
-	 */
-	public void setMaingame(MainGame maingame) {
-		this.maingame = maingame;
 	}
 
 	/**

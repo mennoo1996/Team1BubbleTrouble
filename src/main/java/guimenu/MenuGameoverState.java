@@ -1,4 +1,8 @@
 package guimenu;
+import guiobjects.Button;
+import guiobjects.RND;
+import guiobjects.Separator;
+import guiobjects.Textfield;
 import logic.HighScoresParser;
 import logic.Logger;
 import logic.Score;

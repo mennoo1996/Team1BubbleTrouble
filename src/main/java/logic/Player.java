@@ -4,10 +4,6 @@ import guimenu.MainGame;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import logic.PlayerMovementHelper.Movement;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -26,7 +22,6 @@ public class Player {
 	private PlayerPowerupHelper powerupHelper;
 	private PlayerWeaponHelper weaponHelper;
 
-	private int shieldCount;
 	private float x;
 	private float y;
 	private float width;
@@ -43,29 +38,23 @@ public class Player {
 	private MainGame mainGame;
 
 	private GameState gameState;
-	// weapon management
-	private LinkedList<Powerup.PowerupType> weapons;
+	
 	private int playerNumber;
 	private final float startX;
 	private final float startY;
 	private String playerName = "";
+	private int moveLeftKey;
+	private int moveRightKey;
+	private int shootKey;
+	
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final int PLAYER1_X_DEVIATION = 720;
 	private static final int PLAYER2_X_DEVIATION = 420;
 	private static final int PLAYER_Y_DEVIATION = 705;
 	private static final float HALF = 0.5f;
-	private static final int SECONDS_TO_MS = 1000;
-	private int moveLeftKey;
-	private int moveRightKey;
-	private int shootKey;
-	
-	private long shieldTimeRemaining;
-	
-	private Logger logger = Logger.getInstance();
 	
 	private static final String POWERUPS = "powerups";
-	private static final int POWERUP_DURATION = 10;
 
 	/**
 	 * Constructor class.
@@ -100,10 +89,6 @@ public class Player {
 		moveLeftKey = Input.KEY_LEFT;
 		moveRightKey = Input.KEY_RIGHT;
 		shootKey = Input.KEY_SPACE;
-		this.weapons = new LinkedList<>();
-		this.shieldCount = 0;
-		this.shieldTimeRemaining = 0;
-		
 		this.movementHelper = new PlayerMovementHelper(this, gameState);
 		this.powerupHelper = new PlayerPowerupHelper(this, mainGame, gameState);
 		this.weaponHelper = new PlayerWeaponHelper(mainGame, gameState, this);
@@ -118,13 +103,11 @@ public class Player {
 	 */
 	public void update(float deltaFloat, float containerHeight, float containerWidth, 
 			boolean testing) {
-		if (!gameState.getLogicHelper().isPaused() && shieldTimeRemaining > 0) {
-			shieldTimeRemaining -= deltaFloat * SECONDS_TO_MS;
-		}
+		
 		processGates();
 		weaponHelper.processWeapon(deltaFloat, containerHeight, testing);
 		movementHelper.processPlayerMovement(deltaFloat, containerWidth, testing);
-		powerupHelper.processPowerups(deltaFloat, containerHeight);
+		powerupHelper.update(deltaFloat, containerHeight);
 		processCoins();
 		
 	}
@@ -135,8 +118,8 @@ public class Player {
 	private void processGates() {
 		// Check the intersection of a player with a gate
 		freeToRoam = true;
-		synchronized (gameState.getCirclesHelper().getGateList()) {
-			for (Gate someGate :gameState.getCirclesHelper().getGateList()) {
+		synchronized (gameState.getGateHelper().getGateList()) {
+			for (Gate someGate :gameState.getGateHelper().getGateList()) {
 				if (this.getRectangle().intersects(someGate.getRectangle())) {
 					freeToRoam = false;
 					movementHelper.setIntersectingGate(someGate);
@@ -165,29 +148,34 @@ public class Player {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		synchronized (gameState.getItemsHelper().getDroppedCoins()) {
 			for (Coin coin : gameState.getItemsHelper().getDroppedCoins()) {
-
 				if (coin.getRectangle().intersects(this.getRectangle())) {
-					if (!mainGame.isLanMultiplayer() | (mainGame.isHost() & playerNumber == 0)) {
-						//Here is the claim
-						gameState.getLogicHelper().addToScore(coin.getPoints());
-						gameState.getInterfaceHelper().getFloatingScores().
-						add(new FloatingScore(coin));
-						usedCoins.add(coin);
-						logger.log("Picked up coin", 
-								Logger.PriorityLevels.MEDIUM, POWERUPS);
-						if (mainGame.isHost() & playerNumber == 0) {
-							mainGame.getHost().updateCoinsDictate(coin);
-						}
-					} else if (mainGame.isClient() & playerNumber == 1) {
-						mainGame.getClient().pleaCoin(coin);
-					}
-
+					processCoin(coin, usedCoins);
 				}
 			}
 		}
-		//If client no used coins
 		gameState.getItemsHelper().getDroppedCoins().removeAll(usedCoins);
 	}	
+	
+	/**
+	 * Process the intersection of a player with an individual coin.
+	 * @param coin to process
+	 * @param usedCoins to dump it in
+	 */
+	private void processCoin(Coin coin, ArrayList<Coin> usedCoins) {
+		if (!mainGame.isLanMultiplayer() | (mainGame.isHost() & playerNumber == 0)) {
+			gameState.getLogicHelper().addToScore(coin.getPoints());
+			gameState.getInterfaceHelper().getFloatingScores().
+			add(new FloatingScore(coin));
+			usedCoins.add(coin);
+			Logger.getInstance().log("Picked up coin", 
+					Logger.PriorityLevels.MEDIUM, POWERUPS);
+			if (mainGame.isHost() & playerNumber == 0) {
+				mainGame.getHost().updateCoinsDictate(coin);
+			}
+		} else if (mainGame.isClient() & playerNumber == 1) {
+			mainGame.getClient().pleaCoin(coin);
+		}
+	}
 
 	/**
 	 * @return Whether or not current player is the host
@@ -348,13 +336,6 @@ public class Player {
 	public Image getShieldImageA() {
 		return shieldImageA;
 	}
-
-	/**
-	 * @return Whether or not the player has a shield
-	 */
-	public boolean hasShield() {
-		return shieldCount > 0;
-	}
 	
 	/**
 	 * @return the player spritesheet_norm
@@ -477,9 +458,8 @@ public class Player {
 	 * Respawn player (i.e. reset powerups)
 	 */
 	public void respawn() {
-		weapons = new LinkedList<>();
-		shieldCount = 0;
-		shieldTimeRemaining = 0;
+		weaponHelper.setWeapons(new LinkedList<>());
+		powerupHelper.respawn();
 		this.x = startX;
 		this.y = startY;
 	}
@@ -510,24 +490,7 @@ public class Player {
 	 */
 	public void setPlayerNumber(int playerNumber) {
 		this.playerNumber = playerNumber;
-	}
-
-	/**
-	 * @return shield time remaing (MS)
-	 */
-	public float shieldTimeRemaining() {
-		if (shieldCount > 0) {
-			return shieldTimeRemaining;
-		} else {
-			return 0;
-		}
-	}
-
-	/**
-	 * @param shieldTimeRemaining the shieldTimeRemaining to set
-	 */
-	public void setShieldTimeRemaining(long shieldTimeRemaining) {
-		this.shieldTimeRemaining = shieldTimeRemaining;
+		weaponHelper.setPlayerNumber(playerNumber);
 	}
 	
 	/**
@@ -585,72 +548,6 @@ public class Player {
 	public void setFreeToRoam(boolean freeToRoam) {
 		this.freeToRoam = freeToRoam;
 	}
-	
-	/**
-	 * @param movement the movement integer used to determine movement state. 
-	 */
-	public void setMovement(Movement movement) {
-		movementHelper.setMovement(movement);
-	}
-	
-	/**
-	 * @return the current movement used to determine movement
-	 */
-	public Movement getMovement() {
-		return movementHelper.getMovement();
-	}
-	
-
-	/**
-	 * @param movement the movement integer used to determine movement state. 
-	 */
-	public void setMovingLeft(boolean movement) {
-		movementHelper.setMovingLeft(movement);
-	}
-	
-	/**
-	 * @param movement the movement integer used to determine movement state. 
-	 */
-	public void setMovingRight(boolean movement) {
-		movementHelper.setMovingRight(movement);
-	}
-	
-	/**
-	 * Add a shield for this player.
-	 */
-	public void addShield() {
-        shieldCount += 1;
-        shieldTimeRemaining = TimeUnit.SECONDS.toMillis(POWERUP_DURATION);
-        Executors.newScheduledThreadPool(1).schedule(() -> {
-                    if (shieldCount > 0) {
-                        shieldCount -= 1;
-                    }
-                },
-                POWERUP_DURATION, TimeUnit.SECONDS);
-    }
-	
-	/**
-	 * Add a weapon for this player.
-	 * @param type the type of the powerup
-	 */
-	public void addWeapon(Powerup.PowerupType type) {
-		weapons.add(type);
-		Executors.newScheduledThreadPool(1).schedule(() -> {
-					if (!weapons.isEmpty()) {
-						weapons.removeFirst();
-					}
-				},
-				POWERUP_DURATION, TimeUnit.SECONDS);
-	}
-	
-	
-	
-	/**
-	 * @return the weapons
-	 */
-	public LinkedList<Powerup.PowerupType> getWeapons() {
-		return weapons;
-	}
 
 	/**
 	 * Update the info in the movement helper.
@@ -673,4 +570,26 @@ public class Player {
 		movementHelper.setRightWallWidth(gameState.getRightWall().getWidth());
 		movementHelper.setLeftWallWidth(gameState.getLeftWall().getWidth());
 	}
+	
+	/**
+	 * @return the helper class for player movement
+	 */
+	public PlayerMovementHelper getMovementHelper() {
+		return movementHelper;
+	}
+	
+	/**
+	 * @return the helper class for player powerups
+	 */
+	public PlayerPowerupHelper getPowerupHelper() {
+		return powerupHelper;
+	}
+	
+	/**
+	 * @return the helper class for player weapons
+	 */
+	public PlayerWeaponHelper getWeaponHelper() {
+		return weaponHelper;
+	}
+	
 }

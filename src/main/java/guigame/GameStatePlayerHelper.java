@@ -57,8 +57,8 @@ public class GameStatePlayerHelper extends GameStateHelper {
 
 	@Override
 	public void render(Graphics graphics, GameContainer container) {
-		mainGame.getPlayerList().drawPlayers(graphics);
 		weaponList.drawWeapons(graphics);
+		mainGame.getPlayerList().drawPlayers(graphics);
 	}
 	
 	/**

@@ -79,7 +79,7 @@ public class WeaponList {
 		boolean canProcessLAN = !mainGame.isLanMultiplayer() || (mainGame.isHost() 
 				&& weaponNumber == 0) || (mainGame.isClient() && weaponNumber == 1);
 		
-		if (player.isShot() && weapon.getRectangle().intersects(circle) && canProcessLAN) {
+		if (player.isShot() && canProcessLAN && weapon.getRectangle().intersects(circle)) {
 			gameState.getCirclesHelper().getShotList().add(circle);
 			logger.log("Circle shot", Logger.PriorityLevels.LOW, "weapon");
 			weapon.setVisible(false);

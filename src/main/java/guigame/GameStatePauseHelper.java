@@ -70,12 +70,12 @@ public class GameStatePauseHelper extends GameStateHelper {
 	
 	@Override
 	public void enter() {
-
+		  throw new UnsupportedOperationException("not supported");
 	}
 
 	@Override
 	public void exit() {
-
+		  throw new UnsupportedOperationException("not supported");
 	}
 
 	@Override

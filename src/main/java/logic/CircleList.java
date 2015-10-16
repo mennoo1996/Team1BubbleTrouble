@@ -150,6 +150,18 @@ public class CircleList {
 	}
 	
 	/**
+	 * Removes a given circle from the list.
+	 * @param circle	the circle to remove
+	 */
+	public synchronized void removeCircle(BouncingCircle circle) {
+		synchronized (circles) {
+			if (circles.contains(circle)) {
+				circles.remove(circle);
+			}
+		}
+	}
+	
+	/**
 	 * Render all the circles in the circlelist to the screen.
 	 * @param graphics context to draw in.
 	 * @param color to draw circles with.

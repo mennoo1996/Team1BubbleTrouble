@@ -12,6 +12,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import commands.CommandQueue;
+
 /**
  * This class is the state that we are in during gameplay.
  * It contains basically all the game logic.
@@ -24,7 +26,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class GameState extends BasicGameState {
 	
-	
+	private CommandQueue commandQueue;
 	
 	private GameStatePlayerHelper playerHelper;
 	private GameStateCirclesHelper circlesHelper;
@@ -32,6 +34,7 @@ public class GameState extends BasicGameState {
 	private GameStateItemsHelper itemsHelper;
 	private GameStatePauseHelper pauseHelper;
 	private GameStateLogicHelper logicHelper;
+	private GameStateGateHelper gateHelper;
 	
 	private MainGame mainGame;
 	
@@ -78,6 +81,7 @@ public class GameState extends BasicGameState {
 		itemsHelper.enter();
 		interfaceHelper.enter();
 		logicHelper.enter();
+		gateHelper.enter();
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -145,7 +149,7 @@ public class GameState extends BasicGameState {
 		itemsHelper = new GameStateItemsHelper(mainGame, this);
 		pauseHelper = new GameStatePauseHelper(mainGame, this);
 		logicHelper = new GameStateLogicHelper(mainGame, this);
-		
+		gateHelper = new GameStateGateHelper(mainGame, this);
 		setFloor(new MyRectangle(0, container.getHeight() - FLOOR_Y_DEVIATION,
 				container.getWidth(), FLOOR_HEIGHT));
 		setLeftWall(new MyRectangle(0, 0, LEFT_WALL_WIDTH, container.getHeight()));
@@ -153,6 +157,8 @@ public class GameState extends BasicGameState {
 				0, RIGHT_WALL_WIDTH, container.getHeight()));
 		setCeiling(new MyRectangle(0, 0, container.getWidth(), CEILING_HEIGHT));
 		levels = new LevelContainer(mainGame);
+		
+		commandQueue = CommandQueue.getInstance();
 	}
 	
 	/**
@@ -168,6 +174,8 @@ public class GameState extends BasicGameState {
 		setSavedInput(container.getInput());
 		logicHelper.update(container, sbg, delta);
 		exit(container, sbg, delta);
+		
+		commandQueue.executeQueue();
 	}
 	
 	/**
@@ -193,6 +201,7 @@ public class GameState extends BasicGameState {
 			throws SlickException {
 		RND.getInstance().drawBackground(graphics);
 		circlesHelper.render(graphics, container);
+		gateHelper.render(graphics, container);
 		playerHelper.render(graphics, container);
 		itemsHelper.render(graphics, container);
 		interfaceHelper.renderBottomLayer(graphics, container);
@@ -337,6 +346,13 @@ public class GameState extends BasicGameState {
 	 */
 	public GameStateItemsHelper getItemsHelper() {
 		return itemsHelper;
+	}
+	
+	/**
+	 * @return The GameStateGateHelper object
+	 */
+	public GameStateGateHelper getGateHelper() {
+		return gateHelper;
 	}
 	
 }

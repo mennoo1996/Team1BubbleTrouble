@@ -17,9 +17,7 @@ import logic.WeaponList;
  * @author Mark
  */
 public class GameStatePlayerHelper extends GameStateHelper {
-
-	private MainGame mainGame;
-	private GameState parentState;
+	
 	private WeaponList weaponList;
 	
 	/**

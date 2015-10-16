@@ -31,12 +31,10 @@ public class PlayerMovementHelper {
 	private float playerSpeed, leftWallWidth, rightWallWidth;
 	private Host host;
 	private Client client;
-	
 
 	private int movementCounter = 0;
 	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
 	
-
 	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	
 	/**

@@ -1,6 +1,4 @@
-package guimenu;
-
-import logic.RenderOptions;
+package guiobjects;
 
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
@@ -39,8 +37,6 @@ public final class RND {
 	private Image imageButtonBodyA;
 	private Image imageButtonTailN;
 	private Image imageButtonTailA;
-
-	
 	
 	// Miscellaneous variables used globally
 	

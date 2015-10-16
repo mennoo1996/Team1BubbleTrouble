@@ -17,14 +17,12 @@ import java.util.ArrayList;
 
 import logic.CircleList;
 import logic.Coin;
-import logic.Logger;
 import logic.Weapon;
 import logic.WeaponList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SpriteSheet;
 
 import player.Player;
 import player.PlayerList;

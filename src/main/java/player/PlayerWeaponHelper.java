@@ -22,8 +22,7 @@ public class PlayerWeaponHelper {
 	private MainGame mainGame;
 	private GameState gameState;
 	private Player player;
-	
-	private int playerNumber;
+
 	private boolean shot;
 	
 	private static final String PLAYER = "Player";
@@ -40,7 +39,6 @@ public class PlayerWeaponHelper {
 		this.mainGame = mainGame;
 		this.gameState = gameState;
 		this.player = player;
-		this.playerNumber = player.getPlayerNumber();
 		this.shot = false;
 		this.weapons = new LinkedList<>();
 	}
@@ -56,25 +54,25 @@ public class PlayerWeaponHelper {
 		if (!testing && gameState.getSavedInput().isKeyPressed(player.getShootKey())
 				&& !shot) {
 			shot = true;
-			gameState.getPlayerHelper().getWeaponList().setWeapon(playerNumber, 
+			gameState.getPlayerHelper().getWeaponList().setWeapon(player.getPlayerNumber(), 
 					this.getWeapon(containerHeight));
-			
 			Weapon weapon = gameState.getPlayerHelper().getWeaponList().
-					getWeaponList().get(playerNumber);
+					getWeaponList().get(player.getPlayerNumber());
 			boolean spiky = (weapon instanceof Spiky);
 			if (mainGame.isHost()) {
-				mainGame.getHost().updateLaser(playerNumber, weapon.getX(), 
+				mainGame.getHost().updateLaser(player.getPlayerNumber(), weapon.getX(), 
 						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth(), spiky);
 			} else if (mainGame.isClient()) {
-				mainGame.getClient().updateLaser(playerNumber, weapon.getX(), 
+				mainGame.getClient().updateLaser(player.getPlayerNumber(), weapon.getX(), 
 						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth(), spiky);
 			}
 		}
 		Weapon weapon = gameState.getPlayerHelper().getWeaponList().
-				getWeaponList().get(playerNumber);
+				getWeaponList().get(player.getPlayerNumber());
 		// Update laser
 		if (shot) {
-			weapon.update(gameState.getCeiling(), gameState.getFloor(), deltaFloat);
+			weapon.update(gameState.getLevelsHelper().getCeiling(), 
+					gameState.getLevelsHelper().getFloor(), deltaFloat);
 			// Disable laser when it has reached the ceiling
 			if (!weapon.isVisible()) {
 				shot = false;
@@ -93,7 +91,7 @@ public class PlayerWeaponHelper {
 		+ player.getLogicHelper().getCenterX(),
 					PriorityLevels.MEDIUM, PLAYER);
 			return new Weapon(player.getLogicHelper().getCenterX(), 
-					containerHeight - gameState.getFloor().getHeight(),
+					containerHeight - gameState.getLevelsHelper().getFloor().getHeight(),
 					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
@@ -102,7 +100,7 @@ public class PlayerWeaponHelper {
 		+ player.getLogicHelper().getCenterX(), 
 					PriorityLevels.HIGH, PLAYER);
 			return new Spiky(player.getLogicHelper().getCenterX(), containerHeight 
-					- gameState.getFloor().getHeight(), mainGame.getLaserSpeed(), 
+					- gameState.getLevelsHelper().getFloor().getHeight(), mainGame.getLaserSpeed(), 
 					mainGame.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
@@ -110,7 +108,8 @@ public class PlayerWeaponHelper {
 		+ player.getLogicHelper().getCenterX(), 
 					PriorityLevels.HIGH, PLAYER);
 			return new InstantLaser(player.getLogicHelper().getCenterX(),
-					containerHeight - gameState.getFloor().getHeight(), mainGame.getLaserWidth());
+					containerHeight - gameState.getLevelsHelper().getFloor().getHeight(), 
+						mainGame.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.
 		throw new EnumConstantNotPresentException(Powerup.PowerupType.class, subType.toString());
@@ -142,13 +141,6 @@ public class PlayerWeaponHelper {
 	 */
 	public boolean isShot() {
 		return shot;
-	}
-
-	/**
-	 * @param playerNumber the playerNumber to set
-	 */
-	public void setPlayerNumber(int playerNumber) {
-		this.playerNumber = playerNumber;
 	}
 	
 	/**

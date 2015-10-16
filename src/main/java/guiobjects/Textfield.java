@@ -1,7 +1,6 @@
-package guimenu;
+package guiobjects;
 
 import logic.MyRectangle;
-import logic.RenderOptions;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;

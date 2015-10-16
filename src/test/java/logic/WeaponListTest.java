@@ -24,7 +24,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.opengl.Texture;
 
 import player.Player;

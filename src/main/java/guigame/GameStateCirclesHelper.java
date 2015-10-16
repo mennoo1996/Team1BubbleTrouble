@@ -63,7 +63,7 @@ public class GameStateCirclesHelper extends GameStateHelper {
 	@Override
 	public void enter() {
 		lastCircleUpdate = 0;
-		circleList = new CircleList(parentState.getLevelContainer().getLevel(
+		circleList = new CircleList(parentState.getLevelsHelper().getLevelContainer().getLevel(
 				mainGame.getLevelCounter()).getCircles());
 		shotList = new ArrayList<BouncingCircle>(); 
 	}

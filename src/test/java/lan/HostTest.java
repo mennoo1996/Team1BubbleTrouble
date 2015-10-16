@@ -772,7 +772,7 @@ public class HostTest {
 		h.clientConnected();
 		h.updateRestart();
 		h.updateDead();
-		h.splittedCircle(new BouncingCircle(0, 0, 200, 100, 100, 1));
+		h.splittedCircle(new BouncingCircle(0, 0, 200, 100, 100, 1, 0));
 		h.getReader();
 		h.setPortNumber(4000);
 		assertFalse(h.clientConnected());

@@ -19,6 +19,12 @@ public class Spiky extends Weapon {
         super(x, y, laserSpeed, laserWidth);
     }
 
+    /**
+     * Update this Spiky.
+     * @param ceiling The ceiling of the current level
+     * @param floor The floor of the current level
+     * @param deltaFloat the time in seconds since last update
+     */
     @Override
     public void update(Rectangle ceiling, Rectangle floor, float deltaFloat) {
         final int offsetY = 10;

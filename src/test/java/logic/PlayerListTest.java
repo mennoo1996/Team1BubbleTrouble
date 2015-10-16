@@ -203,7 +203,7 @@ public class PlayerListTest {
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.add(p);
 		
-		BouncingCircle circle = new BouncingCircle(1,1,1,1,10,1);
+		BouncingCircle circle = new BouncingCircle(1,1,1,1,10,1, 0);
 		pl.intersectPlayersWithCircle(circle);
 	}
 	
@@ -217,7 +217,7 @@ public class PlayerListTest {
 		PlayerList pl = new PlayerList(p, mg, gs);
 		pl.add(p);
 		
-		BouncingCircle circle = new BouncingCircle(1,1,1,1,10,1);
+		BouncingCircle circle = new BouncingCircle(1,1,1,1,10,1, 0);
 		pl.intersectPlayersWithCircle(circle);
 	}
 	

@@ -139,7 +139,7 @@ public class GateTest {
 	@Test
 	public void testAddToRequirementsBouncingCircle() {
 		Gate gate1 = new Gate(500,550,50,200);
-		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f);
+		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f, 0);
 		gate1.addToRequirements(circle1);
 		assertTrue(gate1.getUnlockCircles().contains(circle1));
 	}
@@ -147,7 +147,7 @@ public class GateTest {
 	@Test
 	public void testRemoveFromRequirements() {
 		Gate gate1 = new Gate(500,550,50,200);
-		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f);
+		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f, 0);
 		gate1.addToRequirements(circle1);
 		gate1.removeFromRequirements(circle1);
 		assertFalse(gate1.contains(circle1));
@@ -163,7 +163,7 @@ public class GateTest {
 	public void testSetRequired() {
 		Gate gate1 = new Gate(500,550,50,200);
 		ArrayList<BouncingCircle> thing = new ArrayList<BouncingCircle>();
-		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f);
+		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f, 0);
 		thing.add(circle1);
 		gate1.setRequired(thing);
 		assertEquals(gate1.getUnlockCircles(), thing);
@@ -175,8 +175,8 @@ public class GateTest {
 		ArrayList<BouncingCircle> thing = new ArrayList<BouncingCircle>();
 		ArrayList<BouncingCircle> thing2 = new ArrayList<BouncingCircle>();
 		ArrayList<BouncingCircle> thing3 = new ArrayList<BouncingCircle>();
-		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f);
-		BouncingCircle circle2 = new BouncingCircle(200,200,10,1,2,0.01f);
+		BouncingCircle circle1 = new BouncingCircle(100,100,10,1,2,0.01f, 0);
+		BouncingCircle circle2 = new BouncingCircle(200,200,10,1,2,0.01f, 0);
 		thing.add(circle1);
 		thing2.add(circle2);
 		

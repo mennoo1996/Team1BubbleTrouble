@@ -286,88 +286,120 @@ public class MenuSettingsState extends BasicGameState {
 	 */
 	private void processButtons(Input input) {
 		if (mannetje1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer1ImageString(PLAYERSPRITE_NORM, "Playersprite_Add.png");
-			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
-					mainGame.getPlayer1ImageStringA());
-			Logger.getInstance().log("Player 1 sprite changed to gameboy", 
-					Logger.PriorityLevels.MEDIUM, PLAYERS);
+			processMannetje1Button();
 		} else if (telefoon1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer1ImageString(PLAYER2SPRITE_NORM, "Player2sprite_Add.png");
-			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
-					mainGame.getPlayer1ImageStringA());
-			Logger.getInstance().log("Player 1 sprite changed to phone", 
-					Logger.PriorityLevels.MEDIUM, PLAYERS);
+			processTelefoon1Button();
 		} else if (mannetje2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer2ImageString(PLAYERSPRITE_NORM, "Playersprite_Add.png");
-			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
-					mainGame.getPlayer2ImageStringA());
-			Logger.getInstance().log("Player 2 sprite changed to gameboy", 
-					Logger.PriorityLevels.MEDIUM, PLAYERS);
+			processMannetje2Button();
 		} else if (telefoon2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer2ImageString(PLAYER2SPRITE_NORM, "Player2sprite_Add.png");
-			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
-					mainGame.getPlayer2ImageStringA());
-			Logger.getInstance().log("Player 2 sprite changed to phone", 
-					Logger.PriorityLevels.MEDIUM, PLAYERS);
+			processTelefoon2Button();
+		} else if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+			processArie1Button();
+		} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
+			processArie2Button();
+		} else if (returnButton.isMouseOver(input)) {
+			processReturnButton();
 		} 
-		processButtons2(input);
 	}
 	
 	/**
-	 * Process the second batch of buttons.
-	 * @param input the keyboard/mouse input of the user.
+	 * Process a click on the mannetje for player 1.
 	 */
-	private void processButtons2(Input input) {
-		if (arie1Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer1ImageString(ARIESPRITE, "arieSprite_Add.png");
-			mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
-					mainGame.getPlayer1ImageStringA());
-			Logger.getInstance().log("Player 1 sprite changed to arie", 
-					Logger.PriorityLevels.MEDIUM, PLAYERS);
-		} else if (arie2Rectangle.contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.setPlayer2ImageString(ARIESPRITE, "arieSprite_Add.png");
-			mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
-					mainGame.getPlayer2ImageStringA());
-			Logger.getInstance().log("Player 2 sprite changed to arie", 
-					Logger.PriorityLevels.MEDIUM, PLAYERS);
-		} else if (returnButton.isMouseOver(input)) {
-			mainGame.setSwitchState(mainGame.getStartState());
-		} 
+	private void processMannetje1Button() {
+		mainGame.setPlayer1ImageString(PLAYERSPRITE_NORM, "Playersprite_Add.png");
+		mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
+				mainGame.getPlayer1ImageStringA());
+		Logger.getInstance().log("Player 1 sprite changed to gameboy", 
+				Logger.PriorityLevels.MEDIUM, PLAYERS);
 	}
+	
+	/**
+	 * Process a click on the mannetje for player 2.
+	 */
+	private void processMannetje2Button() {
+		mainGame.setPlayer2ImageString(PLAYERSPRITE_NORM, "Playersprite_Add.png");
+		mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
+				mainGame.getPlayer2ImageStringA());
+		Logger.getInstance().log("Player 2 sprite changed to gameboy", 
+				Logger.PriorityLevels.MEDIUM, PLAYERS);
+	}
+	
+	/**
+	 * Process a click on the telefoon for player 1.
+	 */
+	private void processTelefoon1Button() {
+		mainGame.setPlayer1ImageString(PLAYER2SPRITE_NORM, "Player2sprite_Add.png");
+		mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
+				mainGame.getPlayer1ImageStringA());
+		Logger.getInstance().log("Player 1 sprite changed to phone", 
+				Logger.PriorityLevels.MEDIUM, PLAYERS);
+	}
+	
+	/**
+	 * Process a click on the telefoon for player 2.
+	 */
+	private void processTelefoon2Button() {
+		mainGame.setPlayer2ImageString(PLAYER2SPRITE_NORM, "Player2sprite_Add.png");
+		mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
+				mainGame.getPlayer2ImageStringA());
+		Logger.getInstance().log("Player 2 sprite changed to phone", 
+				Logger.PriorityLevels.MEDIUM, PLAYERS);
+	}
+	
+	/**
+	 * Process a click on Arie for player 1.
+	 */
+	private void processArie1Button() {
+		mainGame.setPlayer1ImageString(ARIESPRITE, "arieSprite_Add.png");
+		mainGame.getPlayerList().setPlayerImage(0, mainGame.getPlayer1ImageStringN(), 
+				mainGame.getPlayer1ImageStringA());
+		Logger.getInstance().log("Player 1 sprite changed to arie", 
+				Logger.PriorityLevels.MEDIUM, PLAYERS);
+	}
+	
+	/**
+	 * Process a click on Arie for player 2.
+	 */
+	private void processArie2Button() {
+		mainGame.setPlayer2ImageString(ARIESPRITE, "arieSprite_Add.png");
+		mainGame.getPlayerList().setPlayerImage(1, mainGame.getPlayer2ImageStringN(), 
+				mainGame.getPlayer2ImageStringA());
+		Logger.getInstance().log("Player 2 sprite changed to arie", 
+				Logger.PriorityLevels.MEDIUM, PLAYERS);
+	}
+	
+	/**
+	 * Process a click on the return button.
+	 */
+	private void processReturnButton() {
+		mainGame.setSwitchState(mainGame.getStartState());
+	}
+	
 	
 	/**
 	 * Process the color of the buttons.
 	 * @param input the keyboard/mouse input of the user
 	 */
 	private void processColorButtons(Input input) {
+		mainGame.shuffleColor(false);
 		if (shuffleButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
 			mainGame.shuffleColor(true);
-			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (redButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.shuffleColor(false);
 			mainGame.setNextColor(COLOR_RED);
-			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (blueButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.shuffleColor(false);
 			mainGame.setNextColor(COLOR_BLUE);
-			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (orangeButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.shuffleColor(false);
 			mainGame.setNextColor(COLOR_ORANGE);
-			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (greenButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.shuffleColor(false);
 			mainGame.setNextColor(COLOR_GREEN);
-			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (whiteButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.shuffleColor(false);
 			mainGame.setNextColor(COLOR_WHITE);
-			mainGame.setSwitchState(mainGame.getSettingsState());
 		} else if (pinkButton.getRectangle().contains(input.getMouseX(), input.getMouseY())) {
-			mainGame.shuffleColor(false);
 			mainGame.setNextColor(COLOR_PINK);
-			mainGame.setSwitchState(mainGame.getSettingsState());
-		}
+		} 
+		
+		mainGame.setSwitchState(mainGame.getSettingsState());
+
 	}
 	
 	/**
@@ -427,27 +459,102 @@ public class MenuSettingsState extends BasicGameState {
 	 * @param graphics the Graphics object to draw things on screen
 	 */
 	private void drawSprites(Graphics graphics) {
-		if (mainGame.getPlayer1ImageStringN().equals(PLAYERSPRITE_NORM)) {
-			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
-					MANNETJE_1_X, MANNETJE_1_Y, mainGame.getColor()));
-		} else if (mainGame.getPlayer1ImageStringN().equals(PLAYER2SPRITE_NORM)) {
-			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
-					TELEFOON_1_X, TELEFOON_1_Y, mainGame.getColor()));
-		} else if (mainGame.getPlayer1ImageStringN().equals(ARIESPRITE)) {
-			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
-					ARIE_1_X, ARIE_1_Y, mainGame.getColor())); }
-		if (mainGame.getPlayer2ImageStringN().equals(PLAYERSPRITE_NORM)) {
-			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
-					MANNETJE_2_X, MANNETJE_2_Y, mainGame.getColor()));
-		} else if (mainGame.getPlayer2ImageStringN().equals(PLAYER2SPRITE_NORM)) {
-			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
-					TELEFOON_2_X, TELEFOON_2_Y, mainGame.getColor()));
-		} else if (mainGame.getPlayer2ImageStringN().equals(ARIESPRITE)) {
-			RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
-					ARIE_2_X, ARIE_2_Y, mainGame.getColor())); }
+		drawPlayer1(graphics);
+		drawPlayer2(graphics);
 		returnButton.drawColor(graphics, input, mainGame.getColor());
-		
 		drawSprites2(graphics);
+	}
+	
+	/**
+	 * Draw the sprite for player 1.
+	 * @param graphics the graphics object to draw things on screen.
+	 */
+	private void drawPlayer1(Graphics graphics) {
+		switch (mainGame.getPlayer1ImageStringN()) {
+		case PLAYERSPRITE_NORM:
+			drawPlayer1Mannetje(graphics);
+			break;
+		case PLAYER2SPRITE_NORM:
+			drawPlayer1Telefoon(graphics);
+			break;
+		case ARIESPRITE:
+			drawPlayer1Arie(graphics);
+			break;
+		default:	
+		}
+	}
+	
+	/**
+	 * Draw the sprite for player 2.
+	 * @param graphics the graphics object to draw things on screen.
+	 */
+	private void drawPlayer2(Graphics graphics) {
+		switch (mainGame.getPlayer2ImageStringN()) {
+		case PLAYERSPRITE_NORM:
+			drawPlayer2Mannetje(graphics);
+			break;
+		case PLAYER2SPRITE_NORM:
+			drawPlayer2Telefoon(graphics);
+			break;
+		case ARIESPRITE:
+			drawPlayer2Arie(graphics);
+			break;
+		default:
+		}
+	}
+	
+	/**
+	 * Draw the mannetje sprite for player 1.
+	 * @param graphics the graphics object to draw things on screen.
+	 */
+	private void drawPlayer1Mannetje(Graphics graphics) {
+		RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+				MANNETJE_1_X, MANNETJE_1_Y, mainGame.getColor()));
+	}
+	
+	/**
+	 * Draw the telefoon sprite for player 1.
+	 * @param graphics the graphics object to draw things on screen.
+	 */
+	private void drawPlayer1Telefoon(Graphics graphics) {
+		RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+				TELEFOON_1_X, TELEFOON_1_Y, mainGame.getColor()));
+	}
+	
+	/**
+	 * Draw the arie sprite for player 1.
+	 * @param graphics the graphics object to draw things on screen.
+	 */
+	private void drawPlayer1Arie(Graphics graphics) {
+		RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+				ARIE_1_X, ARIE_1_Y, mainGame.getColor()));
+	}
+	
+	/**
+	 * Draw the mannetje sprite for player 2.
+	 * @param graphics the graphics object to draw things on screen.
+	 */
+	private void drawPlayer2Mannetje(Graphics graphics) {
+		RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+				MANNETJE_2_X, MANNETJE_2_Y, mainGame.getColor()));
+	}
+	
+	/**
+	 * Draw the telefoon sprite for player 2.
+	 * @param graphics the graphics object to draw things on screen.
+	 */
+	private void drawPlayer2Telefoon(Graphics graphics) {
+		RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+				TELEFOON_2_X, TELEFOON_2_Y, mainGame.getColor()));
+	}
+	
+	/**
+	 * Draw the arie sprite for player 2.
+	 * @param graphics the graphics object to draw things on screen.
+	 */
+	private void drawPlayer2Arie(Graphics graphics) {
+		RND.getInstance().drawColor(new RenderOptions(graphics, highLightN, highLightA, 
+				ARIE_2_X, ARIE_2_Y, mainGame.getColor()));
 	}
 	
 	/**
@@ -485,21 +592,7 @@ public class MenuSettingsState extends BasicGameState {
 				"# Change game color manually,");
 		RND.getInstance().text(graphics, COLOR_TEXT_X, COLOR_TEXT_2_Y,
 				"# or let it shuffle!.");
-//		
-//		for (int i = 0; i < NUM_7; i++) {
-//			Button button;
-//			switch (i) {
-//				case 0: button = shuffleButton; break;
-//				case 1: button = redButton; break;
-//				case 2: button = blueButton; break;
-//				case NUM_3: button = orangeButton; break;
-//				case NUM_4: button = whiteButton; break;
-//				case NUM_5: button = pinkButton; break;
-//				case NUM_6: button = greenButton; break;
-//				default: button = shuffleButton; break;
-//			}
-//			button.drawColor(graphics, input, mainGame.getColor());
-//		}
+
 		shuffleButton.drawColor(graphics, input, mainGame.getColor());
 		redButton.drawColor(graphics, input, mainGame.getColor());
 		blueButton.drawColor(graphics, input, mainGame.getColor());

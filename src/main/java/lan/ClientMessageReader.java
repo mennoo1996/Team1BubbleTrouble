@@ -1,9 +1,9 @@
 package lan;
 
+import guigame.GameState;
 import guimenu.MainGame;
 import guimenu.MenuMultiplayerState;
 import logic.BouncingCircle;
-import logic.CircleList;
 import logic.FloatingScore;
 
 import java.io.BufferedReader;
@@ -23,13 +23,27 @@ public class ClientMessageReader {
     private ClientPowerupsHelper powerupsHelper;
     private ClientCoinsHelper coinsHelper;
     private MainGame mainGame;
+    private GameState gameState;
     private CommandQueue commandQueue;
+	private ArrayList<BouncingCircle> circleList;
+	private ArrayList<BouncingCircle> requiredList;
+	private boolean editingCircleList;
+	
+	private static final int THREE = 3;
+	private static final int FOUR = 4;
+	private static final int FIVE = 5;
+	private static final int SIX = 6;
+	private static final int SEVEN = 7;
 
-    public ClientMessageReader(Client client, ClientPowerupsHelper powerupsHelper, ClientCoinsHelper coinsHelper, MainGame mainGame) {
+    public ClientMessageReader(Client client, MainGame mainGame, GameState gameState) {
         this.client = client;
-        this.powerupsHelper = powerupsHelper;
-        this.coinsHelper = coinsHelper;
+        this.powerupsHelper = new ClientPowerupsHelper(gameState, mainGame);
+        this.coinsHelper = new ClientCoinsHelper(client, gameState);
+        this.gameState = gameState;
         this.mainGame = mainGame;
+        this.circleList = new ArrayList<>();
+        this.requiredList = new ArrayList<>();
+        this.editingCircleList = false;
         commandQueue = CommandQueue.getInstance();
     }
 
@@ -56,7 +70,7 @@ public class ClientMessageReader {
                 } else if (message2.startsWith("COIN")) {
                     this.coinsHelper.coinMessage(message2.replaceFirst("COIN", ""));
                 } else if (message2.startsWith("PLAYER")) {
-                    playerMessage(message2.replaceFirst("PLAYER", ""));
+                    client.playerMessage(message2.replaceFirst("PLAYER", ""));
                 }
                 readServerCommands2(message2);
             }
@@ -74,11 +88,11 @@ public class ClientMessageReader {
         if (message2.startsWith("HEARTBEAT_CHECK")) {
             client.sendMessage("HEARTBEAT_ALIVE");
         } else if (message2.startsWith("LASER")) {
-            laserMessage(message2.replaceFirst("LASER", ""));
+            client.laserMessage(message2.replaceFirst("LASER", ""));
         } else if (message2.startsWith("FLOATINGSCORE")) {
             floatingMessage(message2.replaceFirst("FLOATINGSCORE", ""));
         } else if (message2.startsWith("SPLIT")) {
-            splitMessage(message2.replaceFirst("SPLIT", ""));
+            client.splitMessage(message2.replaceFirst("SPLIT", ""));
         } else if (message2.startsWith("SHUTDOWN")) {
             MenuMultiplayerState multiplayerState = (MenuMultiplayerState)
                     this.mainGame.getState(mainGame.getMultiplayerState());
@@ -87,8 +101,7 @@ public class ClientMessageReader {
             mainGame.killMultiplayer();
         }
         // heartBeat reset
-        heartBeatCheck = false;
-        timeLastInput = System.currentTimeMillis();
+        client.resetHeartBeat();
     }
 
     /**
@@ -100,9 +113,9 @@ public class ClientMessageReader {
         String[] stringList = message2.split(" ");
         
     	commandQueue.addCommand(new AddFloatingScoreCommand(
-    			gameState.getInterfaceHelper().getFloatingScores(), 
-    			new FloatingScore(stringList[2],
-				Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1]))));
+                gameState.getInterfaceHelper().getFloatingScores(),
+                new FloatingScore(stringList[2],
+                        Float.parseFloat(stringList[0]), Float.parseFloat(stringList[1]))));
     }
 
 
@@ -178,8 +191,8 @@ public class ClientMessageReader {
         String message2 = message.trim();
         if (message2.startsWith("PLAYERLOCATION")) {
             playerLocation(message2.replaceFirst("PLAYERLOCATION", ""));
-        } else if (message2.startsWith(LASER)) {
-            newLaserMessage(message2.replaceFirst(LASER, ""));
+        } else if (message2.startsWith("LASER")) {
+            client.newLaserMessage(message2.replaceFirst("LASER", ""));
         }
     }
 
@@ -209,7 +222,7 @@ public class ClientMessageReader {
         } else if (message2.startsWith("COUNTIN")) {
             countinMessage(message2.replaceFirst("COUNTIN", ""));
         } else if (message2.startsWith("PAUSE")) {
-            pauseMessage(message2.replaceFirst("PAUSE", ""));
+            client.pauseMessage(message2.replaceFirst("PAUSE", ""));
         } else if (message2.startsWith("LIVES")) {
             livesMessage(message2.replaceFirst("LIVES", ""));
         }

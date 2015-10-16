@@ -1,11 +1,8 @@
 package lan;
 
 import guigame.GameState;
-import guimenu.MainGame;
 import logic.Coin;
 import logic.FloatingScore;
-
-import java.util.ArrayList;
 
 import commands.AddDroppedCoinCommand;
 import commands.AddFloatingScoreCommand;
@@ -18,14 +15,12 @@ import commands.RemoveDroppedCoinCommand;
  */
 public class ClientCoinsHelper {
 
-    private Client client;
     private GameState gameState;
     private CommandQueue commandQueue;
 
     private static final int THREE = 3;
 
     public ClientCoinsHelper(Client client, GameState gameState) {
-        this.client = client;
         this.gameState = gameState;
         commandQueue = CommandQueue.getInstance();
     }

@@ -6,8 +6,6 @@ import logic.FloatingScore;
 import powerups.Powerup;
 import powerups.Powerup.PowerupType;
 
-import java.util.ArrayList;
-
 import commands.AddDroppedPowerupCommand;
 import commands.AddFloatingScoreCommand;
 import commands.AddPowerupToPlayerCommand;
@@ -19,15 +17,13 @@ import commands.RemoveDroppedPowerupCommand;
  */
 public class ClientPowerupsHelper {
 
-    private Client client;
-    private GameState gameState;
+	private GameState gameState;
     private MainGame mainGame;
     private CommandQueue commandQueue;
 
     private static final int THREE = 3;
 
-    public ClientPowerupsHelper(Client client, GameState gameState, MainGame mainGame) {
-        this.client = client;
+    public ClientPowerupsHelper(GameState gameState, MainGame mainGame) {
         this.gameState = gameState;
         this.mainGame = mainGame;
         commandQueue = CommandQueue.getInstance();
@@ -56,40 +52,7 @@ public class ClientPowerupsHelper {
     private void addPowerup(String[] stringList) {
         synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
             Powerup.PowerupType type = Powerup.PowerupType.SHIELD;
-            switch (stringList[2]) {
-                case "SHIELD":
-                    type = Powerup.PowerupType.SHIELD; // shield added
-
-                    break;
-                case "SPIKY":
-                    type = Powerup.PowerupType.SPIKY; // spiky added
-
-                    break;
-                case "INSTANT":
-                    type = Powerup.PowerupType.INSTANT; // inst added
-
-                    break;
-                case "HEALTH":
-                    type = Powerup.PowerupType.HEALTH; // health added
-
-                    break;
-                case "FREEZE":
-                    type = Powerup.PowerupType.FREEZE; // freeze added
-
-                    break;
-                case "SLOW":
-                    type = Powerup.PowerupType.SLOW; // slow added
-
-                    break;
-                case "FAST":
-                    type = Powerup.PowerupType.FAST; // fast added
-
-                    break;
-                case "RANDOM":
-                    type = Powerup.PowerupType.RANDOM; // random added
-
-                    break;
-            }
+            type = getPowerupType(stringList, type);
             if (type != null) {
             	commandQueue.addCommand(new AddDroppedPowerupCommand(
     					gameState.getItemsHelper().getDroppedPowerups(), 
@@ -105,7 +68,23 @@ public class ClientPowerupsHelper {
      */
     private void dictatePowerup(String[] stringList) {
         Powerup.PowerupType type = Powerup.PowerupType.SHIELD;
-        switch (stringList[2]) {
+        type = getPowerupType(stringList, type);
+        for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
+            if (powerup.getxId() == Float.parseFloat(stringList[0])
+                    && powerup.getyId() == Float.parseFloat(stringList[1])) {
+            	commandQueue.addCommand(new RemoveDroppedPowerupCommand(
+						gameState.getItemsHelper().getDroppedPowerups(), powerup));
+				commandQueue.addCommand(new AddFloatingScoreCommand(
+						gameState.getInterfaceHelper().getFloatingScores(), 
+						new FloatingScore(powerup)));
+				commandQueue.addCommand(new AddPowerupToPlayerCommand(
+						mainGame.getPlayerList().getPlayers().get(0), type));
+            }
+        }
+    }
+
+	private Powerup.PowerupType getPowerupType(String[] stringList, Powerup.PowerupType type) {
+		switch (stringList[2]) {
             case "SHIELD":
                 type = Powerup.PowerupType.SHIELD;
                 break;
@@ -131,19 +110,8 @@ public class ClientPowerupsHelper {
                 type = Powerup.PowerupType.RANDOM;
                 break;
         }
-        for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
-            if (powerup.getxId() == Float.parseFloat(stringList[0])
-                    && powerup.getyId() == Float.parseFloat(stringList[1])) {
-            	commandQueue.addCommand(new RemoveDroppedPowerupCommand(
-						gameState.getItemsHelper().getDroppedPowerups(), powerup));
-				commandQueue.addCommand(new AddFloatingScoreCommand(
-						gameState.getInterfaceHelper().getFloatingScores(), 
-						new FloatingScore(powerup)));
-				commandQueue.addCommand(new AddPowerupToPlayerCommand(
-						mainGame.getPlayerList().getPlayers().get(0), type));
-            }
-        }
-    }
+		return type;
+	}
 
     /**
      * Grant a powerup to the client's player.

@@ -202,39 +202,30 @@ public class MenuGameoverState extends BasicGameState {
 	 */
 	private void processButtons(Input input) {
 		if (playButton.isMouseOver(input)) {
-			processStartOver();	
+			processStartOver();
+			Logger.getInstance().log("play again button clicked", 
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		} 
 		else if (saveButton.isMouseOver(input)) {
 			saveScore();
+			Logger.getInstance().log("save button clicked", 
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
 		else if (menuButton.isMouseOver(input)) {
-			menuButtonClicked();
+			// Go to startState
+			mainGame.resetLifeCount();
+			mainGame.resetLevelCount();
+			mainGame.setScore(0);
+			mainGame.killMultiplayer();
+			mainGame.setSwitchState(mainGame.getStartState());
+			Logger.getInstance().log("main menu button clicked", 
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
 		else if (quitButton.isMouseOver(input)) {
-			quitButtonClicked();
+			mainGame.setSwitchState(-1);
+			Logger.getInstance().log("exit button clicked", 
+					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}
-	}
-	
-	/**
-	 * Process a click on the menu button.
-	 */
-	private void menuButtonClicked() {
-		mainGame.resetLifeCount();
-		mainGame.resetLevelCount();
-		mainGame.setScore(0);
-		mainGame.killMultiplayer();
-		mainGame.setSwitchState(mainGame.getStartState());
-		Logger.getInstance().log("main menu button clicked", 
-				Logger.PriorityLevels.MEDIUM, USER_INPUT);
-	}
-	
-	/**
-	 * Process a click on the exit button.
-	 */
-	private void quitButtonClicked() {
-		mainGame.setSwitchState(-1);
-		Logger.getInstance().log("exit button clicked", 
-				Logger.PriorityLevels.MEDIUM, USER_INPUT);
 	}
 
 	/**

@@ -257,7 +257,6 @@ public class Player {
 	 */
 	public void setPlayerNumber(int playerNumber) {
 		this.playerNumber = playerNumber;
-		weaponHelper.setPlayerNumber(playerNumber);
 	}
 	
 	/**

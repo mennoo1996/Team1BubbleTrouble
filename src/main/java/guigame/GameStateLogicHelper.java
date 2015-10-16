@@ -15,9 +15,6 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Mark
  */
 public class GameStateLogicHelper extends GameStateHelper {
-
-	private MainGame mainGame;
-	private GameState parentState;
 	
 	private int totaltime;
 	private long timeDelta;
@@ -201,7 +198,7 @@ public class GameStateLogicHelper extends GameStateHelper {
 	@Override
 	public void render(Graphics graphics, GameContainer container) {
 		if (playingState & (countIn || (mainGame.isClient() & countinStarted))) {
-			parentState.getInterfaceHelper().drawCountIn(container, graphics, timeDelta);
+			parentState.getInterfaceHelper().renderCountIn(container, graphics, timeDelta);
 		}
 		if (!playingState) {
 			parentState.getPauseHelper().render(graphics, container);

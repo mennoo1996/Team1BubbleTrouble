@@ -22,8 +22,7 @@ public class PlayerWeaponHelper {
 	private MainGame mainGame;
 	private GameState gameState;
 	private Player player;
-	
-	private int playerNumber;
+
 	private boolean shot;
 	
 	private static final String PLAYER = "Player";
@@ -40,7 +39,6 @@ public class PlayerWeaponHelper {
 		this.mainGame = mainGame;
 		this.gameState = gameState;
 		this.player = player;
-		this.playerNumber = player.getPlayerNumber();
 		this.shot = false;
 		this.weapons = new LinkedList<>();
 	}
@@ -56,21 +54,21 @@ public class PlayerWeaponHelper {
 		if (!testing && gameState.getSavedInput().isKeyPressed(player.getShootKey())
 				&& !shot) {
 			shot = true;
-			gameState.getPlayerHelper().getWeaponList().setWeapon(playerNumber, 
+			gameState.getPlayerHelper().getWeaponList().setWeapon(player.getPlayerNumber(), 
 					this.getWeapon(containerHeight));
 			Weapon weapon = gameState.getPlayerHelper().getWeaponList().
-					getWeaponList().get(playerNumber);
+					getWeaponList().get(player.getPlayerNumber());
 			boolean spiky = (weapon instanceof Spiky);
 			if (mainGame.isHost()) {
-				mainGame.getHost().updateLaser(playerNumber, weapon.getX(), 
+				mainGame.getHost().updateLaser(player.getPlayerNumber(), weapon.getX(), 
 						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth(), spiky);
 			} else if (mainGame.isClient()) {
-				mainGame.getClient().updateLaser(playerNumber, weapon.getX(), 
+				mainGame.getClient().updateLaser(player.getPlayerNumber(), weapon.getX(), 
 						weapon.getY(), weapon.getLaserSpeed(), weapon.getWidth(), spiky);
 			}
 		}
 		Weapon weapon = gameState.getPlayerHelper().getWeaponList().
-				getWeaponList().get(playerNumber);
+				getWeaponList().get(player.getPlayerNumber());
 		// Update laser
 		if (shot) {
 			weapon.update(gameState.getLevelsHelper().getCeiling(), 
@@ -143,13 +141,6 @@ public class PlayerWeaponHelper {
 	 */
 	public boolean isShot() {
 		return shot;
-	}
-
-	/**
-	 * @param playerNumber the playerNumber to set
-	 */
-	public void setPlayerNumber(int playerNumber) {
-		this.playerNumber = playerNumber;
 	}
 	
 	/**

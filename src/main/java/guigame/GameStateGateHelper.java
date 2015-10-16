@@ -16,9 +16,6 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Mark
  */
 public class GameStateGateHelper extends GameStateHelper {
-
-	private MainGame mainGame;
-	private GameState parentState;
 	
 	private ArrayList<Gate> gateList;
 	

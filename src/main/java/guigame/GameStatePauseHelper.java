@@ -20,9 +20,6 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Mark
  */
 public class GameStatePauseHelper extends GameStateHelper {
-
-	private MainGame mainGame;
-	private GameState parentState;
 	
 	private Button returnButton;
 	private Button menuButton;

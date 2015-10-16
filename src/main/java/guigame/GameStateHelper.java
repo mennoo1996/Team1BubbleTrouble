@@ -1,5 +1,7 @@
 package guigame;
 
+import guimenu.MainGame;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
@@ -9,6 +11,9 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Mark
  */
 public abstract class GameStateHelper {
+	
+	protected MainGame mainGame;
+	protected GameState parentState;
 	
 	/**
 	 * Generally called by GameState on Enter().

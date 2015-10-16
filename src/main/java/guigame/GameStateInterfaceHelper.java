@@ -23,9 +23,6 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Mark
  */
 public class GameStateInterfaceHelper extends GameStateHelper {
-
-	private MainGame mainGame;
-	private GameState parentState;
 	
 	private ArrayList<FloatingScore> floatingScoreList;
 	
@@ -88,8 +85,6 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 		this.parentState = state;
 		initImages();
 	}
-	
-	
 	
 	/**
 	 * Initialize the images.
@@ -167,12 +162,12 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 					container.getHeight() - COUNTER_BAR_Y_DEVIATION, mainGame.getColor()));
 		}
 		mainGame.drawWaterMark();
-		drawFloatingScores(graphics);
+		renderFloatingScores(graphics);
 		RND.getInstance().text(graphics, container.getWidth() / 2 - LEVEL_STRING_X_DEVIATION, 
 				container.getHeight() - LEVEL_STRING_Y_DEVIATION, "Level: "
 						+ Integer.toString(mainGame.getLevelCounter() + 1));
-		drawShieldTimer(graphics);
-		drawScore(graphics, container);
+		renderShieldTimer(graphics);
+		renderScore(graphics, container);
 	}
 	
 	/**
@@ -186,7 +181,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 		if (!playingState) {
 			graphics.drawImage(nobuttonImage, 0, 0);
 		}
-		drawHealth(graphics);
+		renderHealth(graphics);
 	}
 
 	/**
@@ -195,7 +190,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * @param graphics the Graphics object to draw things on screen
 	 * @param timeDelta used to determine how much time has elapsed in counting
 	 */
-	public void drawCountIn(GameContainer container, Graphics graphics, long timeDelta) {
+	public void renderCountIn(GameContainer container, Graphics graphics, long timeDelta) {
 		int count = (int) Math.ceil((COUNT_IN_TIME - timeDelta) / SECOND_TO_MS_FACTOR),
 				amount = Math.round((COUNT_IN_TIME - timeDelta) / COUNT_IN_TIME * COUNT_FACTOR);
 
@@ -226,7 +221,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * Draw the floating scores.
 	 * @param graphics context to draw in.
 	 */
-	private void drawFloatingScores(Graphics graphics) {
+	private void renderFloatingScores(Graphics graphics) {
 		synchronized (floatingScoreList) {
 			for (FloatingScore score : floatingScoreList) {
 				RND.getInstance().textSpecifiedColor(graphics, score.getX(), score.getY(), 
@@ -242,7 +237,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * @param graphics context to draw in.
 	 * @param container most objects are located in.
 	 */
-	private void drawScore(Graphics graphics, GameContainer container) {
+	private void renderScore(Graphics graphics, GameContainer container) {
 		String renderedScore;
 		if (mainGame.getShouldSwitchState()) {
 			renderedScore = Integer.toString(mainGame.getScore());
@@ -258,7 +253,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * Draw health lights.
 	 * @param graphics context to draw in
 	 */
-	private void drawHealth(Graphics graphics) {
+	private void renderHealth(Graphics graphics) {
 		switch (mainGame.getLifeCount()) {
 		case(0) :
 			graphics.drawImage(health0Image, 0, 0);
@@ -291,16 +286,16 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * Draw the shield timer.
 	 * @param graphics the Graphics object to draw things on screne
 	 */
-	private void drawShieldTimer(Graphics graphics) {
+	private void renderShieldTimer(Graphics graphics) {
 		int height = SHIELD_COUNTER_OFFSET_Y;
 		if (mainGame.getPlayerList().getPlayers().get(0).getPowerupHelper().hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
-			drawShieldTimerPlayer1(graphics, height);
+			renderShieldTimerPlayer1(graphics, height);
 		}
 		if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
 				&& mainGame.getPlayerList().getPlayers().get(1).getPowerupHelper().hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
-			drawShieldTimerPlayer2(graphics, height);
+			renderShieldTimerPlayer2(graphics, height);
 		}
 	}
 	
@@ -309,7 +304,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * @param graphics the context to draw in
 	 * @param height the height to draw the timer at
 	 */
-	private void drawShieldTimerPlayer1(Graphics graphics, int height) {
+	private void renderShieldTimerPlayer1(Graphics graphics, int height) {
 		float rem = mainGame.getPlayerList().getPlayers().get(0).
 				getPowerupHelper().getShieldTimeRemaining();
 		RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
@@ -329,7 +324,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 * @param graphics the context to draw in
 	 * @param height the height to draw the timer at
 	 */
-	private void drawShieldTimerPlayer2(Graphics graphics, int height) {
+	private void renderShieldTimerPlayer2(Graphics graphics, int height) {
 		float rem = mainGame.getPlayerList().getPlayers().get(1).
 				getPowerupHelper().getShieldTimeRemaining();
 		RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");

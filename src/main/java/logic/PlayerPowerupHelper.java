@@ -39,7 +39,6 @@ public class PlayerPowerupHelper {
 	 * @param gameState	- the game the player plays in.
 	 */
 	public PlayerPowerupHelper(Player player, MainGame mainGame, GameState gameState) {
-		super();
 		this.player = player;
 		this.mainGame = mainGame;
 		this.gameState = gameState;
@@ -61,7 +60,7 @@ public class PlayerPowerupHelper {
 			for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
 				powerup.update(gameState, containerHeight, deltaFloat);
 
-				if (powerup.getRectangle().intersects(player.getRectangle())) {
+				if (powerup.getRectangle().intersects(player.getLogicHelper().getRectangle())) {
 					if (!mainGame.isLanMultiplayer() | (mainGame.isHost() 
 							& player.getPlayerNumber() == 0)) {
 						//Add a powerup to the player
@@ -146,7 +145,8 @@ public class PlayerPowerupHelper {
 		Powerup.PowerupType newPowerup = Powerup.PowerupType.values()[new Random()
 		.nextInt(Powerup.PowerupType.values().length - 1)];
 		Executors.newScheduledThreadPool(1).schedule(() -> {
-			Powerup powerup = new Powerup(player.getX(), player.getY(), newPowerup);
+			Powerup powerup = new Powerup(player.getLogicHelper().getX(),
+					player.getLogicHelper().getY(), newPowerup);
 			synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
 				if (!mainGame.isLanMultiplayer()) {
 					gameState.getItemsHelper().getDroppedPowerups().add(powerup);

@@ -177,8 +177,8 @@ public abstract class Connector implements Runnable {
     	float x = Float.parseFloat(stringList[1]);
     	float y = Float.parseFloat(stringList[2]);
     	
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).getLogicHelper().setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).getLogicHelper().setY(y);
         
     	mainGame.getPlayerList().getPlayers().get(playerNumber).
     	getMovementHelper().setMovingRight(false);
@@ -202,8 +202,8 @@ public abstract class Connector implements Runnable {
     	float y = Float.parseFloat(stringList[2]);
         String direction = stringList[THREE];
     
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
-        mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).getLogicHelper().setX(x);
+        mainGame.getPlayerList().getPlayers().get(playerNumber).getLogicHelper().setY(y);
         
         switch (direction) {
         case "LEFT":

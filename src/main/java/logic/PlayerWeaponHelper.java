@@ -35,7 +35,6 @@ public class PlayerWeaponHelper {
 	 * @param player		the player ythis helper belongs to.
 	 */
 	public PlayerWeaponHelper(MainGame mainGame, GameState gameState, Player player) {
-		super();
 		this.mainGame = mainGame;
 		this.gameState = gameState;
 		this.player = player;
@@ -88,24 +87,27 @@ public class PlayerWeaponHelper {
 	 */
 	public Weapon getWeapon(float containerHeight) {
 		if (weapons.isEmpty()) {
-			Logger.getInstance().log("Shot regular laser from position " + player.getCenterX(),
+			Logger.getInstance().log("Shot regular laser from position " 
+		+ player.getLogicHelper().getCenterX(),
 					PriorityLevels.MEDIUM, PLAYER);
-			return new Weapon(player.getCenterX(), 
+			return new Weapon(player.getLogicHelper().getCenterX(), 
 					containerHeight - gameState.getFloor().getHeight(),
 					mainGame.getLaserSpeed(), mainGame.getLaserWidth());
 		}
 		Powerup.PowerupType subType = weapons.peekLast();
 		if (subType == Powerup.PowerupType.SPIKY) {
-			Logger.getInstance().log("Shot spiky laser from position " + player.getCenterX(), 
+			Logger.getInstance().log("Shot spiky laser from position " 
+		+ player.getLogicHelper().getCenterX(), 
 					PriorityLevels.HIGH, PLAYER);
-			return new Spiky(player.getCenterX(), containerHeight 
+			return new Spiky(player.getLogicHelper().getCenterX(), containerHeight 
 					- gameState.getFloor().getHeight(), mainGame.getLaserSpeed(), 
 					mainGame.getLaserWidth());
 		}
 		if (subType == Powerup.PowerupType.INSTANT) {
-			Logger.getInstance().log("Shot instant laser from position " + player.getCenterX(), 
+			Logger.getInstance().log("Shot instant laser from position " 
+		+ player.getLogicHelper().getCenterX(), 
 					PriorityLevels.HIGH, PLAYER);
-			return new InstantLaser(player.getCenterX(),
+			return new InstantLaser(player.getLogicHelper().getCenterX(),
 					containerHeight - gameState.getFloor().getHeight(), mainGame.getLaserWidth());
 		}
 		// Wrong weapon type, time to crash hard.

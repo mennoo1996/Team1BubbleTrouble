@@ -27,6 +27,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.StateBasedGame;
 
+import player.Player;
+import player.PlayerList;
+
 public class PlayerListTest {
 
 	MainGame mg;

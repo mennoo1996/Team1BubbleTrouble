@@ -6,7 +6,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
-import logic.Player;
+import player.Player;
 import logic.Weapon;
 import logic.WeaponList;
 

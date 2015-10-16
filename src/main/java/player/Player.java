@@ -1,9 +1,13 @@
-package logic;
+package player;
 import guigame.GameState;
 import guimenu.MainGame;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import logic.Coin;
+import logic.FloatingScore;
+import logic.Logger;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -21,38 +25,24 @@ public class Player {
 	private PlayerMovementHelper movementHelper;
 	private PlayerPowerupHelper powerupHelper;
 	private PlayerWeaponHelper weaponHelper;
+	private PlayerGateHelper gateHelper;
+	private PlayerLogicHelper logicHelper;
 
-	private float x;
-	private float y;
-	private float width;
-	private float height;
-	private int movementCounter = 0;
-	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
-	private Image imageN;
-	private Image imageA;
-	private Image shieldImageN;
-	private Image shieldImageA;
-	private SpriteSheet spritesheetN;
-	private SpriteSheet spritesheetA;
-	private boolean freeToRoam;
+	
 	private MainGame mainGame;
 
 	private GameState gameState;
 	
 	private int playerNumber;
-	private final float startX;
-	private final float startY;
 	private String playerName = "";
 	private int moveLeftKey;
 	private int moveRightKey;
 	private int shootKey;
 	
-	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	private static final int SPRITESHEET_VALUE = 120;
 	private static final int PLAYER1_X_DEVIATION = 720;
 	private static final int PLAYER2_X_DEVIATION = 420;
 	private static final int PLAYER_Y_DEVIATION = 705;
-	private static final float HALF = 0.5f;
 	
 	private static final String POWERUPS = "powerups";
 
@@ -72,18 +62,6 @@ public class Player {
 			Image imageN, Image imageA, Image shieldImageN,
 			Image shieldImageA, MainGame mainGame) {
 		super();
-		this.x = x;
-		this.y = y;
-		this.startX = x;
-		this.startY = y;
-		this.width = width;
-		this.height = height;
-		this.imageN = imageN;
-		this.imageA = imageA;
-		this.shieldImageN = shieldImageN;
-		this.shieldImageA = shieldImageA;
-		this.spritesheetN = new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
-		this.spritesheetA = new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
 		this.mainGame = mainGame;
 		this.gameState = (GameState) mainGame.getState(mainGame.getGameState());
 		moveLeftKey = Input.KEY_LEFT;
@@ -92,6 +70,16 @@ public class Player {
 		this.movementHelper = new PlayerMovementHelper(this, gameState);
 		this.powerupHelper = new PlayerPowerupHelper(this, mainGame, gameState);
 		this.weaponHelper = new PlayerWeaponHelper(mainGame, gameState, this);
+		this.gateHelper = new PlayerGateHelper(mainGame, gameState, this);
+		this.logicHelper = new PlayerLogicHelper(x, y);
+		logicHelper.setSpritesheet(new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE), 
+				new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE));
+		logicHelper.setImage(imageN, imageA);
+		logicHelper.setShieldImage(shieldImageN, shieldImageA);
+		logicHelper.setX(x);
+		logicHelper.setY(y);
+		logicHelper.setWidth(width);
+		logicHelper.setHeight(height);
 	}
 	
 	/**
@@ -103,35 +91,12 @@ public class Player {
 	 */
 	public void update(float deltaFloat, float containerHeight, float containerWidth, 
 			boolean testing) {
-		
-		processGates();
+		gateHelper.processGates();
 		weaponHelper.processWeapon(deltaFloat, containerHeight, testing);
 		movementHelper.processPlayerMovement(deltaFloat, containerWidth, testing);
 		powerupHelper.update(deltaFloat, containerHeight);
 		processCoins();
-		
 	}
-	
-	/**
-	 * Process the intersection with gates.
-	 */
-	private void processGates() {
-		// Check the intersection of a player with a gate
-		freeToRoam = true;
-		synchronized (gameState.getGateHelper().getGateList()) {
-			for (Gate someGate :gameState.getGateHelper().getGateList()) {
-				if (this.getRectangle().intersects(someGate.getRectangle())) {
-					freeToRoam = false;
-					movementHelper.setIntersectingGate(someGate);
-				}
-			}
-		}
-		// Reset intersecting gate to none if there is no intersection
-		if (freeToRoam) {
-			movementHelper.setIntersectingGate(null);
-		}
-	}
-	 
 
 	/**
 	 * Add a powerup to the player.
@@ -148,7 +113,7 @@ public class Player {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		synchronized (gameState.getItemsHelper().getDroppedCoins()) {
 			for (Coin coin : gameState.getItemsHelper().getDroppedCoins()) {
-				if (coin.getRectangle().intersects(this.getRectangle())) {
+				if (coin.getRectangle().intersects(logicHelper.getRectangle())) {
 					processCoin(coin, usedCoins);
 				}
 			}
@@ -162,17 +127,17 @@ public class Player {
 	 * @param usedCoins to dump it in
 	 */
 	private void processCoin(Coin coin, ArrayList<Coin> usedCoins) {
-		if (!mainGame.isLanMultiplayer() | (mainGame.isHost() & playerNumber == 0)) {
+		if (!mainGame.isLanMultiplayer() || (mainGame.isHost() && playerNumber == 0)) {
 			gameState.getLogicHelper().addToScore(coin.getPoints());
 			gameState.getInterfaceHelper().getFloatingScores().
 			add(new FloatingScore(coin));
 			usedCoins.add(coin);
 			Logger.getInstance().log("Picked up coin", 
 					Logger.PriorityLevels.MEDIUM, POWERUPS);
-			if (mainGame.isHost() & playerNumber == 0) {
+			if (mainGame.isHost() && playerNumber == 0) {
 				mainGame.getHost().updateCoinsDictate(coin);
 			}
-		} else if (mainGame.isClient() & playerNumber == 1) {
+		} else if (mainGame.isClient() && playerNumber == 1) {
 			mainGame.getClient().pleaCoin(coin);
 		}
 	}
@@ -187,217 +152,20 @@ public class Player {
 			return playerNumber == 0;
 		}
 	}
-
 	
-
 	/**
 	 * Reset this player to its original location.
 	 * @param m multiplayer index of player
 	 */
 	public void resetPlayerLocation(int m) {
 		if (m == 0) {
-			this.x = PLAYER1_X_DEVIATION;
+			logicHelper.setX(PLAYER1_X_DEVIATION);
 		} else {
-			this.x = PLAYER2_X_DEVIATION;
+			logicHelper.setX(PLAYER2_X_DEVIATION);
 		}
-		this.y = PLAYER_Y_DEVIATION;
+		logicHelper.setY(PLAYER_Y_DEVIATION);
 	}
 	
-	/**
-	 * Return a bounding box rectangle of the player.
-	 * @return a bounding box rectangle
-	 */
-	public MyRectangle getRectangle() {
-		return new MyRectangle(x, y, width, height);
-	}
-	
-	/**
-	 * Get the center X coordinate.
-	 * @return the center x
-	 */
-	public float getCenterX() {
-		return x + (HALF * width);
-	}
-	
-	/**
-	 * Get the center Y coordinate.
-	 * @return the center Y
-	 */
-	public float getCenterY() {
-		return y + (HALF * height);
-	}
-	
-	/**
-	 * Get the maximum x value.
-	 * @return the maximum x.
-	 */
-	public float getMaxX() {
-		return x + width;
-	}
-	
-	/**
-	 * Get the maximum Y value.
-	 * @return the maximum Y.
-	 */
-	public float getMaxY() {
-		return y + height;
-	}
-	
-	/**
-	 * @return the x
-	 */
-	public float getX() {
-		return x;
-	}
-	/**
-	 * @param x the x to set
-	 */
-	public void setX(float x) {
-		this.x = x;
-	}
-	/**
-	 * @return the y
-	 */
-	public float getY() {
-		return y;
-	}
-	/**
-	 * @param y the y to set
-	 */
-	public void setY(float y) {
-		this.y = y;
-	}
-	
-	/**
-	 * @return the width
-	 */
-	public float getWidth() {
-		return width;
-	}
-
-	/**
-	 * @param width the width to set
-	 */
-	public void setWidth(float width) {
-		this.width = width;
-	}
-
-	/**
-	 * @return the height
-	 */
-	public float getHeight() {
-		return height;
-	}
-
-	/**
-	 * @param height the height to set
-	 */
-	public void setHeight(float height) {
-		this.height = height;
-	}
-
-	
-	/**
-	 * @return the player image_norm
-	 */
-	public Image getImageN() {
-		return imageN;
-	}
-	
-	/**
-	 * @return the player image_add
-	 */
-	public Image getImageA() {
-		return imageA;
-	}
-	
-	/**
-	 * sets player images.
-	 * @param imageN normal image
-	 * @param imageA additive image
-	 */
-	public void setImage(Image imageN, Image imageA) {
-		this.imageN = imageN;
-		this.imageA = imageA;
-		this.spritesheetN = new SpriteSheet(imageN, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
-		this.spritesheetA = new SpriteSheet(imageA, SPRITESHEET_VALUE, SPRITESHEET_VALUE);
-	}
-	
-	/**
-	 * @return the shield image_norm
-	 */
-	public Image getShieldImageN() {
-		return shieldImageN;
-	}
-	
-	/**
-	 * @return the shield image_add
-	 */
-	public Image getShieldImageA() {
-		return shieldImageA;
-	}
-	
-	/**
-	 * @return the player spritesheet_norm
-	 */
-	public SpriteSheet getSpritesheetN() {
-		return spritesheetN;
-	}
-	
-	/**
-	 * @return the player spritesheet_add
-	 */
-	public SpriteSheet getSpritesheetA() {
-		return spritesheetA;
-	}
-	
-	/**
-	 * @param spritesheetN the spritesheet_norm to set.
-	 * @param spritesheetA the spritesheet_add to set.
-	 */
-	public void setSpritesheet(SpriteSheet spritesheetN, SpriteSheet spritesheetA) {
-		this.spritesheetN = spritesheetN;
-		this.spritesheetA = spritesheetA;
-	}
-	
-	/**
-	 * @return movement counter for spritesheets
-	 */
-	public int getMovementCounter() {
-		return movementCounter;
-	}
-	
-	/**
-	 * increment the movement counter used for spritesheets.
-	 */
-	public void incrementMovementCounter() {
-		movementCounter++;
-		if (movementCounter > movementCounterMax) {
-			resetMovementCounter();
-		}
-	}
-	
-	/**
-	 * reset the movement counter used for spritesheets.
-	 */
-	public void resetMovementCounter() {
-		movementCounter = 0;
-	}
-	
-	/**
-	 * @return movementCounter_max get the movement counter maximum used for spritesheets
-	 */
-	public int getMovementCounter_Max() {
-		return movementCounterMax;
-	}
-	
-	/**
-	 * @param newMax set the movement counter maximum used for spritesheets
-	 */
-	public void setMovementCounter_Max(int newMax) {
-		movementCounterMax = newMax;
-	}
-
 	/**
 	 * @return the gameState
 	 */
@@ -441,27 +209,26 @@ public class Player {
 	}
 
 	/**
-	 * @return the shootKey
+	 * @return the key used for shooting
 	 */
 	public int getShootKey() {
 		return shootKey;
 	}
 
 	/**
-	 * @param shootKey the shootKey to set
+	 * @param shootKey define the key used for shooting.
 	 */
 	public void setShootKey(int shootKey) {
 		this.shootKey = shootKey;
 	}
 
 	/**
-	 * Respawn player (i.e. reset powerups)
+	 * Respawn player (i.e. reset powerups, location, etc)
 	 */
 	public void respawn() {
 		weaponHelper.setWeapons(new LinkedList<>());
 		powerupHelper.respawn();
-		this.x = startX;
-		this.y = startY;
+		logicHelper.respawn();
 	}
 
 	/**
@@ -472,7 +239,7 @@ public class Player {
 	}
 
 	/**
-	 * @param shot the shot to set
+	 * @param shot set that player is shot.
 	 */
 	public void setShot(boolean shot) {
 		weaponHelper.setShot(shot);
@@ -494,7 +261,7 @@ public class Player {
 	}
 	
 	/**
-	 * Name for player.
+	 * Set the player's display name.
 	 * @param name to set.
 	 */
 	public void setPlayerName(String name) {
@@ -502,7 +269,7 @@ public class Player {
 	}
 	
 	/**
-	 * @return Name of player.
+	 * @return The player's display name.
 	 */
 	public String getPlayerName() {
 		return playerName;
@@ -536,31 +303,16 @@ public class Player {
 	}
 
 	/**
-	 * @return the freeToRoam
-	 */
-	public boolean isFreeToRoam() {
-		return freeToRoam;
-	}
-
-	/**
-	 * @param freeToRoam the freeToRoam to set
-	 */
-	public void setFreeToRoam(boolean freeToRoam) {
-		this.freeToRoam = freeToRoam;
-	}
-
-	/**
-	 * Update the info in the movement helper.
+	 * Update the info in the movement helper, as fetched from the logichelper and mainGame.
 	 */
 	public void updateMovementHelperInfo() {
-		movementHelper.setX(x);
-		movementHelper.setY(y);
+		movementHelper.setX(logicHelper.getX());
+		movementHelper.setY(logicHelper.getY());
 		movementHelper.setPlayerNumber(playerNumber);
-		movementHelper.setMaxX(this.getMaxX());
-		movementHelper.setCenterX(this.getCenterX());
+		movementHelper.setMaxX(logicHelper.getMaxX());
+		movementHelper.setCenterX(logicHelper.getCenterX());
 		movementHelper.setMoveLeftKey(moveLeftKey);
 		movementHelper.setMoveRightKey(moveRightKey);
-		
 		movementHelper.setIsClient(mainGame.isClient());
 		movementHelper.setIsHost(mainGame.isHost());
 		movementHelper.setLanMultiplayer(mainGame.isLanMultiplayer());
@@ -590,6 +342,20 @@ public class Player {
 	 */
 	public PlayerWeaponHelper getWeaponHelper() {
 		return weaponHelper;
+	}
+	
+	/**
+	 * @return the helper class for player weapons
+	 */
+	public PlayerGateHelper getGateHelper() {
+		return gateHelper;
+	}
+	
+	/**
+	 * @return the helper class for player logic/images/location
+	 */
+	public PlayerLogicHelper getLogicHelper() {
+		return logicHelper;
 	}
 	
 }

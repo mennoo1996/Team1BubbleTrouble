@@ -27,6 +27,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.opengl.Texture;
 
+import player.Player;
+import player.PlayerList;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class WeaponListTest {

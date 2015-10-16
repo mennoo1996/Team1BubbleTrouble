@@ -217,7 +217,7 @@ public class MenuGameoverState extends BasicGameState {
 			mainGame.resetLevelCount();
 			mainGame.setScore(0);
 			mainGame.killMultiplayer();
-			mainGame.setSwitchState(mainGame.getStartState());
+			mainGame.setSwitchState(mainGame.getMainState());
 			Logger.getInstance().log("main menu button clicked", 
 					Logger.PriorityLevels.MEDIUM, USER_INPUT);
 		}

@@ -91,7 +91,7 @@ public class GameStatePauseHelper extends GameStateHelper {
 				mainGame.setScore(0);
 				mainGame.setLevelCounter(0);
 				mainGame.killMultiplayer();
-				mainGame.setSwitchState(mainGame.getStartState()); }
+				mainGame.setSwitchState(mainGame.getMainState()); }
 			if (exitButton.isMouseOver(input)) {
 				mainGame.killMultiplayer();
 				mainGame.setSwitchState(-1); }

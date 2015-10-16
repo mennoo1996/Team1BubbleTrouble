@@ -1,8 +1,10 @@
-package logic;
+package player;
 
 import guigame.GameState;
 import lan.Client;
 import lan.Host;
+import logic.Gate;
+import logic.Logger;
 import logic.Logger.PriorityLevels;
 
 
@@ -29,6 +31,13 @@ public class PlayerMovementHelper {
 	private float playerSpeed, leftWallWidth, rightWallWidth;
 	private Host host;
 	private Client client;
+	
+
+	private int movementCounter = 0;
+	private int movementCounterMax = DEFAULT_MOVEMENTCOUNTER_MAX;
+	
+
+	private static final int DEFAULT_MOVEMENTCOUNTER_MAX = 18;
 	
 	/**
 	 * Constructor.
@@ -65,7 +74,6 @@ public class PlayerMovementHelper {
 			return;
 		}
 		boolean didWalk = processPlayerMovementMoving(false, deltaFloat, containerWidth);
-		
 		processPlayerMovementStandingStill(didWalk);
 	}
 	
@@ -84,7 +92,6 @@ public class PlayerMovementHelper {
 		if (movement != Movement.LEFT) {
 			didWalk = processMoveRight(deltaFloat, containerWidth, didWalk);
 		}
-		
 		return didWalk;
 	}
 	
@@ -111,18 +118,10 @@ public class PlayerMovementHelper {
 			if (isHost && playerNumber == 0) {
 				host.playerStoppedMoving(x, y, playerNumber);
 			} 
-			processPlayerMovementStandingStillMultiplayer2();
+			if (isClient && playerNumber == 1) {
+				client.playerStoppedMoving(x, y, playerNumber);
+			}
 		}
-	}
-	
-	/**
-	 * .
-	 */
-	private void processPlayerMovementStandingStillMultiplayer2() {
-		if (isClient && playerNumber == 1) {
-			client.playerStoppedMoving(x, y, playerNumber);
-		}
-
 	}
 
 	/**
@@ -134,7 +133,7 @@ public class PlayerMovementHelper {
 	 */
 	private boolean processMoveRight(float deltaFloat, float containerWidth, boolean didWalk) {
 		if (processRightNeeded(containerWidth)) {
-			setPlayerX(x + playerSpeed * deltaFloat);
+			player.getLogicHelper().setX(x + playerSpeed * deltaFloat);
 			this.movement = Movement.RIGHT;
 			didWalk = true;
 			
@@ -171,8 +170,10 @@ public class PlayerMovementHelper {
 		if (isLanMultiplayer && player.isOthersPlayer() && movingRight) {
 			isMovingRight = true;
 		}
-		return (processRightNeeded2(containerWidth, isMovingRight) && (player.isFreeToRoam()
-						|| (centerX > intersectingGate.getRectangle().getCenterX())));
+		return (processRightNeeded2(containerWidth, isMovingRight)
+				&&
+				(player.getGateHelper().isFreeToRoam()
+				|| (centerX > intersectingGate.getRectangle().getCenterX())));
 	}
 	
 	/**
@@ -196,14 +197,15 @@ public class PlayerMovementHelper {
 	 */
 	private boolean processMoveLeft(float deltaFloat, boolean didWalk) {
 		if (processLeftNeeded()) {
-			setPlayerX(x - playerSpeed * deltaFloat);
+			player.getLogicHelper().setX(x - playerSpeed * deltaFloat);
 			this.movement = Movement.LEFT;
 			didWalk = true;
 			
 			processMoveLeftMultiplayer();
 			
 			if (!lastLogMove.equals("left")) {
-				Logger.getInstance().log("Moving left from position " + player.getCenterX(),
+				Logger.getInstance().log("Moving left from position " 
+			+ player.getLogicHelper().getCenterX(),
 						PriorityLevels.VERYLOW, PLAYER);
 				lastLogMove = "left";
 			}
@@ -219,20 +221,11 @@ public class PlayerMovementHelper {
 			if (isHost && playerNumber == 0) {
 				host.playerStartedMoving(x, y, playerNumber, "LEFT");
 			} 
-			processMoveLeftMultiplayer2();
+			if (isClient && playerNumber == 1) {
+				client.playerStartedMoving(x, y, playerNumber, "LEFT");
+			}
 		}
-	}
-	
-	/**
-	 * .
-	 */
-	private void processMoveLeftMultiplayer2() {
-		if (isClient && playerNumber == 1) {
-			client.playerStartedMoving(x, y, playerNumber, "LEFT");
-		}
-
-	}
-	
+	}	
 	
 	/**
 	 * Determines if it is needed to process left movement.
@@ -243,7 +236,8 @@ public class PlayerMovementHelper {
 		if (isLanMultiplayer && player.isOthersPlayer() && movingLeft) {
 			isMovingLeft = true;
 		}
-		return (processLeftNeeded2() || isMovingLeft) && (player.isFreeToRoam() 
+		return (processLeftNeeded2() || isMovingLeft) 
+				&& (player.getGateHelper().isFreeToRoam() 
 				|| (centerX < intersectingGate.getRectangle().getCenterX()));
 	}
 	
@@ -278,8 +272,6 @@ public class PlayerMovementHelper {
 		return movement;
 	}
 
-	
-
 	/**
 	 * @param x the x to set
 	 */
@@ -292,6 +284,7 @@ public class PlayerMovementHelper {
 	public void setY(float y) {
 		this.y = y;
 	}
+	
 	/**
 	 * @param playerNumber the playerNumber to set
 	 */
@@ -304,7 +297,6 @@ public class PlayerMovementHelper {
 	public void setCenterX(float centerX) {
 		this.centerX = centerX;
 	}
-
 
 	/**
 	 * @param maxX the maxX to set
@@ -324,14 +316,6 @@ public class PlayerMovementHelper {
 	 */
 	public void setMoveRightKey(int moveRightKey) {
 		this.moveRightKey = moveRightKey;
-	}
-	
-	/**
-	 * .
-	 * @param x .
-	 */
-	private void setPlayerX(float x) {
-		player.setX(x);
 	}
 
 	/**
@@ -404,6 +388,42 @@ public class PlayerMovementHelper {
 		this.movingLeft = movingLeft;
 	}
 	
+	/**
+	 * @return movement counter for spritesheets
+	 */
+	public int getMovementCounter() {
+		return movementCounter;
+	}
 	
+	/**
+	 * increment the movement counter used for spritesheets.
+	 */
+	public void incrementMovementCounter() {
+		movementCounter++;
+		if (movementCounter > movementCounterMax) {
+			resetMovementCounter();
+		}
+	}
+	
+	/**
+	 * reset the movement counter used for spritesheets.
+	 */
+	public void resetMovementCounter() {
+		movementCounter = 0;
+	}
+	
+	/**
+	 * @return movementCounter_max get the movement counter maximum used for spritesheets
+	 */
+	public int getMovementCounter_Max() {
+		return movementCounterMax;
+	}
+	
+	/**
+	 * @param newMax set the movement counter maximum used for spritesheets
+	 */
+	public void setMovementCounter_Max(int newMax) {
+		movementCounterMax = newMax;
+	}
 	
 }

@@ -1,6 +1,6 @@
 package commands;
 
-import logic.Player;
+import player.Player;
 import powerups.Powerup.PowerupType;
 
 /**

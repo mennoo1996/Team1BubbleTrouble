@@ -189,7 +189,7 @@ public class MainGameTest {
 	@Test
 	public void testStartState() {
 		MainGame game = new MainGame("hello");
-		assertEquals(0, game.getStartState());
+		assertEquals(0, game.getMainState());
 	}
 	
 	@Test

@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public final class CommandQueue {
 	
 
-	private static volatile CommandQueue cq;
+	private static volatile CommandQueue instance;
 	private Queue<Command> queue;
 	
 	/**
@@ -19,15 +19,15 @@ public final class CommandQueue {
 	 * @return	the instance
 	 */
 	public static CommandQueue getInstance() {
-	 	if (cq == null) {
+	 	if (instance == null) {
 	 		synchronized (CommandQueue.class) {
-	 			if (cq == null) {
-	 				cq = new CommandQueue();
+	 			if (instance == null) {
+	 				instance = new CommandQueue();
 	 			}
 	 		}
 	 	}
 	 	
-	 	return cq;
+	 	return instance;
 	}
 
 	/**

@@ -158,9 +158,9 @@ public class PlayerList {
 	 * @param graphics context
 	 */
 	private void drawPlayer(Player player, Graphics graphics) {
-		if (player.getMovement() == PlayerMovementHelper.Movement.RIGHT) {
+		if (player.getMovementHelper().getMovement() == PlayerMovementHelper.Movement.RIGHT) {
 			drawPlayerMoveRight(player, graphics);
-		} else if (player.getMovement() == PlayerMovementHelper.Movement.LEFT) {
+		} else if (player.getMovementHelper().getMovement() == PlayerMovementHelper.Movement.LEFT) {
 			drawPlayerMoveLeft(player, graphics);
 		} else {
 			drawPlayerNoMovement(player, graphics);
@@ -171,7 +171,7 @@ public class PlayerList {
 					player.getX() - SHIELD_DRAW_X_DEVIATION,
 					player.getY() - SHIELD_DRAW_X_DEVIATION, mainGame.getColor()));
 		}
-		player.setMovement(PlayerMovementHelper.Movement.NO_MOVEMENT);
+		player.getMovementHelper().setMovement(PlayerMovementHelper.Movement.NO_MOVEMENT);
 	}
 
 	/**

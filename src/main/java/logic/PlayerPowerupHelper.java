@@ -90,12 +90,10 @@ public class PlayerPowerupHelper {
 	public void addPowerup(Powerup.PowerupType type) {
 		Logger.getInstance().log("Adding powerup " + type.toString(),
 				Logger.PriorityLevels.MEDIUM, POWERUPS);
-		if (type == Powerup.PowerupType.INSTANT) {
-			player.addWeapon(type);
+		if (type == Powerup.PowerupType.INSTANT || type == Powerup.PowerupType.SPIKY) {
+			player.getWeaponHelper().addWeapon(type);
 		} else if (type == Powerup.PowerupType.SHIELD) {
-			player.addShield();
-		} else if (type == Powerup.PowerupType.SPIKY) {
-			player.addWeapon(type);
+			player.getPowerupHelper().addShield();
 		} else if (type == Powerup.PowerupType.FREEZE) {
 			addFreeze();
 		} else if (type == Powerup.PowerupType.SLOW) {

@@ -5,8 +5,6 @@ import guimenu.MainGame;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import logic.PlayerMovementHelper.Movement;
-
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SpriteSheet;
@@ -57,7 +55,6 @@ public class Player {
 	private static final float HALF = 0.5f;
 	
 	private static final String POWERUPS = "powerups";
-	private static final int POWERUP_DURATION = 10;
 
 	/**
 	 * Constructor class.
@@ -151,29 +148,34 @@ public class Player {
 		ArrayList<Coin> usedCoins = new ArrayList<>();
 		synchronized (gameState.getItemsHelper().getDroppedCoins()) {
 			for (Coin coin : gameState.getItemsHelper().getDroppedCoins()) {
-
 				if (coin.getRectangle().intersects(this.getRectangle())) {
-					if (!mainGame.isLanMultiplayer() | (mainGame.isHost() & playerNumber == 0)) {
-						//Here is the claim
-						gameState.getLogicHelper().addToScore(coin.getPoints());
-						gameState.getInterfaceHelper().getFloatingScores().
-						add(new FloatingScore(coin));
-						usedCoins.add(coin);
-						Logger.getInstance().log("Picked up coin", 
-								Logger.PriorityLevels.MEDIUM, POWERUPS);
-						if (mainGame.isHost() & playerNumber == 0) {
-							mainGame.getHost().updateCoinsDictate(coin);
-						}
-					} else if (mainGame.isClient() & playerNumber == 1) {
-						mainGame.getClient().pleaCoin(coin);
-					}
-
+					processCoin(coin, usedCoins);
 				}
 			}
 		}
-		//If client no used coins
 		gameState.getItemsHelper().getDroppedCoins().removeAll(usedCoins);
 	}	
+	
+	/**
+	 * Process the intersection of a player with an individual coin.
+	 * @param coin to process
+	 * @param usedCoins to dump it in
+	 */
+	private void processCoin(Coin coin, ArrayList<Coin> usedCoins) {
+		if (!mainGame.isLanMultiplayer() | (mainGame.isHost() & playerNumber == 0)) {
+			gameState.getLogicHelper().addToScore(coin.getPoints());
+			gameState.getInterfaceHelper().getFloatingScores().
+			add(new FloatingScore(coin));
+			usedCoins.add(coin);
+			Logger.getInstance().log("Picked up coin", 
+					Logger.PriorityLevels.MEDIUM, POWERUPS);
+			if (mainGame.isHost() & playerNumber == 0) {
+				mainGame.getHost().updateCoinsDictate(coin);
+			}
+		} else if (mainGame.isClient() & playerNumber == 1) {
+			mainGame.getClient().pleaCoin(coin);
+		}
+	}
 
 	/**
 	 * @return Whether or not current player is the host
@@ -490,8 +492,6 @@ public class Player {
 		this.playerNumber = playerNumber;
 		weaponHelper.setPlayerNumber(playerNumber);
 	}
-
-	
 	
 	/**
 	 * Name for player.
@@ -547,50 +547,6 @@ public class Player {
 	 */
 	public void setFreeToRoam(boolean freeToRoam) {
 		this.freeToRoam = freeToRoam;
-	}
-	
-	/**
-	 * @param movement the movement integer used to determine movement state. 
-	 */
-	public void setMovement(Movement movement) {
-		movementHelper.setMovement(movement);
-	}
-	
-	/**
-	 * @return the current movement used to determine movement
-	 */
-	public Movement getMovement() {
-		return movementHelper.getMovement();
-	}
-	
-
-	/**
-	 * @param movement the movement integer used to determine movement state. 
-	 */
-	public void setMovingLeft(boolean movement) {
-		movementHelper.setMovingLeft(movement);
-	}
-	
-	/**
-	 * @param movement the movement integer used to determine movement state. 
-	 */
-	public void setMovingRight(boolean movement) {
-		movementHelper.setMovingRight(movement);
-	}
-	
-	/**
-	 * Add a shield for this player.
-	 */
-	public void addShield() {
-		powerupHelper.addShield();
-    }
-	
-	/**
-	 * Add a weapon for this player.
-	 * @param type the type of the powerup
-	 */
-	public void addWeapon(Powerup.PowerupType type) {
-		weaponHelper.addWeapon(type);
 	}
 
 	/**

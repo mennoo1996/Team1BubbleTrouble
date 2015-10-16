@@ -8,6 +8,9 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import commands.AddFloatingScoreCommand;
+import commands.AddPowerupToPlayerCommand;
+import commands.CommandQueue;
 import logic.FloatingScore;
 import logic.Logger;
 import powerups.FastPowerup;
@@ -26,6 +29,7 @@ public class PlayerPowerupHelper {
 	private Player player;
 	private MainGame mainGame;
 	private GameState gameState;
+	private CommandQueue commandQueue;
 	
 	private long shieldTimeRemaining;
 	private int shieldCount;
@@ -46,6 +50,7 @@ public class PlayerPowerupHelper {
 		this.gameState = gameState;
 		this.shieldTimeRemaining = 0;
 		this.shieldCount = 0;
+		commandQueue = CommandQueue.getInstance();
 	}
 
 	/**
@@ -61,14 +66,14 @@ public class PlayerPowerupHelper {
 		synchronized (gameState.getItemsHelper().getDroppedPowerups()) {
 			for (Powerup powerup : gameState.getItemsHelper().getDroppedPowerups()) {
 				powerup.update(gameState, containerHeight, deltaFloat);
-
 				if (powerup.getRectangle().intersects(player.getLogicHelper().getRectangle())) {
 					if (!mainGame.isLanMultiplayer() || (mainGame.isHost() 
 							&& player.getPlayerNumber() == 0)) {
-						//Add a powerup to the player
-						this.addPowerup(powerup.getType());
-						gameState.getInterfaceHelper().getFloatingScores().
-						add(new FloatingScore(powerup));
+						commandQueue.addCommand(new AddPowerupToPlayerCommand(
+								player, powerup.getType()));
+						commandQueue.addCommand(new AddFloatingScoreCommand(
+								gameState.getInterfaceHelper().getFloatingScores(), 
+								new FloatingScore(powerup)));
 						usedPowerups.add(powerup);
 
 						if (mainGame.isHost() && player.getPlayerNumber() == 0) {

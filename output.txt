@@ -1,0 +1,396 @@
+98144c9e src/main/java/guimenu/MenuGameoverState.java (Mark van de Ruit 2015-10-15 18:29:50 +0200   1) package guimenu;
+98870495 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-11 13:59:21 +0200   2) import logic.HighScoresParser;
+93fa15d9 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-18 12:37:06 +0200   3) import logic.Logger;
+98870495 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-11 13:59:21 +0200   4) import logic.Score;
+98870495 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-11 13:59:21 +0200   5) 
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200   6) import org.newdawn.slick.GameContainer;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200   7) import org.newdawn.slick.Graphics;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200   8) import org.newdawn.slick.Image;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200   9) import org.newdawn.slick.Input;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200  10) import org.newdawn.slick.SlickException;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200  11) import org.newdawn.slick.state.BasicGameState;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200  12) import org.newdawn.slick.state.StateBasedGame;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200  13) 
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  14) /**
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  15)  * Class that represents the state of the game when the game is over.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  16)  * @author Menno
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  17)  *
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  18)  */
+a1a046fe src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-23 18:24:10 +0200  19) public class MenuGameoverState extends BasicGameState {
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200  20) 
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  21) 	private Button playButton;
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  22) 	private Button menuButton;
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  23) 	private Button saveButton;
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200  24) 	private Button quitButton;
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200  25) 	
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200  26) 	private MainGame mainGame;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  27) 	private Image health0Image;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  28) 	private Image health1Image;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  29) 	private Image health2Image;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  30) 	private Image health3Image;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  31) 	private Image health4Image;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  32) 	private Image health5Image;
+7d46f3c8 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-08 17:07:22 +0200  33) 	private String inputMessage;
+a2fae01f src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-24 15:02:48 +0200  34) 	
+a2fae01f src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-24 15:02:48 +0200  35) 	private Textfield nameField;
+22c80099 src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 11:00:34 +0200  36) 
+bff71fa5 src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-10 10:13:41 +0200  37) 	private boolean highScoreEntered;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  38) 	
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  39) 	private static final int TEXT_X = 164;
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  40) 	private static final int TEXT_1_Y = 238;
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  41) 	private static final int TEXT_2_Y = 288;
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  42) 	private static final int TEXT_3_Y = 338;
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  43) 	private static final int TEXT_4_Y = 538;
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  44) 
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200  45) 	private static final int BUTTON_X = 164;
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200  46) 	private static final int SAVE_BUTTON_Y = 538;
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200  47) 	private static final int PLAY_BUTTON_Y = 588;
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200  48) 	private static final int MENU_BUTTON_Y = 638;
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200  49) 	private static final int EXIT_BUTTON_Y = 688;
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200  50) 	
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200  51) 	private static final int BUTTON_WIDTH = 1000;
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200  52) 	private static final int BUTTON_HEIGHT = 50;
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  53) 	
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  54) 	private static final int TEXT_FIELD_X = 164;
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200  55) 	private static final int TEXT_FIELD_Y = 438;
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  56) 	
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  57) 	private static final int HEALTH_IMAGE_THREE = 3;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  58) 	private static final int HEALTH_IMAGE_FOUR = 4;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  59) 	private static final int HEALTH_IMAGE_FIVE = 5;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  60) 	
+c06ca91c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:34:45 +0200  61) 	private static final int LOGO_X = 160;
+c06ca91c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:34:45 +0200  62) 	private static final int LOGO_Y = 110;
+c06ca91c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:34:45 +0200  63) 	private static final int SEPARATOR_X = 164;
+c06ca91c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:34:45 +0200  64) 	private static final int SEPARATOR_Y = 190;
+c06ca91c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:34:45 +0200  65) 	private static final int BOTTOM_TEXT_OFFSET_X = 250;
+c06ca91c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:34:45 +0200  66) 	private static final int BOTTOM_TEXT_OFFSET_Y = 75;
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200  67) 	private static final int MAX_NAME_LENGTH = 34;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  68) 	
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200  69) 	private static final int HIGHSCORES_X = 900;
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200  70) 	private static final int HIGHSCORES_Y = 288;
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200  71) 	private static final int HIGHSCORES_TITLE_X = 760;
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200  72) 	private static final int HIGHSCORES_TITLE_Y = 238;
+15ba8dd6 src/main/java/gui/MenuGameoverState.java     (Menno Oudshoorn  2015-10-07 10:33:54 +0200  73) 	
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200  74) 	private static final int EXIT_FACTOR = 8;
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200  75) 	
+15ba8dd6 src/main/java/gui/MenuGameoverState.java     (Menno Oudshoorn  2015-10-07 10:33:54 +0200  76) 	private static final String USER_INPUT = "user-input";
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200  77) 
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200  78) 	private Separator separatorTop;
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200  79) 	private String separatorTopTitle = "";
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200  80) 	
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  81) 	private int displayLives;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200  82) 	
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  83) 	/**
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  84) 	 * Constructor.
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200  85) 	 * @param mainGame the maingame in which this state will be used.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  86) 	 */
+a1a046fe src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-23 18:24:10 +0200  87) 	public MenuGameoverState(MainGame mainGame) {
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200  88) 		this.mainGame = mainGame;
+fc973b26 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-04 10:06:11 +0200  89) 	}
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200  90) 	
+998763cb src/main/java/GameOverState.java             (Bart de Jonge    2015-09-03 11:29:56 +0200  91) 	/**
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  92) 	 * Init method - load resources here.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  93) 	 * @param container The container this state should be initialized in.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  94) 	 * @param arg1 the StateBasedGame this state is in.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200  95) 	 * @throws SlickException idk when
+998763cb src/main/java/GameOverState.java             (Bart de Jonge    2015-09-03 11:29:56 +0200  96) 	 */
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200  97) 	public void init(GameContainer container, StateBasedGame arg1)
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200  98) 			throws SlickException {
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200  99) 		initButtons();
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 100) 		initHealthImages();
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200 101) 		separatorTop = new Separator(SEPARATOR_X, SEPARATOR_Y, false, separatorTopTitle,
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200 102) 				container.getWidth());
+fa7c5209 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 19:57:00 +0200 103) 		nameField = new Textfield(TEXT_FIELD_X, TEXT_FIELD_Y, "Player name", container);
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 104) 	}
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 105) 
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 106) 	/**
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 107) 	 * Initialize the buttons.
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 108) 	 * @throws SlickException if something goes wrong / file not found
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 109) 	 */
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 110) 	private void initButtons() throws SlickException {
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 111) 		saveButton = new Button(BUTTON_X, SAVE_BUTTON_Y,
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 112) 				BUTTON_WIDTH, BUTTON_HEIGHT,
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200 113) 				"> Save Highscore");
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 114) 		playButton = new Button(BUTTON_X, PLAY_BUTTON_Y,
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 115) 				BUTTON_WIDTH, BUTTON_HEIGHT,
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200 116) 				"> Play Again");
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 117) 		menuButton = new Button(BUTTON_X, MENU_BUTTON_Y,
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 118) 				BUTTON_WIDTH, BUTTON_HEIGHT,
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200 119) 				"> Main Menu");
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200 120) 		quitButton = new Button(BUTTON_X, EXIT_BUTTON_Y,
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 121) 				BUTTON_WIDTH, BUTTON_HEIGHT,
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200 122) 				"> Quit");
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 123) 	}
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 124) 
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 125) 	/**
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 126) 	 * Initialize the health images.
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 127) 	 * @throws SlickException if something goes wrong / file not found
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 128) 	 */
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 129) 	private void initHealthImages() throws SlickException {
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 130) 		health0Image = new Image("resources/Terminal/Terminal_Lights_0.png");
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 131) 		health1Image = new Image("resources/Terminal/Terminal_Lights_1.png");
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 132) 		health2Image = new Image("resources/Terminal/Terminal_Lights_2.png");
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 133) 		health3Image = new Image("resources/Terminal/Terminal_Lights_3.png");
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 134) 		health4Image = new Image("resources/Terminal/Terminal_Lights_4.png");
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 135) 		health5Image = new Image("resources/Terminal/Terminal_Lights_5.png");
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 136) 	}
+7d46f3c8 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-08 17:07:22 +0200 137) 	
+7d46f3c8 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-08 17:07:22 +0200 138) 	@Override
+7d46f3c8 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-08 17:07:22 +0200 139) 	public void enter(GameContainer container, StateBasedGame sbg) {
+1dcae9da src/main/java/gui/MenuGameoverState.java     (Menno Oudshoorn  2015-10-02 14:55:34 +0200 140) 		Logger.getInstance().log("Entering MenuGameoverState", Logger.PriorityLevels.LOW, "States");
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 141) 		RND.getInstance().setOpacity(0.0f);
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 142) 		mainGame.stopSwitchState();
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 143) 		displayLives = mainGame.getLifeCount();
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 144) 		mainGame.setLifeCount(MainGame.getLives());
+7d46f3c8 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-08 17:07:22 +0200 145) 		inputMessage = null;
+bff71fa5 src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-10 10:13:41 +0200 146) 		highScoreEntered = false;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 147) 	}
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 148) 	
+998763cb src/main/java/GameOverState.java             (Bart de Jonge    2015-09-03 11:29:56 +0200 149) 	/**
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 150) 	 * Exit function for state. Fades out and everything.
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 151) 	 * @param container the GameContainer we are running in
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 152) 	 * @param sbg the gamestate cont.
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 153) 	 * @param delta the deltatime in ms
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 154) 	 */
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 155) 	public void exit(GameContainer container, StateBasedGame sbg, int delta) {
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 156) 		if (mainGame.getShouldSwitchState()) {
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 157) 			if (RND.getInstance().getOpacity() > 0.0f) {
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 158) 				int fadeTimer = mainGame.getOpacityFadeTimer();
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 159) 				if (mainGame.getSwitchState() == -1) {
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 160) 					fadeTimer = EXIT_FACTOR * fadeTimer;
+83e85860 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 23:06:11 +0200 161) 				}
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 162) 				RND.getInstance().setOpacity(RND.getInstance().getOpacity()
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 163) 						- ((float) delta) / fadeTimer);
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 164) 			} else {
+1dcae9da src/main/java/gui/MenuGameoverState.java     (Menno Oudshoorn  2015-10-02 14:55:34 +0200 165) 				Logger.getInstance().log("Exiting MenuGameoverState", 
+8b808490 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-18 12:40:38 +0200 166) 						Logger.PriorityLevels.LOW, "States");
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 167) 				if (mainGame.getSwitchState() == -1) {
+2fff9bb2 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 14:09:47 +0200 168) 					System.exit(0);
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 169) 				} else {
+be1e56d5 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-18 16:39:19 +0200 170) 					mainGame.switchColor();
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 171) 					sbg.enterState(mainGame.getSwitchState());
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 172) 				}
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 173) 			}	
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 174) 		}
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 175) 	}
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 176) 	
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 177) 	/**
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 178) 	 * update method - called every frame.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 179) 	 * @param container The container this state is in.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 180) 	 * @param sbg the StateBasedGame this state is in
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 181) 	 * @param delta the time in ms since the last frame
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 182) 	 * @throws SlickException sometimes.
+998763cb src/main/java/GameOverState.java             (Bart de Jonge    2015-09-03 11:29:56 +0200 183) 	 */
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 184) 	public void update(GameContainer container, StateBasedGame sbg, int delta)
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 185) 			throws SlickException {
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 186) 		if (RND.getInstance().getOpacity() < 1.0f && !mainGame.getShouldSwitchState()) {
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 187) 			RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 188) 					+ ((float) delta) / mainGame.getOpacityFadeTimer());
+acab884a src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-16 17:04:36 +0200 189) 		}
+4e7b76dc src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:27:33 +0200 190) 		Input input = container.getInput();
+4e7b76dc src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:27:33 +0200 191) 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !mainGame.getShouldSwitchState()) {
+ec2a194c src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:56:44 +0200 192) 			processButtons(input);
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 193) 		}
+fa7c5209 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 19:57:00 +0200 194) 		nameField.update(input);
+4e7b76dc src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:27:33 +0200 195) 		handleTextField(input);
+4e7b76dc src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:27:33 +0200 196) 		exit(container, sbg, delta);
+4e7b76dc src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:27:33 +0200 197) 	}
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 198) 	
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 199) 	/**
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 200) 	 * Process the button clicks.
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 201) 	 * @param input the keyboard/mouse input of the user
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 202) 	 */
+ec2a194c src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:56:44 +0200 203) 	private void processButtons(Input input) {
+a660968b src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-22 22:29:48 +0200 204) 		if (playButton.isMouseOver(input)) {
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 205) 			processStartOver();	
+ec2a194c src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:56:44 +0200 206) 		} 
+a660968b src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-22 22:29:48 +0200 207) 		else if (saveButton.isMouseOver(input)) {
+ec2a194c src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:56:44 +0200 208) 			saveScore();
+ec2a194c src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:56:44 +0200 209) 		}
+a660968b src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-22 22:29:48 +0200 210) 		else if (menuButton.isMouseOver(input)) {
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 211) 			menuButtonClicked();
+ec2a194c src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:56:44 +0200 212) 		}
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200 213) 		else if (quitButton.isMouseOver(input)) {
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 214) 			quitButtonClicked();
+ec2a194c src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:56:44 +0200 215) 		}
+ec2a194c src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 22:56:44 +0200 216) 	}
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 217) 	
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 218) 	/**
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 219) 	 * Process a click on the menu button.
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 220) 	 */
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 221) 	private void menuButtonClicked() {
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 222) 		mainGame.resetLifeCount();
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 223) 		mainGame.resetLevelCount();
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 224) 		mainGame.setScore(0);
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 225) 		mainGame.killMultiplayer();
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 226) 		mainGame.setSwitchState(mainGame.getStartState());
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 227) 		Logger.getInstance().log("main menu button clicked", 
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 228) 				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 229) 	}
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 230) 	
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 231) 	/**
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 232) 	 * Process a click on the exit button.
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 233) 	 */
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 234) 	private void quitButtonClicked() {
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 235) 		mainGame.setSwitchState(-1);
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 236) 		Logger.getInstance().log("exit button clicked", 
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 237) 				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 238) 	}
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 239) 
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 240) 	/**
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 241) 	 * Process how to start a new game from this state.
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 242) 	 */
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 243) 	private void processStartOver() {
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 244) 		Logger.getInstance().log("play again button clicked", 
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 245) 				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 246) 		if (mainGame.isLanMultiplayer()) {
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 247) 			if (mainGame.isHost()) {
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 248) 				mainGame.getHost().updateRestart();
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 249) 			} else if (mainGame.isClient()) {
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 250) 				mainGame.getClient().updateRestart();
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 251) 			}
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 252) 		}
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 253) 		mainGame.resetLifeCount();
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 254) 		mainGame.resetLevelCount();
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 255) 		mainGame.setScore(0);
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 256) 		mainGame.setSwitchState(mainGame.getGameState());
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 257) 	}
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 258) 	
+cbf9ca59 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-06 12:29:34 +0200 259) 	/**
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 260) 	 * Handle the text field input.
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 261) 	 * @param input the keyboard/mouse input user
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 262) 	 */
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 263) 	private void handleTextField(Input input) {
+a2fae01f src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-24 15:02:48 +0200 264) 		if (nameField.hasFocus() && input.isKeyPressed(Input.KEY_ENTER) && (inputMessage == null 
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 265) 				|| inputMessage.equals("Maximum length is 34 characters")) 
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 266) 				&& !highScoreEntered) {
+a2fae01f src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-24 15:02:48 +0200 267) 			if (nameField.getText().length() < MAX_NAME_LENGTH) {
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 268)                 highScoreEntered = true;
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 269)                 saveScore(); }
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 270) 			else {
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 271) 				inputMessage = "Maximum length is 34 characters";
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 272)             }
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 273) 		}
+9d4aabc4 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-11 08:57:22 +0200 274) 	}
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 275) 
+998763cb src/main/java/GameOverState.java             (Bart de Jonge    2015-09-03 11:29:56 +0200 276) 	/**
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 277) 	 * Render method - draw things to screen.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 278) 	 * @param container The container this state is in
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 279) 	 * @param arg1 the statebasedgame this state is in.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 280) 	 * @param graphics the Graphics used in this gameoverstate.
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 281) 	 * @throws SlickException idk when
+998763cb src/main/java/GameOverState.java             (Bart de Jonge    2015-09-03 11:29:56 +0200 282) 	 */
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 283) 	public void render(GameContainer container, StateBasedGame arg1, Graphics graphics)
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 284) 			throws SlickException {
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 285) 		RND.getInstance().drawBackground(graphics);
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 286) 		renderEndText(container, graphics);
+71a4c059 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-15 11:29:28 +0200 287) 
+a2fae01f src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-24 15:02:48 +0200 288) 		nameField.drawColor(graphics, mainGame.getColor());
+5cc577b4 src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 20:20:22 +0200 289) 		if (inputMessage != null) {
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 290) 			RND.getInstance().text(graphics, TEXT_X, TEXT_4_Y, inputMessage);
+7d46f3c8 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-08 17:07:22 +0200 291) 		}
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 292) 		renderButtons(container, graphics);
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 293) 		mainGame.drawWaterMark();
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 294) 		RND.getInstance().drawLogo(graphics, LOGO_X, LOGO_Y);
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200 295) 		separatorTop.drawColor(graphics, mainGame.getColor());
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 296) 		mainGame.getHighscores().sort();
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 297) 		String highScoresString = mainGame.getHighscores().toString();
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 298) 		RND.getInstance().text(graphics, HIGHSCORES_X, HIGHSCORES_Y, highScoresString);
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 299) 		RND.getInstance().text(graphics, HIGHSCORES_TITLE_X, HIGHSCORES_TITLE_Y, 
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200 300) 				"The best scores of your predecessors!");
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 301) 		RND.getInstance().drawForeGround(graphics);
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 302) 		renderLives(graphics);
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 303) 	}
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 304) 
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 305) 	/**
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 306) 	 * Render the end text.
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 307) 	 * @param container the GameContainer we are playing in.
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 308) 	 * @param graphics the Graphics object to draw things on screen
+a0f7f54a src/main/java/gui/GameOverState.java         (Menno Oudshoorn  2015-09-22 13:31:04 +0200 309) 	 */
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 310) 	private void renderEndText(GameContainer container, Graphics graphics) {
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 311) 		RND.getInstance().text(graphics, container.getWidth() / 2 - BOTTOM_TEXT_OFFSET_X,
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 312) 				container.getHeight() - BOTTOM_TEXT_OFFSET_Y,
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 313) 				"Waiting for user input...");
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 314) 		if (displayLives < 1) {
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 315) 			RND.getInstance().text(graphics, TEXT_X, TEXT_1_Y, "# Game Over");
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 316) 		} else {
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 317) 			RND.getInstance().text(graphics, TEXT_X, TEXT_1_Y, "# You won! You are the champion!");
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 318) 		}
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 319) 
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 320) 		RND.getInstance().text(graphics, TEXT_X, TEXT_2_Y, "# Your score was: " 
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 321) 		+ mainGame.getScore());
+b6e86ca6 src/main/java/gui/MenuGameoverState.java     (Bart de Jonge    2015-10-14 16:24:52 +0200 322) 		RND.getInstance().text(graphics, TEXT_X, TEXT_3_Y, "# Please enter your name below");
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 323) 	}
+0b39e5c1 src/main/java/gui/GameOverState.java         (Alexander Geenen 2015-09-18 16:04:38 +0200 324) 
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 325) 	/**
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 326) 	 * Renders the life-lights in the bottom left corner.
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 327) 	 * @param graphics the graphics to render to
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 328) 	 */
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 329) 	private void renderLives(Graphics graphics) {
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 330) 		switch (displayLives) {
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 331) 		case(0) :
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 332) 			graphics.drawImage(health0Image, 0, 0);
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 333) 		break;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 334) 		case(1) :
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 335) 			graphics.drawImage(health1Image, 0, 0);
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 336) 		break;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 337) 		case(2) :
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 338) 			graphics.drawImage(health2Image, 0, 0);
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 339) 		break;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 340) 		case(HEALTH_IMAGE_THREE) :
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 341) 			graphics.drawImage(health3Image, 0, 0);
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 342) 		break;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 343) 		case(HEALTH_IMAGE_FOUR) :
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 344) 			graphics.drawImage(health4Image, 0, 0);
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 345) 		break;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 346) 		case(HEALTH_IMAGE_FIVE) :
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 347) 			graphics.drawImage(health5Image, 0, 0);
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 348) 		break;
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 349) 		default:
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 350) 			try {
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 351) 				throw new SlickException("Life count was not in the correct range");
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 352) 			} catch (SlickException e) {
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 353) 				e.printStackTrace();
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 354) 			}
+a62aa99c src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-11 10:55:04 +0200 355) 	}
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 356) 	}
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 357) 	
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 358) 	/**
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 359) 	 * Method renders buttons in GameOverState to screen.
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 360) 	 * @param container appgamecontainer used
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 361) 	 * @param graphics graphics context used
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 362) 	 */
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 363) 	private void renderButtons(GameContainer container, Graphics graphics) {
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 364) 		Input input = container.getInput();
+a660968b src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-22 22:29:48 +0200 365) 		playButton.drawColor(graphics, input, mainGame.getColor());
+a660968b src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-22 22:29:48 +0200 366) 		menuButton.drawColor(graphics, input, mainGame.getColor());
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 367) 		if (inputMessage == null) {
+a660968b src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-22 22:29:48 +0200 368) 			saveButton.drawColor(graphics, input, mainGame.getColor());
+71a4c059 src/main/java/gui/GameOverState.java         (Mark van de Ruit 2015-09-15 11:29:28 +0200 369) 		}
+abb633b1 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-10-07 23:04:11 +0200 370) 		quitButton.drawColor(graphics, input, mainGame.getColor());
+d3eb534e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-09 19:47:38 +0200 371) 	}
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 372) 
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 373) 	/**
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 374) 	 * Saves score for this player.
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 375) 	 */
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 376) 	private void saveScore() {
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 377) 		Logger.getInstance().log("save button clicked", 
+de572bca src/main/java/guimenu/MenuGameoverState.java (Menno Oudshoorn  2015-10-15 22:17:20 +0200 378) 				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+a2fae01f src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-24 15:02:48 +0200 379) 		Score score = new Score(mainGame.getScore(), nameField.getText());
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 380) 		mainGame.getHighscores().add(score);
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 381) 		mainGame.getHighscores().sort();
+d856e875 src/main/java/gui/GameOverState.java         (Bart de Jonge    2015-09-18 12:22:58 +0200 382) 		HighScoresParser.writeHighScores(mainGame.getHighscoresFile(), mainGame.getHighscores());
+4ef4a4a8 src/main/java/gui/MenuGameoverState.java     (Mark van de Ruit 2015-09-25 20:38:08 +0200 383) 		inputMessage = "# Your score of " + mainGame.getScore();
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 384) 		inputMessage += " points is saved!";
+1dcae9da src/main/java/gui/MenuGameoverState.java     (Menno Oudshoorn  2015-10-02 14:55:34 +0200 385) 		Logger.getInstance().log("Score saved", Logger.PriorityLevels.MEDIUM, "highscores");
+085d4a3e src/main/java/GameOverState.java             (Mark van de Ruit 2015-09-10 00:21:05 +0200 386) 	}
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 387) 	
+ae947d04 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-09 20:48:35 +0200 388) 	
+998763cb src/main/java/GameOverState.java             (Bart de Jonge    2015-09-03 11:29:56 +0200 389) 	/**
+9b188ece src/main/java/GameOverState.java             (Menno Oudshoorn  2015-09-08 10:21:25 +0200 390) 	 * returns id of the state.
+998763cb src/main/java/GameOverState.java             (Bart de Jonge    2015-09-03 11:29:56 +0200 391) 	 */
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 392) 	@Override
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 393) 	public int getID() {
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 394) 		return 2;
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 395) 	}
+e2f9d6d2 src/main/java/GameOverState.java             (Bart de Jonge    2015-09-02 09:41:47 +0200 396) }

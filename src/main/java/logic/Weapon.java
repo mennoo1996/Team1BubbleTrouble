@@ -49,10 +49,10 @@ public class Weapon {
 	public void update(Rectangle ceiling, Rectangle floor, float deltaFloat) {
 		y -= laserSpeed * deltaFloat;
 		height += laserSpeed * deltaFloat;
-		this.visible = y >= ceiling.getHeight();
+		if (y < ceiling.getHeight()) {        
+            this.visible = false;        
+        }
 	}
-	
-	
 	
 	/**
 	 * @return the x

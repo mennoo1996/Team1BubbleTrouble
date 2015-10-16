@@ -122,7 +122,7 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 
 	@Override
 	public void exit() {
-		// anything needed for UI on exit?
+		  throw new UnsupportedOperationException("not supported");
 	}
 
 	@Override
@@ -292,33 +292,55 @@ public class GameStateInterfaceHelper extends GameStateHelper {
 	 */
 	private void drawShieldTimer(Graphics graphics) {
 		int height = SHIELD_COUNTER_OFFSET_Y;
-		if (mainGame.getPlayerList().getPlayers().get(0).hasShield()) {
+		if (mainGame.getPlayerList().getPlayers().get(0).getPowerupHelper().hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
-			float rem = mainGame.getPlayerList().getPlayers().get(0).shieldTimeRemaining();
-			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
-			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
-						counterBarImageA, SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor()));
-			}
-			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_2_X
-					+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
-					* COUNTER_BAR_X_FACTOR, height,
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
+			drawShieldTimerPlayer1(graphics, height);
+		}
 		if ((mainGame.isMultiplayer() || mainGame.isLanMultiplayer()) 
-				&& mainGame.getPlayerList().getPlayers().get(1).hasShield()) {
+				&& mainGame.getPlayerList().getPlayers().get(1).getPowerupHelper().hasShield()) {
 			height += SHIELD_COUNTER_INCREMENT_Y;
-			float rem = mainGame.getPlayerList().getPlayers().get(1).shieldTimeRemaining();
-			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
-			for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
-				RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
-						counterBarImageA, SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
-						height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor()));
-			}
-			RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_2_X 
-					+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
-					* COUNTER_BAR_X_FACTOR, height, 
-					"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); }
+			drawShieldTimerPlayer2(graphics, height);
+		}
+	}
+	
+	/**
+	 * Draw the shield timer for player 1, if necessary.
+	 * @param graphics the context to draw in
+	 * @param height the height to draw the timer at
+	 */
+	private void drawShieldTimerPlayer1(Graphics graphics, int height) {
+		float rem = mainGame.getPlayerList().getPlayers().get(0).
+				getPowerupHelper().getShieldTimeRemaining();
+		RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_1.Sh():");
+		for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
+			RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+					counterBarImageA, SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
+					height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor()));
+		}
+		RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_2_X
+				+ Math.round(rem / SHIELD_COUNTER_DIVIDER)
+				* COUNTER_BAR_X_FACTOR, height,
+				"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); 
+	}
+	
+	/**
+	 * Draw the shield timer for player 2, if necessary.
+	 * @param graphics the context to draw in
+	 * @param height the height to draw the timer at
+	 */
+	private void drawShieldTimerPlayer2(Graphics graphics, int height) {
+		float rem = mainGame.getPlayerList().getPlayers().get(1).
+				getPowerupHelper().getShieldTimeRemaining();
+		RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_X, height, ">PL_2.Sh():");
+		for (int x = 0; x < Math.round(rem / SHIELD_COUNTER_DIVIDER); x++) {
+			RND.getInstance().drawColor(new RenderOptions(graphics, counterBarImageN, 
+					counterBarImageA, SHIELD_COUNTER_OFFSET_1_X + x * COUNTER_BAR_X_FACTOR, 
+					height + SHIELD_COUNTER_OFFSET_1_Y, mainGame.getColor()));
+		}
+		RND.getInstance().text(graphics, SHIELD_COUNTER_OFFSET_2_X 
+				+ Math.round(rem / SHIELD_COUNTER_DIVIDER) 
+				* COUNTER_BAR_X_FACTOR, height, 
+				"#" + rem / SHIELD_COUNTER_DIVIDER + "s"); 
 	}
 	
 	/**

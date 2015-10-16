@@ -180,9 +180,12 @@ public abstract class Connector implements Runnable {
     	mainGame.getPlayerList().getPlayers().get(playerNumber).setX(x);
         mainGame.getPlayerList().getPlayers().get(playerNumber).setY(y);
         
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(false);
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(false);
-    	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.NO_MOVEMENT);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber).
+    	getMovementHelper().setMovingRight(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber)
+    	.getMovementHelper().setMovingLeft(false);
+    	mainGame.getPlayerList().getPlayers().get(playerNumber)
+    	.getMovementHelper().setMovement(Movement.NO_MOVEMENT);
     }
     
 
@@ -204,12 +207,16 @@ public abstract class Connector implements Runnable {
         
         switch (direction) {
         case "LEFT":
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingLeft(true);
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.LEFT);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber)
+        	.getMovementHelper().setMovingLeft(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber)
+        	.getMovementHelper().setMovement(Movement.LEFT);
         	break;
         case "RIGHT":
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovingRight(true);
-        	mainGame.getPlayerList().getPlayers().get(playerNumber).setMovement(Movement.RIGHT);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber)
+        	.getMovementHelper().setMovingRight(true);
+        	mainGame.getPlayerList().getPlayers().get(playerNumber)
+        	.getMovementHelper().setMovement(Movement.RIGHT);
         	break;
         default:
         	break;

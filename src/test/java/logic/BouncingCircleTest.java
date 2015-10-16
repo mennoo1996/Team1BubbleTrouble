@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 //import edu.umd.cs.findbugs.gui.Logger;
 import guigame.GameState;
 import guigame.GameStateCirclesHelper;
+import guigame.GameStateGateHelper;
 import guigame.GameStateInterfaceHelper;
 import guigame.GameStateItemsHelper;
 import guigame.GameStateLogicHelper;
@@ -35,6 +36,7 @@ public class BouncingCircleTest {
 
 	GameStateCirclesHelper ch;
 	GameStateItemsHelper ih;
+	GameStateGateHelper gh;
 	GameStateInterfaceHelper ifh;
 	GameStatePlayerHelper ph;
 	GameStateLogicHelper lh;
@@ -53,12 +55,14 @@ public class BouncingCircleTest {
 		ph = mock(GameStatePlayerHelper.class);
 		lh = mock(GameStateLogicHelper.class);
 		pah = mock(GameStatePauseHelper.class);
+		gh = mock(	GameStateGateHelper.class);
 		when(gs.getItemsHelper()).thenReturn(ih);
 		when(gs.getCirclesHelper()).thenReturn(ch);
 		when(gs.getInterfaceHelper()).thenReturn(ifh);
 		when(gs.getPlayerHelper()).thenReturn(ph);
 		when(gs.getLogicHelper()).thenReturn(lh);
 		when(gs.getPauseHelper()).thenReturn(pah);
+		when(gs.getGateHelper()).thenReturn(gh);
 		mg = mock(MainGame.class);
 	}
 	
@@ -103,7 +107,6 @@ public class BouncingCircleTest {
 	@Test
 	public void testUpdate3() {
 		c = new BouncingCircle(30, 2, 10, 4, 5, 6, 0);
-		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
@@ -120,7 +123,8 @@ public class BouncingCircleTest {
 		gate.setRequired(circleList);
 		gateList.add(gate);
 		when(gs.getCirclesHelper()).thenReturn(ch);
-		when(gs.getCirclesHelper().getGateList()).thenReturn(gateList);
+		when(gs.getGateHelper().getGateList()).thenReturn(gateList);
+		when(gh.getGateList()).thenReturn(gateList);
 		c.update(gs, 100, 100, 1);
 		
 		assertEquals(-4.0, c.getxSpeed(), 0);
@@ -130,7 +134,6 @@ public class BouncingCircleTest {
 	@Test
 	public void testUpdate4() {
 		c = new BouncingCircle(30, 2, 10, 4, 5, 6, 0);
-		GameState gs = mock(GameState.class);
 		MyRectangle floor = new MyRectangle(1,1,1,1);
 		MyRectangle ceiling = new MyRectangle(1,1,1,1);
 		MyRectangle leftWall = new MyRectangle(1,1,1,1);
@@ -146,7 +149,7 @@ public class BouncingCircleTest {
 		gate.setRequired(circleList);
 		gateList.add(gate);
 		when(gs.getCirclesHelper()).thenReturn(ch);
-		when(gs.getCirclesHelper().getGateList()).thenReturn(gateList);
+		when(gs.getGateHelper().getGateList()).thenReturn(gateList);
 		c.update(gs, 100, 100, 1);
 		
 		assertEquals(4.0, c.getxSpeed(), 0);

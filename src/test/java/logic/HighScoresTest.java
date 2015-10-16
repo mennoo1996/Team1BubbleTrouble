@@ -94,10 +94,6 @@ public class HighScoresTest {
 		
 	}
 	
-	@Test
-	public void testGetLogger() {
-		HighScores a = new HighScores();
-		assertEquals(a.getLogger(), Logger.getInstance());
-	}
+
 
 }

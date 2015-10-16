@@ -45,6 +45,8 @@ public class MenuMainState extends BasicGameState {
 	private static final int HIGHSCORES_TITLE_X = 760;
 	private static final int HIGHSCORES_TITLE_Y = 238;
 	
+	private static final int EXIT_FACTOR = 8;
+	
 	private static final String USER_INPUT = "user-input";
 	
 	private Separator separatorTop;
@@ -105,7 +107,7 @@ public class MenuMainState extends BasicGameState {
 			if (RND.getInstance().getOpacity() > 0.0f) {
 				int fadeTimer = mainGame.getOpacityFadeTimer();
 				if (mainGame.getSwitchState() == -1) {
-					fadeTimer = 2 * 2 * 2 * fadeTimer;
+					fadeTimer = EXIT_FACTOR * fadeTimer;
 				}
 				RND.getInstance().setOpacity(RND.getInstance().getOpacity() 
 						- ((float) delta) / fadeTimer);
@@ -150,33 +152,68 @@ public class MenuMainState extends BasicGameState {
 	 */
 	private void processButtons(Input input) {
 		if (playButton.isMouseOver(input)) { // Go to gamestate in singleplayer
-			mainGame.setMultiplayer(false);
-			mainGame.setSwitchState(mainGame.getGameState());
-			mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
-			Logger.getInstance().log("Play button pressed", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
+			processPlayButton();
 		} else if (play2Button.isMouseOver(input)) { // Go to gamestate in multiplayer
-			mainGame.setMultiplayer(true);
-			mainGame.setSwitchState(mainGame.getGameState());
-			mainGame.getPlayerList().getPlayers().get(0).setPlayerName("PLayer_1");
-			mainGame.getPlayerList().getPlayers().get(1).setPlayerName("PLayer_2");
-			mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
-			mainGame.getPlayerList().getPlayers().get(1).setControlsForPlayer2();
-			Logger.getInstance().log("Play multiplayer button pressed", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
+			processTwoPlayerPlayButton();
 		} else if (lanButton.isMouseOver(input)) { // Go to gamestate in multiplayer
-			mainGame.setSwitchState(mainGame.getMultiplayerState());
-			Logger.getInstance().log("Play lan button pressed", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
+			processLanButton();
 		} else if (optionsButton.isMouseOver(input)) { // Go to settingsState
-			mainGame.setSwitchState(mainGame.getSettingsState());
-			Logger.getInstance().log("options button pressed", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
+			processOptionsButton();
 		} else if (quitButton.isMouseOver(input)) { // Quit game
-			mainGame.setSwitchState(-1);
-			Logger.getInstance().log("quit button pressed", 
-					Logger.PriorityLevels.MEDIUM, USER_INPUT);
+			processExitButton();
 		}
+	}
+	
+	/**
+	 * Process a click on the play button.
+	 */
+	private void processPlayButton() {
+		mainGame.setMultiplayer(false);
+		mainGame.setSwitchState(mainGame.getGameState());
+		mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
+		Logger.getInstance().log("Play button pressed", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+	}
+	
+	/**
+	 * Process a click on the two player play button.
+	 */
+	private void processTwoPlayerPlayButton() {
+		mainGame.setMultiplayer(true);
+		mainGame.setSwitchState(mainGame.getGameState());
+		mainGame.getPlayerList().getPlayers().get(0).setPlayerName("PLayer_1");
+		mainGame.getPlayerList().getPlayers().get(1).setPlayerName("PLayer_2");
+		mainGame.getPlayerList().getPlayers().get(0).setControlsForPlayer1();
+		mainGame.getPlayerList().getPlayers().get(1).setControlsForPlayer2();
+		Logger.getInstance().log("Play multiplayer button pressed", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+	}
+	
+	/**
+	 * Process a click on the lan button.
+	 */
+	private void processLanButton() {
+		mainGame.setSwitchState(mainGame.getMultiplayerState());
+		Logger.getInstance().log("Play lan button pressed", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+	}
+	
+	/**
+	 * Process a click on the options button.
+	 */
+	private void processOptionsButton() {
+		mainGame.setSwitchState(mainGame.getSettingsState());
+		Logger.getInstance().log("options button pressed", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
+	}
+	
+	/**
+	 * Process a click on the exit button.
+	 */
+	private void processExitButton() {
+		mainGame.setSwitchState(-1);
+		Logger.getInstance().log("quit button pressed", 
+				Logger.PriorityLevels.MEDIUM, USER_INPUT);
 	}
 
 	/**
